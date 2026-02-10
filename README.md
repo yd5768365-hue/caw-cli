@@ -9,6 +9,7 @@
 1. **缺少商业软件许可证**：无法使用 SolidWorks，需要替代方案
 2. **学习曲线陡峭**：机械设计、有限元分析、材料力学概念复杂
 3. **缺乏系统学习工具**：需要一个整合的工具来辅助学习全过程
+4. **软件集成困难**：不同CAD/CAE软件接口不统一，难以建立标准化工作流
 
 ### 🎓 用户背景
 - **身份**：大一学生，从互联网专业转向机械专业
@@ -24,10 +25,11 @@
 | ✅ **知识库管理** | 建立个人机械设计知识库，随时查询 | ✅ 已实现 |
 | ✅ **报告生成** | 自动生成分析报告，整理学习笔记 | ✅ 已实现 |
 | 🌟 **多语言支持** | 交互界面支持中文/英文切换，适应不同语言习惯 | ✅ 新功能 |
+| 🚀 **插件化架构** | 标准化CAD/CAE软件接口，支持自由扩展软件集成 | ✅ **新增功能** |
 
 ---
 
-一个专为机械专业学生设计的终端工具，帮助快速分析 SolidWorks/FreeCAD 模型的网格质量、材料力学性能、参数优化，并集成 AI 建议和个人机械手册知识库。
+一个专为机械专业学生设计的终端工具，帮助快速分析 SolidWorks/FreeCAD 模型的网格质量、材料力学性能、参数优化，并集成 AI 建议和个人机械手册知识库。**新增插件化架构**，支持标准化CAD/CAE软件集成。
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -62,10 +64,11 @@
 - **可视化图表**：质量分曲线、应力分布图等
 - **分析类型**：静力、模态、热、屈曲分析报告
 
-### 🔌 **CAD 软件集成**
-- **FreeCAD**：完整 API 集成，支持 MCP 协议
-- **SolidWorks**：规划中的宏生成和文件导出功能
-- **多格式支持**：.FCStd, .step, .stl, .iges 等格式
+### 🧩 **插件化架构** (🔥 **全新功能**)
+- **标准化接口**：统一的CAD/CAE抽象基类，支持自由扩展软件集成
+- **工作流引擎**：标准化的CAD→CAE分析流程管理，支持预定义和自定义工作流
+- **配置驱动**：YAML配置文件定义完整仿真流程，支持复杂参数设置
+- **多软件支持**：已实现FreeCAD、CalculiX集成，可扩展支持更多软件
 
 
 
@@ -269,7 +272,7 @@ print(f"安全系数: {result['safety_factor']}")
 
 ```
 cae-cli/
-├── src/sw_helper/           # 主包
+├── src/sw_helper/           # 主包（原有功能）
 │   ├── cli.py              # CLI入口（核心文件）
 │   ├── geometry/           # 几何解析模块
 │   ├── mesh/               # 网格分析模块
@@ -278,42 +281,179 @@ cae-cli/
 │   ├── optimization/       # 参数优化模块
 │   ├── ai/                 # AI辅助设计模块
 │   ├── chat/               # 交互式聊天模块
-│   ├── integrations/       # CAD软件集成模块
+│   ├── integrations/       # CAD软件集成模块（旧接口）
 │   ├── mcp/                # MCP协议接口模块
 │   └── utils/              # 工具模块
-├── data/                    # 数据文件
-│   ├── materials.json      # 材料库
-│   ├── languages.json      # 多语言包（新）
-│   └── config.yaml         # 默认配置
-├── tests/                   # 测试
-├── examples/                # 示例
-├── docs/                    # 文档
-├── pyproject.toml          # 项目配置
-├── setup.py                # 安装脚本
-└── README.md               # 说明文档
+├── src/integrations/       # 🚀 插件化架构（全新）
+│   ├── _base/              # 抽象基类
+│   │   ├── connectors.py   # CAD/CAE连接器抽象基类
+│   │   └── workflow.py     # 工作流引擎
+│   ├── cad/                # CAD连接器实现
+│   │   ├── freecad.py      # FreeCAD连接器（新架构）
+│   │   └── __init__.py
+│   ├── cae/                # CAE连接器实现
+│   │   ├── calculix.py     # CalculiX连接器（新架构）
+│   │   └── __init__.py
+│   └── __init__.py         # 统一导出
+├── src/core/               # 🎯 核心数据类型
+│   └── types.py           # 统一数据流和配置模型
+├── examples/               # 示例文件
+│   ├── project.yaml       # 标准化配置文件示例
+│   └── demo_config_usage.py # 配置系统使用演示
+├── data/                   # 数据文件
+│   ├── materials.json     # 材料库
+│   ├── languages.json     # 多语言包
+│   └── config.yaml        # 默认配置
+├── tests/                  # 测试
+├── docs/                   # 文档
+├── pyproject.toml         # 项目配置
+├── setup.py               # 安装脚本
+└── README.md              # 说明文档
 ```
 
 ## 🔗 软件集成与协议
 
-### 🎯 **主要支持的CAD软件**
-- **✅ FreeCAD**：完整API集成，通过MCP协议实现自动建模、参数修改、文件导出
-- **🔄 SolidWorks**：规划中的宏生成和文件导出功能（需要许可证）
-- **🔌 多格式支持**：.FCStd, .step, .stl, .iges, .brep等格式
+### 🎯 **插件化架构**
+- **标准化接口**：统一的`CADConnector`和`CAEConnector`抽象基类
+- **灵活扩展**：通过实现抽象方法轻松集成新软件
+- **工作流管理**：`WorkflowEngine`管理CAD→CAE完整分析流程
+- **配置驱动**：YAML配置文件定义完整仿真参数和工作流
 
-### 🤝 **MCP协议集成**
-- **Model Context Protocol (MCP)**：标准化的工具调用协议
-- **FreeCAD MCP服务器**：管理FreeCAD的MCP服务器，支持直接调用建模工具
-- **工具调用示例**：`cae-cli mcp call freecad_create_box '{"length": 100, "width": 50, "height": 30}'`
+### 🔧 **已实现的连接器**
+- **✅ CAD: FreeCAD**：基于新架构的标准化连接器，支持参数修改、重建、导出
+- **✅ CAE: CalculiX**：开源有限元分析软件集成，支持静力、模态、热分析
+- **🔄 旧接口兼容**：原有FreeCAD/SolidWorks连接器保持可用
 
-### 📊 **仿真与网格工具**
-- **Gmsh**：开源网格生成器，支持.msh格式
-- **Netgen/TetGen**：四面体网格生成
-- **通用格式支持**：.inp (Abaqus), .bdf (NASTRAN), .cas/.dat (Fluent)
+### 🔄 **标准数据流**
+- **格式标准化**：遵循 `CAD → STEP → MSH → INP → VTK` 数据流路径
+- **统一配置**：`SimulationConfig`模型管理所有仿真参数
+- **结果标准化**：`SimulationResult`统一结果数据格式
 
-### 🔄 **数据交换格式**
-- **几何格式**：STEP, STL, IGES, BREP
-- **网格格式**：MSH, INP, BDF, CAS
-- **数据格式**：JSON, YAML, CSV, HDF5
+### 🤝 **工作流支持**
+- **预定义工作流**：`stress_analysis`, `modal_analysis`, `topology_optimization`
+- **自定义工作流**：支持用户定义任意分析流程
+- **异常处理**：完整的步骤级错误处理和进度跟踪
+
+### 📊 **仿真工具链**
+- **Gmsh**：开源网格生成器（规划中集成）
+- **CalculiX**：开源有限元分析（已实现）
+- **通用格式支持**：.inp (Abaqus/CalculiX), .bdf (NASTRAN), .msh (Gmsh)
+
+## 🚀 插件化架构使用
+
+### 1. 配置文件示例
+创建 `project.yaml` 定义完整仿真流程：
+
+```yaml
+# examples/project.yaml
+project:
+  name: "支架静力分析"
+  description: "分析支架在载荷下的应力和变形"
+
+cad:
+  software: "freecad"
+  model: "bracket.FCStd"
+  parameters:
+    thickness: 5.0    # mm
+    fillet_radius: 3.0 # mm
+
+mesh:
+  element_size: 2.0
+  element_type: "tetrahedron"
+
+material:
+  name: "Q235"
+  properties:
+    - name: "elastic_modulus"
+      value: 210e9
+      unit: "Pa"
+
+analysis:
+  type: "static"
+  solver: "calculix"
+  
+  loads:
+    - type: "force"
+      value: -1000.0
+      direction: [0, 0, -1]
+  
+  constraints:
+    - type: "fixed"
+      location: "bottom_surface"
+```
+
+### 2. Python API 使用
+```python
+from integrations import WorkflowEngine
+from integrations.cad.freecad import FreeCADConnector
+from integrations.cae.calculix import CalculiXConnector
+from core.types import SimulationConfig
+
+# 创建连接器
+cad = FreeCADConnector()
+cae = CalculiXConnector()
+
+# 创建工作流引擎
+workflow = WorkflowEngine(cad_connector=cad, cae_connector=cae)
+
+# 加载配置
+config = SimulationConfig.from_yaml("project.yaml")
+
+# 运行工作流
+result = workflow.run_workflow(
+    "stress_analysis",
+    cad_software="freecad",
+    cae_software="calculix",
+    config=config
+)
+
+# 查看结果
+print(f"最大应力: {result.max_stress} Pa")
+print(f"最大位移: {result.max_displacement} m")
+print(f"安全系数: {result.safety_factor}")
+```
+
+### 3. 扩展新软件
+要集成新的CAD软件，继承 `CADConnector` 并实现抽象方法：
+
+```python
+from integrations._base.connectors import CADConnector
+
+class MyCADConnector(CADConnector):
+    def connect(self) -> bool:
+        # 连接软件
+        pass
+    
+    def load_model(self, file_path: Path) -> bool:
+        # 加载模型
+        pass
+    
+    def get_parameter(self, name: str) -> Optional[float]:
+        # 获取参数
+        pass
+    
+    def set_parameter(self, name: str, value: float) -> bool:
+        # 设置参数
+        pass
+    
+    def rebuild(self) -> bool:
+        # 重建模型
+        pass
+    
+    def export_step(self, output_path: Path) -> bool:
+        # 导出STEP
+        pass
+    
+    def get_supported_formats(self) -> List[FileFormat]:
+        # 返回支持的格式
+        pass
+```
+
+### 4. 快速测试
+运行演示脚本查看新架构功能：
+```bash
+python demo_workflow.py
+```
 
 ## 🛠️ 开发
 
@@ -328,7 +468,15 @@ pip install -e ".[dev]"
 ### 运行测试
 
 ```bash
+# 运行所有测试
 pytest
+
+# 运行新架构测试
+python test_freecad_connector.py
+python test_calculix_connector.py
+
+# 运行工作流演示
+python demo_workflow.py
 ```
 
 ### 代码格式化
@@ -340,7 +488,7 @@ black src/
 ### 类型检查
 
 ```bash
-mypy src/sw_helper
+mypy src/sw_helper src/integrations src/core
 ```
 
 ## 📝 配置文件
@@ -408,9 +556,14 @@ python -m sw_helper --help
 - **功能建议**：欢迎提交Issue描述您的需求
 
 ### 🎯 项目状态
-- **当前版本**：v0.1.0 (开发中)
-- **主要用户**：机械专业学生、FreeCAD用户、CAE学习者
-- **开发进度**：基础功能已完成，正在添加AI和多语言支持
+- **当前版本**：v0.2.0 (插件化架构发布)
+- **主要用户**：机械专业学生、FreeCAD用户、CAE学习者、插件开发者
+- **开发进度**：
+  - ✅ 基础功能已完成（几何解析、材料计算、网格分析）
+  - ✅ AI辅助设计和多语言支持
+  - ✅ **插件化架构**：标准化CAD/CAE接口，FreeCAD+CalculiX集成
+  - 🔄 工作流CLI命令集成（进行中）
+  - 🔄 Gmsh网格生成器集成（规划中）
 
 ## 🙏 致谢
 

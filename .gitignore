@@ -22,6 +22,7 @@ __pycache__/
 generated_models/
 optimization_results/
 test_output/
+demo_output/
 *.FCStd
 *.step
 *.stl

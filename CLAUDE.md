@@ -17,6 +17,7 @@ cae-cli/
 │   ├── geometry/           # 几何解析模块
 │   ├── mesh/               # 网格分析模块
 │   ├── material/           # 材料力学模块
+│   ├── mechanics/          # 力学计算模块（新增）
 │   ├── report/             # 报告生成模块
 │   ├── optimization/       # 参数优化模块
 │   ├── ai/                 # AI辅助设计模块
@@ -106,22 +107,29 @@ python -m sw_helper --help
 - 支持单位转换（SI、MPa）
 - 支持搜索和查询特定属性
 
-### 4. 报告生成 (report)
+### 4. 力学计算 (mechanics)
+- 支持Von Mises应力、主应力、最大剪应力计算
+- 基于材料伸长率的脆性/塑性智能判定
+- 单位自动转换（Pint库支持）
+- 安全系数计算与颜色预警（红/黄/绿）
+- 支持屈曲分析和挠度计算
+
+### 5. 报告生成 (report)
 - 支持 HTML、PDF、JSON、Markdown 格式
 - 分析类型：静力、模态、热、屈曲分析
 - 支持自定义模板
 
-### 5. 参数优化 (optimization)
+### 6. 参数优化 (optimization)
 - 自动调整设计参数并评估质量
 - 支持 FreeCAD 和 SolidWorks
 - 优化流程：参数修改 → 重建 → 导出 → 分析 → 报告
 
-### 6. AI辅助设计 (ai)
+### 7. AI辅助设计 (ai)
 - 文本到3D模型生成（自然语言描述 → FreeCAD建模）
 - AI优化建议
 - 集成多个LLM提供商（OpenAI、Anthropic、Ollama等）
 
-### 7. CAD集成 (integrations)
+### 8. CAD集成 (integrations)
 - SolidWorks：参数修改、文件导出、宏生成
 - FreeCAD：完整API集成、MCP协议
 - 自动连接和操作CAD软件
