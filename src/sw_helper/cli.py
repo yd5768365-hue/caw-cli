@@ -187,7 +187,9 @@ def parse(ctx, file_path, format, output, format_output):
     default=["all"],
     help="Mesh quality metrics to calculate",
 )
-@click.option("--threshold", "-t", type=float, default=0.1, help="Quality threshold (0-1)")
+@click.option(
+    "--threshold", "-t", type=float, default=0.1, help="Quality threshold (0-1)"
+)
 @click.option("--output", "-o", type=click.Path(), help="Output file path")
 @click.option("--material", "-M", help="Material name for AI suggestions (e.g., Q235)")
 @click.pass_context
@@ -287,8 +289,12 @@ def analyze(ctx, file_path, metric, threshold, output, material):
     "-p",
     help="Query specific property (e.g.: density, elastic_modulus, yield_strength)",
 )
-@click.option("--list", "-l", "list_materials", is_flag=True, help="List all available materials")
-@click.option("--search", "-s", help="Search materials (supports name or description keywords)")
+@click.option(
+    "--list", "-l", "list_materials", is_flag=True, help="List all available materials"
+)
+@click.option(
+    "--search", "-s", help="Search materials (supports name or description keywords)"
+)
 @click.option(
     "--unit",
     "-u",
@@ -495,10 +501,16 @@ def report(ctx, analysis_type, input_file, output, output_format, template, titl
 
 @cli.command()
 @click.option(
-    "--set", "set_config", nargs=2, metavar="<KEY> <VALUE>", help="Set configuration item"
+    "--set",
+    "set_config",
+    nargs=2,
+    metavar="<KEY> <VALUE>",
+    help="Set configuration item",
 )
 @click.option("--get", metavar="<KEY>", help="Get configuration item")
-@click.option("--list", "-l", "list_config", is_flag=True, help="List all configurations")
+@click.option(
+    "--list", "-l", "list_config", is_flag=True, help="List all configurations"
+)
 @click.option("--reset", is_flag=True, help="Reset to default configuration")
 @click.pass_context
 def config(ctx, set_config, get, list_config, reset):
@@ -639,7 +651,9 @@ def info(ctx):
 )
 @click.option("--open", type=click.Path(exists=True), help="Open CAD file")
 @click.option("--list-params", "-l", is_flag=True, help="List all parameters")
-@click.option("--set-param", "-s", nargs=2, metavar="<NAME> <VALUE>", help="Set parameter value")
+@click.option(
+    "--set-param", "-s", nargs=2, metavar="<NAME> <VALUE>", help="Set parameter value"
+)
 @click.option("--rebuild", "-r", is_flag=True, help="Rebuild model")
 @click.option("--export", "-e", type=click.Path(), help="Export file path")
 @click.option(
@@ -763,12 +777,20 @@ def cad(ctx, connect, open, list_params, set_param, rebuild, export, format):
 @click.argument("file_path", type=click.Path(exists=True))
 @click.option("--parameter", "-p", required=True, help="Parameter name to optimize")
 @click.option(
-    "--param-range", "-r", nargs=2, type=float, required=True, help="Parameter range (min max)"
+    "--param-range",
+    "-r",
+    nargs=2,
+    type=float,
+    required=True,
+    help="Parameter range (min max)",
 )
 @click.option("--steps", "-s", type=int, default=5, help="Number of iterations")
 @click.option(
-    "--step-mode", "-m", type=click.Choice(["linear", "geometric"], case_sensitive=False),
-    default="linear", help="Step mode: linear or geometric (default: linear)"
+    "--step-mode",
+    "-m",
+    type=click.Choice(["linear", "geometric"], case_sensitive=False),
+    default="linear",
+    help="Step mode: linear or geometric (default: linear)",
 )
 @click.option(
     "--cad",
@@ -789,7 +811,18 @@ def cad(ctx, connect, open, list_params, set_param, rebuild, export, format):
 @click.option("--material", "-M", help="Material name for AI suggestions (e.g., Q235)")
 @click.pass_context
 def optimize(
-    ctx, file_path, parameter, param_range, steps, step_mode, cad, output, plot, report, output_dir, material
+    ctx,
+    file_path,
+    parameter,
+    param_range,
+    steps,
+    step_mode,
+    cad,
+    output,
+    plot,
+    report,
+    output_dir,
+    material,
 ):
     """
     Parameter optimization loop - automatically adjust design parameters and evaluate quality
@@ -918,7 +951,7 @@ def optimize(
                     f"{r.allowable_stress:.1f}",
                     f"{r.safety_factor:.2f}",
                     f"{r.analysis_time:.2f}",
-                    filename
+                    filename,
                 )
 
             console.print(table)
@@ -964,7 +997,9 @@ def optimize(
             if report:
                 report_path = Path(output_dir) / "optimization_report.md"
                 optimizer.generate_report(str(report_path))
-                console.print(f"[green]Report generated:[/green] [dim]{report_path}[/dim]")
+                console.print(
+                    f"[green]Report generated:[/green] [dim]{report_path}[/dim]"
+                )
 
             # 提示输出目录
             console.print(
@@ -1019,7 +1054,13 @@ def ai():
 )
 @click.option("--name", "-n", help="Model name (auto-generated if not specified)")
 @click.option("--mock", "-m", is_flag=True, help="Use mock mode (no FreeCAD required)")
-@click.option("--analyze", "-a", is_flag=True, default=True, help="Run analysis and generate report")
+@click.option(
+    "--analyze",
+    "-a",
+    is_flag=True,
+    default=True,
+    help="Run analysis and generate report",
+)
 @click.option("--open", is_flag=True, help="Open FreeCAD to view after generation")
 def ai_generate(description, output_dir, name, mock, analyze, open):
     """
@@ -1071,7 +1112,9 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
             )
 
         if not result.get("success"):
-            console.print(f"[red]失败 生成失败: {result.get('error', '未知错误')}[/red]")
+            console.print(
+                f"[red]失败 生成失败: {result.get('error', '未知错误')}[/red]"
+            )
             sys.exit(1)
 
         # 显示解析结果
@@ -1178,7 +1221,9 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
 
 
 @ai.command("suggest")
-@click.option("--file", "-f", type=click.Path(exists=True), help="Analyze existing design file")
+@click.option(
+    "--file", "-f", type=click.Path(exists=True), help="Analyze existing design file"
+)
 @click.option(
     "--target",
     type=click.Choice(["strength", "weight", "cost", "manufacturability"]),
@@ -1210,7 +1255,11 @@ def ai_suggest(file, target, material):
         ai_gen = AIGenerator()
 
         # 模拟当前参数和质量指标
-        current_params = {"wall_thickness": 5, "fillet_radius": 3, "material": material or "Q235"}
+        current_params = {
+            "wall_thickness": 5,
+            "fillet_radius": 3,
+            "material": material or "Q235",
+        }
 
         mock_metrics = {"max_stress": 180e6, "safety_factor": 1.8, "weight": 2.5}
 
@@ -1493,16 +1542,17 @@ def search(keyword, case_sensitive):
 
     for i, result in enumerate(results, 1):
         # 高亮关键词
-        highlighted_content = kb.highlight_keyword(result['content'], keyword)
+        highlighted_content = kb.highlight_keyword(result["content"], keyword)
 
         # 显示结果
         from rich.panel import Panel
+
         panel = Panel(
             highlighted_content,
             title=f"[green]{result['title']}[/green]",
             subtitle=f"[dim]{result['filename']}[/dim]",
             border_style="cyan",
-            expand=False
+            expand=False,
         )
         console.print(panel)
         console.print()
@@ -1538,15 +1588,16 @@ def material(material_name):
     console.print(f"[green]找到 {len(results)} 个匹配结果:[/green]")
 
     for i, result in enumerate(results, 1):
-        highlighted_content = kb.highlight_keyword(result['content'], material_name)
+        highlighted_content = kb.highlight_keyword(result["content"], material_name)
 
         from rich.panel import Panel
+
         panel = Panel(
             highlighted_content,
             title=f"[green]{result['title']}[/green]",
             subtitle=f"[dim]{result['filename']}[/dim]",
             border_style="cyan",
-            expand=False
+            expand=False,
         )
         console.print(panel)
         console.print()
@@ -1582,22 +1633,24 @@ def bolt(bolt_spec):
     console.print(f"[green]找到 {len(results)} 个匹配结果:[/green]")
 
     for i, result in enumerate(results, 1):
-        highlighted_content = kb.highlight_keyword(result['content'], bolt_spec)
+        highlighted_content = kb.highlight_keyword(result["content"], bolt_spec)
 
         from rich.panel import Panel
+
         panel = Panel(
             highlighted_content,
             title=f"[green]{result['title']}[/green]",
             subtitle=f"[dim]{result['filename']}[/dim]",
             border_style="cyan",
-            expand=False
+            expand=False,
         )
         console.print(panel)
         console.print()
 
 
 @cli.command()
-def interactive():
+@click.option("--lang", default="zh", type=click.Choice(["zh", "en"]))
+def interactive(lang):
     """
     Interactive mode - use CAE-CLI through a menu interface
 
@@ -1605,7 +1658,8 @@ def interactive():
         1. Analyze model
         2. Parameter optimization
         3. AI generate model
-        4. Exit
+        4. 知识库查询 (Handbook)
+        5. Exit
 
     Support direct command input like: "analyze test.step --material 40Cr"
     """
@@ -1613,8 +1667,20 @@ def interactive():
     from rich.prompt import Prompt
     from rich.panel import Panel
     from rich.table import Table
+    import json
+    from pathlib import Path
 
     console = Console()
+
+    # 加载语言包
+    lang_file = Path(__file__).parent.parent.parent / "data" / "languages.json"
+    try:
+        with open(lang_file, "r", encoding="utf-8") as f:
+            lang_data = json.load(f)
+        strings = lang_data.get(lang, lang_data["zh"])
+    except Exception as e:
+        console.print(f"[yellow]Warning: Failed to load language pack: {e}[/yellow]")
+        strings = {}
 
     while True:
         try:
@@ -1622,80 +1688,204 @@ def interactive():
             console.clear()
 
             # 创建菜单表格
-            menu_table = Table(title="CAE-CLI Interactive Mode", show_header=True, header_style="bold cyan")
-            menu_table.add_column("Option", style="cyan", width=5)
-            menu_table.add_column("Operation", style="green")
-            menu_table.add_column("Description", style="dim")
+            menu_table = Table(
+                title=strings.get("menu_title", "CAE-CLI Interactive Mode"),
+                show_header=True,
+                header_style="bold cyan",
+            )
+            menu_table.add_column(
+                strings.get("columns", {}).get("option", "Option"),
+                style="cyan",
+                width=5,
+            )
+            menu_table.add_column(
+                strings.get("columns", {}).get("operation", "Operation"), style="green"
+            )
+            menu_table.add_column(
+                strings.get("columns", {}).get("description", "Description"),
+                style="dim",
+            )
 
-            menu_table.add_row("1", "Analyze Model", "Analyze geometry or mesh quality")
-            menu_table.add_row("2", "Optimize Parameter", "Parameter optimization")
-            menu_table.add_row("3", "AI Generate Model", "AI model generation")
-            menu_table.add_row("4", "Exit", "Exit interactive mode")
+            menu_table.add_row(
+                "1",
+                strings.get("menu", {}).get("analyze", "Analyze Model"),
+                strings.get("descriptions", {}).get(
+                    "analyze", "Analyze geometry or mesh quality"
+                ),
+            )
+            menu_table.add_row(
+                "2",
+                strings.get("menu", {}).get("optimize", "Optimize Parameter"),
+                strings.get("descriptions", {}).get(
+                    "optimize", "Parameter optimization"
+                ),
+            )
+            menu_table.add_row(
+                "3",
+                strings.get("menu", {}).get("ai_generate", "AI Generate Model"),
+                strings.get("descriptions", {}).get(
+                    "ai_generate", "AI model generation"
+                ),
+            )
+            menu_table.add_row(
+                "4",
+                strings.get("menu", {}).get("handbook", "知识库查询 (Handbook)"),
+                strings.get("descriptions", {}).get(
+                    "handbook", "Query mechanical handbook knowledge base"
+                ),
+            )
+            menu_table.add_row(
+                "5",
+                strings.get("menu", {}).get("exit", "Exit"),
+                strings.get("descriptions", {}).get("exit", "Exit interactive mode"),
+            )
 
             console.print(menu_table)
-            console.print("\n[dim]Type a command directly (e.g., 'analyze test.step') to execute[/dim]")
+            console.print(
+                strings.get("prompts", {}).get(
+                    "direct_command",
+                    "\n[dim]Type a command directly (e.g., 'analyze test.step') to execute[/dim]",
+                )
+            )
 
             # 获取用户输入
-            choice = Prompt.ask("\nEnter your choice (1-4) or command")
+            choice = Prompt.ask(
+                strings.get("prompts", {}).get(
+                    "enter_choice", "\nEnter your choice (1-5) or command"
+                )
+            )
 
             if choice == "1":
                 # 分析模型
-                file_path = Prompt.ask("Enter model file path")
+                file_path = Prompt.ask(
+                    strings.get("analyze", {}).get(
+                        "enter_file", "Enter model file path"
+                    )
+                )
                 if file_path:
                     # 支持多种分析选项
-                    console.print("\n[cyan]Analysis options:[/cyan]")
-                    console.print("  - [bold]parse[/bold]: Parse geometry file")
-                    console.print("  - [bold]analyze[/bold]: Analyze mesh quality")
-                    console.print("  - [bold]material[/bold]: Query material properties")
+                    console.print(
+                        strings.get("analyze", {}).get(
+                            "options", "\n[cyan]Analysis options:[/cyan]"
+                        )
+                    )
+                    console.print(
+                        strings.get("analyze", {}).get(
+                            "parse", "  - [bold]parse[/bold]: Parse geometry file"
+                        )
+                    )
+                    console.print(
+                        strings.get("analyze", {}).get(
+                            "analyze", "  - [bold]analyze[/bold]: Analyze mesh quality"
+                        )
+                    )
+                    console.print(
+                        strings.get("analyze", {}).get(
+                            "material",
+                            "  - [bold]material[/bold]: Query material properties",
+                        )
+                    )
 
-                    analysis_type = Prompt.ask("Enter analysis type", default="parse")
+                    analysis_type = Prompt.ask(
+                        strings.get("analyze", {}).get(
+                            "enter_analysis_type", "Enter analysis type"
+                        ),
+                        default="parse",
+                    )
 
                     if analysis_type == "parse":
                         from sw_helper.geometry.parser import GeometryParser
+
                         try:
                             parser = GeometryParser()
                             result = parser.parse(file_path)
                             console.print_json(data=result)
                         except Exception as e:
-                            console.print(f"[red]Error: {e}[/red]")
+                            console.print(
+                                strings.get("prompts", {})
+                                .get("error", "[red]Error: {error}[/red]")
+                                .format(error=e)
+                            )
 
                     elif analysis_type == "analyze":
                         from sw_helper.mesh.quality import MeshQualityAnalyzer
+
                         try:
                             analyzer = MeshQualityAnalyzer()
                             results = analyzer.analyze(file_path)
                             console.print_json(data=results)
                         except Exception as e:
-                            console.print(f"[red]Error: {e}[/red]")
+                            console.print(
+                                strings.get("prompts", {})
+                                .get("error", "[red]Error: {error}[/red]")
+                                .format(error=e)
+                            )
 
                     elif analysis_type == "material":
-                        material_name = Prompt.ask("Enter material name")
+                        material_name = Prompt.ask(
+                            strings.get("analyze", {}).get(
+                                "enter_material_name", "Enter material name"
+                            )
+                        )
                         if material_name:
                             from sw_helper.material.database import MaterialDatabase
+
                             try:
                                 db = MaterialDatabase()
                                 material_info = db.get_material(material_name)
                                 if material_info:
                                     console.print_json(data=material_info)
                                 else:
-                                    console.print(f"[yellow]Material '{material_name}' not found[/yellow]")
+                                    console.print(
+                                        strings.get("analyze", {})
+                                        .get(
+                                            "material_not_found",
+                                            f"[yellow]Material '{material_name}' not found[/yellow]",
+                                        )
+                                        .format(material_name=material_name)
+                                    )
                             except Exception as e:
-                                console.print(f"[red]Error: {e}[/red]")
+                                console.print(
+                                    strings.get("prompts", {})
+                                    .get("error", "[red]Error: {error}[/red]")
+                                    .format(error=e)
+                                )
 
             elif choice == "2":
                 # 参数优化
-                file_path = Prompt.ask("Enter CAD file path (.FCStd)")
+                file_path = Prompt.ask(
+                    strings.get("optimize", {}).get(
+                        "enter_cad_file", "Enter CAD file path (.FCStd)"
+                    )
+                )
                 if file_path:
-                    parameter = Prompt.ask("Enter parameter to optimize")
+                    parameter = Prompt.ask(
+                        strings.get("optimize", {}).get(
+                            "enter_parameter", "Enter parameter to optimize"
+                        )
+                    )
                     if parameter:
-                        param_range = Prompt.ask("Enter parameter range (min max)", default="2 15")
-                        steps = Prompt.ask("Enter number of steps", default="5")
+                        param_range = Prompt.ask(
+                            strings.get("optimize", {}).get(
+                                "enter_param_range", "Enter parameter range (min max)"
+                            ),
+                            default="2 15",
+                        )
+                        steps = Prompt.ask(
+                            strings.get("optimize", {}).get(
+                                "enter_steps", "Enter number of steps"
+                            ),
+                            default="5",
+                        )
 
                         try:
                             min_val, max_val = map(float, param_range.split())
                             steps_int = int(steps)
 
-                            from sw_helper.optimization.optimizer import FreeCADOptimizer
+                            from sw_helper.optimization.optimizer import (
+                                FreeCADOptimizer,
+                            )
+
                             optimizer = FreeCADOptimizer(use_mock=False)
 
                             # 设置进度回调
@@ -1712,25 +1902,73 @@ def interactive():
                                 steps=steps_int,
                                 step_mode="linear",
                                 output_dir="./optimization_output",
-                                analyze_geometry=True
+                                analyze_geometry=True,
                             )
 
                             if results:
                                 best = max(results, key=lambda x: x.quality_score)
-                                console.print(f"\n[green]Best result:[/green]")
-                                console.print(f"Parameter: {best.parameter_name} = {best.parameter_value:.2f} mm")
-                                console.print(f"Quality Score: {best.quality_score:.1f}/100")
-                                console.print(f"Allowable Stress: {best.allowable_stress:.1f} MPa")
-                                console.print(f"Safety Factor: {best.safety_factor:.2f}")
+                                console.print(
+                                    strings.get("optimize", {}).get(
+                                        "best_result", "\n[green]Best result:[/green]"
+                                    )
+                                )
+                                console.print(
+                                    strings.get("optimize", {})
+                                    .get(
+                                        "parameter",
+                                        "Parameter: {parameter_name} = {parameter_value:.2f} mm",
+                                    )
+                                    .format(
+                                        parameter_name=best.parameter_name,
+                                        parameter_value=best.parameter_value,
+                                    )
+                                )
+                                console.print(
+                                    strings.get("optimize", {})
+                                    .get(
+                                        "quality_score",
+                                        "Quality Score: {quality_score:.1f}/100",
+                                    )
+                                    .format(quality_score=best.quality_score)
+                                )
+                                console.print(
+                                    strings.get("optimize", {})
+                                    .get(
+                                        "allowable_stress",
+                                        "Allowable Stress: {allowable_stress:.1f} MPa",
+                                    )
+                                    .format(allowable_stress=best.allowable_stress)
+                                )
+                                console.print(
+                                    strings.get("optimize", {})
+                                    .get(
+                                        "safety_factor",
+                                        "Safety Factor: {safety_factor:.2f}",
+                                    )
+                                    .format(safety_factor=best.safety_factor)
+                                )
                             else:
-                                console.print("[yellow]No results obtained[/yellow]")
+                                console.print(
+                                    strings.get("optimize", {}).get(
+                                        "no_results",
+                                        "[yellow]No results obtained[/yellow]",
+                                    )
+                                )
 
                         except Exception as e:
-                            console.print(f"[red]Error: {e}[/red]")
+                            console.print(
+                                strings.get("prompts", {})
+                                .get("error", "[red]Error: {error}[/red]")
+                                .format(error=e)
+                            )
 
             elif choice == "3":
                 # AI生成模型
-                description = Prompt.ask("Enter model description")
+                description = Prompt.ask(
+                    strings.get("ai_generate", {}).get(
+                        "enter_description", "Enter model description"
+                    )
+                )
                 if description:
                     from sw_helper.ai.model_generator import AIModelGenerator
 
@@ -1740,52 +1978,165 @@ def interactive():
                         result = generator.generate(description)
                         console.print_json(data=result)
                     except Exception as e:
-                        console.print(f"[red]Error: {e}[/red]")
+                        console.print(
+                            strings.get("prompts", {})
+                            .get("error", "[red]Error: {error}[/red]")
+                            .format(error=e)
+                        )
 
             elif choice == "4":
+                # 知识库查询
+                from sw_helper.knowledge import get_knowledge_base
+
+                kb = get_knowledge_base()
+
+                while True:
+                    try:
+                        console.clear()
+                        console.print(
+                            Panel(
+                                strings.get("handbook", {}).get(
+                                    "welcome",
+                                    "[green]📚 机械手册知识库查询[/green]\n\n输入关键词查询机械设计相关知识\n示例: 40Cr, M10螺栓, 圆角, 公差, Q235\n\n[dim]输入 'back' 或按 Enter 返回主菜单[/dim]",
+                                ),
+                                title=strings.get("handbook", {}).get(
+                                    "title", "知识库查询"
+                                ),
+                                border_style="cyan",
+                            )
+                        )
+
+                        keyword = Prompt.ask(
+                            strings.get("handbook", {}).get(
+                                "enter_keyword", "\n输入关键词"
+                            )
+                        )
+
+                        if not keyword or keyword.lower() == "back":
+                            break
+
+                        # 执行搜索
+                        console.print(
+                            strings.get("handbook", {})
+                            .get("searching", "\n[cyan]正在搜索: {keyword}[/cyan]")
+                            .format(keyword=keyword)
+                        )
+                        kb.search_and_display(keyword)
+
+                        # 询问是否继续搜索
+                        continue_search = Prompt.ask(
+                            strings.get("handbook", {}).get(
+                                "continue_search", "\n继续搜索? (y/n)"
+                            ),
+                            default="y",
+                        ).lower()
+                        if continue_search not in ["y", "yes"]:
+                            break
+
+                    except KeyboardInterrupt:
+                        console.print(
+                            strings.get("handbook", {}).get(
+                                "back_to_menu", "\n[yellow]返回主菜单[/yellow]"
+                            )
+                        )
+                        break
+                    except Exception as e:
+                        console.print(
+                            strings.get("handbook", {})
+                            .get("query_error", "[red]查询错误: {error}[/red]")
+                            .format(error=e)
+                        )
+                        try:
+                            Prompt.ask(
+                                strings.get("handbook", {}).get(
+                                    "press_enter", "\n按 Enter 继续..."
+                                ),
+                                default="",
+                            )
+                        except EOFError:
+                            break
+
+            elif choice == "5":
                 # 退出
-                console.print("\n[green]Thank you for using CAE-CLI![/green]")
+                console.print(
+                    strings.get("prompts", {}).get(
+                        "thank_you", "\n[green]Thank you for using CAE-CLI![/green]"
+                    )
+                )
                 break
 
             elif choice.strip():
                 # 直接命令执行
                 try:
                     import subprocess
+
                     result = subprocess.run(
                         f"python -m sw_helper.cli {choice}",
                         shell=True,
                         capture_output=True,
                         text=True,
-                        cwd=Path(__file__).parent.parent.parent
+                        cwd=Path(__file__).parent.parent.parent,
                     )
 
                     if result.stdout:
                         console.print(result.stdout)
                     if result.stderr:
-                        console.print(f"[red]Error: {result.stderr}[/red]")
+                        console.print(
+                            strings.get("prompts", {})
+                            .get("error", "[red]Error: {error}[/red]")
+                            .format(error=result.stderr)
+                        )
 
                 except Exception as e:
-                    console.print(f"[red]Error: {e}[/red]")
+                    console.print(
+                        strings.get("prompts", {})
+                        .get("error", "[red]Error: {error}[/red]")
+                        .format(error=e)
+                    )
 
             else:
-                console.print("[yellow]Please enter a valid choice or command[/yellow]")
+                console.print(
+                    strings.get("prompts", {}).get(
+                        "invalid_choice",
+                        "[yellow]Please enter a valid choice or command[/yellow]",
+                    )
+                )
 
             # 按任意键继续
-            if choice not in ["4"]:
+            if choice not in ["5"]:
                 try:
-                    Prompt.ask("\nPress Enter to continue...", default="")
+                    Prompt.ask(
+                        strings.get("prompts", {}).get(
+                            "press_continue", "\nPress Enter to continue..."
+                        ),
+                        default="",
+                    )
                 except EOFError:
                     break
 
         except KeyboardInterrupt:
-            console.print("\n[yellow]Interrupted by user[/yellow]")
+            console.print(
+                strings.get("prompts", {}).get(
+                    "interrupted", "\n[yellow]Interrupted by user[/yellow]"
+                )
+            )
             break
         except Exception as e:
-            console.print(f"[red]Error: {e}[/red]")
+            console.print(
+                strings.get("prompts", {})
+                .get("error", "[red]Error: {error}[/red]")
+                .format(error=e)
+            )
             import traceback
+
             console.print(f"[dim]{traceback.format_exc()}[/dim]")
             try:
-                Prompt.ask("\nPress Enter to continue...", default="")
+                Prompt.ask(
+                    strings.get("prompts", {}).get(
+                        "press_continue", "\nPress Enter to continue..."
+                    ),
+                    default="",
+                )
             except EOFError:
                 break
 
@@ -1879,7 +2230,9 @@ def mcp_call(tool_name, arguments):
                     except:
                         console.print(result_text)
             elif response.error:
-                console.print(f"\n[red]失败 错误: {response.error.get('message')}[/red]")
+                console.print(
+                    f"\n[red]失败 错误: {response.error.get('message')}[/red]"
+                )
 
         except Exception as e:
             console.print(f"[red]失败 执行失败: {e}[/red]")
