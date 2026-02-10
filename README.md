@@ -1,10 +1,20 @@
-# CAE-CLI
+# cae-cli - 机械设计学习辅助 CLI 工具
+
+一个专为机械专业学生设计的终端工具，帮助快速分析 SolidWorks/FreeCAD 模型的网格质量、材料力学性能、参数优化，并集成 AI 建议和个人机械手册知识库。
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-🚀 **SolidWorks CAE集成助手** - 专业的CAE命令行工具，集成SolidWorks、FreeCAD及各类建模/仿真软件。
+## 核心功能
+
+- **模型分析**：支持 STL / STEP 文件，计算网格统计、质量评分（aspect ratio、skewness 等）、许用应力、安全系数
+- **参数优化**：自动迭代修改参数（如圆角半径），寻找最佳质量/强度方案
+- **AI 辅助**：生成专业中文建议、模型描述，甚至自动建模（未来）
+- **交互模式**：菜单式操作，新手友好
+- **机械手册知识库**：随时查询材料参数、螺栓规格、公差、疲劳强度等（本地 Markdown）
+- **报告输出**：Markdown 格式 + 可视化图表（质量分曲线）
+- **多 CAD 支持**：当前 FreeCAD（通过 MCP），规划中 SolidWorks 宏集成
 
 ## ✨ 特性
 
@@ -27,8 +37,8 @@ pip install cae-cli
 ### 方式二：从源码安装
 
 ```bash
-git clone https://github.com/yourusername/cae-cli.git
-cd cae-cli
+git clone https://github.com/yd5768365-hue/caw-cli.git
+cd caw-cli
 pip install -e .
 
 # 或运行安装脚本
@@ -235,8 +245,8 @@ cae-cli/
 ### 安装开发依赖
 
 ```bash
-git clone https://github.com/yourusername/cae-cli.git
-cd cae-cli
+git clone https://github.com/yd5768365-hue/caw-cli.git
+cd caw-cli
 pip install -e ".[dev]"
 ```
 
@@ -315,8 +325,8 @@ python -m sw_helper --help
 
 - 作者: Your Name
 - 邮箱: your.email@example.com
-- 项目主页: https://github.com/yourusername/cae-cli
-- 文档: https://cae-cli.readthedocs.io
+- 项目主页: https://github.com/yd5768365-hue/caw-cli
+- 文档: https://caw-cli.readthedocs.io
 
 ## 🙏 致谢
 
