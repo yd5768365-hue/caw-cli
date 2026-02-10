@@ -1,0 +1,29 @@
+[
+  {
+    "iteration": 1,
+    "parameter_value": 2.0,
+    "quality_score": 26,
+    "allowable_stress": 117.5,
+    "safety_factor": 1.8,
+    "time": 0.001283407211303711,
+    "export_path": "optimization_results\\optimize_001.step"
+  },
+  {
+    "iteration": 2,
+    "parameter_value": 8.5,
+    "quality_score": 32,
+    "allowable_stress": 141.0,
+    "safety_factor": 2.2,
+    "time": 0.0009560585021972656,
+    "export_path": "optimization_results\\optimize_002.step"
+  },
+  {
+    "iteration": 3,
+    "parameter_value": 15.0,
+    "quality_score": 35,
+    "allowable_stress": 129.25,
+    "safety_factor": 2.0,
+    "time": 0.000997304916381836,
+    "export_path": "optimization_results\\optimize_003.step"
+  }
+]

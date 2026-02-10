@@ -1,0 +1,62 @@
+{
+  "Q235": {
+    "name": "Q235",
+    "standard": "GB/T 700",
+    "type": "碳素结构钢",
+    "density": 7850,
+    "elastic_modulus": 210000000000,
+    "poisson_ratio": 0.3,
+    "yield_strength": 235000000,
+    "tensile_strength": 375000000,
+    "thermal_expansion": 1.2e-05,
+    "description": "通用结构钢"
+  },
+  "Q345": {
+    "name": "Q345",
+    "standard": "GB/T 1591",
+    "type": "低合金高强度钢",
+    "density": 7850,
+    "elastic_modulus": 210000000000,
+    "poisson_ratio": 0.3,
+    "yield_strength": 345000000,
+    "tensile_strength": 470000000,
+    "thermal_expansion": 1.2e-05,
+    "description": "低合金高强度结构钢"
+  },
+  "45钢": {
+    "name": "45钢",
+    "standard": "GB/T 699",
+    "type": "优质碳素结构钢",
+    "density": 7850,
+    "elastic_modulus": 210000000000,
+    "poisson_ratio": 0.3,
+    "yield_strength": 355000000,
+    "tensile_strength": 600000000,
+    "thermal_expansion": 1.1e-05,
+    "description": "常用机械零件材料"
+  },
+  "铝合金6061": {
+    "name": "铝合金6061",
+    "standard": "GB/T 3190",
+    "type": "铝合金",
+    "density": 2700,
+    "elastic_modulus": 69000000000,
+    "poisson_ratio": 0.33,
+    "yield_strength": 276000000,
+    "tensile_strength": 310000000,
+    "thermal_expansion": 2.3e-05,
+    "description": "航空铝合金"
+  },
+  "不锈钢304": {
+    "name": "不锈钢304",
+    "standard": "GB/T 20878",
+    "type": "奥氏体不锈钢",
+    "density": 8000,
+    "elastic_modulus": 193000000000,
+    "poisson_ratio": 0.29,
+    "yield_strength": 215000000,
+    "tensile_strength": 520000000,
+    "thermal_expansion": 1.7e-05,
+    "description": "耐腐蚀不锈钢"
+  }
+}

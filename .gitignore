@@ -1,0 +1,45 @@
+# 操作系统文件
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python 文件
+__pycache__/
+*.pyc
+*.pyo
+
+# 测试和临时文件
+*.tmp
+*.temp
+*.log
+*.txt
+*.csv
+
+# 生成的文件
+generated_models/
+optimization_results/
+test_output/
+*.FCStd
+*.step
+*.stl
+*.iges
+*.inp
+*.msh
+
+# 配置文件
+config.json
+*.cfg
+*.ini
+
+# 安装包
+*.egg-info/
+dist/
+build/
+
+# 其他
+*.zip
+*.rar
+*.7z

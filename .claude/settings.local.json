@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cae-cli:*)",
+      "Bash(python -c:*)",
+      "Bash(python -m ruff check:*)",
+      "Bash(python -m sw_helper.cli:*)",
+      "Bash(python test_interactive.py)"
+    ]
+  }
+}
