@@ -59,6 +59,9 @@ pip install "cae-cli[full]"
 - 可选：SolidWorks、FreeCAD、ANSYS、Abaqus
 
 ## 🚀 快速开始
+### 交互界面
+···bash
+cae-cli interactive
 
 ### 查看帮助
 
