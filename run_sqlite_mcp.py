@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-GitHub仓库管理MCP服务器 - stdio模式
+SQLite数据库MCP服务器 - stdio模式
 用于Claude Code的MCP服务器集成
 """
 
 import sys
 import json
 import asyncio
+import os
 from pathlib import Path
 
 # 修复Windows上的asyncio事件循环策略
@@ -23,24 +24,24 @@ if sys.platform == 'win32':
 src_dir = Path(__file__).parent / "src"
 sys.path.insert(0, str(src_dir))
 
-from sw_helper.mcp import get_github_mcp_server, get_mcp_server
+from sw_helper.mcp import get_sqlite_mcp_server, get_mcp_server
 from sw_helper.mcp.core import MCPMessage
 
 
-class StdioMCPServer:
-    """基于stdio的MCP服务器"""
+class StdioSQLiteMCPServer:
+    """基于stdio的SQLite MCP服务器"""
 
-    def __init__(self):
+    def __init__(self, db_path: str = None):
         self.server = get_mcp_server()
-        # 确保GitHub MCP服务器被初始化（这会注册所有工具）
-        self.github_server = get_github_mcp_server()
-        print(f"[MCP Server] MCP服务器已启动", file=sys.stderr)
-        print(f"[MCP Server] 工具数量: {len(self.server.tools)}", file=sys.stderr)
-        print(f"[MCP Server] 仓库URL: https://github.com/yd5768365-hue/caw-cli.git", file=sys.stderr)
+        # 确保SQLite MCP服务器被初始化（这会注册所有工具）
+        self.sqlite_server = get_sqlite_mcp_server(db_path)
+        print(f"[SQLite MCP Server] SQLite MCP服务器已启动", file=sys.stderr)
+        print(f"[SQLite MCP Server] 工具数量: {len(self.server.tools)}", file=sys.stderr)
+        print(f"[SQLite MCP Server] 数据库路径: {self.sqlite_server.db_path}", file=sys.stderr)
 
     async def run(self):
         """运行MCP服务器（stdio模式）"""
-        print(f"[MCP Server] 等待MCP消息...", file=sys.stderr)
+        print(f"[SQLite MCP Server] 等待MCP消息...", file=sys.stderr)
 
         # 使用asyncio处理stdio
         loop = asyncio.get_event_loop()
@@ -64,7 +65,7 @@ class StdioMCPServer:
                 if not line:
                     continue
 
-                print(f"[MCP Server] 收到消息: {line[:100]}...", file=sys.stderr)
+                print(f"[SQLite MCP Server] 收到消息: {line[:100]}...", file=sys.stderr)
 
                 try:
                     # 解析消息
@@ -80,10 +81,10 @@ class StdioMCPServer:
                     writer.write(b'\n')
                     await writer.drain()
 
-                    print(f"[MCP Server] 发送响应: {response_json[:100]}...", file=sys.stderr)
+                    print(f"[SQLite MCP Server] 发送响应: {response_json[:100]}...", file=sys.stderr)
 
                 except json.JSONDecodeError as e:
-                    print(f"[MCP Server] JSON解析错误: {e}", file=sys.stderr)
+                    print(f"[SQLite MCP Server] JSON解析错误: {e}", file=sys.stderr)
                     error_response = MCPMessage(
                         error={"code": -32700, "message": f"JSON解析错误: {e}"}
                     )
@@ -92,7 +93,7 @@ class StdioMCPServer:
                     await writer.drain()
 
                 except Exception as e:
-                    print(f"[MCP Server] 处理错误: {e}", file=sys.stderr)
+                    print(f"[SQLite MCP Server] 处理错误: {e}", file=sys.stderr)
                     error_response = MCPMessage(
                         error={"code": -32603, "message": f"内部错误: {e}"}
                     )
@@ -101,30 +102,36 @@ class StdioMCPServer:
                     await writer.drain()
 
         except asyncio.CancelledError:
-            print(f"[MCP Server] 服务器被取消", file=sys.stderr)
+            print(f"[SQLite MCP Server] 服务器被取消", file=sys.stderr)
         except Exception as e:
-            print(f"[MCP Server] 服务器错误: {e}", file=sys.stderr)
+            print(f"[SQLite MCP Server] 服务器错误: {e}", file=sys.stderr)
         finally:
-            print(f"[MCP Server] 服务器关闭", file=sys.stderr)
+            print(f"[SQLite MCP Server] 服务器关闭", file=sys.stderr)
             writer.close()
 
 
 def main():
     """主函数"""
-    print(f"GitHub仓库管理MCP服务器", file=sys.stderr)
+    print(f"SQLite数据库MCP服务器", file=sys.stderr)
     print(f"版本: 1.0.0", file=sys.stderr)
-    print(f"仓库: https://github.com/yd5768365-hue/caw-cli.git", file=sys.stderr)
+    print(f"工作目录: {os.getcwd()}", file=sys.stderr)
     print(f"=" * 60, file=sys.stderr)
 
+    # 解析命令行参数
+    db_path = None
+    if len(sys.argv) > 1:
+        db_path = sys.argv[1]
+        print(f"[INFO] 使用指定数据库路径: {db_path}", file=sys.stderr)
+
     # 创建并运行服务器
-    server = StdioMCPServer()
+    server = StdioSQLiteMCPServer(db_path)
 
     try:
         asyncio.run(server.run())
     except KeyboardInterrupt:
-        print(f"\n[MCP Server] 收到中断信号，关闭服务器", file=sys.stderr)
+        print(f"\n[SQLite MCP Server] 收到中断信号，关闭服务器", file=sys.stderr)
     except Exception as e:
-        print(f"[MCP Server] 致命错误: {e}", file=sys.stderr)
+        print(f"[SQLite MCP Server] 致命错误: {e}", file=sys.stderr)
         sys.exit(1)
 
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-GitHub仓库管理MCP服务器 - stdio模式
+GitHub仓库管理MCP服务器 - 修复Windows asyncio问题
 用于Claude Code的MCP服务器集成
 """
-
 import sys
 import json
 import asyncio
+import os
 from pathlib import Path
 
 # 修复Windows上的asyncio事件循环策略
@@ -114,6 +114,7 @@ def main():
     print(f"GitHub仓库管理MCP服务器", file=sys.stderr)
     print(f"版本: 1.0.0", file=sys.stderr)
     print(f"仓库: https://github.com/yd5768365-hue/caw-cli.git", file=sys.stderr)
+    print(f"工作目录: {os.getcwd()}", file=sys.stderr)
     print(f"=" * 60, file=sys.stderr)
 
     # 创建并运行服务器

@@ -14,6 +14,7 @@ from .core import (
 )
 from .freecad_server import FreeCADMCPServer, get_freecad_mcp_server
 from .github_server import GitHubRepoMCPServer, get_github_mcp_server
+from .sqlite_server import SQLiteMCPServer, get_sqlite_mcp_server
 
 __all__ = [
     "MCPServer",
@@ -28,4 +29,6 @@ __all__ = [
     "get_freecad_mcp_server",
     "GitHubRepoMCPServer",
     "get_github_mcp_server",
+    "SQLiteMCPServer",
+    "get_sqlite_mcp_server",
 ]

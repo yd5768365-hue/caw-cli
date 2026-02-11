@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-GitHub仓库管理MCP服务器 - stdio模式
+GitHub仓库管理MCP服务器包装器 - 确保从正确目录运行
 用于Claude Code的MCP服务器集成
 """
-
 import sys
-import json
+import os
 import asyncio
 from pathlib import Path
 
@@ -19,13 +18,19 @@ if sys.platform == 'win32':
         # 如果失败，回退到ProactorEventLoop
         asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
+# 切换到脚本所在目录（项目根目录）
+script_dir = Path(__file__).parent
+os.chdir(script_dir)
+
 # 添加src目录到Python路径
-src_dir = Path(__file__).parent / "src"
+src_dir = script_dir / "src"
 sys.path.insert(0, str(src_dir))
 
+# 导入并运行原始服务器
 from sw_helper.mcp import get_github_mcp_server, get_mcp_server
 from sw_helper.mcp.core import MCPMessage
-
+import json
+import asyncio
 
 class StdioMCPServer:
     """基于stdio的MCP服务器"""
@@ -114,6 +119,7 @@ def main():
     print(f"GitHub仓库管理MCP服务器", file=sys.stderr)
     print(f"版本: 1.0.0", file=sys.stderr)
     print(f"仓库: https://github.com/yd5768365-hue/caw-cli.git", file=sys.stderr)
+    print(f"工作目录: {os.getcwd()}", file=sys.stderr)
     print(f"=" * 60, file=sys.stderr)
 
     # 创建并运行服务器

@@ -44,3 +44,32 @@ build/
 *.zip
 *.rar
 *.7z
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 配置和临时文件
+.coverage
+temp_test.json
+test_output/
+*.bak
+
+# Claude Code配置
+.claude/
+
+# Windows临时文件
+nul
+
+# Python虚拟环境
+venv/
+.env/
+.env.local
+*.env
+
+# 编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
