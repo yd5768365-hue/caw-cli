@@ -299,6 +299,34 @@ result = calc.calculate_stress(
 print(f"安全系数: {result['safety_factor']}")
 ```
 
+## 📖 项目文档
+
+CAE-CLI 提供了完整的文档体系，帮助不同角色的用户快速上手：
+
+### 👤 用户文档
+| 文档 | 用途 | 路径 |
+|------|------|------|
+| **[QUICKSTART.md](docs/QUICKSTART.md)** | 3步快速开始，包含5个核心命令示例 | `docs/QUICKSTART.md` |
+| **[INSTALLATION_GUIDE.md](docs/INSTALLATION_GUIDE.md)** | 详细安装指南，支持Windows/Linux/macOS | `docs/INSTALLATION_GUIDE.md` |
+| **[FAQ.md](docs/FAQ.md)** | 10个常见问题解答，解决使用中的疑难问题 | `docs/FAQ.md` |
+
+### 👨‍💻 开发者文档
+| 文档 | 用途 | 路径 |
+|------|------|------|
+| **[API_REFERENCE.md](docs/API_REFERENCE.md)** | 完整的Python API参考，所有模块详细说明 | `docs/API_REFERENCE.md` |
+| **[CONTRIBUTING.md](docs/CONTRIBUTING.md)** | 贡献指南，包含PR模板和开发规范 | `docs/CONTRIBUTING.md` |
+| **[CLAUDE.md](CLAUDE.md)** | Claude Code助手配置，项目架构说明 | `CLAUDE.md` |
+
+### 🛠️ 工具与脚本
+| 工具 | 用途 | 说明 |
+|------|------|------|
+| **generate_api_docs.py** | API文档自动生成 | 一键生成HTML/Markdown格式API文档 |
+| **run_tests.py/.sh/.bat** | 跨平台测试脚本 | 支持Windows/Linux/macOS测试运行 |
+
+### 🌐 在线文档
+- **API文档在线查看**：`docs/api/` 目录包含完整的HTML API文档
+- **自动更新**：使用 `python generate_api_docs.py` 重新生成API文档
+
 ## 📁 项目结构
 
 ```
@@ -324,6 +352,9 @@ cae-cli/
 │   │   └── __init__.py
 │   ├── cae/                # CAE连接器实现
 │   │   ├── calculix.py     # CalculiX连接器（新架构）
+│   │   └── __init__.py
+│   ├── mesher/             # 网格生成器集成
+│   │   ├── gmsh.py         # Gmsh网格生成器（新架构）
 │   │   └── __init__.py
 │   └── __init__.py         # 统一导出
 ├── src/core/               # 🎯 核心数据类型
@@ -353,6 +384,7 @@ cae-cli/
 ### 🔧 **已实现的连接器**
 - **✅ CAD: FreeCAD**：基于新架构的标准化连接器，支持参数修改、重建、导出
 - **✅ CAE: CalculiX**：开源有限元分析软件集成，支持静力、模态、热分析
+- **✅ 网格生成: Gmsh**：开源网格生成器集成，支持2D/3D网格生成和质量控制
 - **🔄 旧接口兼容**：原有FreeCAD/SolidWorks连接器保持可用
 
 ### 🔄 **标准数据流**
@@ -366,8 +398,8 @@ cae-cli/
 - **异常处理**：完整的步骤级错误处理和进度跟踪
 
 ### 📊 **仿真工具链**
-- **Gmsh**：开源网格生成器（规划中集成）
-- **CalculiX**：开源有限元分析（已实现）
+- **Gmsh**：开源网格生成器（✅ **已实现集成**）
+- **CalculiX**：开源有限元分析（✅ 已实现）
 - **通用格式支持**：.inp (Abaqus/CalculiX), .bdf (NASTRAN), .msh (Gmsh)
 
 ## 🚀 插件化架构使用
@@ -444,7 +476,74 @@ print(f"最大位移: {result.max_displacement} m")
 print(f"安全系数: {result.safety_factor}")
 ```
 
-### 3. 扩展新软件
+### 3. 完整工作流示例 (CAD → Mesh → CAE)
+
+```python
+from integrations import WorkflowEngine
+from integrations.cad.freecad import FreeCADConnector
+from integrations.mesher.gmsh import GmshConnector
+from integrations.cae.calculix import CalculiXConnector
+from core.types import SimulationConfig
+
+# 创建完整的工具链连接器
+cad = FreeCADConnector()
+mesher = GmshConnector()
+cae = CalculiXConnector()
+
+# 创建工作流引擎（支持网格生成）
+workflow = WorkflowEngine(
+    cad_connector=cad,
+    mesher_connector=mesher,  # 可选的网格生成器
+    cae_connector=cae
+)
+
+# 加载配置
+config = SimulationConfig.from_yaml("project.yaml")
+
+# 运行完整工作流：CAD建模 → 网格生成 → CAE分析
+result = workflow.run_workflow(
+    "complete_analysis",
+    cad_software="freecad",
+    mesher_software="gmsh",    # 指定网格生成器
+    cae_software="calculix",
+    config=config
+)
+
+# 查看完整分析结果
+print(f"模型信息: {result.cad_info}")
+print(f"网格质量: {result.mesh_quality}")
+print(f"最大应力: {result.max_stress} Pa")
+print(f"安全系数: {result.safety_factor}")
+```
+
+### 4. 网格生成器使用示例
+
+```python
+from integrations.mesher.gmsh import GmshConnector
+
+# 创建Gmsh连接器
+gmsh = GmshConnector()
+
+# 连接Gmsh
+if gmsh.connect():
+    # 从STEP文件生成网格
+    success = gmsh.generate_mesh(
+        input_file="model.step",
+        output_file="model.msh",
+        element_size=2.0,
+        element_type="tetrahedron"
+    )
+
+    if success:
+        # 分析网格质量
+        quality = gmsh.analyze_mesh_quality("model.msh")
+        print(f"网格质量指标: {quality}")
+
+        # 可视化网格
+        gmsh.visualize_mesh("model.msh")
+```
+
+### 6. 扩展新软件
 要集成新的CAD软件，继承 `CADConnector` 并实现抽象方法：
 
 ```python
@@ -480,7 +579,7 @@ class MyCADConnector(CADConnector):
         pass
 ```
 
-### 4. 快速测试
+### 7. 快速测试
 运行演示脚本查看新架构功能：
 ```bash
 python demo_workflow.py
@@ -502,9 +601,18 @@ pip install -e ".[dev]"
 # 运行所有测试
 pytest
 
-# 运行新架构测试
+# 运行新架构连接器测试
 python test_freecad_connector.py
 python test_calculix_connector.py
+python test_gmsh.py
+
+# 运行工作流集成测试
+python test_workflow_integration.py
+
+# 运行工具模块测试
+python test_utils.py
+python test_unicode_display.py
+python test_format_text.py
 
 # 运行工作流演示
 python demo_workflow.py
@@ -587,14 +695,16 @@ python -m sw_helper --help
 - **功能建议**：欢迎提交Issue描述您的需求
 
 ### 🎯 项目状态
-- **当前版本**：v0.2.0 (插件化架构发布)
-- **主要用户**：机械专业学生、FreeCAD用户、CAE学习者、插件开发者
+- **当前版本**：v0.2.0+ (插件化架构 + 完整文档体系)
+- **主要用户**：机械专业学生、FreeCAD用户、CAE学习者、插件开发者、开源贡献者
 - **开发进度**：
-  - ✅ 基础功能已完成（几何解析、材料计算、网格分析）
-  - ✅ AI辅助设计和多语言支持
+  - ✅ **基础功能**：几何解析、材料计算、网格分析
+  - ✅ **AI与交互**：AI辅助设计、多语言支持、交互模式
   - ✅ **插件化架构**：标准化CAD/CAE接口，FreeCAD+CalculiX集成
-  - 🔄 工作流CLI命令集成（进行中）
-  - 🔄 Gmsh网格生成器集成（规划中）
+  - ✅ **网格生成器**：Gmsh标准化集成（src/integrations/mesher/gmsh.py）
+  - ✅ **完整文档体系**：5个核心文档 + API自动生成脚本
+  - 🔄 **工作流CLI命令集成**：进行中，即将发布
+  - 🔄 **PyPI包发布**：规划中，需要完善测试和打包
 
 ## 🙏 致谢
 
