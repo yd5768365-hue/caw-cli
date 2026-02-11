@@ -7,7 +7,42 @@ import sys
 import json
 import asyncio
 import os
+import io
 from pathlib import Path
+
+# 修复Windows上的编码问题
+if sys.platform == 'win32':
+    # 设置环境变量
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
+    os.environ['PYTHONUTF8'] = '1'
+
+    # 重新包装stdio为UTF-8编码
+    try:
+        # 重新包装stdout
+        sys.stdout = io.TextIOWrapper(
+            sys.stdout.buffer,
+            encoding='utf-8',
+            errors='replace',
+            line_buffering=True,
+            write_through=True
+        )
+        # 重新包装stderr
+        sys.stderr = io.TextIOWrapper(
+            sys.stderr.buffer,
+            encoding='utf-8',
+            errors='replace',
+            line_buffering=True,
+            write_through=True
+        )
+        # 重新包装stdin
+        sys.stdin = io.TextIOWrapper(
+            sys.stdin.buffer,
+            encoding='utf-8',
+            errors='replace'
+        )
+        print(f"[编码修复] 已修复stdio编码为UTF-8", file=sys.stderr)
+    except Exception as e:
+        print(f"[编码修复] 警告：无法修复stdio编码: {e}", file=sys.stderr)
 
 # 修复Windows上的asyncio事件循环策略
 if sys.platform == 'win32':
@@ -31,7 +66,7 @@ class StdioMCPServer:
     """基于stdio的MCP服务器"""
 
     def __init__(self):
-        self.server = get_mcp_server()
+        self.server = get_mcp_server()  
         # 确保GitHub MCP服务器被初始化（这会注册所有工具）
         self.github_server = get_github_mcp_server()
         print(f"[MCP Server] MCP服务器已启动", file=sys.stderr)
@@ -39,7 +74,7 @@ class StdioMCPServer:
         print(f"[MCP Server] 仓库URL: https://github.com/yd5768365-hue/caw-cli.git", file=sys.stderr)
 
     async def run(self):
-        """运行MCP服务器（stdio模式）"""
+        """运行MCP服务器stdio模式"""
         print(f"[MCP Server] 等待MCP消息...", file=sys.stderr)
 
         # 使用asyncio处理stdio
