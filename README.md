@@ -385,6 +385,7 @@ cae-cli/
 - **✅ CAD: FreeCAD**：基于新架构的标准化连接器，支持参数修改、重建、导出
 - **✅ CAE: CalculiX**：开源有限元分析软件集成，支持静力、模态、热分析
 - **✅ 网格生成: Gmsh**：开源网格生成器集成，支持2D/3D网格生成和质量控制
+- **✅ MCP服务器: GitHub仓库管理**：专门针对 `https://github.com/yd5768365-hue/caw-cli.git` 仓库的MCP服务器，支持完整的文件操作和Git操作
 - **🔄 旧接口兼容**：原有FreeCAD/SolidWorks连接器保持可用
 
 ### 🔄 **标准数据流**
@@ -401,6 +402,14 @@ cae-cli/
 - **Gmsh**：开源网格生成器（✅ **已实现集成**）
 - **CalculiX**：开源有限元分析（✅ 已实现）
 - **通用格式支持**：.inp (Abaqus/CalculiX), .bdf (NASTRAN), .msh (Gmsh)
+
+### 🤖 **MCP (Model Context Protocol) 服务器**
+- **FreeCAD MCP服务器**：将FreeCAD建模功能暴露为MCP工具，支持AI智能调用
+- **GitHub仓库MCP服务器**：专门针对 `https://github.com/yd5768365-hue/caw-cli.git` 仓库的MCP服务器，提供：
+  - 完整的文件操作：读取、写入、创建、删除、重命名文件
+  - 完整的Git操作：状态查看、添加、提交、推送、拉取、分支管理
+  - 仓库信息查询：获取仓库基本信息、文件统计、提交历史
+  - 演示脚本：`demo_github_mcp.py` 展示所有功能
 
 ## 🚀 插件化架构使用
 

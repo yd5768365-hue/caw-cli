@@ -267,6 +267,102 @@ print(f"最大位移: {result.max_displacement} m")
 print(f"安全系数: {result.safety_factor}")
 ```
 
+### GitHub仓库管理MCP服务器
+
+CAE-CLI 包含一个专门的 GitHub 仓库管理 MCP (Model Context Protocol) 服务器，用于直接操作 `https://github.com/yd5768365-hue/caw-cli.git` 仓库。该服务器提供完整的文件操作和 Git 操作工具集。
+
+#### 可用工具
+
+**文件操作工具:**
+- `github_repo_info` - 获取GitHub仓库基本信息
+- `github_list_files` - 列出仓库中的文件
+- `github_read_file` - 读取文件内容
+- `github_write_file` - 写入文件内容（创建或覆盖）
+- `github_create_file` - 创建新文件
+- `github_delete_file` - 删除文件
+- `github_rename_file` - 重命名或移动文件
+
+**Git 操作工具:**
+- `github_git_status` - 查看Git仓库状态
+- `github_git_add` - 添加文件到Git暂存区
+- `github_git_commit` - 提交更改到Git仓库
+- `github_git_push` - 推送提交到远程仓库
+- `github_git_pull` - 从远程仓库拉取更新
+- `github_git_log` - 查看Git提交历史
+- `github_git_create_branch` - 创建新分支
+- `github_git_checkout` - 切换分支
+
+#### 使用示例
+
+```python
+# 使用GitHub MCP服务器
+from sw_helper.mcp import get_github_mcp_server
+from sw_helper.mcp.core import InMemoryMCPTransport, InMemoryMCPClient
+import asyncio
+
+async def manage_repository():
+    # 获取GitHub MCP服务器
+    github_server = get_github_mcp_server()
+    transport = InMemoryMCPTransport(github_server.server)
+    client = transport.create_client()
+
+    # 连接客户端
+    await client.connect()
+
+    # 1. 获取仓库信息
+    repo_info = await client.call_tool("github_repo_info", {})
+    print(f"仓库路径: {repo_info.get('repo_path')}")
+    print(f"当前分支: {repo_info.get('current_branch')}")
+
+    # 2. 读取文件
+    readme = await client.call_tool("github_read_file", {
+        "file_path": "README.md",
+        "encoding": "utf-8"
+    })
+    print(f"README.md大小: {readme.get('size')} 字节")
+
+    # 3. 创建新文件
+    await client.call_tool("github_create_file", {
+        "file_path": "TEST_FILE.md",
+        "content": "# 测试文件\n通过MCP服务器创建",
+        "encoding": "utf-8"
+    })
+
+    # 4. Git操作
+    await client.call_tool("github_git_add", {
+        "files": ["TEST_FILE.md"]
+    })
+
+    await client.call_tool("github_git_commit", {
+        "message": "添加测试文件",
+        "author": "Claude Code <noreply@anthropic.com>"
+    })
+
+    # 5. 查看提交历史
+    log = await client.call_tool("github_git_log", {
+        "limit": 5,
+        "format": "oneline"
+    })
+    print(f"最近提交: {log.get('commits', [])}")
+
+# 运行
+asyncio.run(manage_repository())
+```
+
+#### 演示脚本
+项目包含完整的演示脚本 `demo_github_mcp.py`，展示所有工具的使用方法：
+
+```bash
+python demo_github_mcp.py
+```
+
+#### 快速测试
+运行简单测试验证MCP服务器功能：
+
+```bash
+python test_mcp_simple.py
+```
+
 ## 配置文件
 
 配置文件位于 `~/.cae-cli/config.json`，支持自定义：
