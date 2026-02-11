@@ -1669,6 +1669,8 @@ def interactive(lang):
     from rich.table import Table
     import json
     from pathlib import Path
+    import sys
+    import os
 
     console = Console()
 
@@ -1682,168 +1684,849 @@ def interactive(lang):
         console.print(f"[yellow]Warning: Failed to load language pack: {e}[/yellow]")
         strings = {}
 
-    while True:
+    # 一级菜单选择函数（支持箭头键，无闪烁）
+    def select_mode():
+        from rich.live import Live
+        from rich.text import Text
+
+        options = ["工作模式", "学习模式", "退出"]
+        selected = 0
+
+        # 检测平台，尝试使用msvcrt（Windows）或termios（Linux/Mac）
         try:
-            # 显示菜单
+            import msvcrt
+            def get_key():
+                if msvcrt.kbhit():
+                    key = msvcrt.getch()
+                    if key == b'\xe0':  # 扩展键
+                        key = msvcrt.getch()
+                        return key
+                    elif key == b'\r':
+                        return 'enter'
+                    elif key == b'q':
+                        return 'q'
+                    elif key == b'\x03':  # Ctrl+C
+                        raise KeyboardInterrupt
+                return None
+            has_keyboard = True
+        except ImportError:
+            try:
+                import tty, termios, sys
+                def get_key():
+                    fd = sys.stdin.fileno()
+                    old_settings = termios.tcgetattr(fd)
+                    try:
+                        tty.setraw(fd)
+                        ch = sys.stdin.read(1)
+                        if ch == '\x1b':  # 转义序列
+                            ch = sys.stdin.read(2)  # 读取后续字符
+                            if ch == '[A':
+                                return 'up'
+                            elif ch == '[B':
+                                return 'down'
+                        elif ch == '\r':
+                            return 'enter'
+                        elif ch == 'q':
+                            return 'q'
+                        elif ch == '\x03':  # Ctrl+C
+                            raise KeyboardInterrupt
+                    finally:
+                        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+                    return None
+                has_keyboard = True
+            except ImportError:
+                has_keyboard = False
+
+        if not has_keyboard:
+            # 回退到数字选择
             console.clear()
+            console.print(Panel.fit(
+                "[bold cyan]CAE-CLI 交互模式[/bold cyan]\n\n"
+                "请选择模式:\n"
+                "1. 工作模式 - 原有功能菜单\n"
+                "2. 学习模式 - 聊天式学习助手\n"
+                "3. 退出",
+                title="模式选择",
+                border_style="green"
+            ))
+            while True:
+                choice = Prompt.ask("\n请输入选择 (1-3)", default="1").strip()
+                if choice == "1":
+                    return "work"
+                elif choice == "2":
+                    return "learn"
+                elif choice == "3":
+                    return "exit"
+                else:
+                    console.print("[yellow]无效选择，请输入 1, 2 或 3[/yellow]")
 
-            # 创建菜单表格
-            menu_table = Table(
-                title=strings.get("menu_title", "CAE-CLI Interactive Mode"),
-                show_header=True,
-                header_style="bold cyan",
-            )
-            menu_table.add_column(
-                strings.get("columns", {}).get("option", "Option"),
-                style="cyan",
-                width=5,
-            )
-            menu_table.add_column(
-                strings.get("columns", {}).get("operation", "Operation"), style="green"
-            )
-            menu_table.add_column(
-                strings.get("columns", {}).get("description", "Description"),
-                style="dim",
-            )
-
-            menu_table.add_row(
-                "1",
-                strings.get("menu", {}).get("analyze", "Analyze Model"),
-                strings.get("descriptions", {}).get(
-                    "analyze", "Analyze geometry or mesh quality"
-                ),
-            )
-            menu_table.add_row(
-                "2",
-                strings.get("menu", {}).get("optimize", "Optimize Parameter"),
-                strings.get("descriptions", {}).get(
-                    "optimize", "Parameter optimization"
-                ),
-            )
-            menu_table.add_row(
-                "3",
-                strings.get("menu", {}).get("ai_generate", "AI Generate Model"),
-                strings.get("descriptions", {}).get(
-                    "ai_generate", "AI model generation"
-                ),
-            )
-            menu_table.add_row(
-                "4",
-                strings.get("menu", {}).get("handbook", "知识库查询 (Handbook)"),
-                strings.get("descriptions", {}).get(
-                    "handbook", "Query mechanical handbook knowledge base"
-                ),
-            )
-            menu_table.add_row(
-                "5",
-                strings.get("menu", {}).get("exit", "Exit"),
-                strings.get("descriptions", {}).get("exit", "Exit interactive mode"),
+        # 使用箭头键选择（Live 动态更新）
+        def generate_panel():
+            menu_lines = []
+            for i, option in enumerate(options):
+                if i == selected:
+                    menu_lines.append(f"[bold green]› {option}[/bold green]")
+                else:
+                    menu_lines.append(f"  {option}")
+            menu_text = "\n".join(menu_lines)
+            return Panel.fit(
+                f"[bold cyan]CAE-CLI 交互模式[/bold cyan]\n\n"
+                f"使用 ↑ ↓ 箭头键选择，Enter 确认:\n\n"
+                f"{menu_text}",
+                title="模式选择",
+                border_style="green"
             )
 
-            console.print(menu_table)
-            console.print(
-                strings.get("prompts", {}).get(
-                    "direct_command",
-                    "\n[dim]Type a command directly (e.g., 'analyze test.step') to execute[/dim]",
-                )
-            )
+        # 初始显示
+        console.clear()
+        with Live(generate_panel(), console=console, refresh_per_second=10, screen=True) as live:
+            while True:
+                key = get_key()
+                if key == b'H' or key == 'up':  # 上箭头
+                    selected = (selected - 1) % len(options)
+                    live.update(generate_panel())
+                elif key == b'P' or key == 'down':  # 下箭头
+                    selected = (selected + 1) % len(options)
+                    live.update(generate_panel())
+                elif key == 'enter':
+                    if selected == 0:
+                        return "work"
+                    elif selected == 1:
+                        return "learn"
+                    elif selected == 2:
+                        return "exit"
+                elif key == 'q':
+                    return "exit"
 
-            # 获取用户输入
-            choice = Prompt.ask(
-                strings.get("prompts", {}).get(
-                    "enter_choice", "\nEnter your choice (1-5) or command"
-                )
-            )
+    # 学习模式函数（集成Ollama phi3:mini）
+    def learning_mode():
+        console.clear()
 
-            if choice == "1":
-                # 分析模型
-                file_path = Prompt.ask(
-                    strings.get("analyze", {}).get(
-                        "enter_file", "Enter model file path"
+        # 尝试导入requests，如果失败则只使用知识库
+        try:
+            import requests
+            requests_available = True
+        except ImportError:
+            requests_available = False
+            console.print(Panel.fit(
+                "[bold yellow]⚠️  缺少 requests 模块[/bold yellow]\n\n"
+                "学习模式需要 requests 模块来调用 Ollama API。\n"
+                "请安装 requests: pip install requests\n\n"
+                "将暂时使用本地知识库回答。",
+                border_style="yellow",
+                padding=(1, 2)
+            ))
+
+        import json
+        import subprocess
+        import time
+        import socket
+        from sw_helper.knowledge import get_knowledge_base
+
+        # 自动启动Ollama服务
+        def start_ollama_service():
+            """尝试自动启动Ollama服务"""
+            if not requests_available:
+                return False
+
+            # 先检查服务是否已经在运行
+            def is_port_open(port=11434, host='localhost'):
+                """检查端口是否开放"""
+                try:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.settimeout(2)
+                    result = sock.connect_ex((host, port))
+                    sock.close()
+                    return result == 0
+                except:
+                    return False
+
+            if is_port_open():
+                console.print("[green]✓ Ollama服务已在运行[/green]")
+                return True
+
+            console.print("[yellow]正在尝试启动Ollama服务...[/yellow]")
+
+            try:
+                # 尝试启动ollama serve
+                import sys
+                if sys.platform == 'win32':
+                    # Windows
+                    process = subprocess.Popen(
+                        ['ollama', 'serve'],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        stdin=subprocess.PIPE,
+                        creationflags=subprocess.CREATE_NEW_CONSOLE
                     )
-                )
-                if file_path:
-                    # 支持多种分析选项
-                    console.print(
-                        strings.get("analyze", {}).get(
-                            "options", "\n[cyan]Analysis options:[/cyan]"
-                        )
-                    )
-                    console.print(
-                        strings.get("analyze", {}).get(
-                            "parse", "  - [bold]parse[/bold]: Parse geometry file"
-                        )
-                    )
-                    console.print(
-                        strings.get("analyze", {}).get(
-                            "analyze", "  - [bold]analyze[/bold]: Analyze mesh quality"
-                        )
-                    )
-                    console.print(
-                        strings.get("analyze", {}).get(
-                            "material",
-                            "  - [bold]material[/bold]: Query material properties",
-                        )
+                else:
+                    # Unix/Linux/Mac
+                    process = subprocess.Popen(
+                        ['ollama', 'serve'],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        stdin=subprocess.PIPE,
+                        start_new_session=True
                     )
 
-                    analysis_type = Prompt.ask(
-                        strings.get("analyze", {}).get(
-                            "enter_analysis_type", "Enter analysis type"
+                console.print("[yellow]等待Ollama服务启动...[/yellow]")
+
+                # 等待最多30秒，每1秒检查一次
+                for i in range(30):
+                    time.sleep(1)
+                    if is_port_open():
+                        console.print(f"[green]✓ Ollama服务启动成功（{i+1}秒）[/green]")
+                        return True
+
+                console.print("[red]✗ Ollama服务启动超时[/red]")
+                return False
+
+            except FileNotFoundError:
+                console.print(Panel.fit(
+                    "[bold red]✗ Ollama未安装[/bold red]\n\n"
+                    "请先安装Ollama:\n"
+                    "1. 访问 https://ollama.com/ 下载安装包\n"
+                    "2. 或使用包管理器安装（如brew install ollama）\n\n"
+                    "安装后请手动运行: ollama serve",
+                    border_style="red",
+                    padding=(1, 2)
+                ))
+                return False
+            except Exception as e:
+                console.print(f"[red]✗ 启动Ollama服务失败: {str(e)}[/red]")
+                return False
+
+        # 尝试自动启动服务
+        ollama_ready = False
+        if requests_available:
+            ollama_ready = start_ollama_service()
+
+        console.print(Panel.fit(
+            "[bold green]📚 CAE-CLI 学习模式[/bold green]\n\n"
+            "欢迎使用聊天式学习助手！\n"
+            f"{'内置本地 Ollama 模型 (phi3:mini)' if ollama_ready else '本地知识库'} 为您解答CAE相关问题。\n"
+            "支持多轮对话，上下文自动保留。\n\n"
+            "[dim]输入 'back' 或 '退出' 返回主菜单[/dim]",
+            title="学习助手",
+            border_style="cyan"
+        ))
+
+        # 初始化知识库（备用）
+        kb = get_knowledge_base()
+        # 对话历史
+        conversation_history = []
+
+        # 初始化RAG引擎（如果可用）
+        rag_available = False
+        rag = None
+        if requests_available:
+            try:
+                from sw_helper.utils.rag_engine import RAGEngine
+                rag = RAGEngine()
+                rag_available = True
+                console.print("[green]✓ RAG引擎已加载[/green]")
+            except ImportError:
+                console.print("[yellow]警告: 无法导入RAG引擎，将使用基础问答模式[/yellow]")
+            except Exception as e:
+                console.print(f"[yellow]警告: RAG引擎初始化失败: {str(e)}[/yellow]")
+
+        # 检查Ollama服务是否可用（包括模型检查）
+        def check_ollama():
+            if not requests_available or not ollama_ready:
+                return False
+            try:
+                response = requests.get("http://localhost:11434/api/tags", timeout=5)
+                if response.status_code != 200:
+                    return False
+
+                # 检查phi3:mini模型是否可用
+                try:
+                    models = response.json().get("models", [])
+                    model_names = [model.get("name", "") for model in models]
+                    # 检查phi3:mini或类似模型
+                    if not any("phi3" in name.lower() for name in model_names):
+                        console.print("[yellow]警告: 未找到phi3:mini模型，请运行: ollama run phi3:mini[/yellow]")
+                        # 仍然返回True，因为服务在运行，模型可能通过自动下载加载
+                except:
+                    pass  # 如果解析失败，仍认为服务在运行
+
+                return True
+            except requests.exceptions.Timeout:
+                return False
+            except Exception:
+                return False
+
+        # 调用Ollama API
+        def ask_ollama(question, history):
+            if not requests_available:
+                return "requests模块不可用，无法调用Ollama API。请安装requests: pip install requests"
+
+            url = "http://localhost:11434/api/chat"
+            # 构建消息历史
+            messages = []
+            for h in history:
+                messages.append({"role": "user", "content": h["question"]})
+                messages.append({"role": "assistant", "content": h["answer"]})
+            messages.append({"role": "user", "content": question})
+
+            payload = {
+                "model": "phi3:mini",
+                "messages": messages,
+                "stream": False
+            }
+
+            try:
+                response = requests.post(url, json=payload, timeout=15)  # 缩短超时时间
+                response.raise_for_status()
+                result = response.json()
+                return result["message"]["content"]
+            except requests.exceptions.ConnectionError:
+                return None  # 连接失败
+            except requests.exceptions.Timeout:
+                return "Ollama服务响应超时（15秒）。请确保：\n1. ollama serve 正在运行\n2. phi3:mini模型已安装: ollama run phi3:mini\n3. 网络连接正常"
+            except Exception as e:
+                return f"API调用错误: {str(e)}"
+
+        # 主循环
+        while True:
+            try:
+                question = Prompt.ask("\n[bold]请输入您的问题[/bold]").strip()
+
+                if not question:
+                    continue
+
+                if question.lower() in ['back', '退出', 'exit', 'quit', '返回']:
+                    console.print("[yellow]返回主菜单...[/yellow]")
+                    break
+
+                # 检查Ollama服务
+                if not check_ollama():
+                    if not requests_available:
+                        # requests模块不可用，直接使用知识库
+                        console.print(Panel.fit(
+                            "[bold yellow]⚠️  requests模块不可用[/bold yellow]\n\n"
+                            "无法调用Ollama API，将使用本地知识库回答。\n"
+                            "如需AI功能，请安装requests: pip install requests",
+                            border_style="yellow",
+                            padding=(1, 2)
+                        ))
+                    elif not ollama_ready:
+                        # requests可用但Ollama服务自动启动失败
+                        console.print(Panel.fit(
+                            "[bold yellow]⚠️  Ollama服务启动失败[/bold yellow]\n\n"
+                            "已尝试自动启动Ollama服务但失败。\n"
+                            "请手动启动服务：\n"
+                            "1. 打开终端，运行: ollama serve\n"
+                            "2. 确保已安装phi3:mini模型: ollama run phi3:mini\n\n"
+                            "将暂时使用本地知识库回答。",
+                            border_style="yellow",
+                            padding=(1, 2)
+                        ))
+                    else:
+                        # requests可用且ollama_ready为True，但检查失败（可能是临时问题）
+                        console.print(Panel.fit(
+                            "[bold yellow]⚠️  Ollama服务连接失败[/bold yellow]\n\n"
+                            "Ollama服务已启动但无法连接。\n"
+                            "请检查：\n"
+                            "1. ollama serve 是否正在运行\n"
+                            "2. 端口11434是否被占用\n"
+                            "3. 防火墙设置\n\n"
+                            "将暂时使用本地知识库回答。",
+                            border_style="yellow",
+                            padding=(1, 2)
+                        ))
+
+                    # 回退到知识库搜索
+                    with console.status("[bold green]正在搜索知识库...[/bold green]"):
+                        search_results = kb.search(question)
+                        if len(search_results) > 3:
+                            search_results = search_results[:3]
+
+                        if search_results:
+                            answer_parts = [f"[bold]问题:[/bold] {question}\n", "[bold]回答:[/bold]\n"]
+                            for i, result in enumerate(search_results, 1):
+                                answer_parts.append(f"{i}. {result['content'][:200]}...")
+                                if 'filename' in result:
+                                    answer_parts.append(f"   [dim]来源: {result['filename']}[/dim]")
+                            answer = "\n".join(answer_parts)
+                        else:
+                            if not requests_available:
+                                answer = (
+                                    f"[bold]问题:[/bold] {question}\n\n"
+                                    f"[bold]回答:[/bold]\n"
+                                    f"知识库中未找到相关信息。如需AI功能，请安装requests模块。"
+                                )
+                            elif not ollama_ready:
+                                answer = (
+                                    f"[bold]问题:[/bold] {question}\n\n"
+                                    f"[bold]回答:[/bold]\n"
+                                    f"知识库中未找到相关信息。Ollama服务自动启动失败，请手动启动服务。"
+                                )
+                            else:
+                                answer = (
+                                    f"[bold]问题:[/bold] {question}\n\n"
+                                    f"[bold]回答:[/bold]\n"
+                                    f"知识库中未找到相关信息，Ollama服务连接失败，请检查服务状态。"
+                                )
+                else:
+                    # 使用Ollama回答（带RAG增强）
+                    with console.status("[bold green]正在检索知识库...[/bold green]"):
+                        # 如果有RAG引擎，先检索相关知识
+                        context = ""
+                        if rag_available and rag:
+                            try:
+                                retrieved = rag.search(question, top_k=2)
+                                if retrieved:
+                                    context = "\n\n".join([f"【来源：{r['source']}】\n{r['content'][:800]}" for r in retrieved])
+                                    console.print("[green]✓ 已检索相关知识[/green]")
+                            except Exception as e:
+                                console.print(f"[yellow]RAG检索失败: {str(e)}[/yellow]")
+
+                    with console.status("[bold green]正在思考...[/bold green]"):
+                        # 构建提示词
+                        if context:
+                            full_prompt = f"""
+                            你是一个耐心、专业的机械学习助手。
+                            知识库相关内容：
+                            {context}
+
+                            用户问题：{question}
+
+                            请用中文、教学式、一步步回答，举例说明，适合大一学生。
+                            """
+                            prompt_to_send = full_prompt
+                        else:
+                            prompt_to_send = question
+
+                        answer = ask_ollama(prompt_to_send, conversation_history)
+                        if answer is None:
+                            answer = "无法连接到Ollama服务，请确保ollama serve正在运行。"
+                        else:
+                            # 保存到历史（限制历史长度），保存原始问题而非完整提示词
+                            conversation_history.append({"question": question, "answer": answer})
+                            if len(conversation_history) > 10:  # 保留最近10轮
+                                conversation_history.pop(0)
+
+                # 显示回答（绿色面板）
+                console.print(Panel.fit(
+                    answer,
+                    title="学习助手回答",
+                    border_style="green",
+                    padding=(1, 2)
+                ))
+
+            except KeyboardInterrupt:
+                console.print("\n[yellow]返回主菜单...[/yellow]")
+                break
+            except Exception as e:
+                console.print(f"[red]错误: {e}[/red]")
+                try:
+                    Prompt.ask("\n按 Enter 继续...", default="")
+                except EOFError:
+                    break
+
+    # 主循环
+    while True:
+        mode = select_mode()
+
+        if mode == "work":
+            # 原有工作模式逻辑（完整保留）
+            while True:
+                try:
+                    # 显示菜单（支持箭头键选择）
+                    console.clear()
+
+                    # 创建菜单表格
+                    menu_table = Table(
+                        title=strings.get("menu_title", "CAE-CLI Interactive Mode"),
+                        show_header=True,
+                        header_style="bold cyan",
+                    )
+                    menu_table.add_column(
+                        strings.get("columns", {}).get("option", "Option"),
+                        style="cyan",
+                        width=5,
+                    )
+                    menu_table.add_column(
+                        strings.get("columns", {}).get("operation", "Operation"), style="green"
+                    )
+                    menu_table.add_column(
+                        strings.get("columns", {}).get("description", "Description"),
+                        style="dim",
+                    )
+
+                    menu_table.add_row(
+                        "1",
+                        strings.get("menu", {}).get("analyze", "Analyze Model"),
+                        strings.get("descriptions", {}).get(
+                            "analyze", "Analyze geometry or mesh quality"
                         ),
-                        default="parse",
+                    )
+                    menu_table.add_row(
+                        "2",
+                        strings.get("menu", {}).get("optimize", "Optimize Parameter"),
+                        strings.get("descriptions", {}).get(
+                            "optimize", "Parameter optimization"
+                        ),
+                    )
+                    menu_table.add_row(
+                        "3",
+                        strings.get("menu", {}).get("ai_generate", "AI Generate Model"),
+                        strings.get("descriptions", {}).get(
+                            "ai_generate", "AI model generation"
+                        ),
+                    )
+                    menu_table.add_row(
+                        "4",
+                        strings.get("menu", {}).get("handbook", "知识库查询 (Handbook)"),
+                        strings.get("descriptions", {}).get(
+                            "handbook", "Query mechanical handbook knowledge base"
+                        ),
+                    )
+                    menu_table.add_row(
+                        "5",
+                        strings.get("menu", {}).get("exit", "Exit"),
+                        strings.get("descriptions", {}).get("exit", "Exit interactive mode"),
                     )
 
-                    if analysis_type == "parse":
-                        from sw_helper.geometry.parser import GeometryParser
+                    console.print(menu_table)
+                    console.print(
+                        strings.get("prompts", {}).get(
+                            "direct_command",
+                            "\n[dim]Type a command directly (e.g., 'analyze test.step') to execute[/dim]",
+                        )
+                    )
 
+                    # 检测平台，尝试使用msvcrt（Windows）或termios（Linux/Mac）
+                    try:
+                        import msvcrt
+                        def get_key():
+                            if msvcrt.kbhit():
+                                key = msvcrt.getch()
+                                if key == b'\xe0':  # 扩展键
+                                    key = msvcrt.getch()
+                                    return key
+                                elif key == b'\r':
+                                    return 'enter'
+                                elif key == b'q':
+                                    return 'q'
+                                elif key == b'\x03':  # Ctrl+C
+                                    raise KeyboardInterrupt
+                                else:
+                                    # 普通字符，返回解码后的字符串
+                                    try:
+                                        return key.decode('utf-8')
+                                    except:
+                                        return None
+                            return None
+                        has_keyboard = True
+                    except ImportError:
                         try:
-                            parser = GeometryParser()
-                            result = parser.parse(file_path)
-                            console.print_json(data=result)
-                        except Exception as e:
-                            console.print(
-                                strings.get("prompts", {})
-                                .get("error", "[red]Error: {error}[/red]")
-                                .format(error=e)
-                            )
+                            import tty, termios, sys
+                            def get_key():
+                                fd = sys.stdin.fileno()
+                                old_settings = termios.tcgetattr(fd)
+                                try:
+                                    tty.setraw(fd)
+                                    ch = sys.stdin.read(1)
+                                    if ch == '\x1b':  # 转义序列
+                                        ch = sys.stdin.read(2)  # 读取后续字符
+                                        if ch == '[A':
+                                            return 'up'
+                                        elif ch == '[B':
+                                            return 'down'
+                                    elif ch == '\r':
+                                        return 'enter'
+                                    elif ch == 'q':
+                                        return 'q'
+                                    elif ch == '\x03':  # Ctrl+C
+                                        raise KeyboardInterrupt
+                                    else:
+                                        return ch  # 普通字符
+                                finally:
+                                    termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+                                return None
+                            has_keyboard = True
+                        except ImportError:
+                            has_keyboard = False
 
-                    elif analysis_type == "analyze":
-                        from sw_helper.mesh.quality import MeshQualityAnalyzer
+                    choice = None
+                    if has_keyboard:
+                        # 使用箭头键选择
+                        selected = 0  # 0-4对应1-5
+                        options_text = [
+                            strings.get("menu", {}).get("analyze", "Analyze Model"),
+                            strings.get("menu", {}).get("optimize", "Optimize Parameter"),
+                            strings.get("menu", {}).get("ai_generate", "AI Generate Model"),
+                            strings.get("menu", {}).get("handbook", "知识库查询 (Handbook)"),
+                            strings.get("menu", {}).get("exit", "Exit"),
+                        ]
 
-                        try:
-                            analyzer = MeshQualityAnalyzer()
-                            results = analyzer.analyze(file_path)
-                            console.print_json(data=results)
-                        except Exception as e:
-                            console.print(
-                                strings.get("prompts", {})
-                                .get("error", "[red]Error: {error}[/red]")
-                                .format(error=e)
-                            )
+                        # 显示提示
+                        console.print("\n[dim]使用 ↑ ↓ 箭头键选择，Enter 确认，或直接输入命令[/dim]")
 
-                    elif analysis_type == "material":
-                        material_name = Prompt.ask(
-                            strings.get("analyze", {}).get(
-                                "enter_material_name", "Enter material name"
+                        while choice is None:
+                            # 高亮显示当前选项（重新绘制菜单行）
+                            console.print(f"\n当前选择: [bold green]{selected+1}. {options_text[selected]}[/bold green]")
+                            console.print("[dim]按 Enter 确认选择，或直接输入命令...[/dim]")
+
+                            key = get_key()
+                            if key == b'H' or key == 'up':  # 上箭头
+                                selected = (selected - 1) % 5
+                            elif key == b'P' or key == 'down':  # 下箭头
+                                selected = (selected + 1) % 5
+                            elif key == 'enter':
+                                choice = str(selected + 1)  # 返回数字字符串
+                            elif isinstance(key, str) and key.isdigit():
+                                # 数字键直接选择
+                                choice = key
+                                break
+                            elif isinstance(key, str) and key:
+                                # 普通字符输入，切换到直接命令模式
+                                console.print(f"\n[dim]输入命令: {key}[/dim]", end='')
+                                # 读取剩余输入
+                                import sys
+                                if sys.stdin.isatty():
+                                    remaining = sys.stdin.readline()
+                                    if remaining:
+                                        command = key + remaining.rstrip('\n')
+                                    else:
+                                        command = key
+                                else:
+                                    command = key
+                                choice = command.strip()
+                                break
+                    else:
+                        # 回退到原有输入方式
+                        choice = Prompt.ask(
+                            strings.get("prompts", {}).get(
+                                "enter_choice", "\nEnter your choice (1-5) or command"
                             )
                         )
-                        if material_name:
-                            from sw_helper.material.database import MaterialDatabase
+
+                    if choice == "1":
+                        # 分析模型
+                        file_path = Prompt.ask(
+                            strings.get("analyze", {}).get(
+                                "enter_file", "Enter model file path"
+                            )
+                        )
+                        if file_path:
+                            # 支持多种分析选项
+                            console.print(
+                                strings.get("analyze", {}).get(
+                                    "options", "\n[cyan]Analysis options:[/cyan]"
+                                )
+                            )
+                            console.print(
+                                strings.get("analyze", {}).get(
+                                    "parse", "  - [bold]parse[/bold]: Parse geometry file"
+                                )
+                            )
+                            console.print(
+                                strings.get("analyze", {}).get(
+                                    "analyze", "  - [bold]analyze[/bold]: Analyze mesh quality"
+                                )
+                            )
+                            console.print(
+                                strings.get("analyze", {}).get(
+                                    "material",
+                                    "  - [bold]material[/bold]: Query material properties",
+                                )
+                            )
+
+                            analysis_type = Prompt.ask(
+                                strings.get("analyze", {}).get(
+                                    "enter_analysis_type", "Enter analysis type"
+                                ),
+                                default="parse",
+                            )
+
+                            if analysis_type == "parse":
+                                from sw_helper.geometry.parser import GeometryParser
+
+                                try:
+                                    parser = GeometryParser()
+                                    result = parser.parse(file_path)
+                                    console.print_json(data=result)
+                                except Exception as e:
+                                    console.print(
+                                        strings.get("prompts", {})
+                                        .get("error", "[red]Error: {error}[/red]")
+                                        .format(error=e)
+                                    )
+
+                            elif analysis_type == "analyze":
+                                from sw_helper.mesh.quality import MeshQualityAnalyzer
+
+                                try:
+                                    analyzer = MeshQualityAnalyzer()
+                                    results = analyzer.analyze(file_path)
+                                    console.print_json(data=results)
+                                except Exception as e:
+                                    console.print(
+                                        strings.get("prompts", {})
+                                        .get("error", "[red]Error: {error}[/red]")
+                                        .format(error=e)
+                                    )
+
+                            elif analysis_type == "material":
+                                material_name = Prompt.ask(
+                                    strings.get("analyze", {}).get(
+                                        "enter_material_name", "Enter material name"
+                                    )
+                                )
+                                if material_name:
+                                    from sw_helper.material.database import MaterialDatabase
+
+                                    try:
+                                        db = MaterialDatabase()
+                                        material_info = db.get_material(material_name)
+                                        if material_info:
+                                            console.print_json(data=material_info)
+                                        else:
+                                            console.print(
+                                                strings.get("analyze", {})
+                                                .get(
+                                                    "material_not_found",
+                                                    f"[yellow]Material '{material_name}' not found[/yellow]",
+                                                )
+                                                .format(material_name=material_name)
+                                            )
+                                    except Exception as e:
+                                        console.print(
+                                            strings.get("prompts", {})
+                                            .get("error", "[red]Error: {error}[/red]")
+                                            .format(error=e)
+                                        )
+
+                    elif choice == "2":
+                        # 参数优化
+                        file_path = Prompt.ask(
+                            strings.get("optimize", {}).get(
+                                "enter_cad_file", "Enter CAD file path (.FCStd)"
+                            )
+                        )
+                        if file_path:
+                            parameter = Prompt.ask(
+                                strings.get("optimize", {}).get(
+                                    "enter_parameter", "Enter parameter to optimize"
+                                )
+                            )
+                            if parameter:
+                                param_range = Prompt.ask(
+                                    strings.get("optimize", {}).get(
+                                        "enter_param_range", "Enter parameter range (min max)"
+                                    ),
+                                    default="2 15",
+                                )
+                                steps = Prompt.ask(
+                                    strings.get("optimize", {}).get(
+                                        "enter_steps", "Enter number of steps"
+                                    ),
+                                    default="5",
+                                )
+
+                                try:
+                                    min_val, max_val = map(float, param_range.split())
+                                    steps_int = int(steps)
+
+                                    from sw_helper.optimization.optimizer import (
+                                        FreeCADOptimizer,
+                                    )
+
+                                    optimizer = FreeCADOptimizer(use_mock=False)
+
+                                    # 设置进度回调
+                                    def progress_callback(msg):
+                                        console.print(msg)
+
+                                    optimizer.set_progress_callback(progress_callback)
+
+                                    # 执行优化
+                                    results = optimizer.optimize_parameter(
+                                        file_path=file_path,
+                                        param_name=parameter,
+                                        param_range=(min_val, max_val),
+                                        steps=steps_int,
+                                        step_mode="linear",
+                                        output_dir="./optimization_output",
+                                        analyze_geometry=True,
+                                    )
+
+                                    if results:
+                                        best = max(results, key=lambda x: x.quality_score)
+                                        console.print(
+                                            strings.get("optimize", {}).get(
+                                                "best_result", "\n[green]Best result:[/green]"
+                                            )
+                                        )
+                                        console.print(
+                                            strings.get("optimize", {})
+                                            .get(
+                                                "parameter",
+                                                "Parameter: {parameter_name} = {parameter_value:.2f} mm",
+                                            )
+                                            .format(
+                                                parameter_name=best.parameter_name,
+                                                parameter_value=best.parameter_value,
+                                            )
+                                        )
+                                        console.print(
+                                            strings.get("optimize", {})
+                                            .get(
+                                                "quality_score",
+                                                "Quality Score: {quality_score:.1f}/100",
+                                            )
+                                            .format(quality_score=best.quality_score)
+                                        )
+                                        console.print(
+                                            strings.get("optimize", {})
+                                            .get(
+                                                "allowable_stress",
+                                                "Allowable Stress: {allowable_stress:.1f} MPa",
+                                            )
+                                            .format(allowable_stress=best.allowable_stress)
+                                        )
+                                        console.print(
+                                            strings.get("optimize", {})
+                                            .get(
+                                                "safety_factor",
+                                                "Safety Factor: {safety_factor:.2f}",
+                                            )
+                                            .format(safety_factor=best.safety_factor)
+                                        )
+
+                                    else:
+                                        console.print(
+                                            strings.get("optimize", {}).get(
+                                                "no_results",
+                                                "[yellow]No results obtained[/yellow]",
+                                            )
+                                        )
+
+                                except Exception as e:
+                                    console.print(
+                                        strings.get("prompts", {})
+                                        .get("error", "[red]Error: {error}[/red]")
+                                        .format(error=e)
+                                    )
+
+                    elif choice == "3":
+                        # AI生成模型
+                        description = Prompt.ask(
+                            strings.get("ai_generate", {}).get(
+                                "enter_description", "Enter model description"
+                            )
+                        )
+                        if description:
+                            from sw_helper.ai.model_generator import AIModelGenerator
+
+                            generator = AIModelGenerator()
 
                             try:
-                                db = MaterialDatabase()
-                                material_info = db.get_material(material_name)
-                                if material_info:
-                                    console.print_json(data=material_info)
-                                else:
-                                    console.print(
-                                        strings.get("analyze", {})
-                                        .get(
-                                            "material_not_found",
-                                            f"[yellow]Material '{material_name}' not found[/yellow]",
-                                        )
-                                        .format(material_name=material_name)
-                                    )
+                                result = generator.generate(description)
+                                console.print_json(data=result)
                             except Exception as e:
                                 console.print(
                                     strings.get("prompts", {})
@@ -1851,108 +2534,107 @@ def interactive(lang):
                                     .format(error=e)
                                 )
 
-            elif choice == "2":
-                # 参数优化
-                file_path = Prompt.ask(
-                    strings.get("optimize", {}).get(
-                        "enter_cad_file", "Enter CAD file path (.FCStd)"
-                    )
-                )
-                if file_path:
-                    parameter = Prompt.ask(
-                        strings.get("optimize", {}).get(
-                            "enter_parameter", "Enter parameter to optimize"
-                        )
-                    )
-                    if parameter:
-                        param_range = Prompt.ask(
-                            strings.get("optimize", {}).get(
-                                "enter_param_range", "Enter parameter range (min max)"
-                            ),
-                            default="2 15",
-                        )
-                        steps = Prompt.ask(
-                            strings.get("optimize", {}).get(
-                                "enter_steps", "Enter number of steps"
-                            ),
-                            default="5",
-                        )
+                    elif choice == "4":
+                        # 知识库查询
+                        from sw_helper.knowledge import get_knowledge_base
 
+                        kb = get_knowledge_base()
+
+                        while True:
+                            try:
+                                console.clear()
+                                console.print(
+                                    Panel(
+                                        strings.get("handbook", {}).get(
+                                            "welcome",
+                                            "[green]📚 机械手册知识库查询[/green]\n\n输入关键词查询机械设计相关知识\n示例: 40Cr, M10螺栓, 圆角, 公差, Q235\n\n[dim]输入 'back' 或按 Enter 返回主菜单[/dim]",
+                                        ),
+                                        title=strings.get("handbook", {}).get(
+                                            "title", "知识库查询"
+                                        ),
+                                        border_style="cyan",
+                                    )
+                                )
+
+                                keyword = Prompt.ask(
+                                    strings.get("handbook", {}).get(
+                                        "enter_keyword", "\n输入关键词"
+                                    )
+                                )
+
+                                if not keyword or keyword.lower() == "back":
+                                    break
+
+                                # 执行搜索
+                                console.print(
+                                    strings.get("handbook", {})
+                                    .get("searching", "\n[cyan]正在搜索: {keyword}[/cyan]")
+                                    .format(keyword=keyword)
+                                )
+                                kb.search_and_display(keyword)
+
+                                # 询问是否继续搜索
+                                continue_search = Prompt.ask(
+                                    strings.get("handbook", {}).get(
+                                        "continue_search", "\n继续搜索? (y/n)"
+                                    ),
+                                    default="y",
+                                ).lower()
+                                if continue_search not in ["y", "yes"]:
+                                    break
+
+                            except KeyboardInterrupt:
+                                console.print(
+                                    strings.get("handbook", {}).get(
+                                        "back_to_menu", "\n[yellow]返回主菜单[/yellow]"
+                                    )
+                                )
+                                break
+                            except Exception as e:
+                                console.print(
+                                    strings.get("handbook", {})
+                                    .get("query_error", "[red]查询错误: {error}[/red]")
+                                    .format(error=e)
+                                )
+                                try:
+                                    Prompt.ask(
+                                        strings.get("handbook", {}).get(
+                                            "press_enter", "\n按 Enter 继续..."
+                                        ),
+                                        default="",
+                                    )
+                                except EOFError:
+                                    break
+
+                    elif choice == "5":
+                        # 退出工作模式，返回一级菜单
+                        console.print(
+                            strings.get("prompts", {}).get(
+                                "back_to_main", "\n[green]返回主菜单...[/green]"
+                            )
+                        )
+                        break
+
+                    elif choice.strip():
+                        # 直接命令执行
                         try:
-                            min_val, max_val = map(float, param_range.split())
-                            steps_int = int(steps)
+                            import subprocess
 
-                            from sw_helper.optimization.optimizer import (
-                                FreeCADOptimizer,
+                            result = subprocess.run(
+                                f"python -m sw_helper.cli {choice}",
+                                shell=True,
+                                capture_output=True,
+                                text=True,
+                                cwd=Path(__file__).parent.parent.parent,
                             )
 
-                            optimizer = FreeCADOptimizer(use_mock=False)
-
-                            # 设置进度回调
-                            def progress_callback(msg):
-                                console.print(msg)
-
-                            optimizer.set_progress_callback(progress_callback)
-
-                            # 执行优化
-                            results = optimizer.optimize_parameter(
-                                file_path=file_path,
-                                param_name=parameter,
-                                param_range=(min_val, max_val),
-                                steps=steps_int,
-                                step_mode="linear",
-                                output_dir="./optimization_output",
-                                analyze_geometry=True,
-                            )
-
-                            if results:
-                                best = max(results, key=lambda x: x.quality_score)
+                            if result.stdout:
+                                console.print(result.stdout)
+                            if result.stderr:
                                 console.print(
-                                    strings.get("optimize", {}).get(
-                                        "best_result", "\n[green]Best result:[/green]"
-                                    )
-                                )
-                                console.print(
-                                    strings.get("optimize", {})
-                                    .get(
-                                        "parameter",
-                                        "Parameter: {parameter_name} = {parameter_value:.2f} mm",
-                                    )
-                                    .format(
-                                        parameter_name=best.parameter_name,
-                                        parameter_value=best.parameter_value,
-                                    )
-                                )
-                                console.print(
-                                    strings.get("optimize", {})
-                                    .get(
-                                        "quality_score",
-                                        "Quality Score: {quality_score:.1f}/100",
-                                    )
-                                    .format(quality_score=best.quality_score)
-                                )
-                                console.print(
-                                    strings.get("optimize", {})
-                                    .get(
-                                        "allowable_stress",
-                                        "Allowable Stress: {allowable_stress:.1f} MPa",
-                                    )
-                                    .format(allowable_stress=best.allowable_stress)
-                                )
-                                console.print(
-                                    strings.get("optimize", {})
-                                    .get(
-                                        "safety_factor",
-                                        "Safety Factor: {safety_factor:.2f}",
-                                    )
-                                    .format(safety_factor=best.safety_factor)
-                                )
-                            else:
-                                console.print(
-                                    strings.get("optimize", {}).get(
-                                        "no_results",
-                                        "[yellow]No results obtained[/yellow]",
-                                    )
+                                    strings.get("prompts", {})
+                                    .get("error", "[red]Error: {error}[/red]")
+                                    .format(error=result.stderr)
                                 )
 
                         except Exception as e:
@@ -1962,185 +2644,67 @@ def interactive(lang):
                                 .format(error=e)
                             )
 
-            elif choice == "3":
-                # AI生成模型
-                description = Prompt.ask(
-                    strings.get("ai_generate", {}).get(
-                        "enter_description", "Enter model description"
-                    )
-                )
-                if description:
-                    from sw_helper.ai.model_generator import AIModelGenerator
-
-                    generator = AIModelGenerator()
-
-                    try:
-                        result = generator.generate(description)
-                        console.print_json(data=result)
-                    except Exception as e:
+                    else:
                         console.print(
-                            strings.get("prompts", {})
-                            .get("error", "[red]Error: {error}[/red]")
-                            .format(error=e)
-                        )
-
-            elif choice == "4":
-                # 知识库查询
-                from sw_helper.knowledge import get_knowledge_base
-
-                kb = get_knowledge_base()
-
-                while True:
-                    try:
-                        console.clear()
-                        console.print(
-                            Panel(
-                                strings.get("handbook", {}).get(
-                                    "welcome",
-                                    "[green]📚 机械手册知识库查询[/green]\n\n输入关键词查询机械设计相关知识\n示例: 40Cr, M10螺栓, 圆角, 公差, Q235\n\n[dim]输入 'back' 或按 Enter 返回主菜单[/dim]",
-                                ),
-                                title=strings.get("handbook", {}).get(
-                                    "title", "知识库查询"
-                                ),
-                                border_style="cyan",
+                            strings.get("prompts", {}).get(
+                                "invalid_choice",
+                                "[yellow]Please enter a valid choice or command[/yellow]",
                             )
                         )
 
-                        keyword = Prompt.ask(
-                            strings.get("handbook", {}).get(
-                                "enter_keyword", "\n输入关键词"
-                            )
-                        )
-
-                        if not keyword or keyword.lower() == "back":
-                            break
-
-                        # 执行搜索
-                        console.print(
-                            strings.get("handbook", {})
-                            .get("searching", "\n[cyan]正在搜索: {keyword}[/cyan]")
-                            .format(keyword=keyword)
-                        )
-                        kb.search_and_display(keyword)
-
-                        # 询问是否继续搜索
-                        continue_search = Prompt.ask(
-                            strings.get("handbook", {}).get(
-                                "continue_search", "\n继续搜索? (y/n)"
-                            ),
-                            default="y",
-                        ).lower()
-                        if continue_search not in ["y", "yes"]:
-                            break
-
-                    except KeyboardInterrupt:
-                        console.print(
-                            strings.get("handbook", {}).get(
-                                "back_to_menu", "\n[yellow]返回主菜单[/yellow]"
-                            )
-                        )
-                        break
-                    except Exception as e:
-                        console.print(
-                            strings.get("handbook", {})
-                            .get("query_error", "[red]查询错误: {error}[/red]")
-                            .format(error=e)
-                        )
+                    # 按任意键继续
+                    if choice not in ["5"]:
                         try:
                             Prompt.ask(
-                                strings.get("handbook", {}).get(
-                                    "press_enter", "\n按 Enter 继续..."
+                                strings.get("prompts", {}).get(
+                                    "press_continue", "\nPress Enter to continue..."
                                 ),
                                 default="",
                             )
                         except EOFError:
                             break
 
-            elif choice == "5":
-                # 退出
-                console.print(
-                    strings.get("prompts", {}).get(
-                        "thank_you", "\n[green]Thank you for using CAE-CLI![/green]"
-                    )
-                )
-                break
-
-            elif choice.strip():
-                # 直接命令执行
-                try:
-                    import subprocess
-
-                    result = subprocess.run(
-                        f"python -m sw_helper.cli {choice}",
-                        shell=True,
-                        capture_output=True,
-                        text=True,
-                        cwd=Path(__file__).parent.parent.parent,
-                    )
-
-                    if result.stdout:
-                        console.print(result.stdout)
-                    if result.stderr:
-                        console.print(
-                            strings.get("prompts", {})
-                            .get("error", "[red]Error: {error}[/red]")
-                            .format(error=result.stderr)
+                except KeyboardInterrupt:
+                    console.print(
+                        strings.get("prompts", {}).get(
+                            "interrupted", "\n[yellow]Interrupted by user[/yellow]"
                         )
-
+                    )
+                    break
                 except Exception as e:
                     console.print(
                         strings.get("prompts", {})
                         .get("error", "[red]Error: {error}[/red]")
                         .format(error=e)
                     )
+                    import traceback
 
-            else:
-                console.print(
-                    strings.get("prompts", {}).get(
-                        "invalid_choice",
-                        "[yellow]Please enter a valid choice or command[/yellow]",
-                    )
-                )
+                    console.print(f"[dim]{traceback.format_exc()}[/dim]")
+                    try:
+                        Prompt.ask(
+                            strings.get("prompts", {}).get(
+                                "press_continue", "\nPress Enter to continue..."
+                            ),
+                            default="",
+                        )
+                    except EOFError:
+                        break
 
-            # 按任意键继续
-            if choice not in ["5"]:
-                try:
-                    Prompt.ask(
-                        strings.get("prompts", {}).get(
-                            "press_continue", "\nPress Enter to continue..."
-                        ),
-                        default="",
-                    )
-                except EOFError:
-                    break
+            # 工作模式循环结束，返回一级菜单
+            continue
 
-        except KeyboardInterrupt:
+        elif mode == "learn":
+            learning_mode()
+            # 学习模式结束后返回一级菜单
+            continue
+
+        elif mode == "exit":
             console.print(
                 strings.get("prompts", {}).get(
-                    "interrupted", "\n[yellow]Interrupted by user[/yellow]"
+                    "thank_you", "\n[green]Thank you for using CAE-CLI![/green]"
                 )
             )
             break
-        except Exception as e:
-            console.print(
-                strings.get("prompts", {})
-                .get("error", "[red]Error: {error}[/red]")
-                .format(error=e)
-            )
-            import traceback
-
-            console.print(f"[dim]{traceback.format_exc()}[/dim]")
-            try:
-                Prompt.ask(
-                    strings.get("prompts", {}).get(
-                        "press_continue", "\nPress Enter to continue..."
-                    ),
-                    default="",
-                )
-            except EOFError:
-                break
-
-
 @cli.group()
 def mcp():
     """

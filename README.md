@@ -26,6 +26,7 @@
 | ✅ **报告生成** | 自动生成分析报告，整理学习笔记 | ✅ 已实现 |
 | 🌟 **多语言支持** | 交互界面支持中文/英文切换，适应不同语言习惯 | ✅ 新功能 |
 | 🚀 **插件化架构** | 标准化CAD/CAE软件接口，支持自由扩展软件集成 | ✅ **新增功能** |
+| 🤖 **AI学习助手** | 集成本地Ollama模型 + RAG知识检索，提供智能问答 | ✅ **最新功能** |
 
 ---
 
@@ -84,6 +85,15 @@
 - **多语言界面**：🔴 **新功能** 支持中英文界面切换（`--lang zh/en`）
 - **实时反馈**：操作过程中提供即时质量分析建议
 - **命令学习**：支持直接命令行输入和菜单操作两种模式
+
+### 🤖 **AI学习助手** (🔥 **最新功能**)
+- **本地AI模型**：集成Ollama本地模型（支持qwen2.5:1.5b/phi3:mini）
+- **RAG知识检索**：使用sentence-transformers + ChromaDB向量化知识库，智能检索相关知识
+- **教学式回答**：专业机械学习助手，用中文教学式、一步步回答，适合大一学生
+- **多轮对话**：自动保存对话历史，支持上下文连贯的深度问答
+- **自动服务启动**：进入学习模式自动检测并启动Ollama服务
+- **知识库增强**：每次提问前先检索knowledge/目录的Markdown知识库，结合知识库内容回答
+- **智能模型检测**：自动检测可用模型，优先使用qwen2.5:1.5b，回退到phi3:mini
 
 ### 📚 **机械知识库管理**
 - **材料数据库**：内置 GB/T 标准材料库（Q235、Q345、铝合金等）
@@ -247,6 +257,41 @@ cae-cli interactive --lang en
 # 例如直接输入：analyze model.step --material Q235
 ```
 
+### 8. AI学习助手模式（最新功能）
+
+进入交互模式后，选择"学习模式"即可使用AI学习助手：
+
+```bash
+# 启动交互模式（中文界面）
+cae-cli interactive --lang zh
+
+# 在交互菜单中选择"学习模式"（支持箭头键导航）
+# 学习模式提供：
+# 1. 基于本地Ollama模型的智能问答（qwen2.5:1.5b/phi3:mini）
+# 2. RAG知识检索：自动检索knowledge/目录的机械知识库
+# 3. 教学式回答：适合大一学生的教学式、一步步解释
+# 4. 多轮对话：自动保存对话历史，支持深度问答
+# 5. 自动服务启动：自动检测并启动Ollama服务
+
+# 使用示例：
+# 1. 问："Q235材料的屈服强度是多少？"
+# 2. 问："M10螺栓的螺距是多少？"
+# 3. 问："什么是间隙配合？"
+# 4. 问："解释一下Von Mises应力的概念"
+```
+
+**依赖安装：**
+```bash
+# 安装AI学习助手所需依赖
+pip install chromadb sentence-transformers requests
+
+# 安装Ollama（请访问 https://ollama.com/ 下载安装）
+# 运行Ollama服务并下载模型
+ollama run phi3:mini
+# 或
+ollama run qwen2.5:1.5b
+```
+
 ## 📖 命令参考
 
 ### 全局选项
@@ -269,7 +314,7 @@ cae-cli interactive --lang en
 | `config` | 管理配置 | `cae-cli config --list` |
 | `version` | 显示版本 | `cae-cli version` |
 | `info` | 系统信息 | `cae-cli info` |
-| `interactive` | 交互模式（支持多语言） | `cae-cli interactive --lang zh` |
+| `interactive` | 交互模式（支持多语言 + AI学习助手） | `cae-cli interactive --lang zh` |
 
 ## 🔧 Python API
 
@@ -708,7 +753,7 @@ python -m sw_helper --help
 - **主要用户**：机械专业学生、FreeCAD用户、CAE学习者、插件开发者、开源贡献者
 - **开发进度**：
   - ✅ **基础功能**：几何解析、材料计算、网格分析
-  - ✅ **AI与交互**：AI辅助设计、多语言支持、交互模式
+  - ✅ **AI与交互**：AI辅助设计、多语言支持、交互模式、AI学习助手（Ollama+RAG）
   - ✅ **插件化架构**：标准化CAD/CAE接口，FreeCAD+CalculiX集成
   - ✅ **网格生成器**：Gmsh标准化集成（src/integrations/mesher/gmsh.py）
   - ✅ **完整文档体系**：5个核心文档 + API自动生成脚本
