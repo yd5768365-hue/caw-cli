@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>integrations.cad.freecad API documentation</title>
+<meta name="description" content="FreeCAD连接器 - 新架构实现 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>integrations.cad.freecad</code></h1>
+</header>
+<section id="section-intro">
+<p>FreeCAD连接器 - 新架构实现</p>
+<p>基于CADConnector抽象基类的FreeCAD连接器实现，
+提供与FreeCAD Python API的标准化交互接口。</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="integrations.cad.freecad.FCParameter"><code class="flex name class">
+<span>class <span class="ident">FCParameter</span></span>
+<span>(</span><span>name: str,<br>value: float,<br>unit: str = 'mm',<br>obj_name: str = '',<br>constraint_index: int = -1)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class FCParameter:
+    &#34;&#34;&#34;FreeCAD参数数据类（保持与旧代码兼容）&#34;&#34;&#34;
+
+    name: str
+    value: float
+    unit: str = &#34;mm&#34;
+    obj_name: str = &#34;&#34;  # FreeCAD中的对象名称
+    constraint_index: int = -1  # 如果是约束，记录索引</code></pre>
+</details>
+<div class="desc"><p>FreeCAD参数数据类（保持与旧代码兼容）</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="integrations.cad.freecad.FCParameter.constraint_index"><code class="name">var <span class="ident">constraint_index</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FCParameter.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FCParameter.obj_name"><code class="name">var <span class="ident">obj_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FCParameter.unit"><code class="name">var <span class="ident">unit</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FCParameter.value"><code class="name">var <span class="ident">value</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector"><code class="flex name class">
+<span>class <span class="ident">FreeCADConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADConnector(CADConnector):
+    &#34;&#34;&#34;FreeCAD连接器 - 基于新架构的实现&#34;&#34;&#34;
+
+    def __init__(self):
+        self.fc_app = None
+        self.part_module = None
+        self.active_doc = None
+        self.is_connected = False
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到FreeCAD实例&#34;&#34;&#34;
+        try:
+            # 尝试导入FreeCAD
+            import FreeCAD as App
+            import Part
+
+            self.fc_app = App
+            self.part_module = Part
+            self.is_connected = True
+            return True
+
+        except ImportError:
+            # 如果直接导入失败，尝试添加FreeCAD路径
+            print(&#34;尝试添加FreeCAD路径...&#34;)
+
+            # 常见的FreeCAD安装路径
+            possible_paths = [
+                &#34;C:/Program Files/FreeCAD 0.21/bin&#34;,
+                &#34;C:/Program Files/FreeCAD 0.20/bin&#34;,
+                &#34;C:/Program Files/FreeCAD/bin&#34;,
+                &#34;/usr/lib/freecad-python3/lib&#34;,
+                &#34;/usr/lib/freecad/lib&#34;,
+                &#34;/Applications/FreeCAD.app/Contents/lib&#34;,
+            ]
+
+            fc_found = False
+            for path in possible_paths:
+                if Path(path).exists():
+                    sys.path.append(path)
+                    try:
+                        import FreeCAD as App
+                        import Part
+
+                        self.fc_app = App
+                        self.part_module = Part
+                        self.is_connected = True
+                        fc_found = True
+                        print(f&#34;OK: 从 {path} 加载FreeCAD成功&#34;)
+                        break
+                    except ImportError:
+                        continue
+
+            if not fc_found:
+                print(&#34;ERROR: 未能找到FreeCAD，请确保已安装并配置Python路径&#34;)
+                print(&#34;提示: 可以设置 FREECAD_LIB 环境变量指向FreeCAD的lib目录&#34;)
+                return False
+
+            return True
+
+        except Exception as e:
+            print(f&#34;连接FreeCAD失败: {e}&#34;)
+            return False
+
+    def load_model(self, file_path: Path) -&gt; bool:
+        &#34;&#34;&#34;加载CAD模型文件&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            file_path = str(file_path.resolve())
+
+            # 关闭当前文档（如果有）
+            if self.active_doc:
+                self.close_document()
+
+            # 打开文档
+            self.active_doc = self.fc_app.open(file_path)
+
+            if self.active_doc:
+                print(f&#34;✓ 已打开: {self.active_doc.Name}&#34;)
+                return True
+            else:
+                print(&#34;✗ 无法打开文档&#34;)
+                return False
+
+        except Exception as e:
+            print(f&#34;打开文档失败: {e}&#34;)
+            return False
+
+    def get_parameter(self, name: str) -&gt; Optional[float]:
+        &#34;&#34;&#34;获取指定参数的值&#34;&#34;&#34;
+        if not self.active_doc:
+            return None
+
+        # 使用现有方法查找参数
+        param = self._find_parameter_internal(name)
+        return param.value if param else None
+
+    def set_parameter(self, name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数值&#34;&#34;&#34;
+        if not self.active_doc:
+            print(&#34;✗ 没有打开的文档&#34;)
+            return False
+
+        try:
+            # 使用现有的参数设置逻辑
+            return self._set_parameter_internal(name, value)
+        except Exception as e:
+            print(f&#34;设置参数失败: {e}&#34;)
+            return False
+
+    def rebuild(self) -&gt; bool:
+        &#34;&#34;&#34;重建模型（应用参数变更）&#34;&#34;&#34;
+        if not self.active_doc:
+            print(&#34;✗ 没有打开的文档&#34;)
+            return False
+
+        try:
+            print(&#34;⏳ 重新计算文档...&#34;)
+            self.active_doc.recompute()
+            self.fc_app.ActiveDocument = self.active_doc
+            print(&#34;✓ 重建完成&#34;)
+            return True
+        except Exception as e:
+            print(f&#34;重建失败: {e}&#34;)
+            return False
+
+    def export_step(self, output_path: Path) -&gt; bool:
+        &#34;&#34;&#34;导出为STEP格式文件&#34;&#34;&#34;
+        return self._export_file_internal(output_path, &#34;STEP&#34;)
+
+    def get_supported_formats(self) -&gt; List[FileFormat]:
+        &#34;&#34;&#34;获取支持的导出格式&#34;&#34;&#34;
+        return [
+            FileFormat.STEP,
+            FileFormat.STL,
+            FileFormat.IGES,
+            FileFormat.BREP,
+            FileFormat.FCSTD,
+        ]
+
+    # ========== 内部辅助方法（保持与旧代码兼容）==========
+
+    def _get_parameters_internal(self) -&gt; List[FCParameter]:
+        &#34;&#34;&#34;获取所有参数（内部实现，保持与旧代码兼容）&#34;&#34;&#34;
+        if not self.active_doc:
+            return []
+
+        params = []
+
+        try:
+            # 遍历所有对象
+            for obj in self.active_doc.Objects:
+                # 检查Sketcher对象（草图约束）
+                if obj.isDerivedFrom(&#34;Sketcher::SketchObject&#34;):
+                    if hasattr(obj, &#34;Constraints&#34;):
+                        for i, constraint in enumerate(obj.Constraints):
+                            if hasattr(constraint, &#34;Value&#34;):
+                                params.append(
+                                    FCParameter(
+                                        name=constraint.Name
+                                        if hasattr(constraint, &#34;Name&#34;)
+                                        and constraint.Name
+                                        else f&#34;Constraint_{i}&#34;,
+                                        value=constraint.Value,
+                                        unit=&#34;mm&#34;,
+                                        obj_name=obj.Name,
+                                        constraint_index=i,
+                                    )
+                                )
+
+                # 检查PartDesign特征（如Pad、Pocket等）
+                if obj.isDerivedFrom(&#34;PartDesign::Feature&#34;):
+                    # 检查常见参数
+                    param_names = [
+                        &#34;Length&#34;,
+                        &#34;Width&#34;,
+                        &#34;Height&#34;,
+                        &#34;Radius&#34;,
+                        &#34;FilletRadius&#34;,
+                        &#34;Thickness&#34;,
+                    ]
+                    for param_name in param_names:
+                        if hasattr(obj, param_name):
+                            value = getattr(obj, param_name)
+                            if isinstance(value, (int, float)):
+                                params.append(
+                                    FCParameter(
+                                        name=f&#34;{obj.Name}.{param_name}&#34;,
+                                        value=float(value),
+                                        unit=&#34;mm&#34;,
+                                        obj_name=obj.Name,
+                                    )
+                                )
+
+                # 检查Fillet（圆角）
+                if obj.isDerivedFrom(&#34;PartDesign::Fillet&#34;):
+                    if hasattr(obj, &#34;Radius&#34;):
+                        params.append(
+                            FCParameter(
+                                name=f&#34;{obj.Name}.Radius&#34;,
+                                value=float(obj.Radius),
+                                unit=&#34;mm&#34;,
+                                obj_name=obj.Name,
+                            )
+                        )
+
+                # 检查Spreadsheet（电子表格中的参数）
+                if obj.isDerivedFrom(&#34;Spreadsheet::Sheet&#34;):
+                    # 获取电子表格中的单元格
+                    for cell in [&#34;A1&#34;, &#34;A2&#34;, &#34;A3&#34;, &#34;B1&#34;, &#34;B2&#34;, &#34;B3&#34;]:
+                        try:
+                            value = obj.get(cell)
+                            if isinstance(value, (int, float)):
+                                params.append(
+                                    FCParameter(
+                                        name=f&#34;Spreadsheet.{cell}&#34;,
+                                        value=float(value),
+                                        unit=&#34;mm&#34;,
+                                        obj_name=obj.Name,
+                                    )
+                                )
+                        except:
+                            pass
+
+        except Exception as e:
+            print(f&#34;获取参数失败: {e}&#34;)
+
+        return params
+
+    def _find_parameter_internal(self, param_name: str) -&gt; Optional[FCParameter]:
+        &#34;&#34;&#34;查找特定参数（内部实现）&#34;&#34;&#34;
+        params = self._get_parameters_internal()
+
+        # 精确匹配
+        for p in params:
+            if p.name == param_name:
+                return p
+
+        # 模糊匹配（部分匹配）
+        param_lower = param_name.lower()
+        for p in params:
+            if param_lower in p.name.lower():
+                return p
+
+        return None
+
+    def _set_parameter_internal(self, param_name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数值（内部实现，保持与旧代码兼容）&#34;&#34;&#34;
+        try:
+            # 支持的参数映射（标准化参数名称）
+            param_mapping = {
+                &#34;fillet_radius&#34;: [&#34;FilletRadius&#34;, &#34;Radius&#34;],
+                &#34;length&#34;: [&#34;Length&#34;],
+                &#34;width&#34;: [&#34;Width&#34;],
+                &#34;height&#34;: [&#34;Height&#34;],
+                &#34;hole_diameter&#34;: [&#34;Diameter&#34;],
+                &#34;thickness&#34;: [&#34;Thickness&#34;],
+                &#34;radius&#34;: [&#34;Radius&#34;],
+                &#34;diameter&#34;: [&#34;Diameter&#34;],
+            }
+
+            # 查找参数
+            param = self._find_parameter_internal(param_name)
+
+            if param:
+                obj = self.active_doc.getObject(param.obj_name)
+
+                if obj:
+                    # 如果是草图约束
+                    if param.constraint_index &gt;= 0 and hasattr(obj, &#34;Constraints&#34;):
+                        obj.setDatum(param.constraint_index, value)
+                        print(f&#34;✓ 设置约束 {param.name} = {value} mm&#34;)
+                        return True
+
+                    # 如果是对象属性（如 Fillet.Radius）
+                    if &#34;.&#34; in param.name:
+                        prop_name = param.name.split(&#34;.&#34;)[-1]
+                        if hasattr(obj, prop_name):
+                            setattr(obj, prop_name, value)
+                            print(f&#34;✓ 设置 {param.name} = {value} mm&#34;)
+                            return True
+
+                    # 直接设置属性
+                    for attr in [&#34;Length&#34;, &#34;Width&#34;, &#34;Height&#34;, &#34;Radius&#34;, &#34;Thickness&#34;]:
+                        if hasattr(obj, attr):
+                            setattr(obj, attr, value)
+                            print(f&#34;✓ 设置 {obj.Name}.{attr} = {value} mm&#34;)
+                            return True
+
+            # 尝试通过对象名称直接查找
+            if &#34;.&#34; in param_name:
+                parts = param_name.split(&#34;.&#34;)
+                if len(parts) == 2:
+                    obj_name, prop_name = parts
+                    obj = self.active_doc.getObject(obj_name)
+                    if obj and hasattr(obj, prop_name):
+                        setattr(obj, prop_name, value)
+                        print(f&#34;✓ 设置 {param_name} = {value} mm&#34;)
+                        return True
+
+            # 尝试全局搜索所有对象（支持常见参数类型）
+            target_param_lower = param_name.lower()
+
+            for obj in self.active_doc.Objects:
+                # 支持的属性类型
+                for attr in [
+                    &#34;Radius&#34;,
+                    &#34;Length&#34;,
+                    &#34;Width&#34;,
+                    &#34;Height&#34;,
+                    &#34;FilletRadius&#34;,
+                    &#34;Thickness&#34;,
+                    &#34;Diameter&#34;,
+                ]:
+                    if hasattr(obj, attr):
+                        # 检查属性名称是否匹配
+                        attr_lower = attr.lower()
+
+                        # 精确匹配或包含匹配
+                        if (
+                            attr_lower == target_param_lower
+                            or target_param_lower in attr_lower
+                        ):
+                            setattr(obj, attr, value)
+                            print(f&#34;✓ 设置 {obj.Name}.{attr} = {value} mm&#34;)
+                            return True
+
+                        # 检查参数名称是否在属性值中（如 Hole_Diameter 匹配 Diameter）
+                        for key, values in param_mapping.items():
+                            if key in target_param_lower:
+                                for possible_attr in values:
+                                    if hasattr(obj, possible_attr):
+                                        setattr(obj, possible_attr, value)
+                                        print(
+                                            f&#34;✓ 设置 {obj.Name}.{possible_attr} = {value} mm&#34;
+                                        )
+                                        return True
+
+            # 尝试在电子表格中查找
+            for obj in self.active_doc.Objects:
+                if obj.isDerivedFrom(&#34;Spreadsheet::Sheet&#34;):
+                    for cell in obj.getContents().keys():
+                        cell_content = obj.getContents()[cell]
+                        if (
+                            param_name.lower() in cell.lower()
+                            or param_name.lower() in str(cell_content).lower()
+                        ):
+                            try:
+                                obj.set(cell, str(value))
+                                print(f&#34;✓ 设置电子表格单元格 {cell} = {value} mm&#34;)
+                                return True
+                            except:
+                                continue
+
+            print(f&#34;✗ 未找到参数 &#39;{param_name}&#39;&#34;)
+            print(&#34;可用参数:&#34;)
+            params = self._get_parameters_internal()
+            for i, p in enumerate(params[:10]):
+                print(f&#34;  {i + 1}. {p.name} = {p.value} mm&#34;)
+
+            if len(params) &gt; 10:
+                print(f&#34;  ... 以及另外 {len(params) - 10} 个参数&#34;)
+
+            return False
+
+        except Exception as e:
+            print(f&#34;设置参数失败: {e}&#34;)
+            import traceback
+
+            traceback.print_exc()
+            return False
+
+    def _export_file_internal(self, output_path: Path, format_type: str) -&gt; bool:
+        &#34;&#34;&#34;导出文件（内部实现，保持与旧代码兼容）&#34;&#34;&#34;
+        if not self.active_doc:
+            print(&#34;✗ 没有打开的文档&#34;)
+            return False
+
+        try:
+            output_path = str(output_path)
+
+            # 根据格式选择导出方式
+            format_map = {
+                &#34;STEP&#34;: &#34;.step&#34;,
+                &#34;STL&#34;: &#34;.stl&#34;,
+                &#34;IGES&#34;: &#34;.iges&#34;,
+                &#34;BREP&#34;: &#34;.brep&#34;,
+                &#34;OBJ&#34;: &#34;.obj&#34;,
+            }
+
+            ext = format_map.get(format_type.upper(), &#34;.step&#34;)
+            if not output_path.endswith(ext):
+                output_path += ext
+
+            # 确保输出目录存在
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+            print(f&#34;⏳ 导出到: {output_path}&#34;)
+
+            # 导出STEP
+            if format_type.upper() == &#34;STEP&#34;:
+                import Import
+
+                # 收集所有Part对象
+                objects = [
+                    obj
+                    for obj in self.active_doc.Objects
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+                ]
+                if objects:
+                    Import.export(objects, output_path)
+                    print(f&#34;✓ 导出成功: {output_path}&#34;)
+                    return True
+                else:
+                    print(&#34;✗ 没有找到可导出的Part对象&#34;)
+                    return False
+
+            # 导出STL
+            elif format_type.upper() == &#34;STL&#34;:
+                for obj in self.active_doc.Objects:
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;) and hasattr(obj, &#34;Shape&#34;):
+                        obj.Shape.exportStl(output_path)
+                        print(f&#34;✓ 导出成功: {output_path}&#34;)
+                        return True
+                print(&#34;✗ 没有找到可导出的Shape&#34;)
+                return False
+
+            # 保存为FCStd（FreeCAD原生格式）
+            elif format_type.upper() == &#34;FCSTD&#34;:
+                self.active_doc.saveAs(output_path)
+                print(f&#34;✓ 保存成功: {output_path}&#34;)
+                return True
+
+            # 导出IGES
+            elif format_type.upper() == &#34;IGES&#34;:
+                import Import
+
+                objects = [
+                    obj
+                    for obj in self.active_doc.Objects
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+                ]
+                if objects:
+                    Import.export(objects, output_path)
+                    print(f&#34;✓ 导出成功: {output_path}&#34;)
+                    return True
+                else:
+                    print(&#34;✗ 没有找到可导出的Part对象&#34;)
+                    return False
+
+            return False
+
+        except Exception as e:
+            print(f&#34;导出失败: {e}&#34;)
+            import traceback
+
+            traceback.print_exc()
+            return False
+
+    def close_document(self, save: bool = False):
+        &#34;&#34;&#34;关闭文档（兼容性方法）&#34;&#34;&#34;
+        if self.active_doc:
+            try:
+                if save:
+                    self.active_doc.save()
+                doc_name = self.active_doc.Name
+                self.fc_app.closeDocument(doc_name)
+                self.active_doc = None
+                print(f&#34;✓ 已关闭文档: {doc_name}&#34;)
+            except Exception as e:
+                print(f&#34;关闭文档时出错: {e}&#34;)
+
+    def disconnect(self):
+        &#34;&#34;&#34;断开连接（兼容性方法）&#34;&#34;&#34;
+        self.close_document(save=False)
+        self.fc_app = None
+        self.part_module = None
+        self.is_connected = False
+
+    # ========== 额外方法（向后兼容）==========
+
+    def open_document(self, file_path: str) -&gt; bool:
+        &#34;&#34;&#34;打开文档（向后兼容）&#34;&#34;&#34;
+        return self.load_model(Path(file_path))
+
+    def get_parameters(self) -&gt; List[FCParameter]:
+        &#34;&#34;&#34;获取所有参数（向后兼容）&#34;&#34;&#34;
+        return self._get_parameters_internal()
+
+    def find_parameter(self, param_name: str) -&gt; Optional[FCParameter]:
+        &#34;&#34;&#34;查找特定参数（向后兼容）&#34;&#34;&#34;
+        return self._find_parameter_internal(param_name)
+
+    def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+        &#34;&#34;&#34;导出文件（向后兼容）&#34;&#34;&#34;
+        return self._export_file_internal(Path(output_path), format_type)
+
+    def save_document(self, file_path: Optional[str] = None) -&gt; bool:
+        &#34;&#34;&#34;保存文档（向后兼容）&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            if file_path:
+                self.active_doc.saveAs(file_path)
+            else:
+                self.active_doc.save()
+            return True
+        except Exception as e:
+            print(f&#34;保存失败: {e}&#34;)
+            return False</code></pre>
+</details>
+<div class="desc"><p>FreeCAD连接器 - 基于新架构的实现</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>integrations._base.connectors.CADConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.cad.freecad.FreeCADConnector.close_document"><code class="name flex">
+<span>def <span class="ident">close_document</span></span>(<span>self, save: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close_document(self, save: bool = False):
+    &#34;&#34;&#34;关闭文档（兼容性方法）&#34;&#34;&#34;
+    if self.active_doc:
+        try:
+            if save:
+                self.active_doc.save()
+            doc_name = self.active_doc.Name
+            self.fc_app.closeDocument(doc_name)
+            self.active_doc = None
+            print(f&#34;✓ 已关闭文档: {doc_name}&#34;)
+        except Exception as e:
+            print(f&#34;关闭文档时出错: {e}&#34;)</code></pre>
+</details>
+<div class="desc"><p>关闭文档（兼容性方法）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到FreeCAD实例&#34;&#34;&#34;
+    try:
+        # 尝试导入FreeCAD
+        import FreeCAD as App
+        import Part
+
+        self.fc_app = App
+        self.part_module = Part
+        self.is_connected = True
+        return True
+
+    except ImportError:
+        # 如果直接导入失败，尝试添加FreeCAD路径
+        print(&#34;尝试添加FreeCAD路径...&#34;)
+
+        # 常见的FreeCAD安装路径
+        possible_paths = [
+            &#34;C:/Program Files/FreeCAD 0.21/bin&#34;,
+            &#34;C:/Program Files/FreeCAD 0.20/bin&#34;,
+            &#34;C:/Program Files/FreeCAD/bin&#34;,
+            &#34;/usr/lib/freecad-python3/lib&#34;,
+            &#34;/usr/lib/freecad/lib&#34;,
+            &#34;/Applications/FreeCAD.app/Contents/lib&#34;,
+        ]
+
+        fc_found = False
+        for path in possible_paths:
+            if Path(path).exists():
+                sys.path.append(path)
+                try:
+                    import FreeCAD as App
+                    import Part
+
+                    self.fc_app = App
+                    self.part_module = Part
+                    self.is_connected = True
+                    fc_found = True
+                    print(f&#34;OK: 从 {path} 加载FreeCAD成功&#34;)
+                    break
+                except ImportError:
+                    continue
+
+        if not fc_found:
+            print(&#34;ERROR: 未能找到FreeCAD，请确保已安装并配置Python路径&#34;)
+            print(&#34;提示: 可以设置 FREECAD_LIB 环境变量指向FreeCAD的lib目录&#34;)
+            return False
+
+        return True
+
+    except Exception as e:
+        print(f&#34;连接FreeCAD失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到FreeCAD实例</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.disconnect"><code class="name flex">
+<span>def <span class="ident">disconnect</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disconnect(self):
+    &#34;&#34;&#34;断开连接（兼容性方法）&#34;&#34;&#34;
+    self.close_document(save=False)
+    self.fc_app = None
+    self.part_module = None
+    self.is_connected = False</code></pre>
+</details>
+<div class="desc"><p>断开连接（兼容性方法）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.export_file"><code class="name flex">
+<span>def <span class="ident">export_file</span></span>(<span>self, output_path: str, format_type: str = 'STEP') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+    &#34;&#34;&#34;导出文件（向后兼容）&#34;&#34;&#34;
+    return self._export_file_internal(Path(output_path), format_type)</code></pre>
+</details>
+<div class="desc"><p>导出文件（向后兼容）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.export_step"><code class="name flex">
+<span>def <span class="ident">export_step</span></span>(<span>self, output_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_step(self, output_path: Path) -&gt; bool:
+    &#34;&#34;&#34;导出为STEP格式文件&#34;&#34;&#34;
+    return self._export_file_internal(output_path, &#34;STEP&#34;)</code></pre>
+</details>
+<div class="desc"><p>导出为STEP格式文件</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.find_parameter"><code class="name flex">
+<span>def <span class="ident">find_parameter</span></span>(<span>self, param_name: str) ‑> <a title="integrations.cad.freecad.FCParameter" href="#integrations.cad.freecad.FCParameter">FCParameter</a> | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_parameter(self, param_name: str) -&gt; Optional[FCParameter]:
+    &#34;&#34;&#34;查找特定参数（向后兼容）&#34;&#34;&#34;
+    return self._find_parameter_internal(param_name)</code></pre>
+</details>
+<div class="desc"><p>查找特定参数（向后兼容）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.get_parameter"><code class="name flex">
+<span>def <span class="ident">get_parameter</span></span>(<span>self, name: str) ‑> float | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameter(self, name: str) -&gt; Optional[float]:
+    &#34;&#34;&#34;获取指定参数的值&#34;&#34;&#34;
+    if not self.active_doc:
+        return None
+
+    # 使用现有方法查找参数
+    param = self._find_parameter_internal(name)
+    return param.value if param else None</code></pre>
+</details>
+<div class="desc"><p>获取指定参数的值</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.get_parameters"><code class="name flex">
+<span>def <span class="ident">get_parameters</span></span>(<span>self) ‑> List[<a title="integrations.cad.freecad.FCParameter" href="#integrations.cad.freecad.FCParameter">FCParameter</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameters(self) -&gt; List[FCParameter]:
+    &#34;&#34;&#34;获取所有参数（向后兼容）&#34;&#34;&#34;
+    return self._get_parameters_internal()</code></pre>
+</details>
+<div class="desc"><p>获取所有参数（向后兼容）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.get_supported_formats"><code class="name flex">
+<span>def <span class="ident">get_supported_formats</span></span>(<span>self) ‑> List[<a title="core.types.FileFormat" href="../../core/types.html#core.types.FileFormat">FileFormat</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_supported_formats(self) -&gt; List[FileFormat]:
+    &#34;&#34;&#34;获取支持的导出格式&#34;&#34;&#34;
+    return [
+        FileFormat.STEP,
+        FileFormat.STL,
+        FileFormat.IGES,
+        FileFormat.BREP,
+        FileFormat.FCSTD,
+    ]</code></pre>
+</details>
+<div class="desc"><p>获取支持的导出格式</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.load_model"><code class="name flex">
+<span>def <span class="ident">load_model</span></span>(<span>self, file_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_model(self, file_path: Path) -&gt; bool:
+    &#34;&#34;&#34;加载CAD模型文件&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        file_path = str(file_path.resolve())
+
+        # 关闭当前文档（如果有）
+        if self.active_doc:
+            self.close_document()
+
+        # 打开文档
+        self.active_doc = self.fc_app.open(file_path)
+
+        if self.active_doc:
+            print(f&#34;✓ 已打开: {self.active_doc.Name}&#34;)
+            return True
+        else:
+            print(&#34;✗ 无法打开文档&#34;)
+            return False
+
+    except Exception as e:
+        print(f&#34;打开文档失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>加载CAD模型文件</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.open_document"><code class="name flex">
+<span>def <span class="ident">open_document</span></span>(<span>self, file_path: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def open_document(self, file_path: str) -&gt; bool:
+    &#34;&#34;&#34;打开文档（向后兼容）&#34;&#34;&#34;
+    return self.load_model(Path(file_path))</code></pre>
+</details>
+<div class="desc"><p>打开文档（向后兼容）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.rebuild"><code class="name flex">
+<span>def <span class="ident">rebuild</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rebuild(self) -&gt; bool:
+    &#34;&#34;&#34;重建模型（应用参数变更）&#34;&#34;&#34;
+    if not self.active_doc:
+        print(&#34;✗ 没有打开的文档&#34;)
+        return False
+
+    try:
+        print(&#34;⏳ 重新计算文档...&#34;)
+        self.active_doc.recompute()
+        self.fc_app.ActiveDocument = self.active_doc
+        print(&#34;✓ 重建完成&#34;)
+        return True
+    except Exception as e:
+        print(f&#34;重建失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>重建模型（应用参数变更）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.save_document"><code class="name flex">
+<span>def <span class="ident">save_document</span></span>(<span>self, file_path: str | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_document(self, file_path: Optional[str] = None) -&gt; bool:
+    &#34;&#34;&#34;保存文档（向后兼容）&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        if file_path:
+            self.active_doc.saveAs(file_path)
+        else:
+            self.active_doc.save()
+        return True
+    except Exception as e:
+        print(f&#34;保存失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>保存文档（向后兼容）</p></div>
+</dd>
+<dt id="integrations.cad.freecad.FreeCADConnector.set_parameter"><code class="name flex">
+<span>def <span class="ident">set_parameter</span></span>(<span>self, name: str, value: float) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_parameter(self, name: str, value: float) -&gt; bool:
+    &#34;&#34;&#34;设置参数值&#34;&#34;&#34;
+    if not self.active_doc:
+        print(&#34;✗ 没有打开的文档&#34;)
+        return False
+
+    try:
+        # 使用现有的参数设置逻辑
+        return self._set_parameter_internal(name, value)
+    except Exception as e:
+        print(f&#34;设置参数失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>设置参数值</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="integrations.cad" href="index.html">integrations.cad</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="integrations.cad.freecad.FCParameter" href="#integrations.cad.freecad.FCParameter">FCParameter</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.cad.freecad.FCParameter.constraint_index" href="#integrations.cad.freecad.FCParameter.constraint_index">constraint_index</a></code></li>
+<li><code><a title="integrations.cad.freecad.FCParameter.name" href="#integrations.cad.freecad.FCParameter.name">name</a></code></li>
+<li><code><a title="integrations.cad.freecad.FCParameter.obj_name" href="#integrations.cad.freecad.FCParameter.obj_name">obj_name</a></code></li>
+<li><code><a title="integrations.cad.freecad.FCParameter.unit" href="#integrations.cad.freecad.FCParameter.unit">unit</a></code></li>
+<li><code><a title="integrations.cad.freecad.FCParameter.value" href="#integrations.cad.freecad.FCParameter.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.cad.freecad.FreeCADConnector" href="#integrations.cad.freecad.FreeCADConnector">FreeCADConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.close_document" href="#integrations.cad.freecad.FreeCADConnector.close_document">close_document</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.connect" href="#integrations.cad.freecad.FreeCADConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.disconnect" href="#integrations.cad.freecad.FreeCADConnector.disconnect">disconnect</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.export_file" href="#integrations.cad.freecad.FreeCADConnector.export_file">export_file</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.export_step" href="#integrations.cad.freecad.FreeCADConnector.export_step">export_step</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.find_parameter" href="#integrations.cad.freecad.FreeCADConnector.find_parameter">find_parameter</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.get_parameter" href="#integrations.cad.freecad.FreeCADConnector.get_parameter">get_parameter</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.get_parameters" href="#integrations.cad.freecad.FreeCADConnector.get_parameters">get_parameters</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.get_supported_formats" href="#integrations.cad.freecad.FreeCADConnector.get_supported_formats">get_supported_formats</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.load_model" href="#integrations.cad.freecad.FreeCADConnector.load_model">load_model</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.open_document" href="#integrations.cad.freecad.FreeCADConnector.open_document">open_document</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.rebuild" href="#integrations.cad.freecad.FreeCADConnector.rebuild">rebuild</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.save_document" href="#integrations.cad.freecad.FreeCADConnector.save_document">save_document</a></code></li>
+<li><code><a title="integrations.cad.freecad.FreeCADConnector.set_parameter" href="#integrations.cad.freecad.FreeCADConnector.set_parameter">set_parameter</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

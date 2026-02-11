@@ -1,0 +1,1335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>integrations.mesher API documentation</title>
+<meta name="description" content="网格生成器模块 - 集成Gmsh等网格生成工具 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>integrations.mesher</code></h1>
+</header>
+<section id="section-intro">
+<p>网格生成器模块 - 集成Gmsh等网格生成工具</p>
+<p>此模块提供网格生成器的标准化接口，支持从几何文件生成
+有限元分析所需的网格，并确保网格质量满足仿真要求。</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="integrations.mesher.gmsh" href="gmsh.html">integrations.mesher.gmsh</a></code></dt>
+<dd>
+<div class="desc"><p>Gmsh网格生成器连接器 - 基于新架构的实现 …</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="integrations.mesher.GmshConnector"><code class="flex name class">
+<span>class <span class="ident">GmshConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GmshConnector(CAEConnector):
+    &#34;&#34;&#34;Gmsh网格生成器连接器&#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        self.gmsh_module: Optional[Any] = None
+        self.is_connected: bool = False
+        self.work_dir: Optional[Path] = None
+        self.current_model: Optional[Any] = None
+        self.ureg = pint.UnitRegistry()
+        self.mesh_options: Dict[str, Any] = {
+            &#34;element_size&#34;: 1.0,  # 默认单元尺寸 (mm)
+            &#34;algorithm&#34;: &#34;Delannay&#34;,  # Delannay, Frontal, Netgen
+            &#34;optimize&#34;: True,
+            &#34;quality_type&#34;: &#34;tetrahedron&#34;,  # tetrahedron, hexahedron, mixed
+            &#34;min_quality&#34;: 0.3,  # 最小网格质量阈值
+            &#34;max_quality&#34;: 1.0,  # 最大网格质量阈值
+        }
+
+    def _gmsh(self) -&gt; Any:
+        &#34;&#34;&#34;获取gmsh模块，确保已连接&#34;&#34;&#34;
+        if self.gmsh_module is None:
+            raise RuntimeError(&#34;Gmsh模块未初始化，请先调用connect()&#34;)
+        return self.gmsh_module
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到Gmsh实例（检查gmsh模块是否可用）&#34;&#34;&#34;
+        try:
+            import gmsh
+
+            self.gmsh_module = gmsh
+            self.is_connected = True
+            print(&#34;✓ 连接到Gmsh成功&#34;)
+            return True
+
+        except ImportError:
+            print(&#34;✗ 未找到Gmsh Python模块&#34;)
+            print(&#34;提示: 请安装Gmsh并确保Python绑定可用&#34;)
+            print(&#34;      pip install gmsh&#34;)
+            print(&#34;      或从 https://gmsh.info/ 下载&#34;)
+            return False
+
+        except Exception as e:
+            print(f&#34;连接Gmsh失败: {e}&#34;)
+            return False
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 1.0
+    ) -&gt; bool:
+        &#34;&#34;&#34;从几何文件生成网格
+
+        支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
+        输出格式: .msh (Gmsh格式)，可转换为其他格式
+
+        Args:
+            geometry_file: 输入几何文件路径
+            mesh_file: 输出网格文件路径
+            element_size: 单元尺寸 (mm，默认1.0)
+
+        Returns:
+            bool: 网格生成是否成功
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        # 确保gmsh_module已连接
+        assert self.gmsh_module is not None, &#34;Gmsh模块未初始化&#34;
+
+        try:
+            # 确保输出目录存在
+            mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # 检查输入文件是否存在
+            if not geometry_file.exists():
+                raise FileNotFoundError(f&#34;几何文件不存在: {geometry_file}&#34;)
+
+            # 获取文件格式
+            file_format = self._detect_file_format(geometry_file)
+
+            # 初始化Gmsh
+            self._gmsh().initialize()
+            self._gmsh().option.setNumber(&#34;General.Terminal&#34;, 1)
+
+            # 设置网格选项 (element_size 单位: mm → 转换为 m 供 Gmsh 使用)
+            element_size_m = (
+                self.ureg.Quantity(element_size, self.ureg.mm).to(self.ureg.m).magnitude
+            )
+            self._set_mesh_options(element_size_m)
+
+            # 导入几何
+            print(f&#34;⏳ 导入几何: {geometry_file.name}&#34;)
+            if file_format == &#34;step&#34;:
+                self.gmsh_module.merge(str(geometry_file))
+            elif file_format == &#34;stl&#34;:
+                self.gmsh_module.merge(str(geometry_file))
+            elif file_format == &#34;brep&#34;:
+                self.gmsh_module.open(str(geometry_file))
+            else:
+                # 通用导入
+                self.gmsh_module.merge(str(geometry_file))
+
+            # 同步几何模型
+            self.gmsh_module.model.geo.synchronize()
+
+            # 生成2D表面网格
+            print(&#34;⏳ 生成表面网格...&#34;)
+            self.gmsh_module.model.mesh.generate(2)
+
+            # 生成3D体积网格
+            print(&#34;⏳ 生成体积网格...&#34;)
+            self.gmsh_module.model.mesh.generate(3)
+
+            # 网格优化
+            if self.mesh_options[&#34;optimize&#34;]:
+                print(&#34;⏳ 优化网格质量...&#34;)
+                self.gmsh_module.model.mesh.optimize(&#34;Netgen&#34;)
+
+            # 检查网格质量
+            quality_ok = self._check_mesh_quality()
+            if not quality_ok:
+                print(&#34;⚠️ 网格质量警告: 部分单元质量较低&#34;)
+
+            # 保存网格文件
+            print(f&#34;⏳ 保存网格文件: {mesh_file}&#34;)
+            self.gmsh_module.write(str(mesh_file))
+
+            # 清理Gmsh
+            self.gmsh_module.finalize()
+
+            # 验证输出文件
+            if mesh_file.exists() and mesh_file.stat().st_size &gt; 0:
+                print(f&#34;✓ 网格生成成功: {mesh_file}&#34;)
+                print(f&#34;  文件大小: {mesh_file.stat().st_size / 1024:.1f} KB&#34;)
+
+                # 显示网格统计信息
+                self._print_mesh_stats(mesh_file)
+                return True
+            else:
+                print(&#34;✗ 网格文件生成失败&#34;)
+                return False
+
+        except Exception as e:
+            print(f&#34;生成网格失败: {e}&#34;)
+            # 确保清理Gmsh
+            try:
+                self.gmsh_module.finalize()
+            except:
+                pass
+            return False
+
+    def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+        &#34;&#34;&#34;设置仿真分析（对于网格生成器，此方法返回输入文件路径）
+
+        注意：Gmsh本身不是求解器，此方法用于创建转换后的输入文件
+        例如：将.msh转换为CalculiX .inp格式
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+        try:
+            # 创建临时工作目录
+            if not self.work_dir:
+                self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;gmsh_&#34;))
+
+            # 确定目标格式
+            target_format = config.get(&#34;target_format&#34;, &#34;inp&#34;)
+            input_file = self.work_dir / f&#34;{mesh_file.stem}.{target_format}&#34;
+
+            # 转换网格格式
+            if target_format == &#34;inp&#34;:
+                self._convert_to_inp(mesh_file, input_file)
+            elif target_format == &#34;bdf&#34;:
+                self._convert_to_bdf(mesh_file, input_file)
+            elif target_format == &#34;cas&#34;:
+                self._convert_to_cas(mesh_file, input_file)
+            else:
+                # 默认复制原始.msh文件
+                shutil.copy2(mesh_file, input_file)
+
+            print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+            return input_file
+
+        except Exception as e:
+            print(f&#34;设置仿真失败: {e}&#34;)
+            raise
+
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        &#34;&#34;&#34;运行仿真分析（对于网格生成器，此方法无实际意义）
+
+        注意：Gmsh不是求解器，此方法仅用于兼容性
+        实际仿真应使用CalculiX、Abaqus等求解器
+        &#34;&#34;&#34;
+        print(f&#34;⚠️  Gmsh不是求解器，跳过仿真步骤&#34;)
+        print(f&#34;    输入文件: {input_file}&#34;)
+        print(f&#34;    请使用CAE求解器运行此文件&#34;)
+
+        # 为兼容性返回成功
+        return True
+
+    def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;读取仿真结果（对于网格生成器，此方法读取网格质量信息）&#34;&#34;&#34;
+        try:
+            if not result_file.exists():
+                raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+            results = {
+                &#34;file_path&#34;: str(result_file),
+                &#34;file_size&#34;: result_file.stat().st_size,
+                &#34;mesh_quality&#34;: {},
+                &#34;elements&#34;: 0,
+                &#34;nodes&#34;: 0,
+                &#34;element_types&#34;: {},
+            }
+
+            # 如果是.msh文件，解析网格信息
+            if result_file.suffix.lower() == &#34;.msh&#34;:
+                results.update(self._parse_msh_file(result_file))
+
+            # 如果是.inp文件，解析CalculiX网格信息
+            elif result_file.suffix.lower() == &#34;.inp&#34;:
+                results.update(self._parse_inp_file(result_file))
+
+            return results
+
+        except Exception as e:
+            print(f&#34;读取结果失败: {e}&#34;)
+            return {
+                &#34;file_path&#34;: str(result_file),
+                &#34;error&#34;: str(e),
+                &#34;success&#34;: False,
+            }
+
+    def get_supported_analysis_types(self) -&gt; List[str]:
+        &#34;&#34;&#34;获取支持的分析类型（对于网格生成器，返回空列表）&#34;&#34;&#34;
+        return []  # Gmsh不是求解器，不直接支持分析类型
+
+    def convert_to_calculix_inp(self, msh_path: Path) -&gt; Path:
+        &#34;&#34;&#34;将 .msh 文件转换为 CalculiX 兼容的 .inp 文件
+
+        Args:
+            msh_path: 输入 .msh 文件路径
+
+        Returns:
+            Path: 生成的 .inp 文件路径
+
+        Raises:
+            FileNotFoundError: 输入文件不存在时
+            RuntimeError: 转换失败时
+        &#34;&#34;&#34;
+        if not msh_path.exists():
+            raise FileNotFoundError(f&#34;MSH 文件不存在: {msh_path}&#34;)
+
+        # 创建输出文件路径
+        inp_path = msh_path.with_suffix(&#34;.inp&#34;)
+
+        # 使用内部转换方法
+        if not self._convert_to_inp(msh_path, inp_path):
+            raise RuntimeError(f&#34;转换为 CalculiX INP 格式失败: {msh_path}&#34;)
+
+        return inp_path
+
+    def convert_mesh_format(
+        self, input_mesh: Path, output_mesh: Path, target_format: str
+    ) -&gt; bool:
+        &#34;&#34;&#34;转换网格格式
+
+        Args:
+            input_mesh: 输入网格文件
+            output_mesh: 输出网格文件
+            target_format: 目标格式 (&#39;inp&#39;, &#39;bdf&#39;, &#39;cas&#39;, &#39;vtk&#39;)
+
+        Returns:
+            bool: 转换是否成功
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            format_map = {
+                &#34;inp&#34;: self._convert_to_inp,
+                &#34;bdf&#34;: self._convert_to_bdf,
+                &#34;cas&#34;: self._convert_to_cas,
+                &#34;vtk&#34;: self._convert_to_vtk,
+            }
+
+            if target_format not in format_map:
+                raise ValueError(f&#34;不支持的格式: {target_format}&#34;)
+
+            converter = format_map[target_format]
+            return converter(input_mesh, output_mesh)
+
+        except Exception as e:
+            print(f&#34;转换网格格式失败: {e}&#34;)
+            return False
+
+    def get_mesh_quality_report(self, mesh_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;获取网格质量报告&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+        try:
+            # 初始化Gmsh并加载网格
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(mesh_file))
+
+            # 计算网格质量指标
+            quality_metrics = self._calculate_quality_metrics()
+
+            # 清理
+            self.gmsh_module.finalize()
+
+            return {
+                &#34;mesh_file&#34;: str(mesh_file),
+                &#34;quality_metrics&#34;: quality_metrics,
+                &#34;overall_quality&#34;: self._evaluate_overall_quality(quality_metrics),
+                &#34;recommendations&#34;: self._generate_quality_recommendations(
+                    quality_metrics
+                ),
+            }
+
+        except Exception as e:
+            print(f&#34;获取网格质量报告失败: {e}&#34;)
+            return {&#34;error&#34;: str(e)}
+
+    # ========== 内部辅助方法 ==========
+
+    def _detect_file_format(self, file_path: Path) -&gt; str:
+        &#34;&#34;&#34;检测文件格式&#34;&#34;&#34;
+        suffix = file_path.suffix.lower()
+        if suffix in [&#34;.step&#34;, &#34;.stp&#34;]:
+            return &#34;step&#34;
+        elif suffix in [&#34;.stl&#34;]:
+            return &#34;stl&#34;
+        elif suffix in [&#34;.brep&#34;]:
+            return &#34;brep&#34;
+        elif suffix in [&#34;.iges&#34;, &#34;.igs&#34;]:
+            return &#34;iges&#34;
+        elif suffix in [&#34;.msh&#34;]:
+            return &#34;msh&#34;
+        elif suffix in [&#34;.inp&#34;]:
+            return &#34;inp&#34;
+        else:
+            return &#34;unknown&#34;
+
+    def _set_mesh_options(self, element_size: float):
+        &#34;&#34;&#34;设置网格生成选项&#34;&#34;&#34;
+        self.gmsh_module.option.setNumber(&#34;Mesh.CharacteristicLengthMin&#34;, element_size)
+        self.gmsh_module.option.setNumber(&#34;Mesh.CharacteristicLengthMax&#34;, element_size)
+        self.gmsh_module.option.setNumber(&#34;Mesh.Algorithm&#34;, 5)  # Delannay
+        self.gmsh_module.option.setNumber(&#34;Mesh.Algorithm3D&#34;, 1)  # Delannay 3D
+        self.gmsh_module.option.setNumber(&#34;Mesh.Optimize&#34;, 1)
+        self.gmsh_module.option.setNumber(&#34;Mesh.QualityType&#34;, 2)  # Tetrahedron quality
+
+    def _check_mesh_quality(self) -&gt; bool:
+        &#34;&#34;&#34;检查网格质量&#34;&#34;&#34;
+        try:
+            # 获取质量统计
+            quality_stats = self.gmsh_module.model.mesh.getQualityStatistics()
+
+            min_quality = quality_stats[0]  # 最小质量
+            max_quality = quality_stats[1]  # 最大质量
+            avg_quality = quality_stats[2]  # 平均质量
+
+            print(f&#34;  网格质量统计:&#34;)
+            print(f&#34;    最小质量: {min_quality:.4f}&#34;)
+            print(f&#34;    最大质量: {max_quality:.4f}&#34;)
+            print(f&#34;    平均质量: {avg_quality:.4f}&#34;)
+
+            # 检查是否满足最小质量阈值
+            threshold = self.mesh_options[&#34;min_quality&#34;]
+            if min_quality &lt; threshold:
+                error_msg = (
+                    f&#34;网格质量过低: 最小质量 ({min_quality:.4f}) 低于阈值 ({threshold})。&#34;
+                    f&#34;建议减小单元尺寸或调整几何。&#34;
+                )
+                raise MeshQualityError(error_msg)
+
+            return True
+
+        except Exception as e:
+            print(f&#34;检查网格质量失败: {e}&#34;)
+            return True  # 如果检查失败，假设质量合格
+
+    def _print_mesh_stats(self, mesh_file: Path):
+        &#34;&#34;&#34;打印网格统计信息&#34;&#34;&#34;
+        try:
+            # 重新打开网格文件获取统计信息
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(mesh_file))
+
+            # 获取网格信息
+            node_count = self.gmsh_module.model.mesh.getNodes()[0].shape[0]
+            element_count = self.gmsh_module.model.mesh.getElements()[2][0].shape[0]
+
+            print(f&#34;  网格统计:&#34;)
+            print(f&#34;    节点数: {node_count}&#34;)
+            print(f&#34;    单元数: {element_count}&#34;)
+
+            self.gmsh_module.finalize()
+
+        except Exception as e:
+            print(f&#34;获取网格统计失败: {e}&#34;)
+
+    def _convert_to_inp(self, input_mesh: Path, output_inp: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为CalculiX .inp格式&#34;&#34;&#34;
+        try:
+            # 确保输出目录存在
+            output_inp.parent.mkdir(parents=True, exist_ok=True)
+
+            # 初始化Gmsh并加载网格
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(input_mesh))
+
+            # 获取网格数据
+            nodes = self.gmsh_module.model.mesh.getNodes()
+            elements = self.gmsh_module.model.mesh.getElements()
+
+            # 写入.inp格式
+            with open(output_inp, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#34;** Converted from Gmsh .msh format\n&#34;)
+                f.write(&#34;** Generated by CAE-CLI GmshConnector\n\n&#34;)
+
+                # 写入节点
+                f.write(&#34;*NODE\n&#34;)
+                for i, (node_id, coords) in enumerate(zip(nodes[0], nodes[1]), 1):
+                    x, y, z = coords[0], coords[1], coords[2]
+                    f.write(f&#34;{i}, {x:.6f}, {y:.6f}, {z:.6f}\n&#34;)
+
+                # 按单元类型分组写入单元
+                element_groups = {}
+
+                for elem_type, elem_tags, elem_nodes in zip(elements[0], elements[1], elements[2]):
+                    if elem_type not in element_groups:
+                        element_groups[elem_type] = []
+                    for tag, nodes_list in zip(elem_tags, elem_nodes):
+                        element_groups[elem_type].append((tag, nodes_list))
+
+                # 定义Gmsh到CalculiX的单元类型映射
+                elem_type_map = {
+                    4: &#34;C3D4&#34;,    # 四面体
+                    5: &#34;C3D8&#34;,    # 六面体
+                    1: &#34;CPS4&#34;,    # 四边形（平面应力）
+                    2: &#34;CPE4&#34;,    # 四边形（平面应变）
+                    3: &#34;C3D6&#34;,    # 三棱柱
+                    6: &#34;C3D10&#34;,   # 四面体（二次）
+                    7: &#34;C3D20&#34;    # 六面体（二次）
+                }
+
+                # 写入每个单元组
+                for gmsh_type, elems in element_groups.items():
+                    calculix_type = elem_type_map.get(gmsh_type)
+                    if calculix_type:
+                        f.write(f&#34;\n*ELEMENT, TYPE={calculix_type}, ELSET=PART1\n&#34;)
+                        for i, (tag, nodes_list) in enumerate(elems, 1):
+                            # 转换节点编号（Gmsh节点编号从1开始，CalculiX也是）
+                            nodes_str = &#34;, &#34;.join(str(int(n)) for n in nodes_list)
+                            f.write(f&#34;{i}, {nodes_str}\n&#34;)
+
+                # 写入固体截面定义
+                f.write(&#34;\n*SOLID SECTION, ELSET=PART1, MATERIAL=DEFAULT_MATERIAL\n&#34;)
+
+            self.gmsh_module.finalize()
+            print(f&#34;✓ 转换成功: {input_mesh.name} -&gt; {output_inp.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为INP格式失败: {e}&#34;)
+            return False
+
+    def _convert_to_bdf(self, input_mesh: Path, output_bdf: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为NASTRAN .bdf格式&#34;&#34;&#34;
+        try:
+            # 简化实现：创建示例.bdf文件
+            with open(output_bdf, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#34;$ NASTRAN input file converted from Gmsh\n&#34;)
+                f.write(&#34;$ Generated by CAE-CLI GmshConnector\n&#34;)
+                f.write(&#34;SOL 101\n&#34;)
+                f.write(&#34;CEND\n&#34;)
+                f.write(&#34;BEGIN BULK\n&#34;)
+                f.write(&#34;$ Nodes and elements would be here\n&#34;)
+                f.write(&#34;ENDDATA\n&#34;)
+
+            print(f&#34;✓ 创建BDF文件: {output_bdf.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为BDF格式失败: {e}&#34;)
+            return False
+
+    def _convert_to_cas(self, input_mesh: Path, output_cas: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为Fluent .cas格式&#34;&#34;&#34;
+        try:
+            # 简化实现：创建示例.cas文件
+            with open(output_cas, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#39;(0 &#34;Fluent Case File converted from Gmsh&#34;)\n&#39;)
+                f.write(&#39;(0 &#34;Generated by CAE-CLI GmshConnector&#34;)\n&#39;)
+                f.write(&#34;(2 2)\n&#34;)  # 版本信息
+
+            print(f&#34;✓ 创建CAS文件: {output_cas.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为CAS格式失败: {e}&#34;)
+            return False
+
+    def _convert_to_vtk(self, input_mesh: Path, output_vtk: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为VTK格式&#34;&#34;&#34;
+        try:
+            # Gmsh可以直接导出为VTK
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(input_mesh))
+            self.gmsh_module.write(str(output_vtk))
+            self.gmsh_module.finalize()
+
+            print(f&#34;✓ 转换成功: {input_mesh.name} -&gt; {output_vtk.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为VTK格式失败: {e}&#34;)
+            return False
+
+    def _parse_msh_file(self, msh_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.msh文件&#34;&#34;&#34;
+        results = {
+            &#34;format&#34;: &#34;msh&#34;,
+            &#34;version&#34;: &#34;unknown&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+        }
+
+        try:
+            with open(msh_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                lines = f.readlines()
+
+            for line in lines:
+                if line.startswith(&#34;$MeshFormat&#34;):
+                    # 格式信息
+                    parts = lines[1].strip().split()
+                    if len(parts) &gt;= 2:
+                        results[&#34;version&#34;] = parts[0]
+                elif line.startswith(&#34;$Nodes&#34;):
+                    # 节点数
+                    node_line = lines[lines.index(line) + 1].strip()
+                    results[&#34;nodes&#34;] = int(node_line.split()[0])
+                elif line.startswith(&#34;$Elements&#34;):
+                    # 单元数
+                    elem_line = lines[lines.index(line) + 1].strip()
+                    results[&#34;elements&#34;] = int(elem_line.split()[0])
+
+        except Exception as e:
+            print(f&#34;解析MSH文件失败: {e}&#34;)
+
+        return results
+
+    def _parse_inp_file(self, inp_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.inp文件&#34;&#34;&#34;
+        results = {
+            &#34;format&#34;: &#34;inp&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+            &#34;materials&#34;: [],
+        }
+
+        try:
+            with open(inp_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                lines = f.readlines()
+
+            in_nodes = False
+            in_elements = False
+
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith(&#34;**&#34;):
+                    continue
+
+                if line.upper().startswith(&#34;*NODE&#34;):
+                    in_nodes = True
+                    in_elements = False
+                elif line.upper().startswith(&#34;*ELEMENT&#34;):
+                    in_nodes = False
+                    in_elements = True
+                elif line.upper().startswith(&#34;*MATERIAL&#34;):
+                    material_name = line.split(&#34;,&#34;)[1].strip().split(&#34;=&#34;)[1]
+                    results[&#34;materials&#34;].append(material_name)
+                elif in_nodes and &#34;,&#34; in line:
+                    results[&#34;nodes&#34;] += 1
+                elif in_elements and &#34;,&#34; in line:
+                    results[&#34;elements&#34;] += 1
+
+        except Exception as e:
+            print(f&#34;解析INP文件失败: {e}&#34;)
+
+        return results
+
+    def _calculate_quality_metrics(self) -&gt; Dict[str, float]:
+        &#34;&#34;&#34;计算网格质量指标&#34;&#34;&#34;
+        try:
+            # 获取质量统计
+            stats = self.gmsh_module.model.mesh.getQualityStatistics()
+
+            return {
+                &#34;min_quality&#34;: stats[0],
+                &#34;max_quality&#34;: stats[1],
+                &#34;avg_quality&#34;: stats[2],
+                &#34;std_quality&#34;: stats[3] if len(stats) &gt; 3 else 0.0,
+                &#34;jacobian_min&#34;: stats[4] if len(stats) &gt; 4 else 1.0,
+                &#34;jacobian_max&#34;: stats[5] if len(stats) &gt; 5 else 1.0,
+            }
+        except Exception as e:
+            print(f&#34;计算质量指标失败: {e}&#34;)
+            return {}
+
+    def _evaluate_overall_quality(self, metrics: Dict[str, float]) -&gt; str:
+        &#34;&#34;&#34;评估整体网格质量&#34;&#34;&#34;
+        min_quality = metrics.get(&#34;min_quality&#34;, 1.0)
+
+        if min_quality &gt;= 0.7:
+            return &#34;excellent&#34;
+        elif min_quality &gt;= 0.5:
+            return &#34;good&#34;
+        elif min_quality &gt;= 0.3:
+            return &#34;fair&#34;
+        elif min_quality &gt;= 0.1:
+            return &#34;poor&#34;
+        else:
+            return &#34;unacceptable&#34;
+
+    def _generate_quality_recommendations(self, metrics: Dict[str, float]) -&gt; List[str]:
+        &#34;&#34;&#34;生成质量改进建议&#34;&#34;&#34;
+        recommendations = []
+        min_quality = metrics.get(&#34;min_quality&#34;, 1.0)
+
+        if min_quality &lt; 0.3:
+            recommendations.append(&#34;网格质量过低，建议减小单元尺寸或调整几何&#34;)
+        elif min_quality &lt; 0.5:
+            recommendations.append(&#34;部分单元质量较差，建议进行网格优化&#34;)
+        elif min_quality &lt; 0.7:
+            recommendations.append(&#34;网格质量一般，可接受但建议优化&#34;)
+
+        avg_quality = metrics.get(&#34;avg_quality&#34;, 1.0)
+        if avg_quality &lt; 0.8:
+            recommendations.append(&#34;平均质量偏低，建议检查几何模型&#34;)
+
+        return recommendations
+
+    def cleanup(self):
+        &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+        if self.work_dir and self.work_dir.exists():
+            try:
+                shutil.rmtree(self.work_dir)
+                self.work_dir = None
+            except:
+                pass</code></pre>
+</details>
+<div class="desc"><p>Gmsh网格生成器连接器</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="integrations.mesher.gmsh.GmshConnectorMock" href="gmsh.html#integrations.mesher.gmsh.GmshConnectorMock">GmshConnectorMock</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.mesher.GmshConnector.cleanup"><code class="name flex">
+<span>def <span class="ident">cleanup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cleanup(self):
+    &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+    if self.work_dir and self.work_dir.exists():
+        try:
+            shutil.rmtree(self.work_dir)
+            self.work_dir = None
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>清理工作目录</p></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到Gmsh实例（检查gmsh模块是否可用）&#34;&#34;&#34;
+    try:
+        import gmsh
+
+        self.gmsh_module = gmsh
+        self.is_connected = True
+        print(&#34;✓ 连接到Gmsh成功&#34;)
+        return True
+
+    except ImportError:
+        print(&#34;✗ 未找到Gmsh Python模块&#34;)
+        print(&#34;提示: 请安装Gmsh并确保Python绑定可用&#34;)
+        print(&#34;      pip install gmsh&#34;)
+        print(&#34;      或从 https://gmsh.info/ 下载&#34;)
+        return False
+
+    except Exception as e:
+        print(f&#34;连接Gmsh失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到Gmsh实例（检查gmsh模块是否可用）</p></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.convert_mesh_format"><code class="name flex">
+<span>def <span class="ident">convert_mesh_format</span></span>(<span>self,<br>input_mesh: pathlib._local.Path,<br>output_mesh: pathlib._local.Path,<br>target_format: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_mesh_format(
+    self, input_mesh: Path, output_mesh: Path, target_format: str
+) -&gt; bool:
+    &#34;&#34;&#34;转换网格格式
+
+    Args:
+        input_mesh: 输入网格文件
+        output_mesh: 输出网格文件
+        target_format: 目标格式 (&#39;inp&#39;, &#39;bdf&#39;, &#39;cas&#39;, &#39;vtk&#39;)
+
+    Returns:
+        bool: 转换是否成功
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        format_map = {
+            &#34;inp&#34;: self._convert_to_inp,
+            &#34;bdf&#34;: self._convert_to_bdf,
+            &#34;cas&#34;: self._convert_to_cas,
+            &#34;vtk&#34;: self._convert_to_vtk,
+        }
+
+        if target_format not in format_map:
+            raise ValueError(f&#34;不支持的格式: {target_format}&#34;)
+
+        converter = format_map[target_format]
+        return converter(input_mesh, output_mesh)
+
+    except Exception as e:
+        print(f&#34;转换网格格式失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>转换网格格式</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_mesh</code></strong></dt>
+<dd>输入网格文件</dd>
+<dt><strong><code>output_mesh</code></strong></dt>
+<dd>输出网格文件</dd>
+<dt><strong><code>target_format</code></strong></dt>
+<dd>目标格式 ('inp', 'bdf', 'cas', 'vtk')</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>转换是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.convert_to_calculix_inp"><code class="name flex">
+<span>def <span class="ident">convert_to_calculix_inp</span></span>(<span>self, msh_path: pathlib._local.Path) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_to_calculix_inp(self, msh_path: Path) -&gt; Path:
+    &#34;&#34;&#34;将 .msh 文件转换为 CalculiX 兼容的 .inp 文件
+
+    Args:
+        msh_path: 输入 .msh 文件路径
+
+    Returns:
+        Path: 生成的 .inp 文件路径
+
+    Raises:
+        FileNotFoundError: 输入文件不存在时
+        RuntimeError: 转换失败时
+    &#34;&#34;&#34;
+    if not msh_path.exists():
+        raise FileNotFoundError(f&#34;MSH 文件不存在: {msh_path}&#34;)
+
+    # 创建输出文件路径
+    inp_path = msh_path.with_suffix(&#34;.inp&#34;)
+
+    # 使用内部转换方法
+    if not self._convert_to_inp(msh_path, inp_path):
+        raise RuntimeError(f&#34;转换为 CalculiX INP 格式失败: {msh_path}&#34;)
+
+    return inp_path</code></pre>
+</details>
+<div class="desc"><p>将 .msh 文件转换为 CalculiX 兼容的 .inp 文件</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>msh_path</code></strong></dt>
+<dd>输入 .msh 文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Path</code></dt>
+<dd>生成的 .inp 文件路径</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>输入文件不存在时</dd>
+<dt><code>RuntimeError</code></dt>
+<dd>转换失败时</dd>
+</dl></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.generate_mesh"><code class="name flex">
+<span>def <span class="ident">generate_mesh</span></span>(<span>self,<br>geometry_file: pathlib._local.Path,<br>mesh_file: pathlib._local.Path,<br>element_size: float = 1.0) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_mesh(
+    self, geometry_file: Path, mesh_file: Path, element_size: float = 1.0
+) -&gt; bool:
+    &#34;&#34;&#34;从几何文件生成网格
+
+    支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
+    输出格式: .msh (Gmsh格式)，可转换为其他格式
+
+    Args:
+        geometry_file: 输入几何文件路径
+        mesh_file: 输出网格文件路径
+        element_size: 单元尺寸 (mm，默认1.0)
+
+    Returns:
+        bool: 网格生成是否成功
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    # 确保gmsh_module已连接
+    assert self.gmsh_module is not None, &#34;Gmsh模块未初始化&#34;
+
+    try:
+        # 确保输出目录存在
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # 检查输入文件是否存在
+        if not geometry_file.exists():
+            raise FileNotFoundError(f&#34;几何文件不存在: {geometry_file}&#34;)
+
+        # 获取文件格式
+        file_format = self._detect_file_format(geometry_file)
+
+        # 初始化Gmsh
+        self._gmsh().initialize()
+        self._gmsh().option.setNumber(&#34;General.Terminal&#34;, 1)
+
+        # 设置网格选项 (element_size 单位: mm → 转换为 m 供 Gmsh 使用)
+        element_size_m = (
+            self.ureg.Quantity(element_size, self.ureg.mm).to(self.ureg.m).magnitude
+        )
+        self._set_mesh_options(element_size_m)
+
+        # 导入几何
+        print(f&#34;⏳ 导入几何: {geometry_file.name}&#34;)
+        if file_format == &#34;step&#34;:
+            self.gmsh_module.merge(str(geometry_file))
+        elif file_format == &#34;stl&#34;:
+            self.gmsh_module.merge(str(geometry_file))
+        elif file_format == &#34;brep&#34;:
+            self.gmsh_module.open(str(geometry_file))
+        else:
+            # 通用导入
+            self.gmsh_module.merge(str(geometry_file))
+
+        # 同步几何模型
+        self.gmsh_module.model.geo.synchronize()
+
+        # 生成2D表面网格
+        print(&#34;⏳ 生成表面网格...&#34;)
+        self.gmsh_module.model.mesh.generate(2)
+
+        # 生成3D体积网格
+        print(&#34;⏳ 生成体积网格...&#34;)
+        self.gmsh_module.model.mesh.generate(3)
+
+        # 网格优化
+        if self.mesh_options[&#34;optimize&#34;]:
+            print(&#34;⏳ 优化网格质量...&#34;)
+            self.gmsh_module.model.mesh.optimize(&#34;Netgen&#34;)
+
+        # 检查网格质量
+        quality_ok = self._check_mesh_quality()
+        if not quality_ok:
+            print(&#34;⚠️ 网格质量警告: 部分单元质量较低&#34;)
+
+        # 保存网格文件
+        print(f&#34;⏳ 保存网格文件: {mesh_file}&#34;)
+        self.gmsh_module.write(str(mesh_file))
+
+        # 清理Gmsh
+        self.gmsh_module.finalize()
+
+        # 验证输出文件
+        if mesh_file.exists() and mesh_file.stat().st_size &gt; 0:
+            print(f&#34;✓ 网格生成成功: {mesh_file}&#34;)
+            print(f&#34;  文件大小: {mesh_file.stat().st_size / 1024:.1f} KB&#34;)
+
+            # 显示网格统计信息
+            self._print_mesh_stats(mesh_file)
+            return True
+        else:
+            print(&#34;✗ 网格文件生成失败&#34;)
+            return False
+
+    except Exception as e:
+        print(f&#34;生成网格失败: {e}&#34;)
+        # 确保清理Gmsh
+        try:
+            self.gmsh_module.finalize()
+        except:
+            pass
+        return False</code></pre>
+</details>
+<div class="desc"><p>从几何文件生成网格</p>
+<p>支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
+输出格式: .msh (Gmsh格式)，可转换为其他格式</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_file</code></strong></dt>
+<dd>输入几何文件路径</dd>
+<dt><strong><code>mesh_file</code></strong></dt>
+<dd>输出网格文件路径</dd>
+<dt><strong><code>element_size</code></strong></dt>
+<dd>单元尺寸 (mm，默认1.0)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>网格生成是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.get_mesh_quality_report"><code class="name flex">
+<span>def <span class="ident">get_mesh_quality_report</span></span>(<span>self, mesh_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mesh_quality_report(self, mesh_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;获取网格质量报告&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+    try:
+        # 初始化Gmsh并加载网格
+        self.gmsh_module.initialize()
+        self.gmsh_module.open(str(mesh_file))
+
+        # 计算网格质量指标
+        quality_metrics = self._calculate_quality_metrics()
+
+        # 清理
+        self.gmsh_module.finalize()
+
+        return {
+            &#34;mesh_file&#34;: str(mesh_file),
+            &#34;quality_metrics&#34;: quality_metrics,
+            &#34;overall_quality&#34;: self._evaluate_overall_quality(quality_metrics),
+            &#34;recommendations&#34;: self._generate_quality_recommendations(
+                quality_metrics
+            ),
+        }
+
+    except Exception as e:
+        print(f&#34;获取网格质量报告失败: {e}&#34;)
+        return {&#34;error&#34;: str(e)}</code></pre>
+</details>
+<div class="desc"><p>获取网格质量报告</p></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.get_supported_analysis_types"><code class="name flex">
+<span>def <span class="ident">get_supported_analysis_types</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_supported_analysis_types(self) -&gt; List[str]:
+    &#34;&#34;&#34;获取支持的分析类型（对于网格生成器，返回空列表）&#34;&#34;&#34;
+    return []  # Gmsh不是求解器，不直接支持分析类型</code></pre>
+</details>
+<div class="desc"><p>获取支持的分析类型（对于网格生成器，返回空列表）</p></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.read_results"><code class="name flex">
+<span>def <span class="ident">read_results</span></span>(<span>self, result_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;读取仿真结果（对于网格生成器，此方法读取网格质量信息）&#34;&#34;&#34;
+    try:
+        if not result_file.exists():
+            raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+        results = {
+            &#34;file_path&#34;: str(result_file),
+            &#34;file_size&#34;: result_file.stat().st_size,
+            &#34;mesh_quality&#34;: {},
+            &#34;elements&#34;: 0,
+            &#34;nodes&#34;: 0,
+            &#34;element_types&#34;: {},
+        }
+
+        # 如果是.msh文件，解析网格信息
+        if result_file.suffix.lower() == &#34;.msh&#34;:
+            results.update(self._parse_msh_file(result_file))
+
+        # 如果是.inp文件，解析CalculiX网格信息
+        elif result_file.suffix.lower() == &#34;.inp&#34;:
+            results.update(self._parse_inp_file(result_file))
+
+        return results
+
+    except Exception as e:
+        print(f&#34;读取结果失败: {e}&#34;)
+        return {
+            &#34;file_path&#34;: str(result_file),
+            &#34;error&#34;: str(e),
+            &#34;success&#34;: False,
+        }</code></pre>
+</details>
+<div class="desc"><p>读取仿真结果（对于网格生成器，此方法读取网格质量信息）</p></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.run_simulation"><code class="name flex">
+<span>def <span class="ident">run_simulation</span></span>(<span>self,<br>input_file: pathlib._local.Path,<br>output_dir: pathlib._local.Path | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_simulation(
+    self, input_file: Path, output_dir: Optional[Path] = None
+) -&gt; bool:
+    &#34;&#34;&#34;运行仿真分析（对于网格生成器，此方法无实际意义）
+
+    注意：Gmsh不是求解器，此方法仅用于兼容性
+    实际仿真应使用CalculiX、Abaqus等求解器
+    &#34;&#34;&#34;
+    print(f&#34;⚠️  Gmsh不是求解器，跳过仿真步骤&#34;)
+    print(f&#34;    输入文件: {input_file}&#34;)
+    print(f&#34;    请使用CAE求解器运行此文件&#34;)
+
+    # 为兼容性返回成功
+    return True</code></pre>
+</details>
+<div class="desc"><p>运行仿真分析（对于网格生成器，此方法无实际意义）</p>
+<p>注意：Gmsh不是求解器，此方法仅用于兼容性
+实际仿真应使用CalculiX、Abaqus等求解器</p></div>
+</dd>
+<dt id="integrations.mesher.GmshConnector.setup_simulation"><code class="name flex">
+<span>def <span class="ident">setup_simulation</span></span>(<span>self, mesh_file: pathlib._local.Path, config: Dict[str, Any]) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+    &#34;&#34;&#34;设置仿真分析（对于网格生成器，此方法返回输入文件路径）
+
+    注意：Gmsh本身不是求解器，此方法用于创建转换后的输入文件
+    例如：将.msh转换为CalculiX .inp格式
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+    try:
+        # 创建临时工作目录
+        if not self.work_dir:
+            self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;gmsh_&#34;))
+
+        # 确定目标格式
+        target_format = config.get(&#34;target_format&#34;, &#34;inp&#34;)
+        input_file = self.work_dir / f&#34;{mesh_file.stem}.{target_format}&#34;
+
+        # 转换网格格式
+        if target_format == &#34;inp&#34;:
+            self._convert_to_inp(mesh_file, input_file)
+        elif target_format == &#34;bdf&#34;:
+            self._convert_to_bdf(mesh_file, input_file)
+        elif target_format == &#34;cas&#34;:
+            self._convert_to_cas(mesh_file, input_file)
+        else:
+            # 默认复制原始.msh文件
+            shutil.copy2(mesh_file, input_file)
+
+        print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+        return input_file
+
+    except Exception as e:
+        print(f&#34;设置仿真失败: {e}&#34;)
+        raise</code></pre>
+</details>
+<div class="desc"><p>设置仿真分析（对于网格生成器，此方法返回输入文件路径）</p>
+<p>注意：Gmsh本身不是求解器，此方法用于创建转换后的输入文件
+例如：将.msh转换为CalculiX .inp格式</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.mesher.GmshConnectorMock"><code class="flex name class">
+<span>class <span class="ident">GmshConnectorMock</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GmshConnectorMock(GmshConnector):
+    &#34;&#34;&#34;Gmsh连接器模拟器（用于测试）&#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__()
+        self.mock_mode = True
+
+    def connect(self) -&gt; bool:
+        print(&#34;[模拟模式] 连接Gmsh&#34;)
+        self.is_connected = True
+        return True
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 生成网格: {geometry_file} -&gt; {mesh_file}&#34;)
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # 创建模拟网格文件
+        with open(mesh_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(&#34;** Mock Gmsh mesh file\n&#34;)
+            f.write(&#34;$MeshFormat\n&#34;)
+            f.write(&#34;4.1 0 8\n&#34;)
+            f.write(&#34;$EndMeshFormat\n&#34;)
+            f.write(&#34;$Nodes\n&#34;)
+            f.write(&#34;8\n&#34;)
+            f.write(&#34;1 0.0 0.0 0.0\n&#34;)
+            f.write(&#34;2 10.0 0.0 0.0\n&#34;)
+            f.write(&#34;3 10.0 5.0 0.0\n&#34;)
+            f.write(&#34;4 0.0 5.0 0.0\n&#34;)
+            f.write(&#34;5 0.0 0.0 3.0\n&#34;)
+            f.write(&#34;6 10.0 0.0 3.0\n&#34;)
+            f.write(&#34;7 10.0 5.0 3.0\n&#34;)
+            f.write(&#34;8 0.0 5.0 3.0\n&#34;)
+            f.write(&#34;$EndNodes\n&#34;)
+            f.write(&#34;$Elements\n&#34;)
+            f.write(&#34;1\n&#34;)
+            f.write(&#34;1 5 2 0 1 1 2 3 4 5 6 7 8\n&#34;)
+            f.write(&#34;$EndElements\n&#34;)
+
+        return True
+
+    def convert_mesh_format(
+        self, input_mesh: Path, output_mesh: Path, target_format: str
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 转换格式: {input_mesh} -&gt; {output_mesh} ({target_format})&#34;)
+        output_mesh.parent.mkdir(parents=True, exist_ok=True)
+        output_mesh.write_text(f&#34;** Mock {target_format.upper()} file\n&#34;)
+        return True</code></pre>
+</details>
+<div class="desc"><p>Gmsh连接器模拟器（用于测试）</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="integrations.mesher.gmsh.GmshConnector" href="gmsh.html#integrations.mesher.gmsh.GmshConnector">GmshConnector</a></li>
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="integrations.mesher.gmsh.GmshConnector" href="gmsh.html#integrations.mesher.gmsh.GmshConnector">GmshConnector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.cleanup" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.connect" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.convert_mesh_format" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.convert_mesh_format">convert_mesh_format</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.convert_to_calculix_inp" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.convert_to_calculix_inp">convert_to_calculix_inp</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.generate_mesh" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.get_mesh_quality_report" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.get_mesh_quality_report">get_mesh_quality_report</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.get_supported_analysis_types" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.read_results" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.run_simulation" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.setup_simulation" href="gmsh.html#integrations.mesher.gmsh.GmshConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="integrations" href="../index.html">integrations</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="integrations.mesher.gmsh" href="gmsh.html">integrations.mesher.gmsh</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="integrations.mesher.GmshConnector" href="#integrations.mesher.GmshConnector">GmshConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.mesher.GmshConnector.cleanup" href="#integrations.mesher.GmshConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.connect" href="#integrations.mesher.GmshConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.convert_mesh_format" href="#integrations.mesher.GmshConnector.convert_mesh_format">convert_mesh_format</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.convert_to_calculix_inp" href="#integrations.mesher.GmshConnector.convert_to_calculix_inp">convert_to_calculix_inp</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.generate_mesh" href="#integrations.mesher.GmshConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.get_mesh_quality_report" href="#integrations.mesher.GmshConnector.get_mesh_quality_report">get_mesh_quality_report</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.get_supported_analysis_types" href="#integrations.mesher.GmshConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.read_results" href="#integrations.mesher.GmshConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.run_simulation" href="#integrations.mesher.GmshConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.mesher.GmshConnector.setup_simulation" href="#integrations.mesher.GmshConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.mesher.GmshConnectorMock" href="#integrations.mesher.GmshConnectorMock">GmshConnectorMock</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

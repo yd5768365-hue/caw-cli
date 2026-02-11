@@ -1,0 +1,2044 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.integrations API documentation</title>
+<meta name="description" content="软件集成模块">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.integrations</code></h1>
+</header>
+<section id="section-intro">
+<p>软件集成模块</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.integrations.cad_connector" href="cad_connector.html">sw_helper.integrations.cad_connector</a></code></dt>
+<dd>
+<div class="desc"><p>CAD连接器模块 - 使用pywin32连接SolidWorks和FreeCAD
+实现参数修改、重建模型、导出文件</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.integrations.freecad_connector" href="freecad_connector.html">sw_helper.integrations.freecad_connector</a></code></dt>
+<dd>
+<div class="desc"><p>FreeCAD连接器 - 使用FreeCAD Python API
+实现参数修改、重建模型、导出文件</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.integrations.sw_macro" href="sw_macro.html">sw_helper.integrations.sw_macro</a></code></dt>
+<dd>
+<div class="desc"><p>SolidWorks VBA宏导出模块
+生成可在SolidWorks中运行的VBA宏代码</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.integrations.CADManager"><code class="flex name class">
+<span>class <span class="ident">CADManager</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CADManager:
+    &#34;&#34;&#34;CAD管理器 - 统一管理多个CAD软件&#34;&#34;&#34;
+
+    def __init__(self):
+        self.connectors = {
+            &#34;solidworks&#34;: SolidWorksConnector(),
+            &#34;freecad&#34;: FreeCADConnector(),
+        }
+        self.active_cad = None
+
+    def auto_connect(self) -&gt; str:
+        &#34;&#34;&#34;自动连接可用的CAD软件&#34;&#34;&#34;
+        for name, connector in self.connectors.items():
+            if connector.connect():
+                self.active_cad = name
+                print(f&#34;成功连接到: {name}&#34;)
+                return name
+
+        print(&#34;未能连接到任何CAD软件&#34;)
+        return None
+
+    def get_connector(self, cad_name: Optional[str] = None):
+        &#34;&#34;&#34;获取连接器&#34;&#34;&#34;
+        if cad_name:
+            return self.connectors.get(cad_name.lower())
+        elif self.active_cad:
+            return self.connectors.get(self.active_cad)
+        return None
+
+    def disconnect_all(self):
+        &#34;&#34;&#34;断开所有连接&#34;&#34;&#34;
+        for connector in self.connectors.values():
+            connector.disconnect()
+        self.active_cad = None</code></pre>
+</details>
+<div class="desc"><p>CAD管理器 - 统一管理多个CAD软件</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.integrations.CADManager.auto_connect"><code class="name flex">
+<span>def <span class="ident">auto_connect</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def auto_connect(self) -&gt; str:
+    &#34;&#34;&#34;自动连接可用的CAD软件&#34;&#34;&#34;
+    for name, connector in self.connectors.items():
+        if connector.connect():
+            self.active_cad = name
+            print(f&#34;成功连接到: {name}&#34;)
+            return name
+
+    print(&#34;未能连接到任何CAD软件&#34;)
+    return None</code></pre>
+</details>
+<div class="desc"><p>自动连接可用的CAD软件</p></div>
+</dd>
+<dt id="sw_helper.integrations.CADManager.disconnect_all"><code class="name flex">
+<span>def <span class="ident">disconnect_all</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disconnect_all(self):
+    &#34;&#34;&#34;断开所有连接&#34;&#34;&#34;
+    for connector in self.connectors.values():
+        connector.disconnect()
+    self.active_cad = None</code></pre>
+</details>
+<div class="desc"><p>断开所有连接</p></div>
+</dd>
+<dt id="sw_helper.integrations.CADManager.get_connector"><code class="name flex">
+<span>def <span class="ident">get_connector</span></span>(<span>self, cad_name: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_connector(self, cad_name: Optional[str] = None):
+    &#34;&#34;&#34;获取连接器&#34;&#34;&#34;
+    if cad_name:
+        return self.connectors.get(cad_name.lower())
+    elif self.active_cad:
+        return self.connectors.get(self.active_cad)
+    return None</code></pre>
+</details>
+<div class="desc"><p>获取连接器</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector"><code class="flex name class">
+<span>class <span class="ident">FreeCADConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADConnector:
+    &#34;&#34;&#34;FreeCAD连接器&#34;&#34;&#34;
+
+    def __init__(self):
+        self.fc_app = None
+        self.active_doc = None
+        self.is_connected = False
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到FreeCAD&#34;&#34;&#34;
+        try:
+            # 尝试导入FreeCAD
+            import FreeCAD as App
+            import Part
+
+            self.fc_app = App
+            self.is_connected = True
+
+            return True
+
+        except ImportError:
+            print(&#34;未找到FreeCAD模块，请确保已安装FreeCAD并配置Python路径&#34;)
+            return False
+        except Exception as e:
+            print(f&#34;连接FreeCAD失败: {e}&#34;)
+            return False
+
+    def open_document(self, file_path: str) -&gt; bool:
+        &#34;&#34;&#34;打开文档&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            file_path = str(Path(file_path).resolve())
+            self.active_doc = self.fc_app.open(file_path)
+
+            return self.active_doc is not None
+
+        except Exception as e:
+            print(f&#34;打开文档失败: {e}&#34;)
+            return False
+
+    def get_parameters(self) -&gt; List[Parameter]:
+        &#34;&#34;&#34;获取参数&#34;&#34;&#34;
+        if not self.active_doc:
+            return []
+
+        params = []
+
+        try:
+            # FreeCAD使用电子表格或约束
+            for obj in self.active_doc.Objects:
+                # 检查是否有约束
+                if hasattr(obj, &#34;Constraints&#34;):
+                    for constraint in obj.Constraints:
+                        if hasattr(constraint, &#34;Value&#34;):
+                            params.append(
+                                Parameter(
+                                    name=constraint.Name,
+                                    value=constraint.Value,
+                                    unit=&#34;mm&#34;,
+                                    description=f&#34;对象: {obj.Name}&#34;,
+                                )
+                            )
+
+                # 检查属性
+                if hasattr(obj, &#34;Length&#34;):
+                    params.append(
+                        Parameter(
+                            name=f&#34;{obj.Name}.Length&#34;, value=obj.Length, unit=&#34;mm&#34;
+                        )
+                    )
+
+        except Exception as e:
+            print(f&#34;获取参数失败: {e}&#34;)
+
+        return params
+
+    def set_parameter(self, param_name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            # 解析参数名（格式：ObjectName.Property）
+            parts = param_name.split(&#34;.&#34;, 1)
+
+            if len(parts) == 2:
+                obj_name, prop_name = parts
+                obj = self.active_doc.getObject(obj_name)
+
+                if obj and hasattr(obj, prop_name):
+                    setattr(obj, prop_name, value)
+                    return True
+            else:
+                # 尝试查找约束
+                for obj in self.active_doc.Objects:
+                    if hasattr(obj, &#34;Constraints&#34;):
+                        for i, constraint in enumerate(obj.Constraints):
+                            if constraint.Name == param_name:
+                                # 更新约束值
+                                obj.setDatum(i, value)
+                                return True
+
+            return False
+
+        except Exception as e:
+            print(f&#34;设置参数失败: {e}&#34;)
+            return False
+
+    def rebuild(self) -&gt; bool:
+        &#34;&#34;&#34;重新计算文档&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            self.active_doc.recompute()
+            return True
+        except Exception as e:
+            print(f&#34;重建失败: {e}&#34;)
+            return False
+
+    def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+        &#34;&#34;&#34;导出文件&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+
+            output_path = str(Path(output_path))
+
+            # 选择导出格式
+            format_map = {
+                &#34;STEP&#34;: &#34;.step&#34;,
+                &#34;STL&#34;: &#34;.stl&#34;,
+                &#34;IGES&#34;: &#34;.iges&#34;,
+                &#34;BREP&#34;: &#34;.brep&#34;,
+                &#34;OBJ&#34;: &#34;.obj&#34;,
+            }
+
+            ext = format_map.get(format_type.upper(), &#34;.step&#34;)
+            if not output_path.endswith(ext):
+                output_path += ext
+
+            # 导出
+            if format_type.upper() == &#34;STEP&#34;:
+                import Import
+
+                Import.export(
+                    [
+                        obj
+                        for obj in self.active_doc.Objects
+                        if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+                    ],
+                    output_path,
+                )
+                return True
+            elif format_type.upper() == &#34;STL&#34;:
+                # 导出STL
+                for obj in self.active_doc.Objects:
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;):
+                        obj.Shape.exportStl(output_path)
+                        return True
+
+            return False
+
+        except Exception as e:
+            print(f&#34;导出失败: {e}&#34;)
+            return False
+
+    def close_document(self, save: bool = False):
+        &#34;&#34;&#34;关闭文档&#34;&#34;&#34;
+        if self.active_doc:
+            try:
+                if save:
+                    self.active_doc.save()
+                self.fc_app.closeDocument(self.active_doc.Name)
+                self.active_doc = None
+            except:
+                pass
+
+    def disconnect(self):
+        &#34;&#34;&#34;断开连接&#34;&#34;&#34;
+        self.close_document()
+        self.fc_app = None
+        self.is_connected = False</code></pre>
+</details>
+<div class="desc"><p>FreeCAD连接器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.integrations.FreeCADConnector.close_document"><code class="name flex">
+<span>def <span class="ident">close_document</span></span>(<span>self, save: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close_document(self, save: bool = False):
+    &#34;&#34;&#34;关闭文档&#34;&#34;&#34;
+    if self.active_doc:
+        try:
+            if save:
+                self.active_doc.save()
+            self.fc_app.closeDocument(self.active_doc.Name)
+            self.active_doc = None
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>关闭文档</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到FreeCAD&#34;&#34;&#34;
+    try:
+        # 尝试导入FreeCAD
+        import FreeCAD as App
+        import Part
+
+        self.fc_app = App
+        self.is_connected = True
+
+        return True
+
+    except ImportError:
+        print(&#34;未找到FreeCAD模块，请确保已安装FreeCAD并配置Python路径&#34;)
+        return False
+    except Exception as e:
+        print(f&#34;连接FreeCAD失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到FreeCAD</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.disconnect"><code class="name flex">
+<span>def <span class="ident">disconnect</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disconnect(self):
+    &#34;&#34;&#34;断开连接&#34;&#34;&#34;
+    self.close_document()
+    self.fc_app = None
+    self.is_connected = False</code></pre>
+</details>
+<div class="desc"><p>断开连接</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.export_file"><code class="name flex">
+<span>def <span class="ident">export_file</span></span>(<span>self, output_path: str, format_type: str = 'STEP') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+    &#34;&#34;&#34;导出文件&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+
+        output_path = str(Path(output_path))
+
+        # 选择导出格式
+        format_map = {
+            &#34;STEP&#34;: &#34;.step&#34;,
+            &#34;STL&#34;: &#34;.stl&#34;,
+            &#34;IGES&#34;: &#34;.iges&#34;,
+            &#34;BREP&#34;: &#34;.brep&#34;,
+            &#34;OBJ&#34;: &#34;.obj&#34;,
+        }
+
+        ext = format_map.get(format_type.upper(), &#34;.step&#34;)
+        if not output_path.endswith(ext):
+            output_path += ext
+
+        # 导出
+        if format_type.upper() == &#34;STEP&#34;:
+            import Import
+
+            Import.export(
+                [
+                    obj
+                    for obj in self.active_doc.Objects
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+                ],
+                output_path,
+            )
+            return True
+        elif format_type.upper() == &#34;STL&#34;:
+            # 导出STL
+            for obj in self.active_doc.Objects:
+                if obj.isDerivedFrom(&#34;Part::Feature&#34;):
+                    obj.Shape.exportStl(output_path)
+                    return True
+
+        return False
+
+    except Exception as e:
+        print(f&#34;导出失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>导出文件</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.get_parameters"><code class="name flex">
+<span>def <span class="ident">get_parameters</span></span>(<span>self) ‑> List[<a title="sw_helper.integrations.cad_connector.Parameter" href="cad_connector.html#sw_helper.integrations.cad_connector.Parameter">Parameter</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameters(self) -&gt; List[Parameter]:
+    &#34;&#34;&#34;获取参数&#34;&#34;&#34;
+    if not self.active_doc:
+        return []
+
+    params = []
+
+    try:
+        # FreeCAD使用电子表格或约束
+        for obj in self.active_doc.Objects:
+            # 检查是否有约束
+            if hasattr(obj, &#34;Constraints&#34;):
+                for constraint in obj.Constraints:
+                    if hasattr(constraint, &#34;Value&#34;):
+                        params.append(
+                            Parameter(
+                                name=constraint.Name,
+                                value=constraint.Value,
+                                unit=&#34;mm&#34;,
+                                description=f&#34;对象: {obj.Name}&#34;,
+                            )
+                        )
+
+            # 检查属性
+            if hasattr(obj, &#34;Length&#34;):
+                params.append(
+                    Parameter(
+                        name=f&#34;{obj.Name}.Length&#34;, value=obj.Length, unit=&#34;mm&#34;
+                    )
+                )
+
+    except Exception as e:
+        print(f&#34;获取参数失败: {e}&#34;)
+
+    return params</code></pre>
+</details>
+<div class="desc"><p>获取参数</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.open_document"><code class="name flex">
+<span>def <span class="ident">open_document</span></span>(<span>self, file_path: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def open_document(self, file_path: str) -&gt; bool:
+    &#34;&#34;&#34;打开文档&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        file_path = str(Path(file_path).resolve())
+        self.active_doc = self.fc_app.open(file_path)
+
+        return self.active_doc is not None
+
+    except Exception as e:
+        print(f&#34;打开文档失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>打开文档</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.rebuild"><code class="name flex">
+<span>def <span class="ident">rebuild</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rebuild(self) -&gt; bool:
+    &#34;&#34;&#34;重新计算文档&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        self.active_doc.recompute()
+        return True
+    except Exception as e:
+        print(f&#34;重建失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>重新计算文档</p></div>
+</dd>
+<dt id="sw_helper.integrations.FreeCADConnector.set_parameter"><code class="name flex">
+<span>def <span class="ident">set_parameter</span></span>(<span>self, param_name: str, value: float) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_parameter(self, param_name: str, value: float) -&gt; bool:
+    &#34;&#34;&#34;设置参数&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        # 解析参数名（格式：ObjectName.Property）
+        parts = param_name.split(&#34;.&#34;, 1)
+
+        if len(parts) == 2:
+            obj_name, prop_name = parts
+            obj = self.active_doc.getObject(obj_name)
+
+            if obj and hasattr(obj, prop_name):
+                setattr(obj, prop_name, value)
+                return True
+        else:
+            # 尝试查找约束
+            for obj in self.active_doc.Objects:
+                if hasattr(obj, &#34;Constraints&#34;):
+                    for i, constraint in enumerate(obj.Constraints):
+                        if constraint.Name == param_name:
+                            # 更新约束值
+                            obj.setDatum(i, value)
+                            return True
+
+        return False
+
+    except Exception as e:
+        print(f&#34;设置参数失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>设置参数</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.integrations.Parameter"><code class="flex name class">
+<span>class <span class="ident">Parameter</span></span>
+<span>(</span><span>name: str,<br>value: float,<br>unit: str = 'mm',<br>description: str = '',<br>modifiable: bool = True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Parameter:
+    &#34;&#34;&#34;参数数据类&#34;&#34;&#34;
+
+    name: str
+    value: float
+    unit: str = &#34;mm&#34;
+    description: str = &#34;&#34;
+    modifiable: bool = True</code></pre>
+</details>
+<div class="desc"><p>参数数据类</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.integrations.Parameter.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.integrations.Parameter.modifiable"><code class="name">var <span class="ident">modifiable</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.integrations.Parameter.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.integrations.Parameter.unit"><code class="name">var <span class="ident">unit</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.integrations.Parameter.value"><code class="name">var <span class="ident">value</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector"><code class="flex name class">
+<span>class <span class="ident">SolidWorksConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SolidWorksConnector:
+    &#34;&#34;&#34;SolidWorks连接器 - 使用COM API&#34;&#34;&#34;
+
+    def __init__(self):
+        self.sw_app = None
+        self.active_doc = None
+        self.is_connected = False
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到SolidWorks&#34;&#34;&#34;
+        try:
+            import win32com.client
+
+            # 尝试连接已运行的SolidWorks实例
+            self.sw_app = win32com.client.Dispatch(&#34;SldWorks.Application&#34;)
+            self.sw_app.Visible = True
+            self.is_connected = True
+
+            return True
+
+        except Exception as e:
+            print(f&#34;连接SolidWorks失败: {e}&#34;)
+            return False
+
+    def open_document(self, file_path: str) -&gt; bool:
+        &#34;&#34;&#34;打开文档&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            file_path = str(Path(file_path).resolve())
+
+            # 定义文件类型常量
+            doc_types = {
+                &#34;.sldprt&#34;: 1,  # 零件
+                &#34;.sldasm&#34;: 2,  # 装配体
+                &#34;.slddrw&#34;: 3,  # 工程图
+            }
+
+            ext = Path(file_path).suffix.lower()
+            doc_type = doc_types.get(ext, 1)
+
+            # 打开文档
+            errors = 0
+            warnings = 0
+            self.active_doc = self.sw_app.OpenDoc6(
+                file_path, doc_type, 0, &#34;&#34;, errors, warnings
+            )
+
+            return self.active_doc is not None
+
+        except Exception as e:
+            print(f&#34;打开文档失败: {e}&#34;)
+            return False
+
+    def get_parameters(self) -&gt; List[Parameter]:
+        &#34;&#34;&#34;获取所有参数&#34;&#34;&#34;
+        if not self.active_doc:
+            return []
+
+        params = []
+
+        try:
+            # 获取自定义属性
+            cust_prop = self.active_doc.Extension.CustomPropertyManager(&#34;&#34;)
+
+            # 获取尺寸参数
+            model = self.active_doc
+
+            # 遍历特征获取尺寸
+            feat = model.FirstFeature
+            while feat:
+                if feat.GetTypeName() in [&#34;Dimension&#34;, &#34;BaseFlange&#34;, &#34;Extrude&#34;]:
+                    try:
+                        # 获取特征的尺寸
+                        dim = feat.GetSpecificFeature2
+                        if hasattr(dim, &#34;GetDimension&#34;):
+                            d = dim.GetDimension(0)
+                            if d:
+                                params.append(
+                                    Parameter(
+                                        name=d.FullName,
+                                        value=d.Value * 1000,  # 转换为mm
+                                        unit=&#34;mm&#34;,
+                                        description=f&#34;特征: {feat.Name}&#34;,
+                                    )
+                                )
+                    except:
+                        pass
+
+                feat = feat.GetNextFeature()
+
+            # 获取全局变量（方程式）
+            eq_mgr = model.GetEquationMgr
+            if eq_mgr:
+                for i in range(eq_mgr.GetCount):
+                    eq = eq_mgr.Equation(i)
+                    if eq:
+                        # 解析方程式
+                        parts = eq.split(&#34;=&#34;, 1)
+                        if len(parts) == 2:
+                            name = parts[0].strip().strip(&#39;&#34;&#39;)
+                            try:
+                                value = float(parts[1])
+                                params.append(
+                                    Parameter(
+                                        name=name,
+                                        value=value,
+                                        unit=&#34;mm&#34;,
+                                        description=&#34;全局变量&#34;,
+                                    )
+                                )
+                            except:
+                                pass
+
+        except Exception as e:
+            print(f&#34;获取参数失败: {e}&#34;)
+
+        return params
+
+    def set_parameter(self, param_name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数值&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            # 尝试作为尺寸参数设置
+            dim = self.active_doc.Parameter(param_name)
+            if dim:
+                # SolidWorks使用米为单位
+                dim.SystemValue = value / 1000
+                return True
+
+            # 尝试作为全局变量设置
+            eq_mgr = self.active_doc.GetEquationMgr
+            if eq_mgr:
+                for i in range(eq_mgr.GetCount):
+                    eq = eq_mgr.Equation(i)
+                    if eq and param_name in eq:
+                        # 更新方程式
+                        new_eq = f&#39;&#34;{param_name}&#34; = {value}&#39;
+                        eq_mgr.Equation(i, new_eq)
+                        return True
+
+            return False
+
+        except Exception as e:
+            print(f&#34;设置参数失败: {e}&#34;)
+            return False
+
+    def rebuild(self) -&gt; bool:
+        &#34;&#34;&#34;重建模型&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            # 强制重建
+            self.active_doc.EditRebuild3
+            return True
+        except Exception as e:
+            print(f&#34;重建失败: {e}&#34;)
+            return False
+
+    def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+        &#34;&#34;&#34;导出文件&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            output_path = str(Path(output_path))
+
+            # 根据格式选择导出方式
+            format_map = {
+                &#34;STEP&#34;: (&#34;.step&#34;, True),
+                &#34;STL&#34;: (&#34;.stl&#34;, False),
+                &#34;IGES&#34;: (&#34;.iges&#34;, True),
+                &#34;PDF&#34;: (&#34;.pdf&#34;, False),
+                &#34;PARASOLID&#34;: (&#34;.x_t&#34;, True),
+            }
+
+            ext, use_save = format_map.get(format_type.upper(), (&#34;.step&#34;, True))
+
+            # 确保扩展名正确
+            if not output_path.endswith(ext):
+                output_path += ext
+
+            if use_save:
+                # 使用SaveAs
+                errors = 0
+                warnings = 0
+                result = self.active_doc.SaveAs3(output_path, 0, 2)
+                return result == 0
+            else:
+                # 特殊导出（如STL）
+                if format_type.upper() == &#34;STL&#34;:
+                    stl_exporter = self.active_doc.Extension.GetSTLExporter
+                    if stl_exporter:
+                        stl_exporter.ExportBinary = False
+                        stl_exporter.ExportPath = output_path
+                        return stl_exporter.Save
+
+            return False
+
+        except Exception as e:
+            print(f&#34;导出失败: {e}&#34;)
+            return False
+
+    def close_document(self, save: bool = False):
+        &#34;&#34;&#34;关闭文档&#34;&#34;&#34;
+        if self.active_doc:
+            try:
+                self.sw_app.CloseDoc(self.active_doc.GetTitle)
+                self.active_doc = None
+            except:
+                pass
+
+    def disconnect(self):
+        &#34;&#34;&#34;断开连接&#34;&#34;&#34;
+        self.close_document()
+        self.sw_app = None
+        self.is_connected = False</code></pre>
+</details>
+<div class="desc"><p>SolidWorks连接器 - 使用COM API</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.integrations.SolidWorksConnector.close_document"><code class="name flex">
+<span>def <span class="ident">close_document</span></span>(<span>self, save: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close_document(self, save: bool = False):
+    &#34;&#34;&#34;关闭文档&#34;&#34;&#34;
+    if self.active_doc:
+        try:
+            self.sw_app.CloseDoc(self.active_doc.GetTitle)
+            self.active_doc = None
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>关闭文档</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到SolidWorks&#34;&#34;&#34;
+    try:
+        import win32com.client
+
+        # 尝试连接已运行的SolidWorks实例
+        self.sw_app = win32com.client.Dispatch(&#34;SldWorks.Application&#34;)
+        self.sw_app.Visible = True
+        self.is_connected = True
+
+        return True
+
+    except Exception as e:
+        print(f&#34;连接SolidWorks失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到SolidWorks</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.disconnect"><code class="name flex">
+<span>def <span class="ident">disconnect</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disconnect(self):
+    &#34;&#34;&#34;断开连接&#34;&#34;&#34;
+    self.close_document()
+    self.sw_app = None
+    self.is_connected = False</code></pre>
+</details>
+<div class="desc"><p>断开连接</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.export_file"><code class="name flex">
+<span>def <span class="ident">export_file</span></span>(<span>self, output_path: str, format_type: str = 'STEP') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+    &#34;&#34;&#34;导出文件&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        output_path = str(Path(output_path))
+
+        # 根据格式选择导出方式
+        format_map = {
+            &#34;STEP&#34;: (&#34;.step&#34;, True),
+            &#34;STL&#34;: (&#34;.stl&#34;, False),
+            &#34;IGES&#34;: (&#34;.iges&#34;, True),
+            &#34;PDF&#34;: (&#34;.pdf&#34;, False),
+            &#34;PARASOLID&#34;: (&#34;.x_t&#34;, True),
+        }
+
+        ext, use_save = format_map.get(format_type.upper(), (&#34;.step&#34;, True))
+
+        # 确保扩展名正确
+        if not output_path.endswith(ext):
+            output_path += ext
+
+        if use_save:
+            # 使用SaveAs
+            errors = 0
+            warnings = 0
+            result = self.active_doc.SaveAs3(output_path, 0, 2)
+            return result == 0
+        else:
+            # 特殊导出（如STL）
+            if format_type.upper() == &#34;STL&#34;:
+                stl_exporter = self.active_doc.Extension.GetSTLExporter
+                if stl_exporter:
+                    stl_exporter.ExportBinary = False
+                    stl_exporter.ExportPath = output_path
+                    return stl_exporter.Save
+
+        return False
+
+    except Exception as e:
+        print(f&#34;导出失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>导出文件</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.get_parameters"><code class="name flex">
+<span>def <span class="ident">get_parameters</span></span>(<span>self) ‑> List[<a title="sw_helper.integrations.cad_connector.Parameter" href="cad_connector.html#sw_helper.integrations.cad_connector.Parameter">Parameter</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameters(self) -&gt; List[Parameter]:
+    &#34;&#34;&#34;获取所有参数&#34;&#34;&#34;
+    if not self.active_doc:
+        return []
+
+    params = []
+
+    try:
+        # 获取自定义属性
+        cust_prop = self.active_doc.Extension.CustomPropertyManager(&#34;&#34;)
+
+        # 获取尺寸参数
+        model = self.active_doc
+
+        # 遍历特征获取尺寸
+        feat = model.FirstFeature
+        while feat:
+            if feat.GetTypeName() in [&#34;Dimension&#34;, &#34;BaseFlange&#34;, &#34;Extrude&#34;]:
+                try:
+                    # 获取特征的尺寸
+                    dim = feat.GetSpecificFeature2
+                    if hasattr(dim, &#34;GetDimension&#34;):
+                        d = dim.GetDimension(0)
+                        if d:
+                            params.append(
+                                Parameter(
+                                    name=d.FullName,
+                                    value=d.Value * 1000,  # 转换为mm
+                                    unit=&#34;mm&#34;,
+                                    description=f&#34;特征: {feat.Name}&#34;,
+                                )
+                            )
+                except:
+                    pass
+
+            feat = feat.GetNextFeature()
+
+        # 获取全局变量（方程式）
+        eq_mgr = model.GetEquationMgr
+        if eq_mgr:
+            for i in range(eq_mgr.GetCount):
+                eq = eq_mgr.Equation(i)
+                if eq:
+                    # 解析方程式
+                    parts = eq.split(&#34;=&#34;, 1)
+                    if len(parts) == 2:
+                        name = parts[0].strip().strip(&#39;&#34;&#39;)
+                        try:
+                            value = float(parts[1])
+                            params.append(
+                                Parameter(
+                                    name=name,
+                                    value=value,
+                                    unit=&#34;mm&#34;,
+                                    description=&#34;全局变量&#34;,
+                                )
+                            )
+                        except:
+                            pass
+
+    except Exception as e:
+        print(f&#34;获取参数失败: {e}&#34;)
+
+    return params</code></pre>
+</details>
+<div class="desc"><p>获取所有参数</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.open_document"><code class="name flex">
+<span>def <span class="ident">open_document</span></span>(<span>self, file_path: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def open_document(self, file_path: str) -&gt; bool:
+    &#34;&#34;&#34;打开文档&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        file_path = str(Path(file_path).resolve())
+
+        # 定义文件类型常量
+        doc_types = {
+            &#34;.sldprt&#34;: 1,  # 零件
+            &#34;.sldasm&#34;: 2,  # 装配体
+            &#34;.slddrw&#34;: 3,  # 工程图
+        }
+
+        ext = Path(file_path).suffix.lower()
+        doc_type = doc_types.get(ext, 1)
+
+        # 打开文档
+        errors = 0
+        warnings = 0
+        self.active_doc = self.sw_app.OpenDoc6(
+            file_path, doc_type, 0, &#34;&#34;, errors, warnings
+        )
+
+        return self.active_doc is not None
+
+    except Exception as e:
+        print(f&#34;打开文档失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>打开文档</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.rebuild"><code class="name flex">
+<span>def <span class="ident">rebuild</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rebuild(self) -&gt; bool:
+    &#34;&#34;&#34;重建模型&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        # 强制重建
+        self.active_doc.EditRebuild3
+        return True
+    except Exception as e:
+        print(f&#34;重建失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>重建模型</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksConnector.set_parameter"><code class="name flex">
+<span>def <span class="ident">set_parameter</span></span>(<span>self, param_name: str, value: float) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_parameter(self, param_name: str, value: float) -&gt; bool:
+    &#34;&#34;&#34;设置参数值&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        # 尝试作为尺寸参数设置
+        dim = self.active_doc.Parameter(param_name)
+        if dim:
+            # SolidWorks使用米为单位
+            dim.SystemValue = value / 1000
+            return True
+
+        # 尝试作为全局变量设置
+        eq_mgr = self.active_doc.GetEquationMgr
+        if eq_mgr:
+            for i in range(eq_mgr.GetCount):
+                eq = eq_mgr.Equation(i)
+                if eq and param_name in eq:
+                    # 更新方程式
+                    new_eq = f&#39;&#34;{param_name}&#34; = {value}&#39;
+                    eq_mgr.Equation(i, new_eq)
+                    return True
+
+        return False
+
+    except Exception as e:
+        print(f&#34;设置参数失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>设置参数值</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksMacroGenerator"><code class="flex name class">
+<span>class <span class="ident">SolidWorksMacroGenerator</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SolidWorksMacroGenerator:
+    &#34;&#34;&#34;SolidWorks宏生成器&#34;&#34;&#34;
+
+    @staticmethod
+    def generate_export_macro(
+        output_path: str,
+        export_format: str = &#34;STEP&#34;,
+        call_cli: bool = True,
+        cli_path: str = &#34;cae-cli&#34;,
+    ) -&gt; str:
+        &#34;&#34;&#34;生成导出宏代码
+
+        Args:
+            output_path: 导出文件路径
+            export_format: 导出格式 (STEP, STL, IGES)
+            call_cli: 是否调用CLI分析
+            cli_path: CLI命令路径
+
+        Returns:
+            VBA宏代码
+        &#34;&#34;&#34;
+
+        format_map = {
+            &#34;STEP&#34;: (&#34;ExportSTEP&#34;, &#34;.step&#34;),
+            &#34;STL&#34;: (&#34;ExportSTL&#34;, &#34;.stl&#34;),
+            &#34;IGES&#34;: (&#34;ExportIGES&#34;, &#34;.iges&#34;),
+            &#34;PDF&#34;: (&#34;ExportPDF&#34;, &#34;.pdf&#34;),
+        }
+
+        export_func, ext = format_map.get(export_format, (&#34;ExportSTEP&#34;, &#34;.step&#34;))
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_Export&#34;
+&#39; CAE-CLI集成宏
+&#39; 自动生成，用于导出模型并调用CLI分析
+
+Sub ExportAndAnalyze()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    Dim longstatus As Long, longwarnings As Long
+    Dim filePath As String
+    Dim exportPath As String
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    &#39; 检查是否有打开的文档
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取当前文件路径
+    filePath = Part.GetPathName
+    If filePath = &#34;&#34; Then
+        MsgBox &#34;请先保存模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置导出路径
+    exportPath = &#34;{output_path}&#34;
+    If exportPath = &#34;&#34; Then
+        exportPath = Left(filePath, InStrRev(filePath, &#34;.&#34;) - 1) &amp; &#34;{ext}&#34;
+    End If
+    
+    &#39; 导出模型
+    On Error Resume Next
+    
+    Select Case &#34;{export_format}&#34;
+        Case &#34;STEP&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case &#34;STL&#34;
+            &#39; STL导出设置
+            Dim swStlExport As Object
+            Set swStlExport = Part.Extension.GetSTLExporter
+            If Not swStlExport Is Nothing Then
+                swStlExport.ExportBinary = False
+                swStlExport.ExportPath = exportPath
+                swStlExport.Save
+            End If
+        Case &#34;IGES&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case Else
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+    End Select
+    
+    If Err.Number &lt;&gt; 0 Then
+        MsgBox &#34;导出失败: &#34; &amp; Err.Description, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    On Error GoTo 0
+    
+    &#39; 显示导出成功
+    MsgBox &#34;模型已导出到:&#34; &amp; vbCrLf &amp; exportPath, vbInformation, &#34;CAE-CLI&#34;
+    
+    {&#34;Call CLI分析&#34; if call_cli else &#34;&#39;CLI分析已禁用&#34;}
+    {&#34;Dim shell As Object&#34; if call_cli else &#34;&#34;}
+    {&#39;Set shell = CreateObject(&#34;WScript.Shell&#34;)&#39; if call_cli else &#34;&#34;}
+    {&#34;Dim cliCommand As String&#34; if call_cli else &#34;&#34;}
+    {&#39;cliCommand = &#34;{cli_path} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;&#39; if call_cli else &#34;&#34;}
+    {&#34;shell.Run cliCommand, 1, False&#34; if call_cli else &#34;&#34;}
+    {&#34;Set shell = Nothing&#34; if call_cli else &#34;&#34;}
+    
+End Sub
+
+Sub ExportWithPrompt()
+    &#39; 带用户交互的导出
+    Dim exportPath As String
+    exportPath = InputBox(&#34;请输入导出路径:&#34;, &#34;CAE-CLI导出&#34;, &#34;C:\\Temp\\model.step&#34;)
+    
+    If exportPath &lt;&gt; &#34;&#34; Then
+        Call ExportAndAnalyze
+    End If
+End Sub
+&#39;&#39;&#39;
+        return macro_code
+
+    @staticmethod
+    def generate_parameter_macro() -&gt; str:
+        &#34;&#34;&#34;生成参数修改宏&#34;&#34;&#34;
+
+        macro_code = &#34;&#34;&#34;Attribute VB_Name = &#34;CAE_Parametric&#34;
+&#39; CAE-CLI参数化宏
+&#39; 用于修改参数并重建模型
+
+Sub ModifyParameters()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取自定义属性
+    Dim custProp As Object
+    Set custProp = Part.Extension.CustomPropertyManager(&#34;&#34;)
+    
+    &#39; 显示当前参数
+    Dim paramList As String
+    paramList = &#34;当前可修改参数:&#34; &amp; vbCrLf &amp; vbCrLf
+    
+    &#39; 这里可以读取特定的尺寸参数
+    Dim dimNames As Variant
+    dimNames = Array(&#34;Length&#34;, &#34;Width&#34;, &#34;Height&#34;, &#34;Fillet_R&#34;)
+    
+    Dim i As Integer
+    For i = LBound(dimNames) To UBound(dimNames)
+        Dim val As String
+        val = &#34;&#34;
+        On Error Resume Next
+        custProp.Get4 dimNames(i), False, val, val
+        If val &lt;&gt; &#34;&#34; Then
+            paramList = paramList &amp; dimNames(i) &amp; &#34; = &#34; &amp; val &amp; vbCrLf
+        End If
+        On Error GoTo 0
+    Next i
+    
+    MsgBox paramList, vbInformation, &#34;CAE-CLI参数&#34;
+    
+End Sub
+
+Sub UpdateDimension(dimensionName As String, newValue As Double)
+    &#39; 更新指定尺寸
+    Dim swApp As Object
+    Dim Part As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 查找并更新尺寸
+    Dim swDim As Object
+    Set swDim = Part.Parameter(dimensionName)
+    
+    If Not swDim Is Nothing Then
+        swDim.SystemValue = newValue / 1000  &#39; 转换为米
+        Part.EditRebuild3
+        MsgBox &#34;尺寸已更新: &#34; &amp; dimensionName &amp; &#34; = &#34; &amp; newValue &amp; &#34; mm&#34;, vbInformation, &#34;CAE-CLI&#34;
+    Else
+        MsgBox &#34;未找到尺寸: &#34; &amp; dimensionName, vbExclamation, &#34;CAE-CLI&#34;
+    End If
+End Sub
+
+Sub BatchUpdate()
+    &#39; 批量更新参数示例
+    Call UpdateDimension(&#34;Length&#34;, 120)
+    Call UpdateDimension(&#34;Fillet_R&#34;, 8)
+    
+    &#39; 导出并分析
+    Call ExportAndAnalyze
+End Sub
+&#34;&#34;&#34;
+        return macro_code
+
+    @staticmethod
+    def generate_full_integration_macro(cli_command: str = &#34;cae-cli&#34;) -&gt; str:
+        &#34;&#34;&#34;生成完整的集成宏&#34;&#34;&#34;
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_FullIntegration&#34;
+&#39; CAE-CLI完整集成宏
+&#39; 功能: 参数化修改 -&gt; 重建 -&gt; 导出 -&gt; CLI分析 -&gt; 显示报告
+
+Sub RunOptimization()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim shell As Object
+    Dim exportPath As String
+    Dim reportPath As String
+    
+    &#39; 初始化
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    Set shell = CreateObject(&#34;WScript.Shell&#34;)
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置路径
+    Dim tempDir As String
+    tempDir = Environ(&#34;TEMP&#34;) &amp; &#34;\\CAE-CLI\\&#34;
+    shell.Run &#34;cmd /c mkdir &#34;&#34;&#34; &amp; tempDir &amp; &#34;&#34;&#34;&#34;&#34;, 0, True
+    
+    exportPath = tempDir &amp; &#34;model.step&#34;
+    reportPath = tempDir &amp; &#34;report.html&#34;
+    
+    &#39; 第1步: 修改参数（示例：增大圆角）
+    Call ModifyFilletRadius(10)
+    
+    &#39; 第2步: 重建模型
+    Part.EditRebuild3
+    DoEvents
+    
+    &#39; 第3步: 导出STEP
+    Dim longstatus As Long
+    longstatus = Part.SaveAs3(exportPath, 0, 2)
+    
+    If longstatus = 1 Then
+        MsgBox &#34;导出失败!&#34;, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 第4步: 调用CLI分析
+    Dim cliCommand As String
+    cliCommand = &#34;{cli_command} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;
+    
+    MsgBox &#34;正在调用CAE-CLI分析...&#34; &amp; vbCrLf &amp; _
+           &#34;命令: &#34; &amp; cliCommand, vbInformation, &#34;CAE-CLI&#34;
+    
+    &#39; 执行CLI命令
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第5步: 生成报告
+    cliCommand = &#34;{cli_command} report static -i &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; -o &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第6步: 显示报告路径
+    If Dir(reportPath) &lt;&gt; &#34;&#34; Then
+        MsgBox &#34;分析完成!&#34; &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;报告路径:&#34; &amp; vbCrLf &amp; reportPath &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;是否打开报告?&#34;, vbQuestion + vbYesNo, &#34;CAE-CLI&#34;
+        
+        If vbYes Then
+            shell.Run &#34;explorer &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+        End If
+    Else
+        MsgBox &#34;分析完成，但未找到报告文件。&#34;, vbInformation, &#34;CAE-CLI&#34;
+    End If
+    
+    Set shell = Nothing
+    
+End Sub
+
+Sub ModifyFilletRadius(newRadius As Double)
+    &#39; 修改圆角半径
+    Dim swApp As Object
+    Dim Part As Object
+    Dim swFeat As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 遍历特征查找圆角
+    Set swFeat = Part.FirstFeature
+    
+    Do While Not swFeat Is Nothing
+        If swFeat.GetTypeName = &#34;Fillet&#34; Then
+            &#39; 找到圆角特征，修改半径
+            Dim swFillet As Object
+            Set swFillet = swFeat.GetSpecificFeature2
+            
+            &#39; 设置新半径（毫米转换为米）
+            swFillet.DefaultRadius = newRadius / 1000
+            
+            Exit Do
+        End If
+        Set swFeat = swFeat.GetNextFeature
+    Loop
+    
+End Sub
+
+Sub OptimizeLoop()
+    &#39; 简单优化循环：改圆角R -&gt; 看质量变化
+    Dim radii As Variant
+    radii = Array(2, 5, 10, 15)
+    
+    Dim i As Integer
+    For i = LBound(radii) To UBound(radii)
+        MsgBox &#34;正在测试圆角 R = &#34; &amp; radii(i) &amp; &#34; mm&#34;, vbInformation, &#34;优化循环&#34;
+        
+        Call ModifyFilletRadius(radii(i))
+        
+        &#39; 这里可以调用分析并记录结果
+        &#39; Call RunAnalysisAndRecord(radii(i))
+        
+    Next i
+    
+    MsgBox &#34;优化循环完成!&#34;, vbInformation, &#34;CAE-CLI&#34;
+End Sub
+&#39;&#39;&#39;
+        return macro_code
+
+    @staticmethod
+    def save_macro(macro_code: str, output_file: str):
+        &#34;&#34;&#34;保存宏到文件&#34;&#34;&#34;
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(macro_code)
+
+        return output_path</code></pre>
+</details>
+<div class="desc"><p>SolidWorks宏生成器</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="sw_helper.integrations.SolidWorksMacroGenerator.generate_export_macro"><code class="name flex">
+<span>def <span class="ident">generate_export_macro</span></span>(<span>output_path: str,<br>export_format: str = 'STEP',<br>call_cli: bool = True,<br>cli_path: str = 'cae-cli') ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    @staticmethod
+    def generate_export_macro(
+        output_path: str,
+        export_format: str = &#34;STEP&#34;,
+        call_cli: bool = True,
+        cli_path: str = &#34;cae-cli&#34;,
+    ) -&gt; str:
+        &#34;&#34;&#34;生成导出宏代码
+
+        Args:
+            output_path: 导出文件路径
+            export_format: 导出格式 (STEP, STL, IGES)
+            call_cli: 是否调用CLI分析
+            cli_path: CLI命令路径
+
+        Returns:
+            VBA宏代码
+        &#34;&#34;&#34;
+
+        format_map = {
+            &#34;STEP&#34;: (&#34;ExportSTEP&#34;, &#34;.step&#34;),
+            &#34;STL&#34;: (&#34;ExportSTL&#34;, &#34;.stl&#34;),
+            &#34;IGES&#34;: (&#34;ExportIGES&#34;, &#34;.iges&#34;),
+            &#34;PDF&#34;: (&#34;ExportPDF&#34;, &#34;.pdf&#34;),
+        }
+
+        export_func, ext = format_map.get(export_format, (&#34;ExportSTEP&#34;, &#34;.step&#34;))
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_Export&#34;
+&#39; CAE-CLI集成宏
+&#39; 自动生成，用于导出模型并调用CLI分析
+
+Sub ExportAndAnalyze()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    Dim longstatus As Long, longwarnings As Long
+    Dim filePath As String
+    Dim exportPath As String
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    &#39; 检查是否有打开的文档
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取当前文件路径
+    filePath = Part.GetPathName
+    If filePath = &#34;&#34; Then
+        MsgBox &#34;请先保存模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置导出路径
+    exportPath = &#34;{output_path}&#34;
+    If exportPath = &#34;&#34; Then
+        exportPath = Left(filePath, InStrRev(filePath, &#34;.&#34;) - 1) &amp; &#34;{ext}&#34;
+    End If
+    
+    &#39; 导出模型
+    On Error Resume Next
+    
+    Select Case &#34;{export_format}&#34;
+        Case &#34;STEP&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case &#34;STL&#34;
+            &#39; STL导出设置
+            Dim swStlExport As Object
+            Set swStlExport = Part.Extension.GetSTLExporter
+            If Not swStlExport Is Nothing Then
+                swStlExport.ExportBinary = False
+                swStlExport.ExportPath = exportPath
+                swStlExport.Save
+            End If
+        Case &#34;IGES&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case Else
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+    End Select
+    
+    If Err.Number &lt;&gt; 0 Then
+        MsgBox &#34;导出失败: &#34; &amp; Err.Description, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    On Error GoTo 0
+    
+    &#39; 显示导出成功
+    MsgBox &#34;模型已导出到:&#34; &amp; vbCrLf &amp; exportPath, vbInformation, &#34;CAE-CLI&#34;
+    
+    {&#34;Call CLI分析&#34; if call_cli else &#34;&#39;CLI分析已禁用&#34;}
+    {&#34;Dim shell As Object&#34; if call_cli else &#34;&#34;}
+    {&#39;Set shell = CreateObject(&#34;WScript.Shell&#34;)&#39; if call_cli else &#34;&#34;}
+    {&#34;Dim cliCommand As String&#34; if call_cli else &#34;&#34;}
+    {&#39;cliCommand = &#34;{cli_path} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;&#39; if call_cli else &#34;&#34;}
+    {&#34;shell.Run cliCommand, 1, False&#34; if call_cli else &#34;&#34;}
+    {&#34;Set shell = Nothing&#34; if call_cli else &#34;&#34;}
+    
+End Sub
+
+Sub ExportWithPrompt()
+    &#39; 带用户交互的导出
+    Dim exportPath As String
+    exportPath = InputBox(&#34;请输入导出路径:&#34;, &#34;CAE-CLI导出&#34;, &#34;C:\\Temp\\model.step&#34;)
+    
+    If exportPath &lt;&gt; &#34;&#34; Then
+        Call ExportAndAnalyze
+    End If
+End Sub
+&#39;&#39;&#39;
+        return macro_code</code></pre>
+</details>
+<div class="desc"><p>生成导出宏代码</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>output_path</code></strong></dt>
+<dd>导出文件路径</dd>
+<dt><strong><code>export_format</code></strong></dt>
+<dd>导出格式 (STEP, STL, IGES)</dd>
+<dt><strong><code>call_cli</code></strong></dt>
+<dd>是否调用CLI分析</dd>
+<dt><strong><code>cli_path</code></strong></dt>
+<dd>CLI命令路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>VBA宏代码</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksMacroGenerator.generate_full_integration_macro"><code class="name flex">
+<span>def <span class="ident">generate_full_integration_macro</span></span>(<span>cli_command: str = 'cae-cli') ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    @staticmethod
+    def generate_full_integration_macro(cli_command: str = &#34;cae-cli&#34;) -&gt; str:
+        &#34;&#34;&#34;生成完整的集成宏&#34;&#34;&#34;
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_FullIntegration&#34;
+&#39; CAE-CLI完整集成宏
+&#39; 功能: 参数化修改 -&gt; 重建 -&gt; 导出 -&gt; CLI分析 -&gt; 显示报告
+
+Sub RunOptimization()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim shell As Object
+    Dim exportPath As String
+    Dim reportPath As String
+    
+    &#39; 初始化
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    Set shell = CreateObject(&#34;WScript.Shell&#34;)
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置路径
+    Dim tempDir As String
+    tempDir = Environ(&#34;TEMP&#34;) &amp; &#34;\\CAE-CLI\\&#34;
+    shell.Run &#34;cmd /c mkdir &#34;&#34;&#34; &amp; tempDir &amp; &#34;&#34;&#34;&#34;&#34;, 0, True
+    
+    exportPath = tempDir &amp; &#34;model.step&#34;
+    reportPath = tempDir &amp; &#34;report.html&#34;
+    
+    &#39; 第1步: 修改参数（示例：增大圆角）
+    Call ModifyFilletRadius(10)
+    
+    &#39; 第2步: 重建模型
+    Part.EditRebuild3
+    DoEvents
+    
+    &#39; 第3步: 导出STEP
+    Dim longstatus As Long
+    longstatus = Part.SaveAs3(exportPath, 0, 2)
+    
+    If longstatus = 1 Then
+        MsgBox &#34;导出失败!&#34;, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 第4步: 调用CLI分析
+    Dim cliCommand As String
+    cliCommand = &#34;{cli_command} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;
+    
+    MsgBox &#34;正在调用CAE-CLI分析...&#34; &amp; vbCrLf &amp; _
+           &#34;命令: &#34; &amp; cliCommand, vbInformation, &#34;CAE-CLI&#34;
+    
+    &#39; 执行CLI命令
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第5步: 生成报告
+    cliCommand = &#34;{cli_command} report static -i &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; -o &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第6步: 显示报告路径
+    If Dir(reportPath) &lt;&gt; &#34;&#34; Then
+        MsgBox &#34;分析完成!&#34; &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;报告路径:&#34; &amp; vbCrLf &amp; reportPath &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;是否打开报告?&#34;, vbQuestion + vbYesNo, &#34;CAE-CLI&#34;
+        
+        If vbYes Then
+            shell.Run &#34;explorer &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+        End If
+    Else
+        MsgBox &#34;分析完成，但未找到报告文件。&#34;, vbInformation, &#34;CAE-CLI&#34;
+    End If
+    
+    Set shell = Nothing
+    
+End Sub
+
+Sub ModifyFilletRadius(newRadius As Double)
+    &#39; 修改圆角半径
+    Dim swApp As Object
+    Dim Part As Object
+    Dim swFeat As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 遍历特征查找圆角
+    Set swFeat = Part.FirstFeature
+    
+    Do While Not swFeat Is Nothing
+        If swFeat.GetTypeName = &#34;Fillet&#34; Then
+            &#39; 找到圆角特征，修改半径
+            Dim swFillet As Object
+            Set swFillet = swFeat.GetSpecificFeature2
+            
+            &#39; 设置新半径（毫米转换为米）
+            swFillet.DefaultRadius = newRadius / 1000
+            
+            Exit Do
+        End If
+        Set swFeat = swFeat.GetNextFeature
+    Loop
+    
+End Sub
+
+Sub OptimizeLoop()
+    &#39; 简单优化循环：改圆角R -&gt; 看质量变化
+    Dim radii As Variant
+    radii = Array(2, 5, 10, 15)
+    
+    Dim i As Integer
+    For i = LBound(radii) To UBound(radii)
+        MsgBox &#34;正在测试圆角 R = &#34; &amp; radii(i) &amp; &#34; mm&#34;, vbInformation, &#34;优化循环&#34;
+        
+        Call ModifyFilletRadius(radii(i))
+        
+        &#39; 这里可以调用分析并记录结果
+        &#39; Call RunAnalysisAndRecord(radii(i))
+        
+    Next i
+    
+    MsgBox &#34;优化循环完成!&#34;, vbInformation, &#34;CAE-CLI&#34;
+End Sub
+&#39;&#39;&#39;
+        return macro_code</code></pre>
+</details>
+<div class="desc"><p>生成完整的集成宏</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksMacroGenerator.generate_parameter_macro"><code class="name flex">
+<span>def <span class="ident">generate_parameter_macro</span></span>(<span>) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    @staticmethod
+    def generate_parameter_macro() -&gt; str:
+        &#34;&#34;&#34;生成参数修改宏&#34;&#34;&#34;
+
+        macro_code = &#34;&#34;&#34;Attribute VB_Name = &#34;CAE_Parametric&#34;
+&#39; CAE-CLI参数化宏
+&#39; 用于修改参数并重建模型
+
+Sub ModifyParameters()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取自定义属性
+    Dim custProp As Object
+    Set custProp = Part.Extension.CustomPropertyManager(&#34;&#34;)
+    
+    &#39; 显示当前参数
+    Dim paramList As String
+    paramList = &#34;当前可修改参数:&#34; &amp; vbCrLf &amp; vbCrLf
+    
+    &#39; 这里可以读取特定的尺寸参数
+    Dim dimNames As Variant
+    dimNames = Array(&#34;Length&#34;, &#34;Width&#34;, &#34;Height&#34;, &#34;Fillet_R&#34;)
+    
+    Dim i As Integer
+    For i = LBound(dimNames) To UBound(dimNames)
+        Dim val As String
+        val = &#34;&#34;
+        On Error Resume Next
+        custProp.Get4 dimNames(i), False, val, val
+        If val &lt;&gt; &#34;&#34; Then
+            paramList = paramList &amp; dimNames(i) &amp; &#34; = &#34; &amp; val &amp; vbCrLf
+        End If
+        On Error GoTo 0
+    Next i
+    
+    MsgBox paramList, vbInformation, &#34;CAE-CLI参数&#34;
+    
+End Sub
+
+Sub UpdateDimension(dimensionName As String, newValue As Double)
+    &#39; 更新指定尺寸
+    Dim swApp As Object
+    Dim Part As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 查找并更新尺寸
+    Dim swDim As Object
+    Set swDim = Part.Parameter(dimensionName)
+    
+    If Not swDim Is Nothing Then
+        swDim.SystemValue = newValue / 1000  &#39; 转换为米
+        Part.EditRebuild3
+        MsgBox &#34;尺寸已更新: &#34; &amp; dimensionName &amp; &#34; = &#34; &amp; newValue &amp; &#34; mm&#34;, vbInformation, &#34;CAE-CLI&#34;
+    Else
+        MsgBox &#34;未找到尺寸: &#34; &amp; dimensionName, vbExclamation, &#34;CAE-CLI&#34;
+    End If
+End Sub
+
+Sub BatchUpdate()
+    &#39; 批量更新参数示例
+    Call UpdateDimension(&#34;Length&#34;, 120)
+    Call UpdateDimension(&#34;Fillet_R&#34;, 8)
+    
+    &#39; 导出并分析
+    Call ExportAndAnalyze
+End Sub
+&#34;&#34;&#34;
+        return macro_code</code></pre>
+</details>
+<div class="desc"><p>生成参数修改宏</p></div>
+</dd>
+<dt id="sw_helper.integrations.SolidWorksMacroGenerator.save_macro"><code class="name flex">
+<span>def <span class="ident">save_macro</span></span>(<span>macro_code: str, output_file: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def save_macro(macro_code: str, output_file: str):
+    &#34;&#34;&#34;保存宏到文件&#34;&#34;&#34;
+    output_path = Path(output_file)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+        f.write(macro_code)
+
+    return output_path</code></pre>
+</details>
+<div class="desc"><p>保存宏到文件</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.integrations.cad_connector" href="cad_connector.html">sw_helper.integrations.cad_connector</a></code></li>
+<li><code><a title="sw_helper.integrations.freecad_connector" href="freecad_connector.html">sw_helper.integrations.freecad_connector</a></code></li>
+<li><code><a title="sw_helper.integrations.sw_macro" href="sw_macro.html">sw_helper.integrations.sw_macro</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.integrations.CADManager" href="#sw_helper.integrations.CADManager">CADManager</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.integrations.CADManager.auto_connect" href="#sw_helper.integrations.CADManager.auto_connect">auto_connect</a></code></li>
+<li><code><a title="sw_helper.integrations.CADManager.disconnect_all" href="#sw_helper.integrations.CADManager.disconnect_all">disconnect_all</a></code></li>
+<li><code><a title="sw_helper.integrations.CADManager.get_connector" href="#sw_helper.integrations.CADManager.get_connector">get_connector</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.integrations.FreeCADConnector" href="#sw_helper.integrations.FreeCADConnector">FreeCADConnector</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.integrations.FreeCADConnector.close_document" href="#sw_helper.integrations.FreeCADConnector.close_document">close_document</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.connect" href="#sw_helper.integrations.FreeCADConnector.connect">connect</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.disconnect" href="#sw_helper.integrations.FreeCADConnector.disconnect">disconnect</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.export_file" href="#sw_helper.integrations.FreeCADConnector.export_file">export_file</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.get_parameters" href="#sw_helper.integrations.FreeCADConnector.get_parameters">get_parameters</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.open_document" href="#sw_helper.integrations.FreeCADConnector.open_document">open_document</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.rebuild" href="#sw_helper.integrations.FreeCADConnector.rebuild">rebuild</a></code></li>
+<li><code><a title="sw_helper.integrations.FreeCADConnector.set_parameter" href="#sw_helper.integrations.FreeCADConnector.set_parameter">set_parameter</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.integrations.Parameter" href="#sw_helper.integrations.Parameter">Parameter</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.integrations.Parameter.description" href="#sw_helper.integrations.Parameter.description">description</a></code></li>
+<li><code><a title="sw_helper.integrations.Parameter.modifiable" href="#sw_helper.integrations.Parameter.modifiable">modifiable</a></code></li>
+<li><code><a title="sw_helper.integrations.Parameter.name" href="#sw_helper.integrations.Parameter.name">name</a></code></li>
+<li><code><a title="sw_helper.integrations.Parameter.unit" href="#sw_helper.integrations.Parameter.unit">unit</a></code></li>
+<li><code><a title="sw_helper.integrations.Parameter.value" href="#sw_helper.integrations.Parameter.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.integrations.SolidWorksConnector" href="#sw_helper.integrations.SolidWorksConnector">SolidWorksConnector</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.close_document" href="#sw_helper.integrations.SolidWorksConnector.close_document">close_document</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.connect" href="#sw_helper.integrations.SolidWorksConnector.connect">connect</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.disconnect" href="#sw_helper.integrations.SolidWorksConnector.disconnect">disconnect</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.export_file" href="#sw_helper.integrations.SolidWorksConnector.export_file">export_file</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.get_parameters" href="#sw_helper.integrations.SolidWorksConnector.get_parameters">get_parameters</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.open_document" href="#sw_helper.integrations.SolidWorksConnector.open_document">open_document</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.rebuild" href="#sw_helper.integrations.SolidWorksConnector.rebuild">rebuild</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksConnector.set_parameter" href="#sw_helper.integrations.SolidWorksConnector.set_parameter">set_parameter</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.integrations.SolidWorksMacroGenerator" href="#sw_helper.integrations.SolidWorksMacroGenerator">SolidWorksMacroGenerator</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.integrations.SolidWorksMacroGenerator.generate_export_macro" href="#sw_helper.integrations.SolidWorksMacroGenerator.generate_export_macro">generate_export_macro</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksMacroGenerator.generate_full_integration_macro" href="#sw_helper.integrations.SolidWorksMacroGenerator.generate_full_integration_macro">generate_full_integration_macro</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksMacroGenerator.generate_parameter_macro" href="#sw_helper.integrations.SolidWorksMacroGenerator.generate_parameter_macro">generate_parameter_macro</a></code></li>
+<li><code><a title="sw_helper.integrations.SolidWorksMacroGenerator.save_macro" href="#sw_helper.integrations.SolidWorksMacroGenerator.save_macro">save_macro</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

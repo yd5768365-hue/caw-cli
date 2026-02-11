@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.utils.error_handler API documentation</title>
+<meta name="description" content="全局错误处理方案 - 提供友好的错误信息 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.utils.error_handler</code></h1>
+</header>
+<section id="section-intro">
+<p>全局错误处理方案 - 提供友好的错误信息</p>
+<p>此模块提供：
+- 统一的异常捕获和处理
+- 友好的中文错误信息
+- 调试模式支持
+- 简单的控制台日志记录</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.utils.error_handler.create_error_handler"><code class="name flex">
+<span>def <span class="ident">create_error_handler</span></span>(<span>console: rich.console.Console | None = None, debug: bool = False) ‑> <a title="sw_helper.utils.error_handler.ErrorHandler" href="#sw_helper.utils.error_handler.ErrorHandler">ErrorHandler</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_error_handler(console: Optional[Console] = None, debug: bool = False) -&gt; ErrorHandler:
+    &#34;&#34;&#34;创建错误处理器实例
+
+    Args:
+        console: Rich Console 实例
+        debug: 是否启用调试模式
+
+    Returns:
+        ErrorHandler: 错误处理器实例
+    &#34;&#34;&#34;
+    return ErrorHandler(console, debug)</code></pre>
+</details>
+<div class="desc"><p>创建错误处理器实例</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>console</code></strong></dt>
+<dd>Rich Console 实例</dd>
+<dt><strong><code>debug</code></strong></dt>
+<dd>是否启用调试模式</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="sw_helper.utils.error_handler.ErrorHandler" href="#sw_helper.utils.error_handler.ErrorHandler">ErrorHandler</a></code></dt>
+<dd>错误处理器实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.error_handler.handle_error"><code class="name flex">
+<span>def <span class="ident">handle_error</span></span>(<span>func: Callable) ‑> Callable</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_error(func: Callable) -&gt; Callable:
+    &#34;&#34;&#34;装饰器：统一处理函数异常&#34;&#34;&#34;
+
+    def wrapper(*args, **kwargs):
+        error_handler = create_error_handler()
+        try:
+            return func(*args, **kwargs)
+        except KeyboardInterrupt:
+            error_handler.handle_keyboard_interrupt()
+            return False
+        except Exception as e:
+            error_handler.handle_exception(e)
+            return False
+        except:
+            error_handler.handle_unknown_error(sys.exc_info()[1])
+            return False
+
+    return wrapper</code></pre>
+</details>
+<div class="desc"><p>装饰器：统一处理函数异常</p></div>
+</dd>
+<dt id="sw_helper.utils.error_handler.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main() -&gt; None:
+    &#34;&#34;&#34;测试错误处理功能&#34;&#34;&#34;
+    console = Console()
+    error_handler = create_error_handler(console, debug=True)
+
+    # 测试不同类型的错误
+    console.print(&#34;测试错误处理功能...&#34;, style=&#34;bold blue&#34;)
+
+    try:
+        # 测试异常处理
+        console.print(&#34;\n1. 测试除法错误...&#34;)
+        1 / 0
+    except Exception as e:
+        error_handler.handle_exception(e)
+
+    try:
+        # 测试未知错误
+        console.print(&#34;\n2. 测试未知错误...&#34;)
+        raise &#34;这不是一个异常对象&#34;
+    except Exception as e:
+        error_handler.handle_unknown_error(e)
+
+    try:
+        # 测试调试信息
+        console.print(&#34;\n3. 测试调试信息...&#34;)
+        raise ValueError(&#34;调试信息测试&#34;)
+    except Exception as e:
+        error_handler.handle_exception(e)</code></pre>
+</details>
+<div class="desc"><p>测试错误处理功能</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.utils.error_handler.ErrorHandler"><code class="flex name class">
+<span>class <span class="ident">ErrorHandler</span></span>
+<span>(</span><span>console: rich.console.Console | None = None, debug: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ErrorHandler:
+    &#34;&#34;&#34;全局错误处理器&#34;&#34;&#34;
+
+    def __init__(self, console: Optional[Console] = None, debug: bool = False):
+        self.console = console or Console()
+        self.debug = debug
+        self.encoding_helper = get_encoding_helper()
+
+    def _get_error_color(self, error_type: str) -&gt; Style:
+        &#34;&#34;&#34;根据错误类型返回颜色样式&#34;&#34;&#34;
+        colors = {
+            &#34;CRITICAL&#34;: &#34;bold red&#34;,
+            &#34;ERROR&#34;: &#34;red&#34;,
+            &#34;WARNING&#34;: &#34;yellow&#34;,
+            &#34;INFO&#34;: &#34;blue&#34;,
+            &#34;DEBUG&#34;: &#34;cyan&#34;,
+        }
+        return colors.get(error_type.upper(), &#34;white&#34;)
+
+    def log(self, message: str, level: str = &#34;INFO&#34;) -&gt; None:
+        &#34;&#34;&#34;记录日志信息
+
+        Args:
+            message: 日志消息
+            level: 日志级别
+        &#34;&#34;&#34;
+        color = self._get_error_color(level)
+        formatted_message = self.encoding_helper.format_text(f&#34;[{level}] {message}&#34;)
+        self.console.print(formatted_message, style=color)
+
+    def handle_exception(self, e: Exception) -&gt; None:
+        &#34;&#34;&#34;处理异常
+
+        Args:
+            e: 异常对象
+        &#34;&#34;&#34;
+        error_name = type(e).__name__
+        error_msg = str(e)
+
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+        formatted_line = self.encoding_helper.format_text(f&#34;❌ 程序错误: {error_name}&#34;)
+        self.console.print(formatted_line, style=&#34;bold red&#34;)
+        self.console.print(f&#34;  错误信息: {error_msg}&#34;, style=&#34;red&#34;)
+
+        if self.debug:
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;📋 详细错误信息:&#34;)
+            self.console.print(formatted_line)
+            self.console.print(f&#34;  异常类型: {type(e).__name__}&#34;)
+            self.console.print(f&#34;  错误信息: {e}&#34;)
+
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+            self.console.print(formatted_line)
+            tb = traceback.format_exc()
+            self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+        else:
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;💡 提示: 运行程序时添加 --debug 选项查看详细错误信息&#34;)
+            self.console.print(formatted_line, style=&#34;yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;💡 示例: cae-cli --debug [命令]&#34;)
+            self.console.print(formatted_line, style=&#34;yellow&#34;)
+
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+
+    def handle_keyboard_interrupt(self) -&gt; None:
+        &#34;&#34;&#34;处理用户中断&#34;&#34;&#34;
+        formatted_line = self.encoding_helper.format_text(&#34;\n\n[yellow]⚠️ 用户中断操作[/yellow]&#34;)
+        self.console.print(formatted_line, style=&#34;bold&#34;)
+
+    def handle_unknown_error(self, e: Any) -&gt; None:
+        &#34;&#34;&#34;处理未知错误类型
+
+        Args:
+            e: 错误对象
+        &#34;&#34;&#34;
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;❌ 未知错误&#34;)
+        self.console.print(formatted_line, style=&#34;bold red&#34;)
+        self.console.print(f&#34;  错误对象: {e}&#34;, style=&#34;red&#34;)
+        self.console.print(f&#34;  类型: {type(e)}&#34;, style=&#34;red&#34;)
+
+        if self.debug:
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+            self.console.print(formatted_line)
+            tb = traceback.format_exc()
+            self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+
+    def prompt_continue(self, message: str = &#34;是否继续执行其他操作?&#34;) -&gt; bool:
+        &#34;&#34;&#34;提示用户是否继续
+
+        Args:
+            message: 提示信息
+
+        Returns:
+            bool: 用户选择结果
+        &#34;&#34;&#34;
+        return Confirm.ask(f&#34;[yellow]{message}[/yellow]&#34;)</code></pre>
+</details>
+<div class="desc"><p>全局错误处理器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.utils.error_handler.ErrorHandler.handle_exception"><code class="name flex">
+<span>def <span class="ident">handle_exception</span></span>(<span>self, e: Exception) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_exception(self, e: Exception) -&gt; None:
+    &#34;&#34;&#34;处理异常
+
+    Args:
+        e: 异常对象
+    &#34;&#34;&#34;
+    error_name = type(e).__name__
+    error_msg = str(e)
+
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+    formatted_line = self.encoding_helper.format_text(f&#34;❌ 程序错误: {error_name}&#34;)
+    self.console.print(formatted_line, style=&#34;bold red&#34;)
+    self.console.print(f&#34;  错误信息: {error_msg}&#34;, style=&#34;red&#34;)
+
+    if self.debug:
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;📋 详细错误信息:&#34;)
+        self.console.print(formatted_line)
+        self.console.print(f&#34;  异常类型: {type(e).__name__}&#34;)
+        self.console.print(f&#34;  错误信息: {e}&#34;)
+
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+        self.console.print(formatted_line)
+        tb = traceback.format_exc()
+        self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+    else:
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;💡 提示: 运行程序时添加 --debug 选项查看详细错误信息&#34;)
+        self.console.print(formatted_line, style=&#34;yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;💡 示例: cae-cli --debug [命令]&#34;)
+        self.console.print(formatted_line, style=&#34;yellow&#34;)
+
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)</code></pre>
+</details>
+<div class="desc"><p>处理异常</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>e</code></strong></dt>
+<dd>异常对象</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.error_handler.ErrorHandler.handle_keyboard_interrupt"><code class="name flex">
+<span>def <span class="ident">handle_keyboard_interrupt</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_keyboard_interrupt(self) -&gt; None:
+    &#34;&#34;&#34;处理用户中断&#34;&#34;&#34;
+    formatted_line = self.encoding_helper.format_text(&#34;\n\n[yellow]⚠️ 用户中断操作[/yellow]&#34;)
+    self.console.print(formatted_line, style=&#34;bold&#34;)</code></pre>
+</details>
+<div class="desc"><p>处理用户中断</p></div>
+</dd>
+<dt id="sw_helper.utils.error_handler.ErrorHandler.handle_unknown_error"><code class="name flex">
+<span>def <span class="ident">handle_unknown_error</span></span>(<span>self, e: Any) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_unknown_error(self, e: Any) -&gt; None:
+    &#34;&#34;&#34;处理未知错误类型
+
+    Args:
+        e: 错误对象
+    &#34;&#34;&#34;
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+    formatted_line = self.encoding_helper.format_text(&#34;❌ 未知错误&#34;)
+    self.console.print(formatted_line, style=&#34;bold red&#34;)
+    self.console.print(f&#34;  错误对象: {e}&#34;, style=&#34;red&#34;)
+    self.console.print(f&#34;  类型: {type(e)}&#34;, style=&#34;red&#34;)
+
+    if self.debug:
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+        self.console.print(formatted_line)
+        tb = traceback.format_exc()
+        self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)</code></pre>
+</details>
+<div class="desc"><p>处理未知错误类型</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>e</code></strong></dt>
+<dd>错误对象</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.error_handler.ErrorHandler.log"><code class="name flex">
+<span>def <span class="ident">log</span></span>(<span>self, message: str, level: str = 'INFO') ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def log(self, message: str, level: str = &#34;INFO&#34;) -&gt; None:
+    &#34;&#34;&#34;记录日志信息
+
+    Args:
+        message: 日志消息
+        level: 日志级别
+    &#34;&#34;&#34;
+    color = self._get_error_color(level)
+    formatted_message = self.encoding_helper.format_text(f&#34;[{level}] {message}&#34;)
+    self.console.print(formatted_message, style=color)</code></pre>
+</details>
+<div class="desc"><p>记录日志信息</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>日志消息</dd>
+<dt><strong><code>level</code></strong></dt>
+<dd>日志级别</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.error_handler.ErrorHandler.prompt_continue"><code class="name flex">
+<span>def <span class="ident">prompt_continue</span></span>(<span>self, message: str = '是否继续执行其他操作?') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prompt_continue(self, message: str = &#34;是否继续执行其他操作?&#34;) -&gt; bool:
+    &#34;&#34;&#34;提示用户是否继续
+
+    Args:
+        message: 提示信息
+
+    Returns:
+        bool: 用户选择结果
+    &#34;&#34;&#34;
+    return Confirm.ask(f&#34;[yellow]{message}[/yellow]&#34;)</code></pre>
+</details>
+<div class="desc"><p>提示用户是否继续</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>提示信息</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>用户选择结果</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.utils" href="index.html">sw_helper.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.utils.error_handler.create_error_handler" href="#sw_helper.utils.error_handler.create_error_handler">create_error_handler</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler.handle_error" href="#sw_helper.utils.error_handler.handle_error">handle_error</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler.main" href="#sw_helper.utils.error_handler.main">main</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.utils.error_handler.ErrorHandler" href="#sw_helper.utils.error_handler.ErrorHandler">ErrorHandler</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.error_handler.ErrorHandler.handle_exception" href="#sw_helper.utils.error_handler.ErrorHandler.handle_exception">handle_exception</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler.ErrorHandler.handle_keyboard_interrupt" href="#sw_helper.utils.error_handler.ErrorHandler.handle_keyboard_interrupt">handle_keyboard_interrupt</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler.ErrorHandler.handle_unknown_error" href="#sw_helper.utils.error_handler.ErrorHandler.handle_unknown_error">handle_unknown_error</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler.ErrorHandler.log" href="#sw_helper.utils.error_handler.ErrorHandler.log">log</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler.ErrorHandler.prompt_continue" href="#sw_helper.utils.error_handler.ErrorHandler.prompt_continue">prompt_continue</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

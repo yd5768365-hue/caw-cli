@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.optimization.optimizer API documentation</title>
+<meta name="description" content="参数优化引擎 - 使用FreeCAD实现参数优化闭环">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.optimization.optimizer</code></h1>
+</header>
+<section id="section-intro">
+<p>参数优化引擎 - 使用FreeCAD实现参数优化闭环</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer"><code class="flex name class">
+<span>class <span class="ident">FreeCADOptimizer</span></span>
+<span>(</span><span>use_mock: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADOptimizer:
+    &#34;&#34;&#34;FreeCAD参数优化器&#34;&#34;&#34;
+
+    def __init__(self, use_mock: bool = False):
+        self.connector = None
+        self.use_mock = use_mock
+        self.results: List[OptimizationResult] = []
+        self.progress_callback: Optional[Callable[[str], None]] = None
+
+    def set_progress_callback(self, callback: Callable[[str], None]):
+        &#34;&#34;&#34;设置进度回调函数&#34;&#34;&#34;
+        self.progress_callback = callback
+
+    def log(self, message: str):
+        &#34;&#34;&#34;输出日志&#34;&#34;&#34;
+        if self.progress_callback:
+            self.progress_callback(message)
+        else:
+            print(message)
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到FreeCAD&#34;&#34;&#34;
+        if self.use_mock:
+            from sw_helper.integrations.freecad_connector import FreeCADConnectorMock
+
+            self.connector = FreeCADConnectorMock()
+            return self.connector.connect()
+
+        try:
+            from sw_helper.integrations.freecad_connector import FreeCADConnector
+
+            self.connector = FreeCADConnector()
+            return self.connector.connect()
+        except Exception as e:
+            self.log(f&#34;Failed to connect to FreeCAD: {e}&#34;)
+            self.log(&#34;Switching to mock mode...&#34;)
+            self.use_mock = True
+            return self.connect()
+
+    def optimize_parameter(
+        self,
+        file_path: str,
+        param_name: str,
+        param_range: tuple,
+        steps: int = 5,
+        step_mode: str = &#34;linear&#34;,
+        output_dir: str = &#34;./optimization_output&#34;,
+        analyze_geometry: bool = True,
+    ) -&gt; List[OptimizationResult]:
+        &#34;&#34;&#34;
+        优化指定参数
+
+        Args:
+            file_path: CAD文件路径(.FCStd)
+            param_name: 参数名(如&#34;Fillet_Radius&#34;)
+            param_range: (最小值, 最大值)
+            steps: 迭代步数
+            step_mode: 步进模式 (linear/geometric)
+            output_dir: 输出目录
+            analyze_geometry: 是否分析几何质量
+
+        Returns:
+            优化结果列表
+        &#34;&#34;&#34;
+        self.results = []
+
+        # 连接FreeCAD
+        self.log(&#34;Connecting to FreeCAD...&#34;)
+        if not self.connect():
+            raise RuntimeError(&#34;Failed to connect to FreeCAD&#34;)
+
+        # 打开文件
+        self.log(f&#34;Opening file: {file_path}&#34;)
+        if not self.connector.open_document(file_path):
+            raise RuntimeError(f&#34;Failed to open file: {file_path}&#34;)
+
+        # 显示可用参数
+        self.log(&#34;\nAvailable parameters:&#34;)
+        params = self.connector.get_parameters()
+        for p in params[:5]:  # 显示前5个
+            self.log(f&#34;  - {p.name} = {p.value} {p.unit}&#34;)
+
+        # 检查目标参数是否存在
+        target_param = self.connector.find_parameter(param_name)
+        if not target_param:
+            if params:
+                self.log(f&#34;[Warning] Parameter &#39;{param_name}&#39; not found, available parameters:&#34;)
+                for p in params[:10]:  # 显示前10个参数
+                    self.log(f&#34;  - {p.name} = {p.value} {p.unit}&#34;)
+                raise ValueError(
+                    f&#34;Parameter &#39;{param_name}&#39; not found. Please select from the available parameters above.&#34;
+                )
+            else:
+                raise ValueError(
+                    f&#34;Parameter &#39;{param_name}&#39; not found, and no parameters were found in the model.&#34;
+                )
+
+        # 创建输出目录
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        # 生成参数序列
+        min_val, max_val = param_range
+        if steps == 1:
+            values = [min_val]
+        elif step_mode == &#34;linear&#34;:
+            # 线性步进
+            step_size = (max_val - min_val) / (steps - 1)
+            values = [min_val + i * step_size for i in range(steps)]
+        else:  # geometric
+            # 等比步进
+            import math
+
+            ratio = math.exp(math.log(max_val / min_val) / (steps - 1))
+            values = [min_val * (ratio ** i) for i in range(steps)]
+
+        self.log(f&#34;\nStarting optimization for parameter: {param_name}&#34;)
+        self.log(f&#34;   Range: {min_val} ~ {max_val} mm&#34;)
+        self.log(f&#34;   Steps: {steps}&#34;)
+        self.log(f&#34;   Step mode: {step_mode}&#34;)
+        self.log(f&#34;   Value sequence: {[round(v, 2) for v in values]}&#34;)
+        self.log(&#34;-&#34; * 60)
+
+        # 优化循环
+        for i, value in enumerate(values, 1):
+            iteration_start = time.time()
+
+            self.log(f&#34;\n[Iteration {i}/{steps}] {param_name} = {value:.2f} mm&#34;)
+
+            try:
+                # 1. 设置参数
+                self.log(&#34;   Modifying parameter...&#34;)
+                if not self.connector.set_parameter(param_name, value):
+                    self.log(&#34;   Parameter setting failed, skipping&#34;)
+                    continue
+
+                # 2. 重建模型
+                self.log(&#34;   Rebuilding model...&#34;)
+                if not self.connector.rebuild():
+                    self.log(&#34;   Warning: Rebuild may have issues&#34;)
+
+                # 3. 导出文件
+                export_file = (
+                    output_path / f&#34;iter_{i:02d}_{param_name}_{value:.1f}.step&#34;
+                )
+                self.log(f&#34;   Exporting: {export_file.name}&#34;)
+
+                if not self.connector.export_file(str(export_file), &#34;STEP&#34;):
+                    self.log(&#34;   Export failed&#34;)
+                    continue
+
+                # 4. 分析质量（如果启用）
+                quality_score = 50.0  # 基础分
+                allowable_stress = 0.0
+                safety_factor = 0.0
+                notes = &#34;Not analyzed&#34;
+
+                if analyze_geometry and export_file.exists():
+                    self.log(&#34;   Analyzing geometry quality...&#34;)
+                    try:
+                        from sw_helper.geometry.parser import GeometryParser
+
+                        parser = GeometryParser()
+                        geo_data = parser.parse(str(export_file))
+
+                        # 计算质量分数
+                        quality_score = self._calculate_quality_score(geo_data, value)
+
+                        # 计算力学性能
+                        allowable_stress, safety_factor = self._calculate_mechanical_properties(
+                            geo_data, value
+                        )
+
+                        notes = f&#34;Volume: {geo_data.get(&#39;volume&#39;, 0):.2e} m³&#34;
+                    except Exception as e:
+                        self.log(f&#34;   Analysis failed: {e}&#34;)
+                        notes = f&#34;Analysis failed: {e}&#34;
+                else:
+                    notes = &#34;Not analyzed&#34;
+                    # 模拟质量分数和力学性能（用于测试）
+                    quality_score = 50 + (value - min_val) / (max_val - min_val) * 40
+                    if param_name.lower() in [&#34;fillet&#34;, &#34;radius&#34;, &#34;r&#34;]:
+                        # 圆角半径在适中范围得分高
+                        optimal = (min_val + max_val) / 2
+                        quality_score = (
+                            100 - abs(value - optimal) / (max_val - min_val) * 50
+                        )
+
+                    # 模拟力学性能
+                    allowable_stress, safety_factor = self._calculate_mechanical_properties(
+                        {}, value
+                    )
+
+                analysis_time = time.time() - iteration_start
+
+                # 记录结果
+                result = OptimizationResult(
+                    iteration=i,
+                    parameter_name=param_name,
+                    parameter_value=value,
+                    quality_score=quality_score,
+                    allowable_stress=allowable_stress,
+                    safety_factor=safety_factor,
+                    analysis_time=analysis_time,
+                    timestamp=datetime.now().isoformat(),
+                    notes=notes,
+                    export_path=str(export_file),
+                )
+
+                self.results.append(result)
+
+                self.log(f&#34;   Quality score: {quality_score:.1f}/100&#34;)
+                self.log(f&#34;   Time elapsed: {analysis_time:.2f}s&#34;)
+
+            except Exception as e:
+                self.log(f&#34;   ✗ 错误: {e}&#34;)
+                import traceback
+
+                traceback.print_exc()
+                continue
+
+        # 关闭文档
+        self.log(&#34;\nClosing document...&#34;)
+        self.connector.close_document(save=False)
+        self.connector.disconnect()
+
+        # 生成最终报告
+        if self.results:
+            self._generate_summary()
+
+        return self.results
+
+    def _calculate_quality_score(self, geo_data: Dict, param_value: float) -&gt; float:
+        &#34;&#34;&#34;计算质量分数 - 包含许用应力和安全系数分析（改进版）&#34;&#34;&#34;
+        score = 50.0  # 基础分
+
+        # 体积合理性
+        volume = geo_data.get(&#34;volume&#34;, 0)
+        if 0.0001 &lt; volume &lt; 0.01:  # 合理的体积范围
+            score += 15
+        elif volume &lt; 0.0001:
+            score += 5  # 过小体积
+        elif volume &lt; 0.1:
+            score += 10  # 稍大体积
+        else:
+            score += 5  # 过大体积
+
+        # 几何复杂度
+        vertices = geo_data.get(&#34;vertices&#34;, 0)
+        if 100 &lt; vertices &lt; 50000:
+            score += 10
+        elif vertices &lt; 100:
+            score += 5  # 过于简单
+        else:
+            score += 7  # 过于复杂
+
+        # 面数合理性
+        faces = geo_data.get(&#34;faces&#34;, 0)
+        if 100 &lt; faces &lt; 10000:
+            score += 10
+        elif faces &lt; 100:
+            score += 5  # 过于简单
+        else:
+            score += 7  # 过于复杂
+
+        # 参数优化加分（假设适中的参数值更好）
+        min_param = 5
+        max_param = 15
+        if min_param &lt; param_value &lt; max_param:
+            score += 20
+        elif param_value &lt;= min_param:
+            score += 10
+        else:
+            score += 15
+
+        # 力学性能加分
+        allowable_stress, safety_factor = self._calculate_mechanical_properties(geo_data, param_value)
+        if allowable_stress &gt; 140:
+            score += 10
+        elif allowable_stress &gt; 120:
+            score += 5
+        else:
+            score += 2
+
+        if safety_factor &gt; 2.0:
+            score += 10
+        elif safety_factor &gt; 1.5:
+            score += 5
+        else:
+            score += 2
+
+        return min(100, max(0, score))
+
+    def _calculate_mechanical_properties(self, geo_data: Dict, param_value: float) -&gt; tuple:
+        &#34;&#34;&#34;计算力学性能 - 许用应力和安全系数（改进版）&#34;&#34;&#34;
+        # 假设材料为Q235钢
+        yield_strength = 235  # MPa
+
+        # 根据几何信息调整计算
+        volume = geo_data.get(&#34;volume&#34;, 0)
+        vertices = geo_data.get(&#34;vertices&#34;, 0)
+        faces = geo_data.get(&#34;faces&#34;, 0)
+
+        # 基础安全系数
+        base_safety_factor = 1.5
+
+        # 根据参数值调整
+        if param_value &lt; 5:
+            param_factor = 0.8  # 较小参数值，降低许用应力
+            safety_factor = base_safety_factor * 1.2  # 增加安全系数
+        elif param_value &lt; 15:
+            param_factor = 1.0  # 适中参数值，正常许用应力
+            safety_factor = base_safety_factor
+        else:
+            param_factor = 0.9  # 较大参数值，略低许用应力
+            safety_factor = base_safety_factor * 1.1
+
+        # 根据体积调整
+        if volume &lt; 0.0001:
+            volume_factor = 0.7  # 小体积，降低许用应力
+        elif volume &lt; 0.01:
+            volume_factor = 1.0  # 合理体积范围
+        else:
+            volume_factor = 0.8  # 大体积，降低许用应力
+
+        # 根据复杂度调整
+        complexity = vertices + faces
+        if complexity &lt; 1000:
+            complexity_factor = 1.1  # 简单几何，提高许用应力
+        elif complexity &lt; 10000:
+            complexity_factor = 1.0  # 适中复杂度
+        else:
+            complexity_factor = 0.9  # 复杂几何，降低许用应力
+
+        # 综合计算许用应力
+        allowable_stress = yield_strength * param_factor * volume_factor * complexity_factor
+
+        # 确保许用应力在合理范围内
+        allowable_stress = max(50, min(allowable_stress, yield_strength * 0.7))
+
+        # 确保安全系数在合理范围内
+        safety_factor = max(1.2, min(safety_factor, 3.0))
+
+        return allowable_stress, safety_factor
+
+    def _generate_summary(self):
+        &#34;&#34;&#34;生成优化总结&#34;&#34;&#34;
+        if not self.results:
+            return
+
+        best = max(self.results, key=lambda x: x.quality_score)
+
+        self.log(&#34;\n&#34; + &#34;=&#34; * 60)
+        self.log(&#34;Optimization complete!&#34;)
+        self.log(&#34;=&#34; * 60)
+        self.log(f&#34;Total iterations: {len(self.results)}&#34;)
+        self.log(f&#34;Best iteration: #{best.iteration}&#34;)
+        self.log(f&#34;Best parameter: {best.parameter_name} = {best.parameter_value:.2f} mm&#34;)
+        self.log(f&#34;Top quality score: {best.quality_score:.1f}/100&#34;)
+        self.log(f&#34;Total time: {sum(r.analysis_time for r in self.results):.2f}s&#34;)
+        self.log(&#34;=&#34; * 60)
+
+    def export_results(self, output_file: str):
+        &#34;&#34;&#34;导出结果为JSON&#34;&#34;&#34;
+        if not self.results:
+            return
+
+        data = {
+            &#34;optimization_type&#34;: &#34;parametric&#34;,
+            &#34;timestamp&#34;: datetime.now().isoformat(),
+            &#34;total_iterations&#34;: len(self.results),
+            &#34;results&#34;: [asdict(r) for r in self.results],
+        }
+
+        # 添加最佳结果
+        best = max(self.results, key=lambda x: x.quality_score)
+        data[&#34;best_result&#34;] = asdict(best)
+
+        with open(output_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+        self.log(f&#34;\nResults saved: {output_file}&#34;)
+
+    def plot_results(self, output_file: str = &#34;optimization_plot.png&#34;):
+        &#34;&#34;&#34;绘制优化结果图表&#34;&#34;&#34;
+        try:
+            import matplotlib.pyplot as plt
+            import matplotlib
+
+            matplotlib.use(&#34;Agg&#34;)  # 非交互式后端
+
+            values = [r.parameter_value for r in self.results]
+            scores = [r.quality_score for r in self.results]
+            allowable_stresses = [r.allowable_stress for r in self.results]
+            safety_factors = [r.safety_factor for r in self.results]
+
+            fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+
+            # 图1: 质量分数 vs 参数值
+            ax1.plot(values, scores, &#34;b-o&#34;, linewidth=2, markersize=8)
+            ax1.set_xlabel(&#34;Parameter Value (mm)&#34;, fontsize=12)
+            ax1.set_ylabel(&#34;Quality Score&#34;, fontsize=12)
+            ax1.set_title(&#34;Quality Score vs Parameter Value&#34;, fontsize=14, pad=10)
+            ax1.grid(True, alpha=0.3)
+            ax1.set_ylim(0, 100)
+
+            # 标记最佳点
+            best_idx = scores.index(max(scores))
+            ax1.plot(
+                values[best_idx],
+                scores[best_idx],
+                &#34;r*&#34;,
+                markersize=20,
+                label=&#34;Best&#34;,
+            )
+            ax1.legend()
+
+            # 图2: 许用应力 vs 参数值
+            ax2.plot(values, allowable_stresses, &#34;g-s&#34;, linewidth=2, markersize=8)
+            ax2.set_xlabel(&#34;Parameter Value (mm)&#34;, fontsize=12)
+            ax2.set_ylabel(&#34;Allowable Stress (MPa)&#34;, fontsize=12)
+            ax2.set_title(&#34;Allowable Stress vs Parameter Value&#34;, fontsize=14, pad=10)
+            ax2.grid(True, alpha=0.3)
+
+            # 标记最佳点
+            ax2.plot(
+                values[best_idx],
+                allowable_stresses[best_idx],
+                &#34;r*&#34;,
+                markersize=20,
+                label=&#34;Best&#34;,
+            )
+            ax2.legend()
+
+            # 图3: 安全系数 vs 参数值
+            ax3.plot(values, safety_factors, &#34;m-^&#34;, linewidth=2, markersize=8)
+            ax3.set_xlabel(&#34;Parameter Value (mm)&#34;, fontsize=12)
+            ax3.set_ylabel(&#34;Safety Factor&#34;, fontsize=12)
+            ax3.set_title(&#34;Safety Factor vs Parameter Value&#34;, fontsize=14, pad=10)
+            ax3.grid(True, alpha=0.3)
+
+            # 标记最佳点
+            ax3.plot(
+                values[best_idx],
+                safety_factors[best_idx],
+                &#34;r*&#34;,
+                markersize=20,
+                label=&#34;Best&#34;,
+            )
+            ax3.legend()
+
+            plt.tight_layout()
+            plt.savefig(output_file, dpi=300, bbox_inches=&#34;tight&#34;)
+            plt.close()
+
+            self.log(f&#34;Plot saved: {output_file}&#34;)
+
+        except ImportError:
+            self.log(&#34;matplotlib not installed, skipping plot&#34;)
+        except Exception as e:
+            self.log(f&#34;Plot failed: {e}&#34;)
+
+    def generate_report(self, output_file: str = &#34;optimization_report.md&#34;):
+        &#34;&#34;&#34;生成Markdown报告&#34;&#34;&#34;
+        if not self.results:
+            return
+
+        best = max(self.results, key=lambda x: x.quality_score)
+
+        report = f&#34;&#34;&#34;# 参数优化报告
+
+## 优化概览
+
+- **优化参数**: {best.parameter_name}
+- **总迭代次数**: {len(self.results)}
+- **优化时间**: {datetime.now().strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)}
+
+## 最佳结果
+
+- **迭代编号**: {best.iteration}
+- **最佳参数值**: {best.parameter_value:.2f} mm
+- **最高质量分**: {best.quality_score:.1f}/100
+- **许用应力**: {best.allowable_stress:.1f} MPa
+- **安全系数**: {best.safety_factor:.2f}
+- **分析耗时**: {best.analysis_time:.2f}s
+- **输出文件**: `{best.export_path}`
+
+## 详细结果
+
+| 迭代 | 参数值 (mm) | 质量分数 | 许用应力 (MPa) | 安全系数 | 耗时 (s) | 备注 |
+|------|-------------|----------|----------------|----------|----------|------|
+&#34;&#34;&#34;
+
+        for r in self.results:
+            marker = &#34;⭐&#34; if r == best else &#34;&#34;
+            report += f&#34;| {r.iteration} | {r.parameter_value:.2f} | {r.quality_score:.1f} {marker} | {r.allowable_stress:.1f} | {r.safety_factor:.2f} | {r.analysis_time:.2f} | {r.notes} |\n&#34;
+
+        report += f&#34;&#34;&#34;
+
+## 统计信息
+
+- **平均质量分数**: {sum(r.quality_score for r in self.results) / len(self.results):.1f}
+- **质量分数范围**: {min(r.quality_score for r in self.results):.1f} ~ {max(r.quality_score for r in self.results):.1f}
+- **平均许用应力**: {sum(r.allowable_stress for r in self.results) / len(self.results):.1f} MPa
+- **许用应力范围**: {min(r.allowable_stress for r in self.results):.1f} ~ {max(r.allowable_stress for r in self.results):.1f} MPa
+- **平均安全系数**: {sum(r.safety_factor for r in self.results) / len(self.results):.2f}
+- **安全系数范围**: {min(r.safety_factor for r in self.results):.2f} ~ {max(r.safety_factor for r in self.results):.2f}
+- **总耗时**: {sum(r.analysis_time for r in self.results):.2f}s
+- **平均迭代耗时**: {sum(r.analysis_time for r in self.results) / len(self.results):.2f}s
+
+## 建议
+
+基于优化结果，建议采用以下参数：
+
+- **{best.parameter_name}**: {best.parameter_value:.2f} mm
+- **预期质量分数**: {best.quality_score:.1f}/100
+- **预期许用应力**: {best.allowable_stress:.1f} MPa
+- **预期安全系数**: {best.safety_factor:.2f}
+
+---
+*Generated by CAE-CLI Optimize*
+&#34;&#34;&#34;
+
+        with open(output_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(report)
+
+        self.log(f&#34;Report generated: {output_file}&#34;)</code></pre>
+</details>
+<div class="desc"><p>FreeCAD参数优化器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到FreeCAD&#34;&#34;&#34;
+    if self.use_mock:
+        from sw_helper.integrations.freecad_connector import FreeCADConnectorMock
+
+        self.connector = FreeCADConnectorMock()
+        return self.connector.connect()
+
+    try:
+        from sw_helper.integrations.freecad_connector import FreeCADConnector
+
+        self.connector = FreeCADConnector()
+        return self.connector.connect()
+    except Exception as e:
+        self.log(f&#34;Failed to connect to FreeCAD: {e}&#34;)
+        self.log(&#34;Switching to mock mode...&#34;)
+        self.use_mock = True
+        return self.connect()</code></pre>
+</details>
+<div class="desc"><p>连接到FreeCAD</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.export_results"><code class="name flex">
+<span>def <span class="ident">export_results</span></span>(<span>self, output_file: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_results(self, output_file: str):
+    &#34;&#34;&#34;导出结果为JSON&#34;&#34;&#34;
+    if not self.results:
+        return
+
+    data = {
+        &#34;optimization_type&#34;: &#34;parametric&#34;,
+        &#34;timestamp&#34;: datetime.now().isoformat(),
+        &#34;total_iterations&#34;: len(self.results),
+        &#34;results&#34;: [asdict(r) for r in self.results],
+    }
+
+    # 添加最佳结果
+    best = max(self.results, key=lambda x: x.quality_score)
+    data[&#34;best_result&#34;] = asdict(best)
+
+    with open(output_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+    self.log(f&#34;\nResults saved: {output_file}&#34;)</code></pre>
+</details>
+<div class="desc"><p>导出结果为JSON</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.generate_report"><code class="name flex">
+<span>def <span class="ident">generate_report</span></span>(<span>self, output_file: str = 'optimization_report.md')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    def generate_report(self, output_file: str = &#34;optimization_report.md&#34;):
+        &#34;&#34;&#34;生成Markdown报告&#34;&#34;&#34;
+        if not self.results:
+            return
+
+        best = max(self.results, key=lambda x: x.quality_score)
+
+        report = f&#34;&#34;&#34;# 参数优化报告
+
+## 优化概览
+
+- **优化参数**: {best.parameter_name}
+- **总迭代次数**: {len(self.results)}
+- **优化时间**: {datetime.now().strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)}
+
+## 最佳结果
+
+- **迭代编号**: {best.iteration}
+- **最佳参数值**: {best.parameter_value:.2f} mm
+- **最高质量分**: {best.quality_score:.1f}/100
+- **许用应力**: {best.allowable_stress:.1f} MPa
+- **安全系数**: {best.safety_factor:.2f}
+- **分析耗时**: {best.analysis_time:.2f}s
+- **输出文件**: `{best.export_path}`
+
+## 详细结果
+
+| 迭代 | 参数值 (mm) | 质量分数 | 许用应力 (MPa) | 安全系数 | 耗时 (s) | 备注 |
+|------|-------------|----------|----------------|----------|----------|------|
+&#34;&#34;&#34;
+
+        for r in self.results:
+            marker = &#34;⭐&#34; if r == best else &#34;&#34;
+            report += f&#34;| {r.iteration} | {r.parameter_value:.2f} | {r.quality_score:.1f} {marker} | {r.allowable_stress:.1f} | {r.safety_factor:.2f} | {r.analysis_time:.2f} | {r.notes} |\n&#34;
+
+        report += f&#34;&#34;&#34;
+
+## 统计信息
+
+- **平均质量分数**: {sum(r.quality_score for r in self.results) / len(self.results):.1f}
+- **质量分数范围**: {min(r.quality_score for r in self.results):.1f} ~ {max(r.quality_score for r in self.results):.1f}
+- **平均许用应力**: {sum(r.allowable_stress for r in self.results) / len(self.results):.1f} MPa
+- **许用应力范围**: {min(r.allowable_stress for r in self.results):.1f} ~ {max(r.allowable_stress for r in self.results):.1f} MPa
+- **平均安全系数**: {sum(r.safety_factor for r in self.results) / len(self.results):.2f}
+- **安全系数范围**: {min(r.safety_factor for r in self.results):.2f} ~ {max(r.safety_factor for r in self.results):.2f}
+- **总耗时**: {sum(r.analysis_time for r in self.results):.2f}s
+- **平均迭代耗时**: {sum(r.analysis_time for r in self.results) / len(self.results):.2f}s
+
+## 建议
+
+基于优化结果，建议采用以下参数：
+
+- **{best.parameter_name}**: {best.parameter_value:.2f} mm
+- **预期质量分数**: {best.quality_score:.1f}/100
+- **预期许用应力**: {best.allowable_stress:.1f} MPa
+- **预期安全系数**: {best.safety_factor:.2f}
+
+---
+*Generated by CAE-CLI Optimize*
+&#34;&#34;&#34;
+
+        with open(output_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(report)
+
+        self.log(f&#34;Report generated: {output_file}&#34;)</code></pre>
+</details>
+<div class="desc"><p>生成Markdown报告</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.log"><code class="name flex">
+<span>def <span class="ident">log</span></span>(<span>self, message: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def log(self, message: str):
+    &#34;&#34;&#34;输出日志&#34;&#34;&#34;
+    if self.progress_callback:
+        self.progress_callback(message)
+    else:
+        print(message)</code></pre>
+</details>
+<div class="desc"><p>输出日志</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.optimize_parameter"><code class="name flex">
+<span>def <span class="ident">optimize_parameter</span></span>(<span>self,<br>file_path: str,<br>param_name: str,<br>param_range: tuple,<br>steps: int = 5,<br>step_mode: str = 'linear',<br>output_dir: str = './optimization_output',<br>analyze_geometry: bool = True) ‑> List[<a title="sw_helper.optimization.optimizer.OptimizationResult" href="#sw_helper.optimization.optimizer.OptimizationResult">OptimizationResult</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def optimize_parameter(
+    self,
+    file_path: str,
+    param_name: str,
+    param_range: tuple,
+    steps: int = 5,
+    step_mode: str = &#34;linear&#34;,
+    output_dir: str = &#34;./optimization_output&#34;,
+    analyze_geometry: bool = True,
+) -&gt; List[OptimizationResult]:
+    &#34;&#34;&#34;
+    优化指定参数
+
+    Args:
+        file_path: CAD文件路径(.FCStd)
+        param_name: 参数名(如&#34;Fillet_Radius&#34;)
+        param_range: (最小值, 最大值)
+        steps: 迭代步数
+        step_mode: 步进模式 (linear/geometric)
+        output_dir: 输出目录
+        analyze_geometry: 是否分析几何质量
+
+    Returns:
+        优化结果列表
+    &#34;&#34;&#34;
+    self.results = []
+
+    # 连接FreeCAD
+    self.log(&#34;Connecting to FreeCAD...&#34;)
+    if not self.connect():
+        raise RuntimeError(&#34;Failed to connect to FreeCAD&#34;)
+
+    # 打开文件
+    self.log(f&#34;Opening file: {file_path}&#34;)
+    if not self.connector.open_document(file_path):
+        raise RuntimeError(f&#34;Failed to open file: {file_path}&#34;)
+
+    # 显示可用参数
+    self.log(&#34;\nAvailable parameters:&#34;)
+    params = self.connector.get_parameters()
+    for p in params[:5]:  # 显示前5个
+        self.log(f&#34;  - {p.name} = {p.value} {p.unit}&#34;)
+
+    # 检查目标参数是否存在
+    target_param = self.connector.find_parameter(param_name)
+    if not target_param:
+        if params:
+            self.log(f&#34;[Warning] Parameter &#39;{param_name}&#39; not found, available parameters:&#34;)
+            for p in params[:10]:  # 显示前10个参数
+                self.log(f&#34;  - {p.name} = {p.value} {p.unit}&#34;)
+            raise ValueError(
+                f&#34;Parameter &#39;{param_name}&#39; not found. Please select from the available parameters above.&#34;
+            )
+        else:
+            raise ValueError(
+                f&#34;Parameter &#39;{param_name}&#39; not found, and no parameters were found in the model.&#34;
+            )
+
+    # 创建输出目录
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # 生成参数序列
+    min_val, max_val = param_range
+    if steps == 1:
+        values = [min_val]
+    elif step_mode == &#34;linear&#34;:
+        # 线性步进
+        step_size = (max_val - min_val) / (steps - 1)
+        values = [min_val + i * step_size for i in range(steps)]
+    else:  # geometric
+        # 等比步进
+        import math
+
+        ratio = math.exp(math.log(max_val / min_val) / (steps - 1))
+        values = [min_val * (ratio ** i) for i in range(steps)]
+
+    self.log(f&#34;\nStarting optimization for parameter: {param_name}&#34;)
+    self.log(f&#34;   Range: {min_val} ~ {max_val} mm&#34;)
+    self.log(f&#34;   Steps: {steps}&#34;)
+    self.log(f&#34;   Step mode: {step_mode}&#34;)
+    self.log(f&#34;   Value sequence: {[round(v, 2) for v in values]}&#34;)
+    self.log(&#34;-&#34; * 60)
+
+    # 优化循环
+    for i, value in enumerate(values, 1):
+        iteration_start = time.time()
+
+        self.log(f&#34;\n[Iteration {i}/{steps}] {param_name} = {value:.2f} mm&#34;)
+
+        try:
+            # 1. 设置参数
+            self.log(&#34;   Modifying parameter...&#34;)
+            if not self.connector.set_parameter(param_name, value):
+                self.log(&#34;   Parameter setting failed, skipping&#34;)
+                continue
+
+            # 2. 重建模型
+            self.log(&#34;   Rebuilding model...&#34;)
+            if not self.connector.rebuild():
+                self.log(&#34;   Warning: Rebuild may have issues&#34;)
+
+            # 3. 导出文件
+            export_file = (
+                output_path / f&#34;iter_{i:02d}_{param_name}_{value:.1f}.step&#34;
+            )
+            self.log(f&#34;   Exporting: {export_file.name}&#34;)
+
+            if not self.connector.export_file(str(export_file), &#34;STEP&#34;):
+                self.log(&#34;   Export failed&#34;)
+                continue
+
+            # 4. 分析质量（如果启用）
+            quality_score = 50.0  # 基础分
+            allowable_stress = 0.0
+            safety_factor = 0.0
+            notes = &#34;Not analyzed&#34;
+
+            if analyze_geometry and export_file.exists():
+                self.log(&#34;   Analyzing geometry quality...&#34;)
+                try:
+                    from sw_helper.geometry.parser import GeometryParser
+
+                    parser = GeometryParser()
+                    geo_data = parser.parse(str(export_file))
+
+                    # 计算质量分数
+                    quality_score = self._calculate_quality_score(geo_data, value)
+
+                    # 计算力学性能
+                    allowable_stress, safety_factor = self._calculate_mechanical_properties(
+                        geo_data, value
+                    )
+
+                    notes = f&#34;Volume: {geo_data.get(&#39;volume&#39;, 0):.2e} m³&#34;
+                except Exception as e:
+                    self.log(f&#34;   Analysis failed: {e}&#34;)
+                    notes = f&#34;Analysis failed: {e}&#34;
+            else:
+                notes = &#34;Not analyzed&#34;
+                # 模拟质量分数和力学性能（用于测试）
+                quality_score = 50 + (value - min_val) / (max_val - min_val) * 40
+                if param_name.lower() in [&#34;fillet&#34;, &#34;radius&#34;, &#34;r&#34;]:
+                    # 圆角半径在适中范围得分高
+                    optimal = (min_val + max_val) / 2
+                    quality_score = (
+                        100 - abs(value - optimal) / (max_val - min_val) * 50
+                    )
+
+                # 模拟力学性能
+                allowable_stress, safety_factor = self._calculate_mechanical_properties(
+                    {}, value
+                )
+
+            analysis_time = time.time() - iteration_start
+
+            # 记录结果
+            result = OptimizationResult(
+                iteration=i,
+                parameter_name=param_name,
+                parameter_value=value,
+                quality_score=quality_score,
+                allowable_stress=allowable_stress,
+                safety_factor=safety_factor,
+                analysis_time=analysis_time,
+                timestamp=datetime.now().isoformat(),
+                notes=notes,
+                export_path=str(export_file),
+            )
+
+            self.results.append(result)
+
+            self.log(f&#34;   Quality score: {quality_score:.1f}/100&#34;)
+            self.log(f&#34;   Time elapsed: {analysis_time:.2f}s&#34;)
+
+        except Exception as e:
+            self.log(f&#34;   ✗ 错误: {e}&#34;)
+            import traceback
+
+            traceback.print_exc()
+            continue
+
+    # 关闭文档
+    self.log(&#34;\nClosing document...&#34;)
+    self.connector.close_document(save=False)
+    self.connector.disconnect()
+
+    # 生成最终报告
+    if self.results:
+        self._generate_summary()
+
+    return self.results</code></pre>
+</details>
+<div class="desc"><p>优化指定参数</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong></dt>
+<dd>CAD文件路径(.FCStd)</dd>
+<dt><strong><code>param_name</code></strong></dt>
+<dd>参数名(如"Fillet_Radius")</dd>
+<dt><strong><code>param_range</code></strong></dt>
+<dd>(最小值, 最大值)</dd>
+<dt><strong><code>steps</code></strong></dt>
+<dd>迭代步数</dd>
+<dt><strong><code>step_mode</code></strong></dt>
+<dd>步进模式 (linear/geometric)</dd>
+<dt><strong><code>output_dir</code></strong></dt>
+<dd>输出目录</dd>
+<dt><strong><code>analyze_geometry</code></strong></dt>
+<dd>是否分析几何质量</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>优化结果列表</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.plot_results"><code class="name flex">
+<span>def <span class="ident">plot_results</span></span>(<span>self, output_file: str = 'optimization_plot.png')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_results(self, output_file: str = &#34;optimization_plot.png&#34;):
+    &#34;&#34;&#34;绘制优化结果图表&#34;&#34;&#34;
+    try:
+        import matplotlib.pyplot as plt
+        import matplotlib
+
+        matplotlib.use(&#34;Agg&#34;)  # 非交互式后端
+
+        values = [r.parameter_value for r in self.results]
+        scores = [r.quality_score for r in self.results]
+        allowable_stresses = [r.allowable_stress for r in self.results]
+        safety_factors = [r.safety_factor for r in self.results]
+
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+
+        # 图1: 质量分数 vs 参数值
+        ax1.plot(values, scores, &#34;b-o&#34;, linewidth=2, markersize=8)
+        ax1.set_xlabel(&#34;Parameter Value (mm)&#34;, fontsize=12)
+        ax1.set_ylabel(&#34;Quality Score&#34;, fontsize=12)
+        ax1.set_title(&#34;Quality Score vs Parameter Value&#34;, fontsize=14, pad=10)
+        ax1.grid(True, alpha=0.3)
+        ax1.set_ylim(0, 100)
+
+        # 标记最佳点
+        best_idx = scores.index(max(scores))
+        ax1.plot(
+            values[best_idx],
+            scores[best_idx],
+            &#34;r*&#34;,
+            markersize=20,
+            label=&#34;Best&#34;,
+        )
+        ax1.legend()
+
+        # 图2: 许用应力 vs 参数值
+        ax2.plot(values, allowable_stresses, &#34;g-s&#34;, linewidth=2, markersize=8)
+        ax2.set_xlabel(&#34;Parameter Value (mm)&#34;, fontsize=12)
+        ax2.set_ylabel(&#34;Allowable Stress (MPa)&#34;, fontsize=12)
+        ax2.set_title(&#34;Allowable Stress vs Parameter Value&#34;, fontsize=14, pad=10)
+        ax2.grid(True, alpha=0.3)
+
+        # 标记最佳点
+        ax2.plot(
+            values[best_idx],
+            allowable_stresses[best_idx],
+            &#34;r*&#34;,
+            markersize=20,
+            label=&#34;Best&#34;,
+        )
+        ax2.legend()
+
+        # 图3: 安全系数 vs 参数值
+        ax3.plot(values, safety_factors, &#34;m-^&#34;, linewidth=2, markersize=8)
+        ax3.set_xlabel(&#34;Parameter Value (mm)&#34;, fontsize=12)
+        ax3.set_ylabel(&#34;Safety Factor&#34;, fontsize=12)
+        ax3.set_title(&#34;Safety Factor vs Parameter Value&#34;, fontsize=14, pad=10)
+        ax3.grid(True, alpha=0.3)
+
+        # 标记最佳点
+        ax3.plot(
+            values[best_idx],
+            safety_factors[best_idx],
+            &#34;r*&#34;,
+            markersize=20,
+            label=&#34;Best&#34;,
+        )
+        ax3.legend()
+
+        plt.tight_layout()
+        plt.savefig(output_file, dpi=300, bbox_inches=&#34;tight&#34;)
+        plt.close()
+
+        self.log(f&#34;Plot saved: {output_file}&#34;)
+
+    except ImportError:
+        self.log(&#34;matplotlib not installed, skipping plot&#34;)
+    except Exception as e:
+        self.log(f&#34;Plot failed: {e}&#34;)</code></pre>
+</details>
+<div class="desc"><p>绘制优化结果图表</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.FreeCADOptimizer.set_progress_callback"><code class="name flex">
+<span>def <span class="ident">set_progress_callback</span></span>(<span>self, callback: Callable[[str], None])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_progress_callback(self, callback: Callable[[str], None]):
+    &#34;&#34;&#34;设置进度回调函数&#34;&#34;&#34;
+    self.progress_callback = callback</code></pre>
+</details>
+<div class="desc"><p>设置进度回调函数</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult"><code class="flex name class">
+<span>class <span class="ident">OptimizationResult</span></span>
+<span>(</span><span>iteration: int,<br>parameter_name: str,<br>parameter_value: float,<br>quality_score: float,<br>analysis_time: float,<br>timestamp: str,<br>allowable_stress: float = 0.0,<br>safety_factor: float = 0.0,<br>notes: str = '',<br>export_path: str = '')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class OptimizationResult:
+    &#34;&#34;&#34;优化结果数据类 - 包含更详细的信息&#34;&#34;&#34;
+
+    iteration: int
+    parameter_name: str
+    parameter_value: float
+    quality_score: float
+    analysis_time: float
+    timestamp: str
+    allowable_stress: float = 0.0
+    safety_factor: float = 0.0
+    notes: str = &#34;&#34;
+    export_path: str = &#34;&#34;</code></pre>
+</details>
+<div class="desc"><p>优化结果数据类 - 包含更详细的信息</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.allowable_stress"><code class="name">var <span class="ident">allowable_stress</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.analysis_time"><code class="name">var <span class="ident">analysis_time</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.export_path"><code class="name">var <span class="ident">export_path</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.iteration"><code class="name">var <span class="ident">iteration</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.notes"><code class="name">var <span class="ident">notes</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.parameter_name"><code class="name">var <span class="ident">parameter_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.parameter_value"><code class="name">var <span class="ident">parameter_value</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.quality_score"><code class="name">var <span class="ident">quality_score</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.safety_factor"><code class="name">var <span class="ident">safety_factor</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.optimization.optimizer.OptimizationResult.timestamp"><code class="name">var <span class="ident">timestamp</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.optimization" href="index.html">sw_helper.optimization</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer" href="#sw_helper.optimization.optimizer.FreeCADOptimizer">FreeCADOptimizer</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.connect" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.connect">connect</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.export_results" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.export_results">export_results</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.generate_report" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.generate_report">generate_report</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.log" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.log">log</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.optimize_parameter" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.optimize_parameter">optimize_parameter</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.plot_results" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.plot_results">plot_results</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.FreeCADOptimizer.set_progress_callback" href="#sw_helper.optimization.optimizer.FreeCADOptimizer.set_progress_callback">set_progress_callback</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.optimization.optimizer.OptimizationResult" href="#sw_helper.optimization.optimizer.OptimizationResult">OptimizationResult</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.allowable_stress" href="#sw_helper.optimization.optimizer.OptimizationResult.allowable_stress">allowable_stress</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.analysis_time" href="#sw_helper.optimization.optimizer.OptimizationResult.analysis_time">analysis_time</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.export_path" href="#sw_helper.optimization.optimizer.OptimizationResult.export_path">export_path</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.iteration" href="#sw_helper.optimization.optimizer.OptimizationResult.iteration">iteration</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.notes" href="#sw_helper.optimization.optimizer.OptimizationResult.notes">notes</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.parameter_name" href="#sw_helper.optimization.optimizer.OptimizationResult.parameter_name">parameter_name</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.parameter_value" href="#sw_helper.optimization.optimizer.OptimizationResult.parameter_value">parameter_value</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.quality_score" href="#sw_helper.optimization.optimizer.OptimizationResult.quality_score">quality_score</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.safety_factor" href="#sw_helper.optimization.optimizer.OptimizationResult.safety_factor">safety_factor</a></code></li>
+<li><code><a title="sw_helper.optimization.optimizer.OptimizationResult.timestamp" href="#sw_helper.optimization.optimizer.OptimizationResult.timestamp">timestamp</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

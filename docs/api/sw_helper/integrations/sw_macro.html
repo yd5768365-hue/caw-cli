@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.integrations.sw_macro API documentation</title>
+<meta name="description" content="SolidWorks VBA宏导出模块
+生成可在SolidWorks中运行的VBA宏代码">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.integrations.sw_macro</code></h1>
+</header>
+<section id="section-intro">
+<p>SolidWorks VBA宏导出模块
+生成可在SolidWorks中运行的VBA宏代码</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator"><code class="flex name class">
+<span>class <span class="ident">SolidWorksMacroGenerator</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SolidWorksMacroGenerator:
+    &#34;&#34;&#34;SolidWorks宏生成器&#34;&#34;&#34;
+
+    @staticmethod
+    def generate_export_macro(
+        output_path: str,
+        export_format: str = &#34;STEP&#34;,
+        call_cli: bool = True,
+        cli_path: str = &#34;cae-cli&#34;,
+    ) -&gt; str:
+        &#34;&#34;&#34;生成导出宏代码
+
+        Args:
+            output_path: 导出文件路径
+            export_format: 导出格式 (STEP, STL, IGES)
+            call_cli: 是否调用CLI分析
+            cli_path: CLI命令路径
+
+        Returns:
+            VBA宏代码
+        &#34;&#34;&#34;
+
+        format_map = {
+            &#34;STEP&#34;: (&#34;ExportSTEP&#34;, &#34;.step&#34;),
+            &#34;STL&#34;: (&#34;ExportSTL&#34;, &#34;.stl&#34;),
+            &#34;IGES&#34;: (&#34;ExportIGES&#34;, &#34;.iges&#34;),
+            &#34;PDF&#34;: (&#34;ExportPDF&#34;, &#34;.pdf&#34;),
+        }
+
+        export_func, ext = format_map.get(export_format, (&#34;ExportSTEP&#34;, &#34;.step&#34;))
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_Export&#34;
+&#39; CAE-CLI集成宏
+&#39; 自动生成，用于导出模型并调用CLI分析
+
+Sub ExportAndAnalyze()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    Dim longstatus As Long, longwarnings As Long
+    Dim filePath As String
+    Dim exportPath As String
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    &#39; 检查是否有打开的文档
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取当前文件路径
+    filePath = Part.GetPathName
+    If filePath = &#34;&#34; Then
+        MsgBox &#34;请先保存模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置导出路径
+    exportPath = &#34;{output_path}&#34;
+    If exportPath = &#34;&#34; Then
+        exportPath = Left(filePath, InStrRev(filePath, &#34;.&#34;) - 1) &amp; &#34;{ext}&#34;
+    End If
+    
+    &#39; 导出模型
+    On Error Resume Next
+    
+    Select Case &#34;{export_format}&#34;
+        Case &#34;STEP&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case &#34;STL&#34;
+            &#39; STL导出设置
+            Dim swStlExport As Object
+            Set swStlExport = Part.Extension.GetSTLExporter
+            If Not swStlExport Is Nothing Then
+                swStlExport.ExportBinary = False
+                swStlExport.ExportPath = exportPath
+                swStlExport.Save
+            End If
+        Case &#34;IGES&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case Else
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+    End Select
+    
+    If Err.Number &lt;&gt; 0 Then
+        MsgBox &#34;导出失败: &#34; &amp; Err.Description, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    On Error GoTo 0
+    
+    &#39; 显示导出成功
+    MsgBox &#34;模型已导出到:&#34; &amp; vbCrLf &amp; exportPath, vbInformation, &#34;CAE-CLI&#34;
+    
+    {&#34;Call CLI分析&#34; if call_cli else &#34;&#39;CLI分析已禁用&#34;}
+    {&#34;Dim shell As Object&#34; if call_cli else &#34;&#34;}
+    {&#39;Set shell = CreateObject(&#34;WScript.Shell&#34;)&#39; if call_cli else &#34;&#34;}
+    {&#34;Dim cliCommand As String&#34; if call_cli else &#34;&#34;}
+    {&#39;cliCommand = &#34;{cli_path} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;&#39; if call_cli else &#34;&#34;}
+    {&#34;shell.Run cliCommand, 1, False&#34; if call_cli else &#34;&#34;}
+    {&#34;Set shell = Nothing&#34; if call_cli else &#34;&#34;}
+    
+End Sub
+
+Sub ExportWithPrompt()
+    &#39; 带用户交互的导出
+    Dim exportPath As String
+    exportPath = InputBox(&#34;请输入导出路径:&#34;, &#34;CAE-CLI导出&#34;, &#34;C:\\Temp\\model.step&#34;)
+    
+    If exportPath &lt;&gt; &#34;&#34; Then
+        Call ExportAndAnalyze
+    End If
+End Sub
+&#39;&#39;&#39;
+        return macro_code
+
+    @staticmethod
+    def generate_parameter_macro() -&gt; str:
+        &#34;&#34;&#34;生成参数修改宏&#34;&#34;&#34;
+
+        macro_code = &#34;&#34;&#34;Attribute VB_Name = &#34;CAE_Parametric&#34;
+&#39; CAE-CLI参数化宏
+&#39; 用于修改参数并重建模型
+
+Sub ModifyParameters()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取自定义属性
+    Dim custProp As Object
+    Set custProp = Part.Extension.CustomPropertyManager(&#34;&#34;)
+    
+    &#39; 显示当前参数
+    Dim paramList As String
+    paramList = &#34;当前可修改参数:&#34; &amp; vbCrLf &amp; vbCrLf
+    
+    &#39; 这里可以读取特定的尺寸参数
+    Dim dimNames As Variant
+    dimNames = Array(&#34;Length&#34;, &#34;Width&#34;, &#34;Height&#34;, &#34;Fillet_R&#34;)
+    
+    Dim i As Integer
+    For i = LBound(dimNames) To UBound(dimNames)
+        Dim val As String
+        val = &#34;&#34;
+        On Error Resume Next
+        custProp.Get4 dimNames(i), False, val, val
+        If val &lt;&gt; &#34;&#34; Then
+            paramList = paramList &amp; dimNames(i) &amp; &#34; = &#34; &amp; val &amp; vbCrLf
+        End If
+        On Error GoTo 0
+    Next i
+    
+    MsgBox paramList, vbInformation, &#34;CAE-CLI参数&#34;
+    
+End Sub
+
+Sub UpdateDimension(dimensionName As String, newValue As Double)
+    &#39; 更新指定尺寸
+    Dim swApp As Object
+    Dim Part As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 查找并更新尺寸
+    Dim swDim As Object
+    Set swDim = Part.Parameter(dimensionName)
+    
+    If Not swDim Is Nothing Then
+        swDim.SystemValue = newValue / 1000  &#39; 转换为米
+        Part.EditRebuild3
+        MsgBox &#34;尺寸已更新: &#34; &amp; dimensionName &amp; &#34; = &#34; &amp; newValue &amp; &#34; mm&#34;, vbInformation, &#34;CAE-CLI&#34;
+    Else
+        MsgBox &#34;未找到尺寸: &#34; &amp; dimensionName, vbExclamation, &#34;CAE-CLI&#34;
+    End If
+End Sub
+
+Sub BatchUpdate()
+    &#39; 批量更新参数示例
+    Call UpdateDimension(&#34;Length&#34;, 120)
+    Call UpdateDimension(&#34;Fillet_R&#34;, 8)
+    
+    &#39; 导出并分析
+    Call ExportAndAnalyze
+End Sub
+&#34;&#34;&#34;
+        return macro_code
+
+    @staticmethod
+    def generate_full_integration_macro(cli_command: str = &#34;cae-cli&#34;) -&gt; str:
+        &#34;&#34;&#34;生成完整的集成宏&#34;&#34;&#34;
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_FullIntegration&#34;
+&#39; CAE-CLI完整集成宏
+&#39; 功能: 参数化修改 -&gt; 重建 -&gt; 导出 -&gt; CLI分析 -&gt; 显示报告
+
+Sub RunOptimization()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim shell As Object
+    Dim exportPath As String
+    Dim reportPath As String
+    
+    &#39; 初始化
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    Set shell = CreateObject(&#34;WScript.Shell&#34;)
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置路径
+    Dim tempDir As String
+    tempDir = Environ(&#34;TEMP&#34;) &amp; &#34;\\CAE-CLI\\&#34;
+    shell.Run &#34;cmd /c mkdir &#34;&#34;&#34; &amp; tempDir &amp; &#34;&#34;&#34;&#34;&#34;, 0, True
+    
+    exportPath = tempDir &amp; &#34;model.step&#34;
+    reportPath = tempDir &amp; &#34;report.html&#34;
+    
+    &#39; 第1步: 修改参数（示例：增大圆角）
+    Call ModifyFilletRadius(10)
+    
+    &#39; 第2步: 重建模型
+    Part.EditRebuild3
+    DoEvents
+    
+    &#39; 第3步: 导出STEP
+    Dim longstatus As Long
+    longstatus = Part.SaveAs3(exportPath, 0, 2)
+    
+    If longstatus = 1 Then
+        MsgBox &#34;导出失败!&#34;, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 第4步: 调用CLI分析
+    Dim cliCommand As String
+    cliCommand = &#34;{cli_command} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;
+    
+    MsgBox &#34;正在调用CAE-CLI分析...&#34; &amp; vbCrLf &amp; _
+           &#34;命令: &#34; &amp; cliCommand, vbInformation, &#34;CAE-CLI&#34;
+    
+    &#39; 执行CLI命令
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第5步: 生成报告
+    cliCommand = &#34;{cli_command} report static -i &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; -o &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第6步: 显示报告路径
+    If Dir(reportPath) &lt;&gt; &#34;&#34; Then
+        MsgBox &#34;分析完成!&#34; &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;报告路径:&#34; &amp; vbCrLf &amp; reportPath &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;是否打开报告?&#34;, vbQuestion + vbYesNo, &#34;CAE-CLI&#34;
+        
+        If vbYes Then
+            shell.Run &#34;explorer &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+        End If
+    Else
+        MsgBox &#34;分析完成，但未找到报告文件。&#34;, vbInformation, &#34;CAE-CLI&#34;
+    End If
+    
+    Set shell = Nothing
+    
+End Sub
+
+Sub ModifyFilletRadius(newRadius As Double)
+    &#39; 修改圆角半径
+    Dim swApp As Object
+    Dim Part As Object
+    Dim swFeat As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 遍历特征查找圆角
+    Set swFeat = Part.FirstFeature
+    
+    Do While Not swFeat Is Nothing
+        If swFeat.GetTypeName = &#34;Fillet&#34; Then
+            &#39; 找到圆角特征，修改半径
+            Dim swFillet As Object
+            Set swFillet = swFeat.GetSpecificFeature2
+            
+            &#39; 设置新半径（毫米转换为米）
+            swFillet.DefaultRadius = newRadius / 1000
+            
+            Exit Do
+        End If
+        Set swFeat = swFeat.GetNextFeature
+    Loop
+    
+End Sub
+
+Sub OptimizeLoop()
+    &#39; 简单优化循环：改圆角R -&gt; 看质量变化
+    Dim radii As Variant
+    radii = Array(2, 5, 10, 15)
+    
+    Dim i As Integer
+    For i = LBound(radii) To UBound(radii)
+        MsgBox &#34;正在测试圆角 R = &#34; &amp; radii(i) &amp; &#34; mm&#34;, vbInformation, &#34;优化循环&#34;
+        
+        Call ModifyFilletRadius(radii(i))
+        
+        &#39; 这里可以调用分析并记录结果
+        &#39; Call RunAnalysisAndRecord(radii(i))
+        
+    Next i
+    
+    MsgBox &#34;优化循环完成!&#34;, vbInformation, &#34;CAE-CLI&#34;
+End Sub
+&#39;&#39;&#39;
+        return macro_code
+
+    @staticmethod
+    def save_macro(macro_code: str, output_file: str):
+        &#34;&#34;&#34;保存宏到文件&#34;&#34;&#34;
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(macro_code)
+
+        return output_path</code></pre>
+</details>
+<div class="desc"><p>SolidWorks宏生成器</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_export_macro"><code class="name flex">
+<span>def <span class="ident">generate_export_macro</span></span>(<span>output_path: str,<br>export_format: str = 'STEP',<br>call_cli: bool = True,<br>cli_path: str = 'cae-cli') ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    @staticmethod
+    def generate_export_macro(
+        output_path: str,
+        export_format: str = &#34;STEP&#34;,
+        call_cli: bool = True,
+        cli_path: str = &#34;cae-cli&#34;,
+    ) -&gt; str:
+        &#34;&#34;&#34;生成导出宏代码
+
+        Args:
+            output_path: 导出文件路径
+            export_format: 导出格式 (STEP, STL, IGES)
+            call_cli: 是否调用CLI分析
+            cli_path: CLI命令路径
+
+        Returns:
+            VBA宏代码
+        &#34;&#34;&#34;
+
+        format_map = {
+            &#34;STEP&#34;: (&#34;ExportSTEP&#34;, &#34;.step&#34;),
+            &#34;STL&#34;: (&#34;ExportSTL&#34;, &#34;.stl&#34;),
+            &#34;IGES&#34;: (&#34;ExportIGES&#34;, &#34;.iges&#34;),
+            &#34;PDF&#34;: (&#34;ExportPDF&#34;, &#34;.pdf&#34;),
+        }
+
+        export_func, ext = format_map.get(export_format, (&#34;ExportSTEP&#34;, &#34;.step&#34;))
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_Export&#34;
+&#39; CAE-CLI集成宏
+&#39; 自动生成，用于导出模型并调用CLI分析
+
+Sub ExportAndAnalyze()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    Dim longstatus As Long, longwarnings As Long
+    Dim filePath As String
+    Dim exportPath As String
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    &#39; 检查是否有打开的文档
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取当前文件路径
+    filePath = Part.GetPathName
+    If filePath = &#34;&#34; Then
+        MsgBox &#34;请先保存模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置导出路径
+    exportPath = &#34;{output_path}&#34;
+    If exportPath = &#34;&#34; Then
+        exportPath = Left(filePath, InStrRev(filePath, &#34;.&#34;) - 1) &amp; &#34;{ext}&#34;
+    End If
+    
+    &#39; 导出模型
+    On Error Resume Next
+    
+    Select Case &#34;{export_format}&#34;
+        Case &#34;STEP&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case &#34;STL&#34;
+            &#39; STL导出设置
+            Dim swStlExport As Object
+            Set swStlExport = Part.Extension.GetSTLExporter
+            If Not swStlExport Is Nothing Then
+                swStlExport.ExportBinary = False
+                swStlExport.ExportPath = exportPath
+                swStlExport.Save
+            End If
+        Case &#34;IGES&#34;
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+        Case Else
+            longstatus = Part.SaveAs3(exportPath, 0, 2)
+    End Select
+    
+    If Err.Number &lt;&gt; 0 Then
+        MsgBox &#34;导出失败: &#34; &amp; Err.Description, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    On Error GoTo 0
+    
+    &#39; 显示导出成功
+    MsgBox &#34;模型已导出到:&#34; &amp; vbCrLf &amp; exportPath, vbInformation, &#34;CAE-CLI&#34;
+    
+    {&#34;Call CLI分析&#34; if call_cli else &#34;&#39;CLI分析已禁用&#34;}
+    {&#34;Dim shell As Object&#34; if call_cli else &#34;&#34;}
+    {&#39;Set shell = CreateObject(&#34;WScript.Shell&#34;)&#39; if call_cli else &#34;&#34;}
+    {&#34;Dim cliCommand As String&#34; if call_cli else &#34;&#34;}
+    {&#39;cliCommand = &#34;{cli_path} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;&#39; if call_cli else &#34;&#34;}
+    {&#34;shell.Run cliCommand, 1, False&#34; if call_cli else &#34;&#34;}
+    {&#34;Set shell = Nothing&#34; if call_cli else &#34;&#34;}
+    
+End Sub
+
+Sub ExportWithPrompt()
+    &#39; 带用户交互的导出
+    Dim exportPath As String
+    exportPath = InputBox(&#34;请输入导出路径:&#34;, &#34;CAE-CLI导出&#34;, &#34;C:\\Temp\\model.step&#34;)
+    
+    If exportPath &lt;&gt; &#34;&#34; Then
+        Call ExportAndAnalyze
+    End If
+End Sub
+&#39;&#39;&#39;
+        return macro_code</code></pre>
+</details>
+<div class="desc"><p>生成导出宏代码</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>output_path</code></strong></dt>
+<dd>导出文件路径</dd>
+<dt><strong><code>export_format</code></strong></dt>
+<dd>导出格式 (STEP, STL, IGES)</dd>
+<dt><strong><code>call_cli</code></strong></dt>
+<dd>是否调用CLI分析</dd>
+<dt><strong><code>cli_path</code></strong></dt>
+<dd>CLI命令路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>VBA宏代码</p></div>
+</dd>
+<dt id="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_full_integration_macro"><code class="name flex">
+<span>def <span class="ident">generate_full_integration_macro</span></span>(<span>cli_command: str = 'cae-cli') ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    @staticmethod
+    def generate_full_integration_macro(cli_command: str = &#34;cae-cli&#34;) -&gt; str:
+        &#34;&#34;&#34;生成完整的集成宏&#34;&#34;&#34;
+
+        macro_code = f&#39;&#39;&#39;Attribute VB_Name = &#34;CAE_FullIntegration&#34;
+&#39; CAE-CLI完整集成宏
+&#39; 功能: 参数化修改 -&gt; 重建 -&gt; 导出 -&gt; CLI分析 -&gt; 显示报告
+
+Sub RunOptimization()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim shell As Object
+    Dim exportPath As String
+    Dim reportPath As String
+    
+    &#39; 初始化
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    Set shell = CreateObject(&#34;WScript.Shell&#34;)
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 设置路径
+    Dim tempDir As String
+    tempDir = Environ(&#34;TEMP&#34;) &amp; &#34;\\CAE-CLI\\&#34;
+    shell.Run &#34;cmd /c mkdir &#34;&#34;&#34; &amp; tempDir &amp; &#34;&#34;&#34;&#34;&#34;, 0, True
+    
+    exportPath = tempDir &amp; &#34;model.step&#34;
+    reportPath = tempDir &amp; &#34;report.html&#34;
+    
+    &#39; 第1步: 修改参数（示例：增大圆角）
+    Call ModifyFilletRadius(10)
+    
+    &#39; 第2步: 重建模型
+    Part.EditRebuild3
+    DoEvents
+    
+    &#39; 第3步: 导出STEP
+    Dim longstatus As Long
+    longstatus = Part.SaveAs3(exportPath, 0, 2)
+    
+    If longstatus = 1 Then
+        MsgBox &#34;导出失败!&#34;, vbCritical, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 第4步: 调用CLI分析
+    Dim cliCommand As String
+    cliCommand = &#34;{cli_command} parse &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; --verbose&#34;
+    
+    MsgBox &#34;正在调用CAE-CLI分析...&#34; &amp; vbCrLf &amp; _
+           &#34;命令: &#34; &amp; cliCommand, vbInformation, &#34;CAE-CLI&#34;
+    
+    &#39; 执行CLI命令
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第5步: 生成报告
+    cliCommand = &#34;{cli_command} report static -i &#34;&#34;&#34; &amp; exportPath &amp; &#34;&#34;&#34; -o &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+    shell.Run cliCommand, 1, True
+    
+    &#39; 第6步: 显示报告路径
+    If Dir(reportPath) &lt;&gt; &#34;&#34; Then
+        MsgBox &#34;分析完成!&#34; &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;报告路径:&#34; &amp; vbCrLf &amp; reportPath &amp; vbCrLf &amp; vbCrLf &amp; _
+               &#34;是否打开报告?&#34;, vbQuestion + vbYesNo, &#34;CAE-CLI&#34;
+        
+        If vbYes Then
+            shell.Run &#34;explorer &#34;&#34;&#34; &amp; reportPath &amp; &#34;&#34;&#34;&#34;
+        End If
+    Else
+        MsgBox &#34;分析完成，但未找到报告文件。&#34;, vbInformation, &#34;CAE-CLI&#34;
+    End If
+    
+    Set shell = Nothing
+    
+End Sub
+
+Sub ModifyFilletRadius(newRadius As Double)
+    &#39; 修改圆角半径
+    Dim swApp As Object
+    Dim Part As Object
+    Dim swFeat As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 遍历特征查找圆角
+    Set swFeat = Part.FirstFeature
+    
+    Do While Not swFeat Is Nothing
+        If swFeat.GetTypeName = &#34;Fillet&#34; Then
+            &#39; 找到圆角特征，修改半径
+            Dim swFillet As Object
+            Set swFillet = swFeat.GetSpecificFeature2
+            
+            &#39; 设置新半径（毫米转换为米）
+            swFillet.DefaultRadius = newRadius / 1000
+            
+            Exit Do
+        End If
+        Set swFeat = swFeat.GetNextFeature
+    Loop
+    
+End Sub
+
+Sub OptimizeLoop()
+    &#39; 简单优化循环：改圆角R -&gt; 看质量变化
+    Dim radii As Variant
+    radii = Array(2, 5, 10, 15)
+    
+    Dim i As Integer
+    For i = LBound(radii) To UBound(radii)
+        MsgBox &#34;正在测试圆角 R = &#34; &amp; radii(i) &amp; &#34; mm&#34;, vbInformation, &#34;优化循环&#34;
+        
+        Call ModifyFilletRadius(radii(i))
+        
+        &#39; 这里可以调用分析并记录结果
+        &#39; Call RunAnalysisAndRecord(radii(i))
+        
+    Next i
+    
+    MsgBox &#34;优化循环完成!&#34;, vbInformation, &#34;CAE-CLI&#34;
+End Sub
+&#39;&#39;&#39;
+        return macro_code</code></pre>
+</details>
+<div class="desc"><p>生成完整的集成宏</p></div>
+</dd>
+<dt id="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_parameter_macro"><code class="name flex">
+<span>def <span class="ident">generate_parameter_macro</span></span>(<span>) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    @staticmethod
+    def generate_parameter_macro() -&gt; str:
+        &#34;&#34;&#34;生成参数修改宏&#34;&#34;&#34;
+
+        macro_code = &#34;&#34;&#34;Attribute VB_Name = &#34;CAE_Parametric&#34;
+&#39; CAE-CLI参数化宏
+&#39; 用于修改参数并重建模型
+
+Sub ModifyParameters()
+    Dim swApp As Object
+    Dim Part As Object
+    Dim boolstatus As Boolean
+    
+    &#39; 获取SolidWorks应用
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then
+        MsgBox &#34;请先打开一个模型!&#34;, vbExclamation, &#34;CAE-CLI&#34;
+        Exit Sub
+    End If
+    
+    &#39; 获取自定义属性
+    Dim custProp As Object
+    Set custProp = Part.Extension.CustomPropertyManager(&#34;&#34;)
+    
+    &#39; 显示当前参数
+    Dim paramList As String
+    paramList = &#34;当前可修改参数:&#34; &amp; vbCrLf &amp; vbCrLf
+    
+    &#39; 这里可以读取特定的尺寸参数
+    Dim dimNames As Variant
+    dimNames = Array(&#34;Length&#34;, &#34;Width&#34;, &#34;Height&#34;, &#34;Fillet_R&#34;)
+    
+    Dim i As Integer
+    For i = LBound(dimNames) To UBound(dimNames)
+        Dim val As String
+        val = &#34;&#34;
+        On Error Resume Next
+        custProp.Get4 dimNames(i), False, val, val
+        If val &lt;&gt; &#34;&#34; Then
+            paramList = paramList &amp; dimNames(i) &amp; &#34; = &#34; &amp; val &amp; vbCrLf
+        End If
+        On Error GoTo 0
+    Next i
+    
+    MsgBox paramList, vbInformation, &#34;CAE-CLI参数&#34;
+    
+End Sub
+
+Sub UpdateDimension(dimensionName As String, newValue As Double)
+    &#39; 更新指定尺寸
+    Dim swApp As Object
+    Dim Part As Object
+    
+    Set swApp = Application.SldWorks
+    Set Part = swApp.ActiveDoc
+    
+    If Part Is Nothing Then Exit Sub
+    
+    &#39; 查找并更新尺寸
+    Dim swDim As Object
+    Set swDim = Part.Parameter(dimensionName)
+    
+    If Not swDim Is Nothing Then
+        swDim.SystemValue = newValue / 1000  &#39; 转换为米
+        Part.EditRebuild3
+        MsgBox &#34;尺寸已更新: &#34; &amp; dimensionName &amp; &#34; = &#34; &amp; newValue &amp; &#34; mm&#34;, vbInformation, &#34;CAE-CLI&#34;
+    Else
+        MsgBox &#34;未找到尺寸: &#34; &amp; dimensionName, vbExclamation, &#34;CAE-CLI&#34;
+    End If
+End Sub
+
+Sub BatchUpdate()
+    &#39; 批量更新参数示例
+    Call UpdateDimension(&#34;Length&#34;, 120)
+    Call UpdateDimension(&#34;Fillet_R&#34;, 8)
+    
+    &#39; 导出并分析
+    Call ExportAndAnalyze
+End Sub
+&#34;&#34;&#34;
+        return macro_code</code></pre>
+</details>
+<div class="desc"><p>生成参数修改宏</p></div>
+</dd>
+<dt id="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.save_macro"><code class="name flex">
+<span>def <span class="ident">save_macro</span></span>(<span>macro_code: str, output_file: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def save_macro(macro_code: str, output_file: str):
+    &#34;&#34;&#34;保存宏到文件&#34;&#34;&#34;
+    output_path = Path(output_file)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+        f.write(macro_code)
+
+    return output_path</code></pre>
+</details>
+<div class="desc"><p>保存宏到文件</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.integrations" href="index.html">sw_helper.integrations</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator" href="#sw_helper.integrations.sw_macro.SolidWorksMacroGenerator">SolidWorksMacroGenerator</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_export_macro" href="#sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_export_macro">generate_export_macro</a></code></li>
+<li><code><a title="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_full_integration_macro" href="#sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_full_integration_macro">generate_full_integration_macro</a></code></li>
+<li><code><a title="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_parameter_macro" href="#sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.generate_parameter_macro">generate_parameter_macro</a></code></li>
+<li><code><a title="sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.save_macro" href="#sw_helper.integrations.sw_macro.SolidWorksMacroGenerator.save_macro">save_macro</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

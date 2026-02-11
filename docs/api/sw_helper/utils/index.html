@@ -1,0 +1,1443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.utils API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.utils</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.utils.dependency_checker" href="dependency_checker.html">sw_helper.utils.dependency_checker</a></code></dt>
+<dd>
+<div class="desc"><p>依赖检查和降级方案 - 确保核心功能可用 …</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.utils.encoding_helper" href="encoding_helper.html">sw_helper.utils.encoding_helper</a></code></dt>
+<dd>
+<div class="desc"><p>编码问题解决方案 - 自动检测和配置系统编码 …</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.utils.error_handler" href="error_handler.html">sw_helper.utils.error_handler</a></code></dt>
+<dd>
+<div class="desc"><p>全局错误处理方案 - 提供友好的错误信息 …</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.utils.logger" href="logger.html">sw_helper.utils.logger</a></code></dt>
+<dd>
+<div class="desc"><p>日志工具模块</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.utils.validator" href="validator.html">sw_helper.utils.validator</a></code></dt>
+<dd>
+<div class="desc"><p>验证工具模块</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.utils.create_dependency_checker"><code class="name flex">
+<span>def <span class="ident">create_dependency_checker</span></span>(<span>console: rich.console.Console | None = None) ‑> <a title="sw_helper.utils.dependency_checker.DependencyChecker" href="dependency_checker.html#sw_helper.utils.dependency_checker.DependencyChecker">DependencyChecker</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_dependency_checker(console: Optional[Console] = None) -&gt; DependencyChecker:
+    &#34;&#34;&#34;创建依赖检查器实例
+
+    Args:
+        console: Rich Console 实例
+
+    Returns:
+        DependencyChecker: 依赖检查器实例
+    &#34;&#34;&#34;
+    return DependencyChecker(console)</code></pre>
+</details>
+<div class="desc"><p>创建依赖检查器实例</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>console</code></strong></dt>
+<dd>Rich Console 实例</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="sw_helper.utils.DependencyChecker" href="#sw_helper.utils.DependencyChecker">DependencyChecker</a></code></dt>
+<dd>依赖检查器实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.create_error_handler"><code class="name flex">
+<span>def <span class="ident">create_error_handler</span></span>(<span>console: rich.console.Console | None = None, debug: bool = False) ‑> <a title="sw_helper.utils.error_handler.ErrorHandler" href="error_handler.html#sw_helper.utils.error_handler.ErrorHandler">ErrorHandler</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_error_handler(console: Optional[Console] = None, debug: bool = False) -&gt; ErrorHandler:
+    &#34;&#34;&#34;创建错误处理器实例
+
+    Args:
+        console: Rich Console 实例
+        debug: 是否启用调试模式
+
+    Returns:
+        ErrorHandler: 错误处理器实例
+    &#34;&#34;&#34;
+    return ErrorHandler(console, debug)</code></pre>
+</details>
+<div class="desc"><p>创建错误处理器实例</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>console</code></strong></dt>
+<dd>Rich Console 实例</dd>
+<dt><strong><code>debug</code></strong></dt>
+<dd>是否启用调试模式</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="sw_helper.utils.ErrorHandler" href="#sw_helper.utils.ErrorHandler">ErrorHandler</a></code></dt>
+<dd>错误处理器实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.get_encoding_helper"><code class="name flex">
+<span>def <span class="ident">get_encoding_helper</span></span>(<span>) ‑> <a title="sw_helper.utils.encoding_helper.EncodingHelper" href="encoding_helper.html#sw_helper.utils.encoding_helper.EncodingHelper">EncodingHelper</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_encoding_helper() -&gt; EncodingHelper:
+    &#34;&#34;&#34;获取编码助手的单例实例
+
+    Returns:
+        EncodingHelper: 单例实例
+    &#34;&#34;&#34;
+    global _helper_instance
+    if _helper_instance is None:
+        _helper_instance = EncodingHelper()
+    return _helper_instance</code></pre>
+</details>
+<div class="desc"><p>获取编码助手的单例实例</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="sw_helper.utils.EncodingHelper" href="#sw_helper.utils.EncodingHelper">EncodingHelper</a></code></dt>
+<dd>单例实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.handle_error"><code class="name flex">
+<span>def <span class="ident">handle_error</span></span>(<span>func: Callable) ‑> Callable</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_error(func: Callable) -&gt; Callable:
+    &#34;&#34;&#34;装饰器：统一处理函数异常&#34;&#34;&#34;
+
+    def wrapper(*args, **kwargs):
+        error_handler = create_error_handler()
+        try:
+            return func(*args, **kwargs)
+        except KeyboardInterrupt:
+            error_handler.handle_keyboard_interrupt()
+            return False
+        except Exception as e:
+            error_handler.handle_exception(e)
+            return False
+        except:
+            error_handler.handle_unknown_error(sys.exc_info()[1])
+            return False
+
+    return wrapper</code></pre>
+</details>
+<div class="desc"><p>装饰器：统一处理函数异常</p></div>
+</dd>
+<dt id="sw_helper.utils.setup_logger"><code class="name flex">
+<span>def <span class="ident">setup_logger</span></span>(<span>name: str = 'sw_helper', level: int = 20, log_file: str | None = None) ‑> logging.Logger</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_logger(
+    name: str = &#34;sw_helper&#34;, level: int = logging.INFO, log_file: Optional[str] = None
+) -&gt; logging.Logger:
+    &#34;&#34;&#34;设置日志记录器
+
+    Args:
+        name: 日志记录器名称
+        level: 日志级别
+        log_file: 日志文件路径
+
+    Returns:
+        配置好的日志记录器
+    &#34;&#34;&#34;
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+
+    # 清除现有处理器
+    logger.handlers.clear()
+
+    # 创建格式器
+    formatter = logging.Formatter(
+        &#34;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#34;,
+        datefmt=&#34;%Y-%m-%d %H:%M:%S&#34;,
+    )
+
+    # 控制台处理器
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(level)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    # 文件处理器
+    if log_file:
+        log_path = Path(log_file)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+
+        file_handler = logging.FileHandler(log_file, encoding=&#34;utf-8&#34;)
+        file_handler.setLevel(level)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+    return logger</code></pre>
+</details>
+<div class="desc"><p>设置日志记录器</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>日志记录器名称</dd>
+<dt><strong><code>level</code></strong></dt>
+<dd>日志级别</dd>
+<dt><strong><code>log_file</code></strong></dt>
+<dd>日志文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>配置好的日志记录器</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.utils.ColoredFormatter"><code class="flex name class">
+<span>class <span class="ident">ColoredFormatter</span></span>
+<span>(</span><span>fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ColoredFormatter(logging.Formatter):
+    &#34;&#34;&#34;带颜色的日志格式器&#34;&#34;&#34;
+
+    COLORS = {
+        &#34;DEBUG&#34;: &#34;\033[36m&#34;,  # 青色
+        &#34;INFO&#34;: &#34;\033[32m&#34;,  # 绿色
+        &#34;WARNING&#34;: &#34;\033[33m&#34;,  # 黄色
+        &#34;ERROR&#34;: &#34;\033[31m&#34;,  # 红色
+        &#34;CRITICAL&#34;: &#34;\033[35m&#34;,  # 紫色
+        &#34;RESET&#34;: &#34;\033[0m&#34;,  # 重置
+    }
+
+    def format(self, record):
+        log_color = self.COLORS.get(record.levelname, self.COLORS[&#34;RESET&#34;])
+        reset = self.COLORS[&#34;RESET&#34;]
+
+        record.levelname = f&#34;{log_color}{record.levelname}{reset}&#34;
+        return super().format(record)</code></pre>
+</details>
+<div class="desc"><p>带颜色的日志格式器</p>
+<p>Initialize the formatter with specified format strings.</p>
+<p>Initialize the formatter either with the specified format string, or a
+default as described above. Allow for specialized date formatting with
+the optional datefmt argument. If datefmt is omitted, you get an
+ISO8601-like (or RFC 3339-like) format.</p>
+<p>Use a style parameter of '%', '{' or '$' to specify that you want to
+use one of %-formatting, :meth:<code>str.format</code> (<code>{}</code>) formatting or
+:class:<code>string.Template</code> formatting in your format string.</p>
+<div class="admonition versionchanged">
+<p class="admonition-title">Changed in version:&ensp;3.2</p>
+<p>Added the <code>style</code> parameter.</p>
+</div></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>logging.Formatter</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sw_helper.utils.ColoredFormatter.COLORS"><code class="name">var <span class="ident">COLORS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.utils.ColoredFormatter.format"><code class="name flex">
+<span>def <span class="ident">format</span></span>(<span>self, record)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format(self, record):
+    log_color = self.COLORS.get(record.levelname, self.COLORS[&#34;RESET&#34;])
+    reset = self.COLORS[&#34;RESET&#34;]
+
+    record.levelname = f&#34;{log_color}{record.levelname}{reset}&#34;
+    return super().format(record)</code></pre>
+</details>
+<div class="desc"><p>Format the specified record as text.</p>
+<p>The record's attribute dictionary is used as the operand to a
+string formatting operation which yields the returned string.
+Before formatting the dictionary, a couple of preparatory steps
+are carried out. The message attribute of the record is computed
+using LogRecord.getMessage(). If the formatting string uses the
+time (as determined by a call to usesTime(), formatTime() is
+called to format the event time. If there is exception information,
+it is formatted using formatException() and appended to the message.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.utils.DependencyChecker"><code class="flex name class">
+<span>class <span class="ident">DependencyChecker</span></span>
+<span>(</span><span>console: rich.console.Console | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DependencyChecker:
+    &#34;&#34;&#34;依赖检查器&#34;&#34;&#34;
+
+    def __init__(self, console: Optional[Console] = None):
+        self.console = console or Console()
+        self.dependency_status: Dict[Dependency, Dict] = {}
+
+    def _check_single_dependency(self, dependency: Dependency) -&gt; Dict:
+        &#34;&#34;&#34;检查单个依赖项
+
+        Returns:
+            Dict: 包含状态、版本、错误信息的字典
+        &#34;&#34;&#34;
+        status = {
+            &#34;is_installed&#34;: False,
+            &#34;version&#34;: None,
+            &#34;error&#34;: None,
+        }
+
+        try:
+            module = __import__(dependency.module_name)
+            status[&#34;is_installed&#34;] = True
+
+            # 尝试获取版本
+            if hasattr(module, &#34;__version__&#34;):
+                status[&#34;version&#34;] = module.__version__
+            elif hasattr(module, &#34;__VERSION__&#34;):
+                status[&#34;version&#34;] = module.__VERSION__
+            else:
+                status[&#34;version&#34;] = &#34;Unknown&#34;
+
+        except ImportError as e:
+            status[&#34;error&#34;] = str(e)
+        except Exception as e:
+            status[&#34;error&#34;] = f&#34;导入模块时出错: {e}&#34;
+
+        return status
+
+    def check_all_dependencies(self) -&gt; Dict[Dependency, Dict]:
+        &#34;&#34;&#34;检查所有核心依赖项
+
+        Returns:
+            Dict: 依赖项状态字典
+        &#34;&#34;&#34;
+        self.console.print(&#34;正在检查核心依赖项...&#34;, style=&#34;blue&#34;)
+
+        for dep in CORE_DEPENDENCIES:
+            self.console.print(f&#34;检查 {dep.name}...&#34;, style=&#34;dim&#34;)
+            status = self._check_single_dependency(dep)
+            self.dependency_status[dep] = status
+
+        return self.dependency_status
+
+    def get_status_report(self) -&gt; str:
+        &#34;&#34;&#34;获取依赖状态报告&#34;&#34;&#34;
+        table = Table(title=&#34;依赖状态报告&#34;, show_header=True, header_style=&#34;bold&#34;)
+        table.add_column(&#34;依赖名称&#34;, style=&#34;cyan&#34;)
+        table.add_column(&#34;模块名称&#34;, style=&#34;magenta&#34;)
+        table.add_column(&#34;状态&#34;, style=&#34;green&#34;)
+        table.add_column(&#34;版本&#34;, style=&#34;blue&#34;)
+        table.add_column(&#34;错误信息&#34;, style=&#34;red&#34;)
+
+        for dep, status in self.dependency_status.items():
+            if status[&#34;is_installed&#34;]:
+                status_text = &#34;[OK]&#34;
+                version_text = status[&#34;version&#34;] or &#34;Unknown&#34;
+                error_text = &#34;&#34;
+            else:
+                status_text = &#34;[ERROR]&#34;
+                version_text = &#34;&#34;
+                error_text = status[&#34;error&#34;] or &#34;&#34;
+
+            table.add_row(dep.name, dep.module_name, status_text, version_text, error_text)
+
+        return table
+
+    def get_missing_dependencies(self) -&gt; List[Dependency]:
+        &#34;&#34;&#34;获取缺失的依赖项
+
+        Returns:
+            List[Dependency]: 缺失的依赖项列表
+        &#34;&#34;&#34;
+        missing = []
+        for dep, status in self.dependency_status.items():
+            if not status[&#34;is_installed&#34;]:
+                missing.append(dep)
+        return missing
+
+    def get_install_commands(self) -&gt; List[str]:
+        &#34;&#34;&#34;获取安装命令
+
+        Returns:
+            List[str]: pip 安装命令列表
+        &#34;&#34;&#34;
+        commands = []
+        for dep, status in self.dependency_status.items():
+            if not status[&#34;is_installed&#34;]:
+                commands.append(dep.install_command)
+        return commands
+
+    def get_fallback_options(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;获取功能降级选项
+
+        Returns:
+            Dict: 功能降级选项字典
+        &#34;&#34;&#34;
+        fallback_options = {}
+        for dep, status in self.dependency_status.items():
+            if not status[&#34;is_installed&#34;] and dep.fallback:
+                fallback_status = self._check_single_dependency(
+                    Dependency(name=f&#34;{dep.fallback}&#34;, module_name=dep.fallback)
+                )
+                if fallback_status[&#34;is_installed&#34;]:
+                    fallback_options[dep.module_name] = dep.fallback
+
+        return fallback_options
+
+    def print_report(self) -&gt; None:
+        &#34;&#34;&#34;打印依赖状态报告&#34;&#34;&#34;
+        report = self.get_status_report()
+        self.console.print(report)
+
+        # 打印安装命令
+        missing_deps = self.get_missing_dependencies()
+        if missing_deps:
+            self.console.print(&#34;\n缺失的依赖项安装命令:&#34;, style=&#34;bold&#34;)
+            for dep in missing_deps:
+                self.console.print(f&#34;  {dep.install_command}&#34;, style=&#34;yellow&#34;)
+
+        # 打印完整安装命令
+        full_command = &#34;pip install click rich pint pyyaml numpy meshio trimesh gmsh&#34;
+        self.console.print(f&#34;\n完整安装命令:\n  {full_command}&#34;, style=&#34;cyan&#34;)
+
+        # 打印功能降级信息
+        fallback_options = self.get_fallback_options()
+        if fallback_options:
+            self.console.print(&#34;\n功能降级选项:&#34;, style=&#34;bold&#34;)
+            for module, fallback in fallback_options.items():
+                self.console.print(f&#34;  {module} → {fallback}&#34;, style=&#34;green&#34;)</code></pre>
+</details>
+<div class="desc"><p>依赖检查器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.utils.DependencyChecker.check_all_dependencies"><code class="name flex">
+<span>def <span class="ident">check_all_dependencies</span></span>(<span>self) ‑> Dict[<a title="sw_helper.utils.dependency_checker.Dependency" href="dependency_checker.html#sw_helper.utils.dependency_checker.Dependency">Dependency</a>, Dict]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_all_dependencies(self) -&gt; Dict[Dependency, Dict]:
+    &#34;&#34;&#34;检查所有核心依赖项
+
+    Returns:
+        Dict: 依赖项状态字典
+    &#34;&#34;&#34;
+    self.console.print(&#34;正在检查核心依赖项...&#34;, style=&#34;blue&#34;)
+
+    for dep in CORE_DEPENDENCIES:
+        self.console.print(f&#34;检查 {dep.name}...&#34;, style=&#34;dim&#34;)
+        status = self._check_single_dependency(dep)
+        self.dependency_status[dep] = status
+
+    return self.dependency_status</code></pre>
+</details>
+<div class="desc"><p>检查所有核心依赖项</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict</code></dt>
+<dd>依赖项状态字典</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.DependencyChecker.get_fallback_options"><code class="name flex">
+<span>def <span class="ident">get_fallback_options</span></span>(<span>self) ‑> Dict[str, str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_fallback_options(self) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;获取功能降级选项
+
+    Returns:
+        Dict: 功能降级选项字典
+    &#34;&#34;&#34;
+    fallback_options = {}
+    for dep, status in self.dependency_status.items():
+        if not status[&#34;is_installed&#34;] and dep.fallback:
+            fallback_status = self._check_single_dependency(
+                Dependency(name=f&#34;{dep.fallback}&#34;, module_name=dep.fallback)
+            )
+            if fallback_status[&#34;is_installed&#34;]:
+                fallback_options[dep.module_name] = dep.fallback
+
+    return fallback_options</code></pre>
+</details>
+<div class="desc"><p>获取功能降级选项</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict</code></dt>
+<dd>功能降级选项字典</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.DependencyChecker.get_install_commands"><code class="name flex">
+<span>def <span class="ident">get_install_commands</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_install_commands(self) -&gt; List[str]:
+    &#34;&#34;&#34;获取安装命令
+
+    Returns:
+        List[str]: pip 安装命令列表
+    &#34;&#34;&#34;
+    commands = []
+    for dep, status in self.dependency_status.items():
+        if not status[&#34;is_installed&#34;]:
+            commands.append(dep.install_command)
+    return commands</code></pre>
+</details>
+<div class="desc"><p>获取安装命令</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[str]</code></dt>
+<dd>pip 安装命令列表</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.DependencyChecker.get_missing_dependencies"><code class="name flex">
+<span>def <span class="ident">get_missing_dependencies</span></span>(<span>self) ‑> List[<a title="sw_helper.utils.dependency_checker.Dependency" href="dependency_checker.html#sw_helper.utils.dependency_checker.Dependency">Dependency</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_missing_dependencies(self) -&gt; List[Dependency]:
+    &#34;&#34;&#34;获取缺失的依赖项
+
+    Returns:
+        List[Dependency]: 缺失的依赖项列表
+    &#34;&#34;&#34;
+    missing = []
+    for dep, status in self.dependency_status.items():
+        if not status[&#34;is_installed&#34;]:
+            missing.append(dep)
+    return missing</code></pre>
+</details>
+<div class="desc"><p>获取缺失的依赖项</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[Dependency]</code></dt>
+<dd>缺失的依赖项列表</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.DependencyChecker.get_status_report"><code class="name flex">
+<span>def <span class="ident">get_status_report</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_status_report(self) -&gt; str:
+    &#34;&#34;&#34;获取依赖状态报告&#34;&#34;&#34;
+    table = Table(title=&#34;依赖状态报告&#34;, show_header=True, header_style=&#34;bold&#34;)
+    table.add_column(&#34;依赖名称&#34;, style=&#34;cyan&#34;)
+    table.add_column(&#34;模块名称&#34;, style=&#34;magenta&#34;)
+    table.add_column(&#34;状态&#34;, style=&#34;green&#34;)
+    table.add_column(&#34;版本&#34;, style=&#34;blue&#34;)
+    table.add_column(&#34;错误信息&#34;, style=&#34;red&#34;)
+
+    for dep, status in self.dependency_status.items():
+        if status[&#34;is_installed&#34;]:
+            status_text = &#34;[OK]&#34;
+            version_text = status[&#34;version&#34;] or &#34;Unknown&#34;
+            error_text = &#34;&#34;
+        else:
+            status_text = &#34;[ERROR]&#34;
+            version_text = &#34;&#34;
+            error_text = status[&#34;error&#34;] or &#34;&#34;
+
+        table.add_row(dep.name, dep.module_name, status_text, version_text, error_text)
+
+    return table</code></pre>
+</details>
+<div class="desc"><p>获取依赖状态报告</p></div>
+</dd>
+<dt id="sw_helper.utils.DependencyChecker.print_report"><code class="name flex">
+<span>def <span class="ident">print_report</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def print_report(self) -&gt; None:
+    &#34;&#34;&#34;打印依赖状态报告&#34;&#34;&#34;
+    report = self.get_status_report()
+    self.console.print(report)
+
+    # 打印安装命令
+    missing_deps = self.get_missing_dependencies()
+    if missing_deps:
+        self.console.print(&#34;\n缺失的依赖项安装命令:&#34;, style=&#34;bold&#34;)
+        for dep in missing_deps:
+            self.console.print(f&#34;  {dep.install_command}&#34;, style=&#34;yellow&#34;)
+
+    # 打印完整安装命令
+    full_command = &#34;pip install click rich pint pyyaml numpy meshio trimesh gmsh&#34;
+    self.console.print(f&#34;\n完整安装命令:\n  {full_command}&#34;, style=&#34;cyan&#34;)
+
+    # 打印功能降级信息
+    fallback_options = self.get_fallback_options()
+    if fallback_options:
+        self.console.print(&#34;\n功能降级选项:&#34;, style=&#34;bold&#34;)
+        for module, fallback in fallback_options.items():
+            self.console.print(f&#34;  {module} → {fallback}&#34;, style=&#34;green&#34;)</code></pre>
+</details>
+<div class="desc"><p>打印依赖状态报告</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.utils.EncodingHelper"><code class="flex name class">
+<span>class <span class="ident">EncodingHelper</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EncodingHelper:
+    &#34;&#34;&#34;编码问题解决方案的高级接口&#34;&#34;&#34;
+
+    def __init__(self):
+        self.encoding = detect_system_encoding()
+        self.use_ascii_fallback = should_use_ascii_fallback()
+        self.console = configure_console()
+        set_encoding_env()
+
+    def print(self, text: str) -&gt; None:
+        &#34;&#34;&#34;安全打印方法&#34;&#34;&#34;
+        safe_print(text, self.console)
+
+    def format_text(self, text: str) -&gt; str:
+        &#34;&#34;&#34;格式化文本，根据环境选择是否使用 ASCII 回退
+
+        Args:
+            text: 要格式化的文本
+
+        Returns:
+            str: 格式化后的文本
+        &#34;&#34;&#34;
+        return ascii_fallback(text)
+
+    def get_encoding_info(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;获取编码信息
+
+        Returns:
+            Dict[str, Any]: 编码信息字典
+        &#34;&#34;&#34;
+        return {
+            &#34;platform&#34;: sys.platform,
+            &#34;detected_encoding&#34;: self.encoding,
+            &#34;color_system&#34;: self.console.color_system,
+            &#34;using_ascii_fallback&#34;: self.use_ascii_fallback,
+            &#34;console_supports_unicode&#34;: not self.use_ascii_fallback,
+        }
+
+    def test_unicode_support(self, chars: Optional[str] = None) -&gt; Dict[str, bool]:
+        &#34;&#34;&#34;测试控制台的 Unicode 支持情况
+
+        Args:
+            chars: 要测试的字符，默认为常用字符
+
+        Returns:
+            Dict[str, bool]: 字符支持情况字典
+        &#34;&#34;&#34;
+        if chars is None:
+            chars = &#34;✅❌⚠️🔧📊&#34;
+
+        results = {}
+        for char in chars:
+            try:
+                char.encode(sys.stdout.encoding)
+                results[char] = True
+            except UnicodeEncodeError:
+                results[char] = False
+
+        return results</code></pre>
+</details>
+<div class="desc"><p>编码问题解决方案的高级接口</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.utils.EncodingHelper.format_text"><code class="name flex">
+<span>def <span class="ident">format_text</span></span>(<span>self, text: str) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_text(self, text: str) -&gt; str:
+    &#34;&#34;&#34;格式化文本，根据环境选择是否使用 ASCII 回退
+
+    Args:
+        text: 要格式化的文本
+
+    Returns:
+        str: 格式化后的文本
+    &#34;&#34;&#34;
+    return ascii_fallback(text)</code></pre>
+</details>
+<div class="desc"><p>格式化文本，根据环境选择是否使用 ASCII 回退</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong></dt>
+<dd>要格式化的文本</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>格式化后的文本</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.EncodingHelper.get_encoding_info"><code class="name flex">
+<span>def <span class="ident">get_encoding_info</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_encoding_info(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;获取编码信息
+
+    Returns:
+        Dict[str, Any]: 编码信息字典
+    &#34;&#34;&#34;
+    return {
+        &#34;platform&#34;: sys.platform,
+        &#34;detected_encoding&#34;: self.encoding,
+        &#34;color_system&#34;: self.console.color_system,
+        &#34;using_ascii_fallback&#34;: self.use_ascii_fallback,
+        &#34;console_supports_unicode&#34;: not self.use_ascii_fallback,
+    }</code></pre>
+</details>
+<div class="desc"><p>获取编码信息</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>编码信息字典</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.EncodingHelper.print"><code class="name flex">
+<span>def <span class="ident">print</span></span>(<span>self, text: str) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def print(self, text: str) -&gt; None:
+    &#34;&#34;&#34;安全打印方法&#34;&#34;&#34;
+    safe_print(text, self.console)</code></pre>
+</details>
+<div class="desc"><p>安全打印方法</p></div>
+</dd>
+<dt id="sw_helper.utils.EncodingHelper.test_unicode_support"><code class="name flex">
+<span>def <span class="ident">test_unicode_support</span></span>(<span>self, chars: str | None = None) ‑> Dict[str, bool]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_unicode_support(self, chars: Optional[str] = None) -&gt; Dict[str, bool]:
+    &#34;&#34;&#34;测试控制台的 Unicode 支持情况
+
+    Args:
+        chars: 要测试的字符，默认为常用字符
+
+    Returns:
+        Dict[str, bool]: 字符支持情况字典
+    &#34;&#34;&#34;
+    if chars is None:
+        chars = &#34;✅❌⚠️🔧📊&#34;
+
+    results = {}
+    for char in chars:
+        try:
+            char.encode(sys.stdout.encoding)
+            results[char] = True
+        except UnicodeEncodeError:
+            results[char] = False
+
+    return results</code></pre>
+</details>
+<div class="desc"><p>测试控制台的 Unicode 支持情况</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>chars</code></strong></dt>
+<dd>要测试的字符，默认为常用字符</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, bool]</code></dt>
+<dd>字符支持情况字典</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.utils.ErrorHandler"><code class="flex name class">
+<span>class <span class="ident">ErrorHandler</span></span>
+<span>(</span><span>console: rich.console.Console | None = None, debug: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ErrorHandler:
+    &#34;&#34;&#34;全局错误处理器&#34;&#34;&#34;
+
+    def __init__(self, console: Optional[Console] = None, debug: bool = False):
+        self.console = console or Console()
+        self.debug = debug
+        self.encoding_helper = get_encoding_helper()
+
+    def _get_error_color(self, error_type: str) -&gt; Style:
+        &#34;&#34;&#34;根据错误类型返回颜色样式&#34;&#34;&#34;
+        colors = {
+            &#34;CRITICAL&#34;: &#34;bold red&#34;,
+            &#34;ERROR&#34;: &#34;red&#34;,
+            &#34;WARNING&#34;: &#34;yellow&#34;,
+            &#34;INFO&#34;: &#34;blue&#34;,
+            &#34;DEBUG&#34;: &#34;cyan&#34;,
+        }
+        return colors.get(error_type.upper(), &#34;white&#34;)
+
+    def log(self, message: str, level: str = &#34;INFO&#34;) -&gt; None:
+        &#34;&#34;&#34;记录日志信息
+
+        Args:
+            message: 日志消息
+            level: 日志级别
+        &#34;&#34;&#34;
+        color = self._get_error_color(level)
+        formatted_message = self.encoding_helper.format_text(f&#34;[{level}] {message}&#34;)
+        self.console.print(formatted_message, style=color)
+
+    def handle_exception(self, e: Exception) -&gt; None:
+        &#34;&#34;&#34;处理异常
+
+        Args:
+            e: 异常对象
+        &#34;&#34;&#34;
+        error_name = type(e).__name__
+        error_msg = str(e)
+
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+        formatted_line = self.encoding_helper.format_text(f&#34;❌ 程序错误: {error_name}&#34;)
+        self.console.print(formatted_line, style=&#34;bold red&#34;)
+        self.console.print(f&#34;  错误信息: {error_msg}&#34;, style=&#34;red&#34;)
+
+        if self.debug:
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;📋 详细错误信息:&#34;)
+            self.console.print(formatted_line)
+            self.console.print(f&#34;  异常类型: {type(e).__name__}&#34;)
+            self.console.print(f&#34;  错误信息: {e}&#34;)
+
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+            self.console.print(formatted_line)
+            tb = traceback.format_exc()
+            self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+        else:
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;💡 提示: 运行程序时添加 --debug 选项查看详细错误信息&#34;)
+            self.console.print(formatted_line, style=&#34;yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;💡 示例: cae-cli --debug [命令]&#34;)
+            self.console.print(formatted_line, style=&#34;yellow&#34;)
+
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+
+    def handle_keyboard_interrupt(self) -&gt; None:
+        &#34;&#34;&#34;处理用户中断&#34;&#34;&#34;
+        formatted_line = self.encoding_helper.format_text(&#34;\n\n[yellow]⚠️ 用户中断操作[/yellow]&#34;)
+        self.console.print(formatted_line, style=&#34;bold&#34;)
+
+    def handle_unknown_error(self, e: Any) -&gt; None:
+        &#34;&#34;&#34;处理未知错误类型
+
+        Args:
+            e: 错误对象
+        &#34;&#34;&#34;
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;❌ 未知错误&#34;)
+        self.console.print(formatted_line, style=&#34;bold red&#34;)
+        self.console.print(f&#34;  错误对象: {e}&#34;, style=&#34;red&#34;)
+        self.console.print(f&#34;  类型: {type(e)}&#34;, style=&#34;red&#34;)
+
+        if self.debug:
+            self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+            formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+            self.console.print(formatted_line)
+            tb = traceback.format_exc()
+            self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+        self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+
+    def prompt_continue(self, message: str = &#34;是否继续执行其他操作?&#34;) -&gt; bool:
+        &#34;&#34;&#34;提示用户是否继续
+
+        Args:
+            message: 提示信息
+
+        Returns:
+            bool: 用户选择结果
+        &#34;&#34;&#34;
+        return Confirm.ask(f&#34;[yellow]{message}[/yellow]&#34;)</code></pre>
+</details>
+<div class="desc"><p>全局错误处理器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.utils.ErrorHandler.handle_exception"><code class="name flex">
+<span>def <span class="ident">handle_exception</span></span>(<span>self, e: Exception) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_exception(self, e: Exception) -&gt; None:
+    &#34;&#34;&#34;处理异常
+
+    Args:
+        e: 异常对象
+    &#34;&#34;&#34;
+    error_name = type(e).__name__
+    error_msg = str(e)
+
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+    formatted_line = self.encoding_helper.format_text(f&#34;❌ 程序错误: {error_name}&#34;)
+    self.console.print(formatted_line, style=&#34;bold red&#34;)
+    self.console.print(f&#34;  错误信息: {error_msg}&#34;, style=&#34;red&#34;)
+
+    if self.debug:
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;📋 详细错误信息:&#34;)
+        self.console.print(formatted_line)
+        self.console.print(f&#34;  异常类型: {type(e).__name__}&#34;)
+        self.console.print(f&#34;  错误信息: {e}&#34;)
+
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+        self.console.print(formatted_line)
+        tb = traceback.format_exc()
+        self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+    else:
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;💡 提示: 运行程序时添加 --debug 选项查看详细错误信息&#34;)
+        self.console.print(formatted_line, style=&#34;yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;💡 示例: cae-cli --debug [命令]&#34;)
+        self.console.print(formatted_line, style=&#34;yellow&#34;)
+
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)</code></pre>
+</details>
+<div class="desc"><p>处理异常</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>e</code></strong></dt>
+<dd>异常对象</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.ErrorHandler.handle_keyboard_interrupt"><code class="name flex">
+<span>def <span class="ident">handle_keyboard_interrupt</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_keyboard_interrupt(self) -&gt; None:
+    &#34;&#34;&#34;处理用户中断&#34;&#34;&#34;
+    formatted_line = self.encoding_helper.format_text(&#34;\n\n[yellow]⚠️ 用户中断操作[/yellow]&#34;)
+    self.console.print(formatted_line, style=&#34;bold&#34;)</code></pre>
+</details>
+<div class="desc"><p>处理用户中断</p></div>
+</dd>
+<dt id="sw_helper.utils.ErrorHandler.handle_unknown_error"><code class="name flex">
+<span>def <span class="ident">handle_unknown_error</span></span>(<span>self, e: Any) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handle_unknown_error(self, e: Any) -&gt; None:
+    &#34;&#34;&#34;处理未知错误类型
+
+    Args:
+        e: 错误对象
+    &#34;&#34;&#34;
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)
+    formatted_line = self.encoding_helper.format_text(&#34;❌ 未知错误&#34;)
+    self.console.print(formatted_line, style=&#34;bold red&#34;)
+    self.console.print(f&#34;  错误对象: {e}&#34;, style=&#34;red&#34;)
+    self.console.print(f&#34;  类型: {type(e)}&#34;, style=&#34;red&#34;)
+
+    if self.debug:
+        self.console.print(&#34;\n&#34; + &#34;-&#34; * 80, style=&#34;bold yellow&#34;)
+        formatted_line = self.encoding_helper.format_text(&#34;📚 错误堆栈:&#34;)
+        self.console.print(formatted_line)
+        tb = traceback.format_exc()
+        self.console.print(f&#34;```\n{tb}```&#34;, style=&#34;red&#34;)
+
+    self.console.print(&#34;\n&#34; + &#34;=&#34; * 80, style=&#34;bold red&#34;)</code></pre>
+</details>
+<div class="desc"><p>处理未知错误类型</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>e</code></strong></dt>
+<dd>错误对象</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.ErrorHandler.log"><code class="name flex">
+<span>def <span class="ident">log</span></span>(<span>self, message: str, level: str = 'INFO') ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def log(self, message: str, level: str = &#34;INFO&#34;) -&gt; None:
+    &#34;&#34;&#34;记录日志信息
+
+    Args:
+        message: 日志消息
+        level: 日志级别
+    &#34;&#34;&#34;
+    color = self._get_error_color(level)
+    formatted_message = self.encoding_helper.format_text(f&#34;[{level}] {message}&#34;)
+    self.console.print(formatted_message, style=color)</code></pre>
+</details>
+<div class="desc"><p>记录日志信息</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>日志消息</dd>
+<dt><strong><code>level</code></strong></dt>
+<dd>日志级别</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.ErrorHandler.prompt_continue"><code class="name flex">
+<span>def <span class="ident">prompt_continue</span></span>(<span>self, message: str = '是否继续执行其他操作?') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prompt_continue(self, message: str = &#34;是否继续执行其他操作?&#34;) -&gt; bool:
+    &#34;&#34;&#34;提示用户是否继续
+
+    Args:
+        message: 提示信息
+
+    Returns:
+        bool: 用户选择结果
+    &#34;&#34;&#34;
+    return Confirm.ask(f&#34;[yellow]{message}[/yellow]&#34;)</code></pre>
+</details>
+<div class="desc"><p>提示用户是否继续</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>提示信息</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>用户选择结果</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.utils.FileValidator"><code class="flex name class">
+<span>class <span class="ident">FileValidator</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileValidator:
+    &#34;&#34;&#34;文件验证器&#34;&#34;&#34;
+
+    SUPPORTED_GEOMETRY = [&#34;.step&#34;, &#34;.stp&#34;, &#34;.stl&#34;, &#34;.iges&#34;, &#34;.igs&#34;]
+    SUPPORTED_MESH = [&#34;.msh&#34;, &#34;.inp&#34;, &#34;.bdf&#34;, &#34;.cdb&#34;, &#34;.unv&#34;]
+
+    @classmethod
+    def validate_geometry_file(cls, file_path: Union[str, Path]) -&gt; bool:
+        &#34;&#34;&#34;验证几何文件&#34;&#34;&#34;
+        path = Path(file_path)
+
+        if not path.exists():
+            raise FileNotFoundError(f&#34;文件不存在: {file_path}&#34;)
+
+        if path.suffix.lower() not in cls.SUPPORTED_GEOMETRY:
+            raise ValueError(
+                f&#34;不支持的几何文件格式: {path.suffix}. &#34;
+                f&#34;支持的格式: {&#39;, &#39;.join(cls.SUPPORTED_GEOMETRY)}&#34;
+            )
+
+        return True
+
+    @classmethod
+    def validate_mesh_file(cls, file_path: Union[str, Path]) -&gt; bool:
+        &#34;&#34;&#34;验证网格文件&#34;&#34;&#34;
+        path = Path(file_path)
+
+        if not path.exists():
+            raise FileNotFoundError(f&#34;文件不存在: {file_path}&#34;)
+
+        if path.suffix.lower() not in cls.SUPPORTED_MESH:
+            raise ValueError(
+                f&#34;不支持的网格文件格式: {path.suffix}. &#34;
+                f&#34;支持的格式: {&#39;, &#39;.join(cls.SUPPORTED_MESH)}&#34;
+            )
+
+        return True
+
+    @classmethod
+    def validate_file_size(
+        cls, file_path: Union[str, Path], max_size_mb: float = 100
+    ) -&gt; bool:
+        &#34;&#34;&#34;验证文件大小&#34;&#34;&#34;
+        path = Path(file_path)
+        size_mb = path.stat().st_size / (1024 * 1024)
+
+        if size_mb &gt; max_size_mb:
+            raise ValueError(f&#34;文件过大: {size_mb:.2f}MB. 最大允许: {max_size_mb}MB&#34;)
+
+        return True</code></pre>
+</details>
+<div class="desc"><p>文件验证器</p></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="sw_helper.utils.FileValidator.SUPPORTED_GEOMETRY"><code class="name">var <span class="ident">SUPPORTED_GEOMETRY</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.utils.FileValidator.SUPPORTED_MESH"><code class="name">var <span class="ident">SUPPORTED_MESH</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="sw_helper.utils.FileValidator.validate_file_size"><code class="name flex">
+<span>def <span class="ident">validate_file_size</span></span>(<span>file_path: str | pathlib._local.Path, max_size_mb: float = 100) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>验证文件大小</p></div>
+</dd>
+<dt id="sw_helper.utils.FileValidator.validate_geometry_file"><code class="name flex">
+<span>def <span class="ident">validate_geometry_file</span></span>(<span>file_path: str | pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>验证几何文件</p></div>
+</dd>
+<dt id="sw_helper.utils.FileValidator.validate_mesh_file"><code class="name flex">
+<span>def <span class="ident">validate_mesh_file</span></span>(<span>file_path: str | pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>验证网格文件</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.utils.InputValidator"><code class="flex name class">
+<span>class <span class="ident">InputValidator</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputValidator:
+    &#34;&#34;&#34;输入验证器&#34;&#34;&#34;
+
+    @staticmethod
+    def validate_material_name(name: str) -&gt; bool:
+        &#34;&#34;&#34;验证材料名称&#34;&#34;&#34;
+        if not name or not isinstance(name, str):
+            raise ValueError(&#34;材料名称不能为空&#34;)
+
+        if len(name) &gt; 100:
+            raise ValueError(&#34;材料名称过长&#34;)
+
+        return True
+
+    @staticmethod
+    def validate_positive_number(value: float, name: str = &#34;值&#34;) -&gt; bool:
+        &#34;&#34;&#34;验证正数&#34;&#34;&#34;
+        if not isinstance(value, (int, float)):
+            raise TypeError(f&#34;{name}必须是数字&#34;)
+
+        if value &lt;= 0:
+            raise ValueError(f&#34;{name}必须大于0&#34;)
+
+        return True
+
+    @staticmethod
+    def validate_range(
+        value: float, min_val: float, max_val: float, name: str = &#34;值&#34;
+    ) -&gt; bool:
+        &#34;&#34;&#34;验证数值范围&#34;&#34;&#34;
+        if not min_val &lt;= value &lt;= max_val:
+            raise ValueError(f&#34;{name}必须在 {min_val} 和 {max_val} 之间&#34;)
+
+        return True</code></pre>
+</details>
+<div class="desc"><p>输入验证器</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="sw_helper.utils.InputValidator.validate_material_name"><code class="name flex">
+<span>def <span class="ident">validate_material_name</span></span>(<span>name: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def validate_material_name(name: str) -&gt; bool:
+    &#34;&#34;&#34;验证材料名称&#34;&#34;&#34;
+    if not name or not isinstance(name, str):
+        raise ValueError(&#34;材料名称不能为空&#34;)
+
+    if len(name) &gt; 100:
+        raise ValueError(&#34;材料名称过长&#34;)
+
+    return True</code></pre>
+</details>
+<div class="desc"><p>验证材料名称</p></div>
+</dd>
+<dt id="sw_helper.utils.InputValidator.validate_positive_number"><code class="name flex">
+<span>def <span class="ident">validate_positive_number</span></span>(<span>value: float, name: str = '值') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def validate_positive_number(value: float, name: str = &#34;值&#34;) -&gt; bool:
+    &#34;&#34;&#34;验证正数&#34;&#34;&#34;
+    if not isinstance(value, (int, float)):
+        raise TypeError(f&#34;{name}必须是数字&#34;)
+
+    if value &lt;= 0:
+        raise ValueError(f&#34;{name}必须大于0&#34;)
+
+    return True</code></pre>
+</details>
+<div class="desc"><p>验证正数</p></div>
+</dd>
+<dt id="sw_helper.utils.InputValidator.validate_range"><code class="name flex">
+<span>def <span class="ident">validate_range</span></span>(<span>value: float, min_val: float, max_val: float, name: str = '值') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def validate_range(
+    value: float, min_val: float, max_val: float, name: str = &#34;值&#34;
+) -&gt; bool:
+    &#34;&#34;&#34;验证数值范围&#34;&#34;&#34;
+    if not min_val &lt;= value &lt;= max_val:
+        raise ValueError(f&#34;{name}必须在 {min_val} 和 {max_val} 之间&#34;)
+
+    return True</code></pre>
+</details>
+<div class="desc"><p>验证数值范围</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.utils.dependency_checker" href="dependency_checker.html">sw_helper.utils.dependency_checker</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper" href="encoding_helper.html">sw_helper.utils.encoding_helper</a></code></li>
+<li><code><a title="sw_helper.utils.error_handler" href="error_handler.html">sw_helper.utils.error_handler</a></code></li>
+<li><code><a title="sw_helper.utils.logger" href="logger.html">sw_helper.utils.logger</a></code></li>
+<li><code><a title="sw_helper.utils.validator" href="validator.html">sw_helper.utils.validator</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.utils.create_dependency_checker" href="#sw_helper.utils.create_dependency_checker">create_dependency_checker</a></code></li>
+<li><code><a title="sw_helper.utils.create_error_handler" href="#sw_helper.utils.create_error_handler">create_error_handler</a></code></li>
+<li><code><a title="sw_helper.utils.get_encoding_helper" href="#sw_helper.utils.get_encoding_helper">get_encoding_helper</a></code></li>
+<li><code><a title="sw_helper.utils.handle_error" href="#sw_helper.utils.handle_error">handle_error</a></code></li>
+<li><code><a title="sw_helper.utils.setup_logger" href="#sw_helper.utils.setup_logger">setup_logger</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.utils.ColoredFormatter" href="#sw_helper.utils.ColoredFormatter">ColoredFormatter</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.ColoredFormatter.COLORS" href="#sw_helper.utils.ColoredFormatter.COLORS">COLORS</a></code></li>
+<li><code><a title="sw_helper.utils.ColoredFormatter.format" href="#sw_helper.utils.ColoredFormatter.format">format</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.utils.DependencyChecker" href="#sw_helper.utils.DependencyChecker">DependencyChecker</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.DependencyChecker.check_all_dependencies" href="#sw_helper.utils.DependencyChecker.check_all_dependencies">check_all_dependencies</a></code></li>
+<li><code><a title="sw_helper.utils.DependencyChecker.get_fallback_options" href="#sw_helper.utils.DependencyChecker.get_fallback_options">get_fallback_options</a></code></li>
+<li><code><a title="sw_helper.utils.DependencyChecker.get_install_commands" href="#sw_helper.utils.DependencyChecker.get_install_commands">get_install_commands</a></code></li>
+<li><code><a title="sw_helper.utils.DependencyChecker.get_missing_dependencies" href="#sw_helper.utils.DependencyChecker.get_missing_dependencies">get_missing_dependencies</a></code></li>
+<li><code><a title="sw_helper.utils.DependencyChecker.get_status_report" href="#sw_helper.utils.DependencyChecker.get_status_report">get_status_report</a></code></li>
+<li><code><a title="sw_helper.utils.DependencyChecker.print_report" href="#sw_helper.utils.DependencyChecker.print_report">print_report</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.utils.EncodingHelper" href="#sw_helper.utils.EncodingHelper">EncodingHelper</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.EncodingHelper.format_text" href="#sw_helper.utils.EncodingHelper.format_text">format_text</a></code></li>
+<li><code><a title="sw_helper.utils.EncodingHelper.get_encoding_info" href="#sw_helper.utils.EncodingHelper.get_encoding_info">get_encoding_info</a></code></li>
+<li><code><a title="sw_helper.utils.EncodingHelper.print" href="#sw_helper.utils.EncodingHelper.print">print</a></code></li>
+<li><code><a title="sw_helper.utils.EncodingHelper.test_unicode_support" href="#sw_helper.utils.EncodingHelper.test_unicode_support">test_unicode_support</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.utils.ErrorHandler" href="#sw_helper.utils.ErrorHandler">ErrorHandler</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.ErrorHandler.handle_exception" href="#sw_helper.utils.ErrorHandler.handle_exception">handle_exception</a></code></li>
+<li><code><a title="sw_helper.utils.ErrorHandler.handle_keyboard_interrupt" href="#sw_helper.utils.ErrorHandler.handle_keyboard_interrupt">handle_keyboard_interrupt</a></code></li>
+<li><code><a title="sw_helper.utils.ErrorHandler.handle_unknown_error" href="#sw_helper.utils.ErrorHandler.handle_unknown_error">handle_unknown_error</a></code></li>
+<li><code><a title="sw_helper.utils.ErrorHandler.log" href="#sw_helper.utils.ErrorHandler.log">log</a></code></li>
+<li><code><a title="sw_helper.utils.ErrorHandler.prompt_continue" href="#sw_helper.utils.ErrorHandler.prompt_continue">prompt_continue</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.utils.FileValidator" href="#sw_helper.utils.FileValidator">FileValidator</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.FileValidator.SUPPORTED_GEOMETRY" href="#sw_helper.utils.FileValidator.SUPPORTED_GEOMETRY">SUPPORTED_GEOMETRY</a></code></li>
+<li><code><a title="sw_helper.utils.FileValidator.SUPPORTED_MESH" href="#sw_helper.utils.FileValidator.SUPPORTED_MESH">SUPPORTED_MESH</a></code></li>
+<li><code><a title="sw_helper.utils.FileValidator.validate_file_size" href="#sw_helper.utils.FileValidator.validate_file_size">validate_file_size</a></code></li>
+<li><code><a title="sw_helper.utils.FileValidator.validate_geometry_file" href="#sw_helper.utils.FileValidator.validate_geometry_file">validate_geometry_file</a></code></li>
+<li><code><a title="sw_helper.utils.FileValidator.validate_mesh_file" href="#sw_helper.utils.FileValidator.validate_mesh_file">validate_mesh_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.utils.InputValidator" href="#sw_helper.utils.InputValidator">InputValidator</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.InputValidator.validate_material_name" href="#sw_helper.utils.InputValidator.validate_material_name">validate_material_name</a></code></li>
+<li><code><a title="sw_helper.utils.InputValidator.validate_positive_number" href="#sw_helper.utils.InputValidator.validate_positive_number">validate_positive_number</a></code></li>
+<li><code><a title="sw_helper.utils.InputValidator.validate_range" href="#sw_helper.utils.InputValidator.validate_range">validate_range</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

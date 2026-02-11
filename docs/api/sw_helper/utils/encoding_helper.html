@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.utils.encoding_helper API documentation</title>
+<meta name="description" content="编码问题解决方案 - 自动检测和配置系统编码 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.utils.encoding_helper</code></h1>
+</header>
+<section id="section-intro">
+<p>编码问题解决方案 - 自动检测和配置系统编码</p>
+<p>此模块提供编码问题的根治方案，包括：
+- 自动检测系统编码
+- 智能 Unicode 字符降级
+- 配置 Rich Console 输出
+- 设置环境变量
+- 提供回退方案</p>
+<p>支持平台：
+- Windows GBK 环境：使用 ASCII 替代字符
+- Windows UTF-8 环境：正常显示 Unicode
+- Linux/Mac：正常显示 Unicode</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.utils.encoding_helper.ascii_fallback"><code class="name flex">
+<span>def <span class="ident">ascii_fallback</span></span>(<span>text: str) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ascii_fallback(text: str) -&gt; str:
+    &#34;&#34;&#34;将 Unicode 字符替换为 ASCII 等效字符
+
+    Args:
+        text: 包含 Unicode 字符的文本
+
+    Returns:
+        str: 替换后的 ASCII 文本
+    &#34;&#34;&#34;
+    if not should_use_ascii_fallback():
+        return text
+
+    result = text
+    for unicode_char, ascii_replacement in ASCII_FALLBACK.items():
+        result = result.replace(unicode_char, ascii_replacement)
+    return result</code></pre>
+</details>
+<div class="desc"><p>将 Unicode 字符替换为 ASCII 等效字符</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong></dt>
+<dd>包含 Unicode 字符的文本</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>替换后的 ASCII 文本</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.configure_console"><code class="name flex">
+<span>def <span class="ident">configure_console</span></span>(<span>) ‑> rich.console.Console</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def configure_console() -&gt; Console:
+    &#34;&#34;&#34;配置 Rich Console 以处理编码问题
+
+    Returns:
+        Console: 配置好的控制台实例
+    &#34;&#34;&#34;
+    try:
+        # 根据平台和编码配置 Rich Console
+        if sys.platform == &#34;win32&#34;:
+            # Windows 特殊配置
+            console = Console(
+                force_terminal=True,
+                legacy_windows=False,
+                color_system=&#34;auto&#34;,
+            )
+        else:
+            # Linux/Mac 配置
+            console = Console(
+                force_terminal=True,
+                color_system=&#34;auto&#34;,
+            )
+        return console
+    except Exception as e:
+        # 回退方案：使用简化的控制台
+        print(f&#34;控制台配置失败: {e}&#34;)
+        return Console(
+            force_terminal=False,
+            legacy_windows=True,
+            color_system=None,
+        )</code></pre>
+</details>
+<div class="desc"><p>配置 Rich Console 以处理编码问题</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Console</code></dt>
+<dd>配置好的控制台实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.detect_system_encoding"><code class="name flex">
+<span>def <span class="ident">detect_system_encoding</span></span>(<span>) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_system_encoding() -&gt; str:
+    &#34;&#34;&#34;自动检测系统编码
+
+    Returns:
+        str: 检测到的最佳编码
+    &#34;&#34;&#34;
+    platform = sys.platform.lower()
+    possible_encodings = ENCODING_MAP.get(platform, [DEFAULT_ENCODING])
+
+    for encoding in possible_encodings:
+        try:
+            # 测试编码是否有效
+            &#34;测试编码&#34;.encode(encoding).decode(encoding)
+            return encoding
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            continue
+
+    return DEFAULT_ENCODING</code></pre>
+</details>
+<div class="desc"><p>自动检测系统编码</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>检测到的最佳编码</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.get_encoding_helper"><code class="name flex">
+<span>def <span class="ident">get_encoding_helper</span></span>(<span>) ‑> <a title="sw_helper.utils.encoding_helper.EncodingHelper" href="#sw_helper.utils.encoding_helper.EncodingHelper">EncodingHelper</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_encoding_helper() -&gt; EncodingHelper:
+    &#34;&#34;&#34;获取编码助手的单例实例
+
+    Returns:
+        EncodingHelper: 单例实例
+    &#34;&#34;&#34;
+    global _helper_instance
+    if _helper_instance is None:
+        _helper_instance = EncodingHelper()
+    return _helper_instance</code></pre>
+</details>
+<div class="desc"><p>获取编码助手的单例实例</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="sw_helper.utils.encoding_helper.EncodingHelper" href="#sw_helper.utils.encoding_helper.EncodingHelper">EncodingHelper</a></code></dt>
+<dd>单例实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.load_unicode_fallback"><code class="name flex">
+<span>def <span class="ident">load_unicode_fallback</span></span>(<span>) ‑> Dict[str, str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_unicode_fallback() -&gt; Dict[str, str]:
+    &#34;&#34;&#34;加载 Unicode 到 ASCII 字符映射配置
+
+    Returns:
+        Dict[str, str]: 字符映射字典
+    &#34;&#34;&#34;
+    default_mapping = {
+        &#34;✅&#34;: &#34;[OK]&#34;,
+        &#34;❌&#34;: &#34;[ERROR]&#34;,
+        &#34;⚠️&#34;: &#34;[WARN]&#34;,
+        &#34;🔧&#34;: &#34;[FIX]&#34;,
+        &#34;📊&#34;: &#34;[DATA]&#34;,
+        &#34;✓&#34;: &#34;[OK]&#34;,
+        &#34;✗&#34;: &#34;[ERROR]&#34;,
+        &#34;⏳&#34;: &#34;[WAIT]&#34;,
+        &#34;📈&#34;: &#34;[UP]&#34;,
+        &#34;📉&#34;: &#34;[DOWN]&#34;,
+        &#34;ℹ️&#34;: &#34;[INFO]&#34;,
+        &#34;🔥&#34;: &#34;[HOT]&#34;,
+        &#34;🎉&#34;: &#34;[OK]&#34;,
+        &#34;🚀&#34;: &#34;[GO]&#34;,
+        &#34;📦&#34;: &#34;[PKG]&#34;,
+        &#34;📝&#34;: &#34;[NOTE]&#34;,
+        &#34;🔍&#34;: &#34;[SEARCH]&#34;,
+        &#34;⭐&#34;: &#34;[STAR]&#34;,
+        &#34;💡&#34;: &#34;[IDEA]&#34;,
+        &#34;❓&#34;: &#34;[QUESTION]&#34;,
+        &#34;❗&#34;: &#34;[WARNING]&#34;,
+        &#34;💚&#34;: &#34;[OK]&#34;,
+        &#34;❤️&#34;: &#34;[ERROR]&#34;,
+        &#34;💛&#34;: &#34;[WARN]&#34;,
+        &#34;💙&#34;: &#34;[INFO]&#34;,
+        &#34;💜&#34;: &#34;[DEBUG]&#34;,
+    }
+
+    try:
+        if UNICODE_FALLBACK_CONFIG.exists():
+            with open(UNICODE_FALLBACK_CONFIG, &#34;r&#34;, encoding=&#34;utf-8&#34;) as f:
+                custom_mapping = json.load(f)
+            default_mapping.update(custom_mapping)
+    except Exception as e:
+        print(f&#34;加载 Unicode 字符映射失败: {e}&#34;)
+
+    return default_mapping</code></pre>
+</details>
+<div class="desc"><p>加载 Unicode 到 ASCII 字符映射配置</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, str]</code></dt>
+<dd>字符映射字典</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.safe_print"><code class="name flex">
+<span>def <span class="ident">safe_print</span></span>(<span>text: str, console: rich.console.Console | None = None) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def safe_print(text: str, console: Optional[Console] = None) -&gt; None:
+    &#34;&#34;&#34;安全打印函数，处理编码问题
+
+    Args:
+        text: 要打印的文本
+        console: 可选的 Rich Console 实例
+    &#34;&#34;&#34;
+    fallback_text = ascii_fallback(text)
+
+    try:
+        if console:
+            console.print(fallback_text)
+        else:
+            print(fallback_text)
+    except Exception as e:
+        # 终极回退方案：仅打印 ASCII 字符
+        try:
+            stripped_text = &#34;&#34;.join(c for c in fallback_text if ord(c) &lt; 128)
+            print(stripped_text)
+        except:
+            print(&#34;输出失败&#34;)</code></pre>
+</details>
+<div class="desc"><p>安全打印函数，处理编码问题</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong></dt>
+<dd>要打印的文本</dd>
+<dt><strong><code>console</code></strong></dt>
+<dd>可选的 Rich Console 实例</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.set_encoding_env"><code class="name flex">
+<span>def <span class="ident">set_encoding_env</span></span>(<span>) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_encoding_env() -&gt; None:
+    &#34;&#34;&#34;设置编码相关的环境变量&#34;&#34;&#34;
+    os.environ[&#34;PYTHONIOENCODING&#34;] = DEFAULT_ENCODING
+
+    # Windows 特定设置
+    if sys.platform == &#34;win32&#34;:
+        try:
+            # 尝试设置控制台代码页
+            import subprocess
+            subprocess.run([&#34;chcp&#34;, &#34;65001&#34;], shell=True, check=False, capture_output=True)
+        except Exception as e:
+            print(f&#34;设置控制台代码页失败: {e}&#34;)</code></pre>
+</details>
+<div class="desc"><p>设置编码相关的环境变量</p></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.should_use_ascii_fallback"><code class="name flex">
+<span>def <span class="ident">should_use_ascii_fallback</span></span>(<span>) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def should_use_ascii_fallback() -&gt; bool:
+    &#34;&#34;&#34;判断是否需要使用 ASCII 回退方案
+
+    Returns:
+        bool: 是否需要使用 ASCII 回退
+    &#34;&#34;&#34;
+    if sys.platform != &#34;win32&#34;:
+        return False
+
+    try:
+        # 测试控制台是否支持 Unicode
+        test_chars = &#34;✅❌⚠️🔧📊&#34;
+        for char in test_chars:
+            char.encode(sys.stdout.encoding)
+        return False
+    except UnicodeEncodeError:
+        return True</code></pre>
+</details>
+<div class="desc"><p>判断是否需要使用 ASCII 回退方案</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>是否需要使用 ASCII 回退</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.update_unicode_fallback"><code class="name flex">
+<span>def <span class="ident">update_unicode_fallback</span></span>(<span>new_mapping: Dict[str, str]) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_unicode_fallback(new_mapping: Dict[str, str]) -&gt; None:
+    &#34;&#34;&#34;更新 Unicode 字符映射配置
+
+    Args:
+        new_mapping: 新的字符映射
+    &#34;&#34;&#34;
+    global ASCII_FALLBACK
+    ASCII_FALLBACK.update(new_mapping)
+
+    try:
+        with open(UNICODE_FALLBACK_CONFIG, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            json.dump(ASCII_FALLBACK, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f&#34;保存 Unicode 字符映射失败: {e}&#34;)</code></pre>
+</details>
+<div class="desc"><p>更新 Unicode 字符映射配置</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>new_mapping</code></strong></dt>
+<dd>新的字符映射</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.utils.encoding_helper.EncodingHelper"><code class="flex name class">
+<span>class <span class="ident">EncodingHelper</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EncodingHelper:
+    &#34;&#34;&#34;编码问题解决方案的高级接口&#34;&#34;&#34;
+
+    def __init__(self):
+        self.encoding = detect_system_encoding()
+        self.use_ascii_fallback = should_use_ascii_fallback()
+        self.console = configure_console()
+        set_encoding_env()
+
+    def print(self, text: str) -&gt; None:
+        &#34;&#34;&#34;安全打印方法&#34;&#34;&#34;
+        safe_print(text, self.console)
+
+    def format_text(self, text: str) -&gt; str:
+        &#34;&#34;&#34;格式化文本，根据环境选择是否使用 ASCII 回退
+
+        Args:
+            text: 要格式化的文本
+
+        Returns:
+            str: 格式化后的文本
+        &#34;&#34;&#34;
+        return ascii_fallback(text)
+
+    def get_encoding_info(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;获取编码信息
+
+        Returns:
+            Dict[str, Any]: 编码信息字典
+        &#34;&#34;&#34;
+        return {
+            &#34;platform&#34;: sys.platform,
+            &#34;detected_encoding&#34;: self.encoding,
+            &#34;color_system&#34;: self.console.color_system,
+            &#34;using_ascii_fallback&#34;: self.use_ascii_fallback,
+            &#34;console_supports_unicode&#34;: not self.use_ascii_fallback,
+        }
+
+    def test_unicode_support(self, chars: Optional[str] = None) -&gt; Dict[str, bool]:
+        &#34;&#34;&#34;测试控制台的 Unicode 支持情况
+
+        Args:
+            chars: 要测试的字符，默认为常用字符
+
+        Returns:
+            Dict[str, bool]: 字符支持情况字典
+        &#34;&#34;&#34;
+        if chars is None:
+            chars = &#34;✅❌⚠️🔧📊&#34;
+
+        results = {}
+        for char in chars:
+            try:
+                char.encode(sys.stdout.encoding)
+                results[char] = True
+            except UnicodeEncodeError:
+                results[char] = False
+
+        return results</code></pre>
+</details>
+<div class="desc"><p>编码问题解决方案的高级接口</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.utils.encoding_helper.EncodingHelper.format_text"><code class="name flex">
+<span>def <span class="ident">format_text</span></span>(<span>self, text: str) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_text(self, text: str) -&gt; str:
+    &#34;&#34;&#34;格式化文本，根据环境选择是否使用 ASCII 回退
+
+    Args:
+        text: 要格式化的文本
+
+    Returns:
+        str: 格式化后的文本
+    &#34;&#34;&#34;
+    return ascii_fallback(text)</code></pre>
+</details>
+<div class="desc"><p>格式化文本，根据环境选择是否使用 ASCII 回退</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong></dt>
+<dd>要格式化的文本</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>格式化后的文本</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.EncodingHelper.get_encoding_info"><code class="name flex">
+<span>def <span class="ident">get_encoding_info</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_encoding_info(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;获取编码信息
+
+    Returns:
+        Dict[str, Any]: 编码信息字典
+    &#34;&#34;&#34;
+    return {
+        &#34;platform&#34;: sys.platform,
+        &#34;detected_encoding&#34;: self.encoding,
+        &#34;color_system&#34;: self.console.color_system,
+        &#34;using_ascii_fallback&#34;: self.use_ascii_fallback,
+        &#34;console_supports_unicode&#34;: not self.use_ascii_fallback,
+    }</code></pre>
+</details>
+<div class="desc"><p>获取编码信息</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>编码信息字典</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.EncodingHelper.print"><code class="name flex">
+<span>def <span class="ident">print</span></span>(<span>self, text: str) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def print(self, text: str) -&gt; None:
+    &#34;&#34;&#34;安全打印方法&#34;&#34;&#34;
+    safe_print(text, self.console)</code></pre>
+</details>
+<div class="desc"><p>安全打印方法</p></div>
+</dd>
+<dt id="sw_helper.utils.encoding_helper.EncodingHelper.test_unicode_support"><code class="name flex">
+<span>def <span class="ident">test_unicode_support</span></span>(<span>self, chars: str | None = None) ‑> Dict[str, bool]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_unicode_support(self, chars: Optional[str] = None) -&gt; Dict[str, bool]:
+    &#34;&#34;&#34;测试控制台的 Unicode 支持情况
+
+    Args:
+        chars: 要测试的字符，默认为常用字符
+
+    Returns:
+        Dict[str, bool]: 字符支持情况字典
+    &#34;&#34;&#34;
+    if chars is None:
+        chars = &#34;✅❌⚠️🔧📊&#34;
+
+    results = {}
+    for char in chars:
+        try:
+            char.encode(sys.stdout.encoding)
+            results[char] = True
+        except UnicodeEncodeError:
+            results[char] = False
+
+    return results</code></pre>
+</details>
+<div class="desc"><p>测试控制台的 Unicode 支持情况</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>chars</code></strong></dt>
+<dd>要测试的字符，默认为常用字符</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, bool]</code></dt>
+<dd>字符支持情况字典</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.utils" href="index.html">sw_helper.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.utils.encoding_helper.ascii_fallback" href="#sw_helper.utils.encoding_helper.ascii_fallback">ascii_fallback</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.configure_console" href="#sw_helper.utils.encoding_helper.configure_console">configure_console</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.detect_system_encoding" href="#sw_helper.utils.encoding_helper.detect_system_encoding">detect_system_encoding</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.get_encoding_helper" href="#sw_helper.utils.encoding_helper.get_encoding_helper">get_encoding_helper</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.load_unicode_fallback" href="#sw_helper.utils.encoding_helper.load_unicode_fallback">load_unicode_fallback</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.safe_print" href="#sw_helper.utils.encoding_helper.safe_print">safe_print</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.set_encoding_env" href="#sw_helper.utils.encoding_helper.set_encoding_env">set_encoding_env</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.should_use_ascii_fallback" href="#sw_helper.utils.encoding_helper.should_use_ascii_fallback">should_use_ascii_fallback</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.update_unicode_fallback" href="#sw_helper.utils.encoding_helper.update_unicode_fallback">update_unicode_fallback</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.utils.encoding_helper.EncodingHelper" href="#sw_helper.utils.encoding_helper.EncodingHelper">EncodingHelper</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.utils.encoding_helper.EncodingHelper.format_text" href="#sw_helper.utils.encoding_helper.EncodingHelper.format_text">format_text</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.EncodingHelper.get_encoding_info" href="#sw_helper.utils.encoding_helper.EncodingHelper.get_encoding_info">get_encoding_info</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.EncodingHelper.print" href="#sw_helper.utils.encoding_helper.EncodingHelper.print">print</a></code></li>
+<li><code><a title="sw_helper.utils.encoding_helper.EncodingHelper.test_unicode_support" href="#sw_helper.utils.encoding_helper.EncodingHelper.test_unicode_support">test_unicode_support</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

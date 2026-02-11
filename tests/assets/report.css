@@ -1,0 +1,179 @@
+/* CAE-CLI 测试报告样式 - 青色主题 */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* 报告标题 */
+h1 {
+    background-color: #0088cc;
+    color: #ffffff;
+    padding: 20px;
+    margin: 0;
+    font-size: 28px;
+    border-bottom: 3px solid #006699;
+}
+
+/* 报告导航栏 */
+nav {
+    background-color: #e6f2f8;
+    padding: 10px;
+    border-bottom: 1px solid #c8e6f5;
+}
+
+nav a {
+    color: #0088cc;
+    text-decoration: none;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #0088cc;
+    color: #ffffff;
+}
+
+/* 测试摘要统计 */
+.summary {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.stat {
+    text-align: center;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #0088cc;
+}
+
+.stat .count {
+    font-size: 36px;
+    font-weight: bold;
+    color: #006699;
+}
+
+/* 测试结果表格 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e6f2f8;
+}
+
+th {
+    background-color: #0088cc;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #e6f2f8;
+}
+
+/* 测试通过/失败状态 */
+.passed {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.failed {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.skipped {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+/* 错误信息 */
+.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 3px;
+}
+
+/* 代码覆盖率 */
+.coverage {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.coverage h2 {
+    color: #0088cc;
+    margin-top: 0;
+}
+
+/* 性能分析 */
+.performance {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.performance h2 {
+    color: #0088cc;
+    margin-top: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .summary {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stat {
+        width: 80%;
+        margin-bottom: 10px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}

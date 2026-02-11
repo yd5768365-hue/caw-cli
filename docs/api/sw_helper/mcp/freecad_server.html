@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.mcp.freecad_server API documentation</title>
+<meta name="description" content="FreeCAD MCP Server - 将FreeCAD功能暴露为MCP工具">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.mcp.freecad_server</code></h1>
+</header>
+<section id="section-intro">
+<p>FreeCAD MCP Server - 将FreeCAD功能暴露为MCP工具</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.mcp.freecad_server.get_freecad_mcp_server"><code class="name flex">
+<span>def <span class="ident">get_freecad_mcp_server</span></span>(<span>) ‑> <a title="sw_helper.mcp.freecad_server.FreeCADMCPServer" href="#sw_helper.mcp.freecad_server.FreeCADMCPServer">FreeCADMCPServer</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_freecad_mcp_server() -&gt; FreeCADMCPServer:
+    &#34;&#34;&#34;获取全局FreeCAD MCP服务器&#34;&#34;&#34;
+    global _fc_mcp_server
+    if _fc_mcp_server is None:
+        _fc_mcp_server = FreeCADMCPServer()
+    return _fc_mcp_server</code></pre>
+</details>
+<div class="desc"><p>获取全局FreeCAD MCP服务器</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.mcp.freecad_server.FreeCADMCPServer"><code class="flex name class">
+<span>class <span class="ident">FreeCADMCPServer</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADMCPServer:
+    &#34;&#34;&#34;
+    FreeCAD MCP服务器
+    将FreeCAD的所有功能封装为MCP工具
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self.server = get_mcp_server()
+        self.fc_connector = None
+        self._register_tools()
+
+    def _register_tools(self):
+        &#34;&#34;&#34;注册所有FreeCAD工具&#34;&#34;&#34;
+
+        # 1. 连接FreeCAD
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_connect&#34;,
+                description=&#34;连接到FreeCAD&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;use_mock&#34;: {
+                            &#34;type&#34;: &#34;boolean&#34;,
+                            &#34;description&#34;: &#34;是否使用模拟模式&#34;,
+                            &#34;default&#34;: False,
+                        }
+                    },
+                },
+                handler=self._handle_connect,
+            )
+        )
+
+        # 2. 打开文档
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_open&#34;,
+                description=&#34;打开FreeCAD文档&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;file_path&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;文件路径&#34;}
+                    },
+                    &#34;required&#34;: [&#34;file_path&#34;],
+                },
+                handler=self._handle_open,
+            )
+        )
+
+        # 3. 获取参数列表
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_get_parameters&#34;,
+                description=&#34;获取模型中的所有参数&#34;,
+                input_schema={&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: {}},
+                handler=self._handle_get_parameters,
+            )
+        )
+
+        # 4. 设置参数
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_set_parameter&#34;,
+                description=&#34;设置模型参数&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;param_name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;参数名称&#34;},
+                        &#34;value&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;参数值&#34;},
+                    },
+                    &#34;required&#34;: [&#34;param_name&#34;, &#34;value&#34;],
+                },
+                handler=self._handle_set_parameter,
+            )
+        )
+
+        # 5. 重建模型
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_rebuild&#34;,
+                description=&#34;重建模型&#34;,
+                input_schema={&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: {}},
+                handler=self._handle_rebuild,
+            )
+        )
+
+        # 6. 导出文件
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_export&#34;,
+                description=&#34;导出模型为STEP/STL&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;output_path&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;输出路径&#34;},
+                        &#34;format&#34;: {
+                            &#34;type&#34;: &#34;string&#34;,
+                            &#34;description&#34;: &#34;导出格式&#34;,
+                            &#34;enum&#34;: [&#34;STEP&#34;, &#34;STL&#34;, &#34;IGES&#34;],
+                            &#34;default&#34;: &#34;STEP&#34;,
+                        },
+                    },
+                    &#34;required&#34;: [&#34;output_path&#34;],
+                },
+                handler=self._handle_export,
+            )
+        )
+
+        # 7. 创建几何体
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_create_box&#34;,
+                description=&#34;创建立方体&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;length&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 100},
+                        &#34;width&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 50},
+                        &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 30},
+                    },
+                },
+                handler=self._handle_create_box,
+            )
+        )
+
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_create_cylinder&#34;,
+                description=&#34;创建圆柱体&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;radius&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 25},
+                        &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 50},
+                    },
+                },
+                handler=self._handle_create_cylinder,
+            )
+        )
+
+        # 8. 应用圆角
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_apply_fillet&#34;,
+                description=&#34;应用圆角&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;radius&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;圆角半径&#34;}
+                    },
+                    &#34;required&#34;: [&#34;radius&#34;],
+                },
+                handler=self._handle_apply_fillet,
+            )
+        )
+
+        # 9. 优化参数
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_optimize&#34;,
+                description=&#34;优化参数&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;param_name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                        &#34;min_value&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;max_value&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;steps&#34;: {&#34;type&#34;: &#34;integer&#34;, &#34;default&#34;: 5},
+                    },
+                    &#34;required&#34;: [&#34;param_name&#34;, &#34;min_value&#34;, &#34;max_value&#34;],
+                },
+                handler=self._handle_optimize,
+            )
+        )
+
+        # 10. 分析质量
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_analyze&#34;,
+                description=&#34;分析模型质量&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {&#34;file_path&#34;: {&#34;type&#34;: &#34;string&#34;}},
+                },
+                handler=self._handle_analyze,
+            )
+        )
+
+        print(f&#34;[FreeCAD MCP] 已注册 {len(self.server.tools)} 个工具&#34;)
+
+    def _get_connector(self):
+        &#34;&#34;&#34;获取或创建连接器&#34;&#34;&#34;
+        if self.fc_connector is None:
+            from sw_helper.integrations.freecad_connector import (
+                FreeCADConnectorMock,
+            )
+
+            # 这里可以选择使用真实或模拟连接器
+            self.fc_connector = FreeCADConnectorMock()
+        return self.fc_connector
+
+    # ===== 工具处理器 =====
+
+    def _handle_connect(self, use_mock: bool = False) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理连接请求&#34;&#34;&#34;
+        try:
+            if use_mock:
+                from sw_helper.integrations.freecad_connector import (
+                    FreeCADConnectorMock,
+                )
+
+                self.fc_connector = FreeCADConnectorMock()
+            else:
+                from sw_helper.integrations.freecad_connector import FreeCADConnector
+
+                self.fc_connector = FreeCADConnector()
+
+            success = self.fc_connector.connect()
+            return {
+                &#34;success&#34;: success,
+                &#34;mode&#34;: &#34;mock&#34; if use_mock else &#34;real&#34;,
+                &#34;message&#34;: &#34;连接成功&#34; if success else &#34;连接失败&#34;,
+            }
+        except Exception as e:
+            return {&#34;success&#34;: False, &#34;error&#34;: str(e)}
+
+    def _handle_open(self, file_path: str) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理打开文件请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.open_document(file_path)
+        return {&#34;success&#34;: success, &#34;file_path&#34;: file_path}
+
+    def _handle_get_parameters(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理获取参数请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        params = connector.get_parameters()
+        return {
+            &#34;count&#34;: len(params),
+            &#34;parameters&#34;: [
+                {&#34;name&#34;: p.name, &#34;value&#34;: p.value, &#34;unit&#34;: p.unit} for p in params
+            ],
+        }
+
+    def _handle_set_parameter(self, param_name: str, value: float) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理设置参数请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.set_parameter(param_name, value)
+        return {&#34;success&#34;: success, &#34;param_name&#34;: param_name, &#34;new_value&#34;: value}
+
+    def _handle_rebuild(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理重建请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.rebuild()
+        return {&#34;success&#34;: success}
+
+    def _handle_export(self, output_path: str, format: str = &#34;STEP&#34;) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理导出请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.export_file(output_path, format)
+        return {&#34;success&#34;: success, &#34;output_path&#34;: output_path, &#34;format&#34;: format}
+
+    def _handle_create_box(
+        self, length: float = 100, width: float = 50, height: float = 30
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理创建立方体请求&#34;&#34;&#34;
+        # 这里简化实现，实际应该调用FreeCAD API
+        return {
+            &#34;success&#34;: True,
+            &#34;shape&#34;: &#34;box&#34;,
+            &#34;dimensions&#34;: {&#34;length&#34;: length, &#34;width&#34;: width, &#34;height&#34;: height},
+            &#34;message&#34;: f&#34;创建立方体: {length}x{width}x{height}mm&#34;,
+        }
+
+    def _handle_create_cylinder(
+        self, radius: float = 25, height: float = 50
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理创建圆柱体请求&#34;&#34;&#34;
+        return {
+            &#34;success&#34;: True,
+            &#34;shape&#34;: &#34;cylinder&#34;,
+            &#34;dimensions&#34;: {&#34;radius&#34;: radius, &#34;height&#34;: height},
+            &#34;message&#34;: f&#34;创建圆柱体: 半径{radius}mm, 高度{height}mm&#34;,
+        }
+
+    def _handle_apply_fillet(self, radius: float) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理应用圆角请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        # 这里简化实现
+        return {
+            &#34;success&#34;: True,
+            &#34;fillet_radius&#34;: radius,
+            &#34;message&#34;: f&#34;应用圆角: R{radius}mm&#34;,
+        }
+
+    def _handle_optimize(
+        self, param_name: str, min_value: float, max_value: float, steps: int = 5
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理优化请求&#34;&#34;&#34;
+        # 这里调用优化器
+        from sw_helper.optimization.optimizer import FreeCADOptimizer
+
+        optimizer = FreeCADOptimizer(use_mock=True)
+        # 简化实现，实际应该执行完整优化流程
+
+        return {
+            &#34;success&#34;: True,
+            &#34;param_name&#34;: param_name,
+            &#34;range&#34;: [min_value, max_value],
+            &#34;steps&#34;: steps,
+            &#34;message&#34;: f&#34;优化完成: {param_name} 范围 {min_value}~{max_value}mm, {steps}步&#34;,
+            &#34;best_value&#34;: (min_value + max_value) / 2,
+            &#34;quality_score&#34;: 85.0,
+        }
+
+    def _handle_analyze(self, file_path: Optional[str] = None) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理分析请求&#34;&#34;&#34;
+        if file_path and Path(file_path).exists():
+            from sw_helper.geometry.parser import GeometryParser
+
+            parser = GeometryParser()
+            try:
+                geo_data = parser.parse(file_path)
+                return {
+                    &#34;success&#34;: True,
+                    &#34;volume&#34;: geo_data.get(&#34;volume&#34;, 0),
+                    &#34;vertices&#34;: geo_data.get(&#34;vertices&#34;, 0),
+                    &#34;faces&#34;: geo_data.get(&#34;faces&#34;, 0),
+                    &#34;quality_score&#34;: 80.0,
+                }
+            except Exception as e:
+                return {&#34;success&#34;: False, &#34;error&#34;: str(e)}
+
+        return {&#34;success&#34;: True, &#34;message&#34;: &#34;模型质量良好&#34;, &#34;quality_score&#34;: 85.0}</code></pre>
+</details>
+<div class="desc"><p>FreeCAD MCP服务器
+将FreeCAD的所有功能封装为MCP工具</p></div>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.mcp" href="index.html">sw_helper.mcp</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.mcp.freecad_server.get_freecad_mcp_server" href="#sw_helper.mcp.freecad_server.get_freecad_mcp_server">get_freecad_mcp_server</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.mcp.freecad_server.FreeCADMCPServer" href="#sw_helper.mcp.freecad_server.FreeCADMCPServer">FreeCADMCPServer</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

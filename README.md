@@ -35,6 +35,37 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+## 🆚 版本演进与功能对比
+
+### 📊 当前版本 (v0.2.0+) 新增功能
+
+| 功能模块 | 新增内容 | 说明 |
+|----------|----------|------|
+| **📚 完整文档体系** | 5个专业文档 | 新增QUICKSTART.md快速开始、INSTALLATION_GUIDE.md安装指南、FAQ.md常见问题、API_REFERENCE.md API参考、CONTRIBUTING.md贡献指南 |
+| **🔧 API文档生成** | 自动生成脚本 | 支持一键生成HTML/Markdown格式的完整API参考文档 |
+| **🧩 网格生成器集成** | Gmsh连接器 | 新增`src/integrations/mesher/gmsh.py`，支持Gmsh网格生成器标准化集成 |
+| **⚙️ 工具模块增强** | 4个新工具模块 | 新增依赖检查器(dependency_checker.py)、编码辅助(encoding_helper.py)、错误处理(error_handler.py)、Unicode回退数据 |
+| **🧪 测试与示例** | 完整测试套件 | 新增工作流集成测试、工具测试、示例配置文件(optimization_demo.yaml) |
+| **📝 开发脚本** | 多平台测试脚本 | 新增run_tests.py/.sh/.bat，支持Windows/Linux/macOS测试运行 |
+
+### 🔄 核心架构演进
+
+| 版本阶段 | 核心特性 | 状态 |
+|----------|----------|------|
+| **v0.1.x** | 基础CAE功能 | ✅ 已稳定 |
+| **v0.2.0** | 插件化架构重构 | ✅ **已发布** |
+| **v0.2.0+** | 完整文档与工具链 | ✅ **本次更新** |
+
+### 🎯 关键里程碑达成
+
+1. **✅ 插件化架构完成** - 标准化CAD/CAE接口，支持FreeCAD+CalculiX集成
+2. **✅ 力学计算模块完善** - 完整的应力、应变、安全系数计算体系
+3. **✅ 多语言支持** - 中英文界面切换，国际化设计
+4. **✅ 完整文档体系** - 从安装到开发的全方位文档支持
+5. **🔄 工作流CLI集成** - 进行中，即将发布
+
+> 💡 **项目状态**：CAE-CLI已从基础工具发展为**完整的机械学习辅助平台**，具备插件化扩展能力、完整文档体系和专业测试套件。
+
 ## 🚀 核心功能
 
 ### 🎯 **模型分析与优化**
