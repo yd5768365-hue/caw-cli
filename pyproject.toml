@@ -61,6 +61,11 @@ optimize = [
     "matplotlib>=3.5.0",
     "numpy>=1.21.0",
 ]
+# SSH增强功能
+ssh = [
+    "paramiko>=3.0.0",
+]
+
 # 开发依赖
 dev = [
     "pytest>=7.0.0",
