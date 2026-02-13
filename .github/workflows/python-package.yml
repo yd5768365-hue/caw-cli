@@ -38,6 +38,7 @@ jobs:
       run: |
         cae-cli --version
         cae-cli --help
+        cae-cli review --help
 
     - name: Lint with flake8
       run: |
