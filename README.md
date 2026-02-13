@@ -37,14 +37,15 @@ CAE-CLI 是为机械专业学生（特别是从互联网专业转向机械领域
 ### 📊 当前版本 (v0.2.0+) 新增功能
 
 | 功能模块 | 新增内容 | 说明 |
-|---------|--------|------|
-| 📚 完整文档体系 | 5个专业文档 | 新增QUICKSTART.md快速开始、INSTALLATION_GUIDE.md安装指南、FAQ.md常见问题、API_REFERENCE.md API参考、CONTRIBUTING.md贡献指南 |
-| 🔧 API文档生成 | 自动生成脚本 | 支持一键生成HTML/Markdown格式的完整API参考文档 |
-| 🧩 网格生成器集成 | Gmsh连接器 | 新增src/integrations/mesher/gmsh.py，支持Gmsh网格生成器标准化集成 |
-| ⚙️ 工具模块增强 | 4个新工具模块 | 新增依赖检查器(dependency_checker.py)、编码辅助(encoding_helper.py)、错误处理(error_handler.py)、Unicode回退数据 |
-| 🧪 测试与示例 | 完整测试套件 | 新增工作流集成测试、工具测试、示例配置文件(optimization_demo.yaml) |
-| 📝 开发脚本 | 多平台测试脚本 | 新增run_tests.py/.sh/.bat，支持Windows/Linux/macOS测试运行 |
-| 🤖 AI学习助手 | Ollama + RAG | 本地AI模型、向量知识库、多轮对话、教学式回答 |
+|----------|----------|------|
+| **📚 完整文档体系** | 5个专业文档 | 新增QUICKSTART.md快速开始、INSTALLATION_GUIDE.md安装指南、FAQ.md常见问题、API_REFERENCE.md API参考、CONTRIBUTING.md贡献指南 |
+| **🔧 API文档生成** | 自动生成脚本 | 支持一键生成HTML/Markdown格式的完整API参考文档 |
+| **🧩 网格生成器集成** | Gmsh连接器 | 新增`src/integrations/mesher/gmsh.py`，支持Gmsh网格生成器标准化集成 |
+| **⚙️ 工具模块增强** | 4个新工具模块 | 新增依赖检查器(dependency_checker.py)、编码辅助(encoding_helper.py)、错误处理(error_handler.py)、Unicode回退数据 |
+| **🧪 测试与示例** | 完整测试套件 | 新增工作流集成测试、工具测试、示例配置文件(optimization_demo.yaml) |
+| **📝 开发脚本** | 多平台测试脚本 | 新增run_tests.py/.sh/.bat，支持Windows/Linux/macOS测试运行 |
+| **🤖 AI学习助手** | Ollama + RAG | 本地AI模型、向量知识库、多轮对话、教学式回答 |
+| **🛠️ DevOps自动化** | GitHub Actions PR审查 | 新增自动化代码审查工作流、智能代码审查工具、JSON报告输出 |
 
 ### 🔄 核心架构演进
 
@@ -56,14 +57,15 @@ CAE-CLI 是为机械专业学生（特别是从互联网专业转向机械领域
 
 ### 🎯 关键里程碑达成
 
-- ✅ 插件化架构完成 - 标准化CAD/CAE接口，支持FreeCAD+CalculiX集成
-- ✅ 力学计算模块完善 - 完整的应力、应变、安全系数计算体系
-- ✅ 多语言支持 - 中英文界面切换，国际化设计
-- ✅ 完整文档体系 - 从安装到开发的全方位文档支持
-- ✅ AI学习助手 - 本地Ollama + RAG知识库集成
-- 🔄 工作流CLI集成 - 进行中，即将发布
+1. **✅ 插件化架构完成** - 标准化CAD/CAE接口，支持FreeCAD+CalculiX集成
+2. **✅ 力学计算模块完善** - 完整的应力、应变、安全系数计算体系
+3. **✅ 多语言支持** - 中英文界面切换，国际化设计
+4. **✅ 完整文档体系** - 从安装到开发的全方位文档支持
+5. **✅ AI学习助手** - 本地Ollama + RAG知识库集成
+6. **✅ DevOps自动化** - GitHub Actions PR审查、智能代码审查工具、JSON报告输出
+7. **🔄 工作流CLI集成** - 进行中，即将发布
 
-> 💡 **项目状态**：CAE-CLI已从基础工具发展为完整的机械学习辅助平台，具备插件化扩展能力、完整文档体系、专业测试套件和AI智能助手。
+> 💡 **项目状态**：CAE-CLI已从基础工具发展为**完整的机械学习辅助平台**，具备插件化扩展能力、完整文档体系、专业测试套件、AI智能助手和DevOps自动化审查功能。
 
 ---
 
@@ -111,7 +113,38 @@ CAE-CLI 是为机械专业学生（特别是从互联网专业转向机械领域
 - ⚡ **配置驱动**：YAML配置文件定义完整仿真流程，支持复杂参数设置
 - 🛠️ **多软件支持**：已实现FreeCAD、CalculiX集成，可扩展支持更多软件
 
-#### 核心功能特性
+### 🛠️ DevOps自动化 (🚀 新增功能)
+- 🤖 **GitHub Actions PR审查**：自动化代码审查工作流，支持安全/性能/可维护性检查
+- 🔍 **智能代码审查工具**：集成PR分析器、RAG知识库和机械工程规则检查
+- 📊 **JSON报告输出**：支持`cae-cli review --format json`生成结构化审查报告
+- 🔧 **持续集成支持**：零配置部署，使用默认GITHUB_TOKEN，审查失败不阻断合并
+
+#### GitHub Actions PR审查工作流
+```yaml
+# .github/workflows/pr-review.yml
+name: CAE-CLI PR Review
+on: [pull_request]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install -e .
+      - run: python -m sw_helper.utils.pr_review --branch main --output json
+```
+
+#### 智能代码审查命令
+```bash
+# 本地代码审查
+cae-cli review --local
+
+# JSON格式输出（适合CI/CD集成）
+cae-cli review --local --format json
+
+# 与远程分支比较
+cae-cli review --format json
+```
 
 | 特性 | 说明 | 优势 |
 |------|------|------|

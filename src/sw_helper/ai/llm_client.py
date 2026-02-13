@@ -6,7 +6,8 @@ AI LLM集成 - 支持OpenAI/Claude/本地模型
 import os
 import json
 import asyncio
-from typing import Dict, List, Optional, AsyncGenerator
+import time
+from typing import Dict, List, Optional, AsyncGenerator, Any
 from dataclasses import dataclass
 from enum import Enum
 import aiohttp
@@ -20,6 +21,86 @@ class LLMProvider(Enum):
     DEEPSEEK = "deepseek"
     OLLAMA = "ollama"  # 本地模型
     CUSTOM = "custom"
+
+
+class ConnectionPool:
+    """HTTP连接池 - 重用ClientSession减少TCP握手开销"""
+
+    _instance = None
+    _sessions: Dict[str, aiohttp.ClientSession] = {}
+    _session_refcount: Dict[str, int] = {}
+    _cleanup_task = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def get_session(self, base_url: str) -> aiohttp.ClientSession:
+        """
+        获取或创建ClientSession
+
+        Args:
+            base_url: API基础URL
+
+        Returns:
+            ClientSession实例
+        """
+        # 规范化URL（去除末尾斜杠）
+        normalized_url = base_url.rstrip('/')
+
+        if normalized_url not in self._sessions:
+            # 创建新的session
+            timeout = aiohttp.ClientTimeout(total=60)
+            connector = aiohttp.TCPConnector(limit=10, keepalive_timeout=30)
+            session = aiohttp.ClientSession(
+                timeout=timeout,
+                connector=connector,
+                headers={"User-Agent": "CAE-CLI/1.0"}
+            )
+            self._sessions[normalized_url] = session
+            self._session_refcount[normalized_url] = 1
+            print(f"[HTTP连接池] 创建新session: {normalized_url}")
+        else:
+            # 增加引用计数
+            self._session_refcount[normalized_url] += 1
+
+        return self._sessions[normalized_url]
+
+    def release_session(self, base_url: str):
+        """
+        释放session引用
+
+        Args:
+            base_url: API基础URL
+        """
+        normalized_url = base_url.rstrip('/')
+
+        if normalized_url in self._session_refcount:
+            self._session_refcount[normalized_url] -= 1
+
+            # 如果引用计数为0，关闭session（实际上我们保持session开启以重用）
+            # 这里我们只是减少引用计数，session会一直保持开启直到程序结束
+            if self._session_refcount[normalized_url] <= 0:
+                print(f"[HTTP连接池] 引用计数归零，但保持session开启: {normalized_url}")
+
+    async def cleanup(self):
+        """清理所有session（程序退出时调用）"""
+        for url, session in self._sessions.items():
+            if not session.closed:
+                await session.close()
+                print(f"[HTTP连接池] 关闭session: {url}")
+
+        self._sessions.clear()
+        self._session_refcount.clear()
+
+    def get_stats(self) -> Dict[str, Any]:
+        """获取连接池统计信息"""
+        return {
+            "total_sessions": len(self._sessions),
+            "session_refcounts": self._session_refcount.copy(),
+            "open_sessions": sum(1 for s in self._sessions.values() if not s.closed)
+        }
 
 
 @dataclass
@@ -55,14 +136,36 @@ class LLMClient:
         self.config = config
         self.session: Optional[aiohttp.ClientSession] = None
         self.conversation_history: List[Message] = []
+        self.connection_pool = ConnectionPool()
+
+    def _get_base_url(self) -> str:
+        """获取API基础URL"""
+        if self.config.api_base:
+            return self.config.api_base.rstrip('/')
+
+        # 默认URL
+        if self.config.provider == LLMProvider.OPENAI:
+            return "https://api.openai.com/v1"
+        elif self.config.provider == LLMProvider.ANTHROPIC:
+            return "https://api.anthropic.com/v1"
+        elif self.config.provider == LLMProvider.DEEPSEEK:
+            return "https://api.deepseek.com"
+        elif self.config.provider == LLMProvider.OLLAMA:
+            return "http://localhost:11434"
+        else:
+            return "http://localhost:8080"  # 自定义API默认地址
 
     async def __aenter__(self):
-        self.session = aiohttp.ClientSession()
+        base_url = self._get_base_url()
+        self.session = self.connection_pool.get_session(base_url)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         if self.session:
-            await self.session.close()
+            # 不关闭session，只是释放引用
+            base_url = self._get_base_url()
+            self.connection_pool.release_session(base_url)
+            self.session = None
 
     async def chat(self, message: str, tools: Optional[List[Dict]] = None) -> str:
         """
@@ -297,9 +400,10 @@ class LLMClient:
             return data["choices"][0]["message"]["content"]
 
     async def _call_ollama(self, tools: Optional[List[Dict]] = None) -> str:
-        """调用Ollama本地模型"""
-        url = self.config.api_base or "http://localhost:11434"
-        url = f"{url}/api/chat"
+        """调用Ollama本地模型（使用HTTP连接池）"""
+        # 获取基础URL
+        base_url = self.config.api_base or "http://localhost:11434"
+        url = f"{base_url.rstrip('/')}/api/chat"
 
         messages = [
             {"role": m.role, "content": m.content} for m in self.conversation_history
@@ -307,13 +411,38 @@ class LLMClient:
 
         payload = {"model": self.config.model, "messages": messages, "stream": False}
 
-        async with self.session.post(url, json=payload) as resp:
-            if resp.status != 200:
-                error = await resp.text()
-                raise Exception(f"Ollama error: {error}")
+        # 使用连接池的session
+        use_temp_session = self.session is None
+        session_to_use = self.session
 
-            data = await resp.json()
-            return data["message"]["content"]
+        try:
+            if use_temp_session:
+                # 从连接池获取临时session
+                session_to_use = self.connection_pool.get_session(base_url)
+                print(f"[HTTP连接池] 获取临时session: {base_url}")
+
+            # 执行HTTP请求
+            import time
+            start_time = time.time()
+
+            async with session_to_use.post(url, json=payload) as resp:
+                if resp.status != 200:
+                    error = await resp.text()
+                    raise Exception(f"Ollama error: {error}")
+
+                data = await resp.json()
+
+                # 统计信息
+                elapsed_ms = int((time.time() - start_time) * 1000)
+                print(f"[Ollama] 请求完成 | 耗时 {elapsed_ms}ms | 连接池: {'是' if use_temp_session else '否'}")
+
+                return data["message"]["content"]
+
+        finally:
+            if use_temp_session and session_to_use:
+                # 释放临时session
+                self.connection_pool.release_session(base_url)
+                print(f"[HTTP连接池] 释放临时session: {base_url}")
 
     async def _call_custom(self, tools: Optional[List[Dict]] = None) -> str:
         """调用自定义API"""

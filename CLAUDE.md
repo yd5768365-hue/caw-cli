@@ -1,8 +1,6 @@
-```
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-```
 
 ## CAE-CLI 项目概览
 
@@ -27,10 +25,11 @@ cae-cli/
 │   │   ├── optimization/   # 参数优化模块
 │   │   ├── ai/             # AI辅助设计模块
 │   │   ├── chat/           # 交互式聊天模块
-│   │   ├── integrations/   # CAD软件集成模块（旧接口）
+│   │   ├── integrations/   # CAD软件集成模块（旧接口，保留兼容性）
 │   │   ├── mcp/            # MCP协议接口模块
+│   │   ├── knowledge.py     # 知识库管理（Markdown搜索）
 │   │   └── utils/          # 工具模块
-│   ├── integrations/       # 🚀 插件化架构（全新）
+│   ├── integrations/        # 🚀 插件化架构（全新，推荐使用）
 │   │   ├── _base/          # 抽象基类
 │   │   │   ├── connectors.py   # CAD/CAE连接器抽象基类
 │   │   │   └── workflow.py     # 工作流引擎
@@ -39,19 +38,29 @@ cae-cli/
 │   │   ├── cae/            # CAE连接器实现
 │   │   │   └── calculix.py # CalculiX连接器（新架构）
 │   │   └── mesher/         # 网格生成器
+│   │       └── gmsh.py     # Gmsh连接器
 │   └── core/               # 🎯 核心数据类型
 │       └── types.py        # 统一数据流和配置模型
+├── freecad-parametric-mcp/  # FreeCAD MCP 服务器插件
+│   ├── src/freecad_parametric_mcp/  # MCP服务器实现
+│   ├── addon/ParametricMCP/        # FreeCAD插件
+│   └── examples/                    # 示例脚本
 ├── data/                    # 数据文件
 │   ├── materials.json      # 材料库
 │   ├── languages.json      # 多语言包
 │   └── config.yaml         # 默认配置
-├── tests/                   # 测试
+├── knowledge/              # Markdown格式知识库（RAG向量源）
+├── scripts/                # 工具脚本
+│   ├── setup/              # 安装和初始化脚本
+│   ├── tools/              # 开发工具（API文档生成等）
+│   └── mcp/                # MCP相关脚本
+├── tests/                  # 测试
 │   ├── test_cli.py         # CLI测试
-│   └── test_workflow_integration.py # 工作流集成测试
-├── examples/                # 示例
-│   ├── project.yaml        # 标准化配置文件示例
-│   └── optimization_demo.yaml # 参数优化示例
-├── docs/                    # 文档
+│   ├── integration/        # 集成测试
+│   ├── mcp/               # MCP服务器测试
+│   └── unit/              # 单元测试
+├── examples/               # 示例
+│   └── project.yaml        # 标准化配置文件示例
 ├── pyproject.toml          # 项目配置
 ├── setup.py                # 安装脚本
 └── README.md               # 说明文档
@@ -70,6 +79,9 @@ pip install -e ".[full]"
 
 # 安装开发依赖
 pip install -e ".[dev]"
+
+# 安装SSH增强功能
+pip install -e ".[ssh]"
 ```
 
 ### 运行测试
@@ -83,11 +95,16 @@ pytest tests/test_cli.py -v
 pytest tests/test_workflow_integration.py -v
 
 # 运行新架构测试
-python test_freecad_connector.py
-python test_calculix_connector.py
+python tests/integration/connectors/test_freecad_connector.py
+python tests/integration/connectors/test_calculix_connector.py
+python tests/integration/connectors/test_gmsh.py
+
+# 运行MCP服务器测试
+python tests/mcp/test_mcp_simple.py
+python tests/mcp/test_mcp_basic.py
 
 # 运行工作流演示
-python demo_workflow.py
+python scripts/tools/demo_workflow.py
 ```
 
 ### 代码格式化
@@ -116,12 +133,25 @@ cae-cli --help
 python -m sw_helper --help
 ```
 
+### 脚本工具
+
+```bash
+# 初始化SQLite数据库
+python scripts/setup/init_sqlite_db.py
+
+# 生成API文档
+python scripts/tools/generate_api_docs.py
+
+# 测试依赖
+python -m sw_helper.utils.dependency_checker
+```
+
 ## 核心架构
 
 ### 插件化架构 (全新)
 
 #### 1. 标准化接口
-- `CADConnector`：CAD软件连接器抽象基类
+- `CADConnector`：CAD软件连接器抽象基类（位于 `src/integrations/_base/connectors.py`）
 - `CAEConnector`：CAE软件连接器抽象基类
 - `WorkflowEngine`：工作流引擎，管理CAD→CAE完整分析流程
 - 支持通过继承抽象类轻松集成新软件
@@ -129,7 +159,7 @@ python -m sw_helper --help
 #### 2. 已实现的连接器
 - **CAD: FreeCAD**：标准化连接器，支持参数修改、重建、导出
 - **CAE: CalculiX**：开源有限元分析软件集成
-- **网格生成: Gmsh**：规划中集成
+- **网格生成: Gmsh**：标准化网格生成器集成
 
 #### 3. 配置驱动
 使用 YAML 配置文件定义完整仿真流程：
@@ -158,6 +188,90 @@ analysis:
   solver: "calculix"
 ```
 
+#### 4. 双集成架构说明
+项目包含两套集成接口：
+- **旧接口**（`src/sw_helper/integrations/`）：保留兼容性，包含 SolidWorks 和 FreeCAD 的原始实现
+- **新接口**（`src/integrations/`）：插件化架构，推荐使用，提供更好的扩展性和标准化
+
+### MCP (Model Context Protocol) 服务器
+
+项目包含多个 MCP 服务器，用于与 AI 系统集成：
+
+#### 1. FreeCAD MCP 服务器
+- 位置：`src/sw_helper/mcp/freecad_server.py`
+- 功能：将 FreeCAD 建模功能暴露为 MCP 工具
+- 使用场景：AI 智能调用 FreeCAD 进行建模
+
+#### 2. GitHub 仓库 MCP 服务器
+- 位置：`src/sw_helper/mcp/github_server.py`
+- 功能：管理 `https://github.com/yd5768365-hue/caw-cli.git` 仓库
+- 工具：文件操作（读取/写入/创建/删除）、Git 操作（提交/推送/拉取/分支管理）
+
+#### 3. SSH 增强 MCP 服务器
+- 位置：`src/sw_helper/mcp/ssh_server.py`
+- 功能：
+  - SSH 密钥管理（生成/获取/测试）
+  - SSH 主机密钥修复
+  - 网络诊断
+  - 基于 SSH 的 Git 操作（更稳定）
+- 依赖：可选安装 `paramiko` 用于高级 SSH 测试
+
+#### 4. SQLite MCP 服务器
+- 位置：`src/sw_helper/mcp/sqlite_server.py`
+- 功能：
+  - 材料数据库查询
+  - 知识库全文搜索（FTS）
+  - 计算历史管理
+  - 数据库备份
+- 默认数据库路径：`data/cae.db`
+
+#### 5. MCP 核心框架
+- 位置：`src/sw_helper/mcp/core.py`
+- 功能：
+  - `MCPServer`：基础 MCP 服务器类
+  - `MCPClient`：MCP 客户端类
+  - `InMemoryMCPTransport` / `InMemoryMCPClient`：内存传输（用于测试）
+  - `Tool` / `Resource`：工具和资源定义
+
+### 知识库系统
+
+项目使用双层知识库架构：
+
+#### 1. Markdown 知识库（`knowledge.py`）
+- 位置：`src/sw_helper/knowledge.py`
+- 功能：基于关键词搜索的 Markdown 知识库
+- 存储位置：`knowledge/` 目录
+- 支持的功能：
+  - 关键词搜索
+  - 材料信息查询
+  - 螺栓规格查询
+  - 公差配合查询
+
+#### 2. RAG 向量知识库（`rag_engine.py`）
+- 位置：`src/sw_helper/utils/rag_engine.py`
+- 功能：基于 ChromaDB + sentence-transformers 的向量检索
+- 向量存储：`knowledge/chroma_db/`
+- 模型：`all-MiniLM-L6-v2`（支持自定义模型路径）
+- 使用场景：AI 学习模式的智能检索
+
+### 工具模块
+
+#### 1. 依赖检查器（`dependency_checker.py`）
+- 位置：`src/sw_helper/utils/dependency_checker.py`
+- 功能：
+  - 检查核心依赖安装状态
+  - 友好的错误提示和安装命令
+  - 功能降级支持（如 meshio → trimesh）
+  - Rich 表格化状态报告
+
+#### 2. 编码辅助器（`encoding_helper.py`）
+- 功能：解决 Windows 终端编码问题
+- 支持：Unicode 回退数据、编码自动检测
+
+#### 3. 错误处理器（`error_handler.py`）
+- 功能：统一的错误处理和用户友好的错误消息
+- 特点：结构化错误信息、建议解决方案
+
 ## 核心功能模块
 
 ### 1. 几何解析 (geometry)
@@ -176,9 +290,9 @@ analysis:
 - 支持搜索和查询特定属性
 
 ### 4. 力学计算 (mechanics)
-- 支持Von Mises应力、主应力、最大剪应力计算
+- 支持 Von Mises 应力、主应力、最大剪应力计算
 - 基于材料伸长率的脆性/塑性智能判定
-- 单位自动转换（Pint库支持）
+- 单位自动转换（Pint 库支持）
 - 安全系数计算与颜色预警（红/黄/绿）
 - 支持屈曲分析和挠度计算
 
@@ -193,18 +307,18 @@ analysis:
 - 优化流程：参数修改 → 重建 → 导出 → 分析 → 报告
 
 ### 7. AI辅助设计 (ai)
-- 文本到3D模型生成（自然语言描述 → FreeCAD建模）
-- AI优化建议
-- 集成多个LLM提供商（OpenAI、Anthropic、Ollama等）
+- 文本到 3D 模型生成（自然语言描述 → FreeCAD 建模）
+- AI 优化建议
+- 集成多个 LLM 提供商（OpenAI、Anthropic、Ollama 等）
 
 ### 8. 交互式聊天 (chat)
-- 类似OpenCode的交互式AI助手
-- 自然语言控制FreeCAD建模
+- 类似 OpenCode 的交互式 AI 助手
+- 自然语言控制 FreeCAD 建模
 - 实时质量分析反馈
 
-### 9. AI学习助手 (🔥 最新功能)
-- **本地AI模型集成**：支持 Ollama 本地模型 (qwen2.5:1.5b / phi3:mini)
-- **RAG知识检索**：使用 ChromaDB + sentence-transformers 向量化知识库，智能检索相关知识
+### 9. AI 学习助手 (🔥 最新功能)
+- **本地 AI 模型集成**：支持 Ollama 本地模型 (qwen2.5:1.5b / phi3:mini)
+- **RAG 知识检索**：使用 ChromaDB + sentence-transformers 向量化知识库，智能检索相关知识
 - **教学式回答**：专业机械学习助手，用中文教学式、一步步回答，适合大一学生
 - **多轮对话**：自动保存对话历史，支持上下文连贯的深度问答
 - **自动服务启动**：进入学习模式自动检测并启动 Ollama 服务
@@ -212,7 +326,7 @@ analysis:
 - **智能模型检测**：自动检测可用模型，优先使用 qwen2.5:1.5b，回退到 phi3:mini
 
 ### 10. 工作流管理 (workflow)
-- 标准化CAD→CAE分析流程管理
+- 标准化 CAD→CAE 分析流程管理
 - 支持预定义和自定义工作流
 - 完整的步骤级错误处理和进度跟踪
 
@@ -283,101 +397,89 @@ print(f"最大位移: {result.max_displacement} m")
 print(f"安全系数: {result.safety_factor}")
 ```
 
-### GitHub仓库管理MCP服务器
+### MCP 服务器使用
 
-CAE-CLI 包含一个专门的 GitHub 仓库管理 MCP (Model Context Protocol) 服务器，用于直接操作 `https://github.com/yd5768365-hue/caw-cli.git` 仓库。该服务器提供完整的文件操作和 Git 操作工具集。
-
-#### 可用工具
-
-**文件操作工具:**
-- `github_repo_info` - 获取GitHub仓库基本信息
-- `github_list_files` - 列出仓库中的文件
-- `github_read_file` - 读取文件内容
-- `github_write_file` - 写入文件内容（创建或覆盖）
-- `github_create_file` - 创建新文件
-- `github_delete_file` - 删除文件
-- `github_rename_file` - 重命名或移动文件
-
-**Git 操作工具:**
-- `github_git_status` - 查看Git仓库状态
-- `github_git_add` - 添加文件到Git暂存区
-- `github_git_commit` - 提交更改到Git仓库
-- `github_git_push` - 推送提交到远程仓库
-- `github_git_pull` - 从远程仓库拉取更新
-- `github_git_log` - 查看Git提交历史
-- `github_git_create_branch` - 创建新分支
-- `github_git_checkout` - 切换分支
-
-#### 使用示例
+#### GitHub MCP 服务器
 
 ```python
-# 使用GitHub MCP服务器
 from sw_helper.mcp import get_github_mcp_server
 from sw_helper.mcp.core import InMemoryMCPTransport, InMemoryMCPClient
 import asyncio
 
 async def manage_repository():
-    # 获取GitHub MCP服务器
     github_server = get_github_mcp_server()
     transport = InMemoryMCPTransport(github_server.server)
     client = transport.create_client()
-
-    # 连接客户端
     await client.connect()
 
-    # 1. 获取仓库信息
+    # 获取仓库信息
     repo_info = await client.call_tool("github_repo_info", {})
-    print(f"仓库路径: {repo_info.get('repo_path')}")
-    print(f"当前分支: {repo_info.get('current_branch')}")
 
-    # 2. 读取文件
+    # 读取文件
     readme = await client.call_tool("github_read_file", {
-        "file_path": "README.md",
-        "encoding": "utf-8"
-    })
-    print(f"README.md大小: {readme.get('size')} 字节")
-
-    # 3. 创建新文件
-    await client.call_tool("github_create_file", {
-        "file_path": "TEST_FILE.md",
-        "content": "# 测试文件\n通过MCP服务器创建",
-        "encoding": "utf-8"
+        "file_path": "README.md"
     })
 
-    # 4. Git操作
-    await client.call_tool("github_git_add", {
-        "files": ["TEST_FILE.md"]
-    })
-
-    await client.call_tool("github_git_commit", {
-        "message": "添加测试文件",
-        "author": "Claude Code <noreply@anthropic.com>"
-    })
-
-    # 5. 查看提交历史
-    log = await client.call_tool("github_git_log", {
-        "limit": 5,
-        "format": "oneline"
-    })
-    print(f"最近提交: {log.get('commits', [])}")
-
-# 运行
-asyncio.run(manage_repository())
+    # Git 操作
+    await client.call_tool("github_git_add", {"files": ["README.md"]})
+    await client.call_tool("github_git_commit", {"message": "更新文档"})
 ```
 
-#### 演示脚本
-项目包含完整的演示脚本 `demo_github_mcp.py`，展示所有工具的使用方法：
+#### SQLite MCP 服务器
 
-```bash
-python demo_github_mcp.py
+```python
+from sw_helper.mcp import get_sqlite_mcp_server
+
+# 获取 SQLite MCP 服务器
+sqlite_server = get_sqlite_mcp_server()
+
+# 查询材料
+materials = await client.call_tool("sqlite_query_materials", {
+    "name": "Q235",
+    "limit": 10
+})
+
+# 知识库搜索
+results = await client.call_tool("sqlite_search_knowledge", {
+    "query": "螺栓规格",
+    "limit": 5
+})
 ```
 
-#### 快速测试
-运行简单测试验证MCP服务器功能：
+#### SSH MCP 服务器
 
-```bash
-python test_mcp_simple.py
+```python
+from sw_helper.mcp import get_ssh_mcp_server
+
+# 获取 SSH MCP 服务器
+ssh_server = get_ssh_mcp_server()
+
+# 检查 SSH 配置
+config = await client.call_tool("ssh_check_config", {})
+
+# 生成 SSH 密钥
+key = await client.call_tool("ssh_generate_key", {
+    "key_type": "ed25519",
+    "email": "user@example.com"
+})
+
+# 测试 SSH 连接
+connection = await client.call_tool("ssh_test_connection", {
+    "host": "github.com"
+})
 ```
+
+### FreeCAD Parametric MCP 插件
+
+项目包含一个独立的 FreeCAD MCP 服务器插件：
+- 位置：`freecad-parametric-mcp/`
+- 功能：
+  - 参数管理（获取/设置参数）
+  - 草图操作（创建/编辑草图）
+  - 特征操作（拉伸、旋转、扫掠）
+  - 特征族管理
+  - 历史记录查看
+  - 模板应用
 
 ## 配置文件
 
@@ -397,6 +499,9 @@ python test_mcp_simple.py
 2. 所有 CLI 命令通过 Click 库实现
 3. 使用 Rich 库提供美观的终端输出
 4. 重要功能都有对应的测试用例
-5. 支持可选依赖安装（[full] 包含所有功能）
+5. 支持可选依赖安装（[full] 包含所有功能，[ssh] 包含 SSH 功能）
 6. 新架构采用插件化设计，通过实现抽象基类扩展功能
 7. 配置驱动的工作流管理，支持复杂仿真流程的标准化
+8. 双集成架构：新代码应使用 `src/integrations/`，旧接口 `src/sw_helper/integrations/` 保持兼容性
+9. MCP 服务器使用统一的 `InMemoryMCPTransport` 进行测试
+10. 知识库支持两种方式：Markdown 关键词搜索和 RAG 向量检索

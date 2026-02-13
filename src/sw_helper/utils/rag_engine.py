@@ -11,6 +11,253 @@ from pathlib import Path
 import os
 import sys
 import traceback
+import sqlite3
+import json
+import hashlib
+import time
+from datetime import datetime, timedelta
+from typing import Dict, List, Any, Optional
+
+class RAGCacheManager:
+    """RAG查询缓存管理器 - 基于SQLite的本地缓存"""
+
+    def __init__(self, cache_dir: Optional[str] = None):
+        """
+        初始化缓存管理器
+
+        Args:
+            cache_dir: 缓存目录，默认 ~/.cae-cli/cache
+        """
+        if cache_dir is None:
+            home = Path.home()
+            self.cache_dir = home / ".cae-cli" / "cache"
+        else:
+            self.cache_dir = Path(cache_dir)
+
+        # 确保缓存目录存在
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.db_path = self.cache_dir / "rag.db"
+        self._init_database()
+
+    def _init_database(self):
+        """初始化SQLite数据库表 - 简化结构"""
+        conn = sqlite3.connect(str(self.db_path))
+        cursor = conn.cursor()
+
+        # 创建缓存表（简化版）
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS rag_cache (
+                query_hash TEXT PRIMARY KEY,
+                query_text TEXT NOT NULL,
+                result_json TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expire_at TIMESTAMP NOT NULL
+            )
+        """)
+
+        # 创建索引
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_expire_at
+            ON rag_cache(expire_at)
+        """)
+
+        conn.commit()
+        conn.close()
+
+    def _compute_knowledge_hash(self, knowledge_dir: Path, src_dir: Optional[Path] = None) -> str:
+        """
+        计算知识库目录的哈希值
+
+        Args:
+            knowledge_dir: knowledge目录路径
+            src_dir: src核心模块目录路径（可选）
+
+        Returns:
+            基于文件修改时间和文件大小的哈希字符串
+        """
+        hash_data = []
+
+        # 1. 计算knowledge/目录的哈希
+        if knowledge_dir.exists():
+            for md_file in knowledge_dir.glob("*.md"):
+                if md_file.is_file():
+                    stat = md_file.stat()
+                    # 使用文件路径、修改时间和大小
+                    file_info = f"{md_file}:{stat.st_mtime}:{stat.st_size}"
+                    hash_data.append(file_info)
+
+        # 2. 计算src/核心模块的哈希（只包含.py文件）
+        if src_dir and src_dir.exists():
+            # 定义核心模块路径模式
+            core_patterns = [
+                "sw_helper/geometry/**/*.py",
+                "sw_helper/mesh/**/*.py",
+                "sw_helper/material/**/*.py",
+                "sw_helper/mechanics/**/*.py",
+                "sw_helper/report/**/*.py",
+                "sw_helper/utils/**/*.py"
+            ]
+
+            for pattern in core_patterns:
+                for py_file in src_dir.glob(pattern):
+                    if py_file.is_file():
+                        try:
+                            stat = py_file.stat()
+                            file_info = f"{py_file}:{stat.st_mtime}:{stat.st_size}"
+                            hash_data.append(file_info)
+                        except:
+                            pass
+
+        # 如果没有文件，返回默认哈希
+        if not hash_data:
+            return "empty_knowledge_base"
+
+        # 排序以确保一致性
+        hash_data.sort()
+        combined = "|".join(hash_data)
+        return hashlib.md5(combined.encode()).hexdigest()
+
+    def _generate_query_hash(self, query: str, top_k: int = 3, max_length: int = 0) -> str:
+        """生成查询哈希（包含所有影响结果的参数）"""
+        data = f"{query}|{top_k}|{max_length}"
+        return hashlib.md5(data.encode()).hexdigest()
+
+    def get_cache(self, query: str, top_k: int = 3, max_length: int = 0) -> Optional[List[Dict[str, Any]]]:
+        """
+        从缓存获取查询结果
+
+        Args:
+            query: 查询字符串
+            top_k: 返回结果数量
+            max_length: 内容最大长度
+
+        Returns:
+            缓存的检索结果列表，如果未命中或过期则返回None
+        """
+        query_hash = self._generate_query_hash(query, top_k, max_length)
+
+        conn = sqlite3.connect(str(self.db_path))
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        try:
+            # 查询缓存（检查是否过期）
+            cursor.execute("""
+                SELECT result_json, created_at
+                FROM rag_cache
+                WHERE query_hash = ? AND expire_at > datetime('now')
+            """, (query_hash,))
+
+            row = cursor.fetchone()
+            if row:
+                # 更新访问时间（可选）
+                cursor.execute("""
+                    UPDATE rag_cache
+                    SET created_at = CURRENT_TIMESTAMP
+                    WHERE query_hash = ?
+                """, (query_hash,))
+                conn.commit()
+
+                # 返回缓存的JSON结果
+                result_json = row["result_json"]
+                return json.loads(result_json)
+
+            return None
+
+        finally:
+            conn.close()
+
+    def set_cache(self, query: str, results: List[Dict[str, Any]], top_k: int = 3, max_length: int = 0, ttl_hours: int = 24):
+        """
+        设置缓存
+
+        Args:
+            query: 查询字符串
+            results: 检索结果列表
+            top_k: 返回结果数量
+            max_length: 内容最大长度
+            ttl_hours: 缓存有效期（小时）
+        """
+        query_hash = self._generate_query_hash(query, top_k, max_length)
+        result_json = json.dumps(results, ensure_ascii=False)
+
+        conn = sqlite3.connect(str(self.db_path))
+        cursor = conn.cursor()
+
+        try:
+            # 计算过期时间
+            from datetime import datetime, timedelta
+            expire_at = datetime.now() + timedelta(hours=ttl_hours)
+            expire_str = expire_at.isoformat()
+
+            # 插入或替换缓存
+            cursor.execute("""
+                INSERT OR REPLACE INTO rag_cache
+                (query_hash, query_text, result_json, created_at, expire_at)
+                VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?)
+            """, (query_hash, query, result_json, expire_str))
+
+            conn.commit()
+
+        finally:
+            conn.close()
+
+    def cleanup_expired(self):
+        """清理过期的缓存条目（基于expire_at字段）"""
+        conn = sqlite3.connect(str(self.db_path))
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("""
+                DELETE FROM rag_cache
+                WHERE expire_at <= datetime('now')
+            """)
+
+            deleted_count = cursor.rowcount
+            conn.commit()
+
+            if deleted_count > 0:
+                print(f"[RAG缓存] 清理了 {deleted_count} 个过期条目")
+
+        finally:
+            conn.close()
+
+    def get_stats(self) -> Dict[str, Any]:
+        """获取缓存统计信息"""
+        conn = sqlite3.connect(str(self.db_path))
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("SELECT COUNT(*) as total FROM rag_cache")
+            total = cursor.fetchone()["total"]
+
+            cursor.execute("""
+                SELECT COUNT(*) as active FROM rag_cache
+                WHERE expire_at > datetime('now')
+            """)
+            active = cursor.fetchone()["active"]
+
+            cursor.execute("""
+                SELECT COUNT(*) as expired FROM rag_cache
+                WHERE expire_at <= datetime('now')
+            """)
+            expired = cursor.fetchone()["expired"]
+
+            # 计算缓存命中率（需要额外跟踪，暂时返回0）
+            hit_rate = 0.0
+
+            return {
+                "total_entries": total,
+                "active_entries": active,
+                "expired_entries": expired,
+                "hit_rate": hit_rate,
+                "db_path": str(self.db_path)
+            }
+
+        finally:
+            conn.close()
+
 
 class RAGEngine:
     def __init__(self, knowledge_dir="knowledge", model_path=None):
@@ -125,6 +372,25 @@ class RAGEngine:
             print(f"错误: 无法获取或创建集合: {e}")
             self.sentence_transformers_available = False
             return
+
+        # 初始化缓存管理器
+        self.cache_manager = RAGCacheManager()
+
+        # 计算知识库哈希（基于knowledge目录和src核心模块）
+        # 尝试自动发现src目录（假设在项目根目录下）
+        project_root = self.knowledge_dir.parent
+        src_dir = project_root / "src" if project_root.name else Path("src")
+
+        self.knowledge_hash = self.cache_manager._compute_knowledge_hash(
+            self.knowledge_dir,
+            src_dir if src_dir.exists() else None
+        )
+
+        print(f"[缓存] 知识库哈希: {self.knowledge_hash[:12]}...")
+        print(f"[缓存] 数据库路径: {self.cache_manager.db_path}")
+
+        # 定期清理过期缓存（24小时TTL）
+        self.cache_manager.cleanup_expired(ttl_hours=24)
 
         # 加载知识库
         self._load_knowledge()
@@ -270,17 +536,21 @@ class RAGEngine:
         except Exception as e:
             print(f"错误: 无法创建示例文件: {e}")
 
-    def search(self, query: str, top_k: int = 3) -> list:
+    def search(self, query: str, top_k: int = 3, max_length: int = 0) -> list:
         """
-        检索最相关的知识片段
+        检索最相关的知识片段（带缓存）
 
         Args:
             query: 查询文本
             top_k: 返回的结果数量
+            max_length: 内容最大长度（字符数），0表示不截断
 
         Returns:
             检索结果列表，每个结果包含 content、source、distance 字段
         """
+        import time
+        start_time = time.time()
+
         if not self.sentence_transformers_available:
             print("错误: sentence-transformers不可用")
             return []
@@ -289,6 +559,16 @@ class RAGEngine:
             return []
 
         try:
+            # 1. 先尝试从缓存获取
+            cached_results = self.cache_manager.get_cache(query, top_k, max_length)
+            if cached_results is not None:
+                elapsed_ms = int((time.time() - start_time) * 1000)
+                # 估算节省的tokens：假设一次向量编码相当于50个tokens
+                saved_tokens = 50
+                print(f"[RAG] 缓存命中 | 耗时 {elapsed_ms}ms | 节省 tokens {saved_tokens}")
+                return cached_results
+
+            # 2. 缓存未命中，执行向量检索
             # 生成查询向量
             query_embedding = self.model.encode(query, normalize_embeddings=True).tolist()
 
@@ -307,11 +587,37 @@ class RAGEngine:
                     results["metadatas"][0],
                     results["distances"][0]
                 )):
+                    # 内容截断处理
+                    content = doc
+                    if max_length > 0 and len(content) > max_length:
+                        # 尝试截断到最近的句号、感叹号、问号或换行处
+                        truncate_pos = max_length
+                        for punct in ['.', '!', '?', '\n']:
+                            pos = content.rfind(punct, 0, max_length)
+                            if pos > 0:
+                                truncate_pos = max(truncate_pos, pos + 1)
+                                break
+                        content = content[:truncate_pos].rstrip() + "..."
+
                     formatted_results.append({
-                        "content": doc,
+                        "content": content,
                         "source": meta.get("source", "未知来源"),
                         "distance": float(dist)
                     })
+
+            # 3. 将结果存入缓存（24小时TTL）
+            if formatted_results:
+                self.cache_manager.set_cache(
+                    query=query,
+                    results=formatted_results,
+                    top_k=top_k,
+                    max_length=max_length,
+                    ttl_hours=24
+                )
+
+            # 4. 打印统计信息
+            elapsed_ms = int((time.time() - start_time) * 1000)
+            print(f"[RAG] 缓存未命中 | 耗时 {elapsed_ms}ms | 已缓存结果")
 
             return formatted_results
 

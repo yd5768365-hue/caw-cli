@@ -107,7 +107,35 @@ async def sync_project_with_ssh_mcp():
                 print(f"     解释: {interpretation}")
         else:
             print(f"   [WARN] SSH连接测试失败")
-            print(f"     可能需要生成SSH密钥或检查网络连接")
+
+            # 检查是否是主机密钥验证问题
+            ssh_output = ssh_test.get("ssh_command_result", {}).get("stderr", "").lower()
+            if "host key verification failed" in ssh_output or "verification failed" in ssh_output:
+                print(f"     检测到主机密钥验证问题，尝试自动修复...")
+
+                # 尝试修复主机密钥
+                fix_result = await client.call_tool("ssh_fix_host_key", {
+                    "host": "github.com",
+                    "key_types": ["rsa", "ecdsa", "ed25519"]
+                })
+
+                if fix_result.get("success"):
+                    print(f"     [OK] 主机密钥修复成功")
+                    keys_added = fix_result.get("keys_added", 0)
+                    print(f"     已添加 {keys_added} 个主机密钥")
+
+                    # 重新测试连接
+                    print(f"     重新测试SSH连接...")
+                    ssh_test2 = await client.call_tool("ssh_test_connection", {"host": "github.com"})
+
+                    if ssh_test2.get("success"):
+                        print(f"     [OK] SSH连接测试现在成功")
+                    else:
+                        print(f"     [WARN] SSH连接仍然失败，可能需要其他配置")
+                else:
+                    print(f"     [FAIL] 主机密钥修复失败: {fix_result.get('error')}")
+            else:
+                print(f"     可能需要生成SSH密钥或检查网络连接")
 
         # 7. 获取仓库信息（使用GitHub MCP服务器）
         print("\n7. 获取仓库基本信息...")

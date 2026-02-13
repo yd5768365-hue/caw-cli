@@ -1,0 +1,150 @@
+name: CAE-CLI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+
+      - name: Run PR Review
+        id: review
+        run: |
+          # 使用Python脚本运行PR审查工具并提取纯JSON输出
+          python << 'EOF' > review_report.json
+          import subprocess
+          import sys
+          import json
+
+          # 运行PR审查工具
+          result = subprocess.run(
+              [sys.executable, '-m', 'sw_helper.utils.pr_review', '--branch', 'origin/main', '--output', 'json'],
+              capture_output=True,
+              text=True,
+              encoding='utf-8'
+          )
+
+          # 提取JSON输出（工具可能输出日志信息，JSON在最后）
+          output_lines = result.stdout.strip().split('\n')
+          json_start = None
+
+          # 查找JSON开始位置
+          for i, line in enumerate(output_lines):
+              line = line.strip()
+              if line.startswith('{'):
+                  json_start = i
+                  break
+
+          if json_start is not None:
+              json_str = '\n'.join(output_lines[json_start:])
+              try:
+                  # 验证JSON有效性
+                  json_data = json.loads(json_str)
+                  # 输出纯JSON
+                  print(json.dumps(json_data, ensure_ascii=False))
+              except json.JSONDecodeError as e:
+                  print(f"{{'error': 'JSON解析失败: {e}', 'raw_output': {json.dumps(result.stdout)}}}")
+          else:
+              # 没有找到JSON，输出错误信息
+              print(json.dumps({
+                  'error': '未找到JSON输出',
+                  'stdout': result.stdout,
+                  'stderr': result.stderr,
+                  'returncode': result.returncode
+              }))
+
+          # 传递退出状态
+          sys.exit(result.returncode)
+          EOF
+
+          # 检查退出状态（如果有严重问题，工具会返回1）
+          if [ $? -eq 1 ]; then
+            echo "has_critical_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_critical_issues=false" >> $GITHUB_OUTPUT
+          fi
+
+          # 设置输出变量用于下一步
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          cat review_report.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      - name: Comment PR with Review Results
+        uses: actions/github-script@v7
+        env:
+          HAS_CRITICAL_ISSUES: ${{ steps.review.outputs.has_critical_issues }}
+        with:
+          script: |
+            const report = JSON.parse(`${{ steps.review.outputs.report }}`);
+            const issueCount = report.summary?.total_issues || 0;
+            const criticalCount = report.summary?.critical_issues || 0;
+            const highCount = report.summary?.high_issues || 0;
+
+            // 构建Markdown表格
+            let issuesTable = '';
+            if (issueCount > 0 && report.suggestions && report.suggestions.length > 0) {
+              issuesTable = `| 严重程度 | 文件 | 问题描述 |\n|---|---|---|\n`;
+              // 只显示严重和高优先级问题
+              const criticalAndHigh = report.suggestions.filter(s =>
+                s.severity === 'critical' || s.severity === 'high'
+              );
+
+              criticalAndHigh.slice(0, 10).forEach(issue => {
+                const fileDisplay = issue.file.split('/').slice(-2).join('/');
+                const lineInfo = issue.line > 0 ? `:${issue.line}` : '';
+                issuesTable += `| ${issue.severity.toUpperCase()} | \`${fileDisplay}${lineInfo}\` | ${issue.message} |\n`;
+              });
+
+              if (criticalAndHigh.length > 10) {
+                issuesTable += `| ... | ... | 还有 ${criticalAndHigh.length - 10} 个问题未显示 |\n`;
+              }
+            } else {
+              issuesTable = '✅ 未发现问题！';
+            }
+
+            // 构建评论内容
+            const body = `## 🤖 CAE-CLI 自动化审查报告
+
+            ### 📊 统计信息
+            - **审查文件**: ${report.summary?.reviewed_files || 0}/${report.summary?.total_files || 0}
+            - **发现问题**: ${issueCount} 个
+            - **严重问题**: ${criticalCount} 个
+            - **高优先级**: ${highCount} 个
+            - **知识库查询**: ${report.summary?.knowledge_queries || 0} 次（命中: ${report.summary?.knowledge_hits || 0}）
+
+            ${criticalCount > 0 ? '⚠️ **存在严重问题，请优先修复！**\n\n' : ''}
+
+            ### 🎯 主要问题
+            ${issuesTable}
+
+            ${issueCount > 0 ? `
+            ### 💡 建议
+            1. 修复所有**严重**和**高优先级**问题
+            2. 查看完整报告了解所有问题详情
+            3. 运行 \`cae-cli review --local\` 在本地验证修复
+            ` : ''}
+
+            *此报告由 CAE-CLI PR审查工具自动生成*`;
+
+            // 发布评论
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

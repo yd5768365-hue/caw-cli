@@ -205,7 +205,32 @@ class SSHEnhancedMCPServer:
             )
         )
 
-        # 8. 检查Git远程配置
+        # 8. 修复SSH主机密钥验证
+        self.server.register_tool(
+            Tool(
+                name="ssh_fix_host_key",
+                description="修复SSH主机密钥验证问题",
+                input_schema={
+                    "type": "object",
+                    "properties": {
+                        "host": {
+                            "type": "string",
+                            "description": "主机名",
+                            "default": "github.com"
+                        },
+                        "key_types": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "密钥类型",
+                            "default": ["rsa", "ecdsa", "ed25519"]
+                        }
+                    }
+                },
+                handler=self._handle_ssh_fix_host_key,
+            )
+        )
+
+        # 9. 检查Git远程配置
         self.server.register_tool(
             Tool(
                 name="git_check_remote",
@@ -577,6 +602,92 @@ class SSHEnhancedMCPServer:
             suggestions.append("未知错误，请检查错误信息")
 
         return suggestions
+
+    def _handle_ssh_fix_host_key(self, host: str = "github.com", key_types: List[str] = None) -> Dict[str, Any]:
+        """修复SSH主机密钥验证问题"""
+        if key_types is None:
+            key_types = ["rsa", "ecdsa", "ed25519"]
+
+        try:
+            # 确保SSH目录存在
+            self.ssh_config_dir.mkdir(exist_ok=True, mode=0o700)
+
+            known_hosts_file = self.ssh_config_dir / "known_hosts"
+            results = []
+
+            for key_type in key_types:
+                try:
+                    # 使用ssh-keyscan获取主机密钥
+                    cmd = ["ssh-keyscan", "-t", key_type, host]
+                    result = self._run_command(cmd, capture_output=True, timeout=10)
+
+                    if result["success"] and result["stdout"]:
+                        key_line = result["stdout"].strip()
+                        # 解析密钥信息
+                        if key_line and not key_line.startswith("#"):
+                            # 追加到known_hosts文件
+                            with open(known_hosts_file, "a", encoding="utf-8") as f:
+                                f.write(f"{key_line}\n")
+
+                            results.append({
+                                "key_type": key_type,
+                                "success": True,
+                                "key_line": key_line,
+                                "action": "added"
+                            })
+                        else:
+                            results.append({
+                                "key_type": key_type,
+                                "success": False,
+                                "error": f"未获取到有效的{key_type}密钥"
+                            })
+                    else:
+                        results.append({
+                            "key_type": key_type,
+                            "success": False,
+                            "error": result.get("error", "获取密钥失败")
+                        })
+                except Exception as e:
+                    results.append({
+                        "key_type": key_type,
+                        "success": False,
+                        "error": str(e)
+                    })
+
+            # 统计成功情况
+            success_count = sum(1 for r in results if r["success"])
+            total_count = len(results)
+
+            if success_count > 0:
+                # 测试修复后的连接
+                test_result = self._run_command(["ssh", "-T", f"git@{host}"], capture_output=True, timeout=10)
+
+                return {
+                    "success": True,
+                    "host": host,
+                    "keys_scanned": total_count,
+                    "keys_added": success_count,
+                    "results": results,
+                    "test_after_fix": {
+                        "success": test_result["success"],
+                        "output": test_result.get("stdout", ""),
+                        "error": test_result.get("stderr", "")
+                    },
+                    "known_hosts_file": str(known_hosts_file),
+                    "file_exists": known_hosts_file.exists(),
+                    "file_size": known_hosts_file.stat().st_size if known_hosts_file.exists() else 0,
+                    "instructions": "主机密钥已添加到known_hosts文件，现在可以尝试SSH连接"
+                }
+            else:
+                return {
+                    "success": False,
+                    "host": host,
+                    "results": results,
+                    "error": f"未能成功获取任何主机密钥，请检查网络连接"
+                }
+
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
     def _handle_ssh_get_public_key(self, key_file: str = "id_ed25519") -> Dict[str, Any]:
         """获取SSH公钥内容"""

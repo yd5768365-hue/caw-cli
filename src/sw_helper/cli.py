@@ -31,6 +31,13 @@ sys.path.insert(0, str(project_root))
 
 console = Console()
 
+# 项目核心颜色定义
+MAIN_RED = "#8B0000"       # 深红/酒红 - 主色调
+HIGHLIGHT_RED = "#FF4500"     # 荧光红 - 高亮色
+BACKGROUND_BLACK = "#0F0F0F"   # 深黑背景
+COOL_GRAY = "#333333"         # 冷灰 - 辅助色
+TEXT_WHITE = "#FFFFFF"          # 白色
+
 # 版本信息
 __version__ = "0.1.0"
 __prog_name__ = "cae-cli"
@@ -193,6 +200,131 @@ def parse(ctx, file_path, format, output, format_output):
 @click.option("--output", "-o", type=click.Path(), help="Output file path")
 @click.option("--material", "-M", help="Material name for AI suggestions (e.g., Q235)")
 @click.pass_context
+def _get_quality_color(overall_quality: str) -> str:
+    """Get color for quality rating"""
+    quality_colors = {
+        "excellent": "bright_green",
+        "good": "green",
+        "fair": "yellow",
+        "poor": "red",
+        "unknown": "dim",
+    }
+    return quality_colors.get(overall_quality, "white")
+
+
+def _display_analysis_results(results: dict) -> None:
+    """Display analysis results in a table"""
+    table = Table(
+        title="网格质量分析结果", show_header=True, header_style="bold blue"
+    )
+    table.add_column("指标", style="cyan")
+    table.add_column("最小值", style="green")
+    table.add_column("最大值", style="green")
+    table.add_column("平均值", style="yellow")
+    table.add_column("标准差", style="dim")
+
+    for metric_name, values in results.items():
+        if metric_name == "overall_quality":
+            continue
+        if isinstance(values, dict):
+            table.add_row(
+                metric_name,
+                f"{values.get('min', 'N/A'):.4f}"
+                if isinstance(values.get("min"), (int, float))
+                else str(values.get("min", "N/A")),
+                f"{values.get('max', 'N/A'):.4f}"
+                if isinstance(values.get("max"), (int, float))
+                else str(values.get("max", "N/A")),
+                f"{values.get('mean', 'N/A'):.4f}"
+                if isinstance(values.get("mean"), (int, float))
+                else str(values.get("mean", "N/A")),
+                f"{values.get('std', 'N/A'):.4f}"
+                if isinstance(values.get("std"), (int, float))
+                else str(values.get("std", "N/A")),
+            )
+
+    console.print(table)
+
+
+def _save_analysis_results(results: dict, output_path: str) -> None:
+    """Save analysis results to file"""
+    import json
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2, ensure_ascii=False)
+    console.print(f"[green]成功[/green] 报告已保存: [bold]{output_path}[/bold]")
+
+
+def _list_materials_table(db) -> None:
+    """Display table of all materials"""
+    materials = db.list_materials()
+    table = Table(title="材料数据库", show_header=True)
+    table.add_column("名称", style="cyan")
+    table.add_column("类型", style="green")
+    table.add_column("标准", style="dim")
+
+    for mat_name in materials:
+        info = db.get_material(mat_name)
+        table.add_row(
+            mat_name, info.get("type", "N/A"), info.get("standard", "N/A")
+        )
+
+    console.print(table)
+    console.print(f"\n共 [bold]{len(materials)}[/bold] 种材料")
+
+
+def _search_materials_table(db, search_term: str) -> None:
+    """Search and display materials"""
+    results = db.search_materials(search_term)
+    if results:
+        console.print(
+            f"\n搜索 '[bold]{search_term}[/bold]' 找到 {len(results)} 个结果:"
+        )
+        for mat in results:
+            console.print(
+                f"  - {mat['name']} - {mat.get('description', '无描述')}"
+            )
+    else:
+        console.print(
+            f"[yellow]未找到匹配 '[bold]{search_term}[/bold]' 的材料[/yellow]"
+        )
+
+
+def _convert_material_value(key: str, value: float, unit: str) -> tuple:
+    """Convert material value based on unit system"""
+    unit_label = ""
+    converted_value = value
+
+    if unit == "mpa" and isinstance(value, (int, float)):
+        if "modulus" in key or "strength" in key:
+            converted_value = value / 1e6
+            unit_label = "MPa"
+        elif "density" in key:
+            unit_label = "kg/m³"
+
+    return converted_value, unit_label
+
+
+def _display_material_info(info: dict, material_name: str, unit: str) -> None:
+    """Display material information in table"""
+    table = Table(title=f"材料信息: {material_name}", show_header=True)
+    table.add_column("属性", style="cyan")
+    table.add_column("值", style="green")
+    table.add_column("单位", style="dim")
+
+    for key, value in info.items():
+        if key == "name":
+            continue
+
+        # 单位处理
+        if isinstance(value, (int, float)):
+            converted_value, unit_label = _convert_material_value(key, value, unit)
+            table.add_row(str(key), str(converted_value), unit_label)
+        else:
+            table.add_row(str(key), str(value), "")
+
+    console.print(table)
+
+
 def analyze(ctx, file_path, metric, threshold, output, material):
     """
     Analyze mesh quality
@@ -223,57 +355,17 @@ def analyze(ctx, file_path, metric, threshold, output, material):
 
             progress.update(task, completed=True)
 
-        # 显示结果表格
-        table = Table(
-            title="网格质量分析结果", show_header=True, header_style="bold blue"
-        )
-        table.add_column("指标", style="cyan")
-        table.add_column("最小值", style="green")
-        table.add_column("最大值", style="green")
-        table.add_column("平均值", style="yellow")
-        table.add_column("标准差", style="dim")
-
-        for metric_name, values in results.items():
-            if metric_name == "overall_quality":
-                continue
-            if isinstance(values, dict):
-                table.add_row(
-                    metric_name,
-                    f"{values.get('min', 'N/A'):.4f}"
-                    if isinstance(values.get("min"), (int, float))
-                    else str(values.get("min", "N/A")),
-                    f"{values.get('max', 'N/A'):.4f}"
-                    if isinstance(values.get("max"), (int, float))
-                    else str(values.get("max", "N/A")),
-                    f"{values.get('mean', 'N/A'):.4f}"
-                    if isinstance(values.get("mean"), (int, float))
-                    else str(values.get("mean", "N/A")),
-                    f"{values.get('std', 'N/A'):.4f}"
-                    if isinstance(values.get("std"), (int, float))
-                    else str(values.get("std", "N/A")),
-                )
-
-        console.print(table)
+        # 显示结果
+        _display_analysis_results(results)
 
         # 整体质量评估
         overall = results.get("overall_quality", "unknown")
-        quality_colors = {
-            "excellent": "bright_green",
-            "good": "green",
-            "fair": "yellow",
-            "poor": "red",
-            "unknown": "dim",
-        }
-        color = quality_colors.get(overall, "white")
+        color = _get_quality_color(overall)
         console.print(f"\n整体质量: [{color}]{overall}[/{color}]")
 
         # 保存结果
         if output:
-            import json
-
-            with open(output, "w", encoding="utf-8") as f:
-                json.dump(results, f, indent=2, ensure_ascii=False)
-            console.print(f"[green]成功[/green] 报告已保存: [bold]{output}[/bold]")
+            _save_analysis_results(results, output)
 
     except Exception as e:
         console.print(f"[red]失败 错误: {e}[/red]")
@@ -322,37 +414,12 @@ def material(ctx, material_name, property, list_materials, search, unit):
 
         # 列出所有材料
         if list_materials:
-            materials = db.list_materials()
-            table = Table(title="材料数据库", show_header=True)
-            table.add_column("名称", style="cyan")
-            table.add_column("类型", style="green")
-            table.add_column("标准", style="dim")
-
-            for mat_name in materials:
-                info = db.get_material(mat_name)
-                table.add_row(
-                    mat_name, info.get("type", "N/A"), info.get("standard", "N/A")
-                )
-
-            console.print(table)
-            console.print(f"\n共 [bold]{len(materials)}[/bold] 种材料")
+            _list_materials_table(db)
             return
 
         # 搜索材料
         if search:
-            results = db.search_materials(search)
-            if results:
-                console.print(
-                    f"\n搜索 '[bold]{search}[/bold]' 找到 {len(results)} 个结果:"
-                )
-                for mat in results:
-                    console.print(
-                        f"  - {mat['name']} - {mat.get('description', '无描述')}"
-                    )
-            else:
-                console.print(
-                    f"[yellow]未找到匹配 '[bold]{search}[/bold]' 的材料[/yellow]"
-                )
+            _search_materials_table(db, search)
             return
 
         # 查询特定材料
@@ -380,33 +447,7 @@ def material(ctx, material_name, property, list_materials, search, unit):
             return
 
         # 显示完整信息表格
-        table = Table(title=f"材料信息: {material_name}", show_header=True)
-        table.add_column("属性", style="cyan")
-        table.add_column("值", style="green")
-        table.add_column("单位", style="dim")
-
-        # 单位转换
-        unit_labels = {
-            "si": {"density": "kg/m³", "elastic_modulus": "Pa", "strength": "Pa"},
-            "mpa": {"density": "kg/m³", "elastic_modulus": "MPa", "strength": "MPa"},
-        }
-
-        for key, value in info.items():
-            if key == "name":
-                continue
-
-            # 单位处理
-            unit_label = ""
-            if unit == "mpa" and isinstance(value, (int, float)):
-                if "modulus" in key or "strength" in key:
-                    value = value / 1e6
-                    unit_label = "MPa"
-                elif "density" in key:
-                    unit_label = "kg/m³"
-
-            table.add_row(str(key), str(value), unit_label)
-
-        console.print(table)
+        _display_material_info(info, material_name, unit)
 
     except Exception as e:
         console.print(f"[red]失败 错误: {e}[/red]")
@@ -641,6 +682,99 @@ def info(ctx):
 # ==================== CAD集成命令 ====================
 
 
+def _connect_cad(connect, manager):
+    """Connect to CAD software and return connector"""
+    # 连接CAD
+    if connect == "auto":
+        cad_name = manager.auto_connect()
+    else:
+        connector = manager.get_connector(connect)
+        if connector and connector.connect():
+            cad_name = connect
+            manager.active_cad = connect
+        else:
+            cad_name = None
+
+    if not cad_name:
+        console.print("[red]失败 无法连接到CAD软件[/red]")
+        console.print("[dim]请确保SolidWorks或FreeCAD已运行[/dim]")
+        sys.exit(1)
+
+    connector = manager.get_connector()
+    console.print(f"[green]成功[/green] 已连接到: [bold]{cad_name}[/bold]")
+    return connector
+
+
+def _open_cad_file(connector, file_path):
+    """Open CAD file"""
+    console.print(f"[dim]正在打开: {file_path}...[/dim]")
+    if connector.open_document(file_path):
+        console.print("[green]成功[/green] 文件已打开")
+        return True
+    else:
+        console.print("[red]失败 无法打开文件[/red]")
+        return False
+
+
+def _list_cad_parameters(connector):
+    """List CAD parameters in a table"""
+    params = connector.get_parameters()
+    if not params:
+        console.print("[yellow]未找到参数[/yellow]")
+        return
+
+    table = Table(title="模型参数", show_header=True)
+    table.add_column("名称", style="cyan")
+    table.add_column("值", style="green")
+    table.add_column("单位", style="dim")
+    table.add_column("描述", style="white")
+
+    for param in params[:20]:  # 限制显示前20个
+        table.add_row(
+            param.name,
+            f"{param.value:.4f}",
+            param.unit,
+            param.description[:30],
+        )
+
+    console.print(table)
+    console.print(f"\n共 {len(params)} 个参数")
+
+
+def _set_cad_parameter(connector, param_name, param_value):
+    """Set CAD parameter value"""
+    console.print(f"[dim]设置参数: {param_name} = {param_value}...[/dim]")
+    if connector.set_parameter(param_name, param_value):
+        console.print("[green]成功[/green] 参数已更新")
+        return True
+    else:
+        console.print("[red]失败 参数设置失败[/red]")
+        return False
+
+
+def _rebuild_cad_model(connector):
+    """Rebuild CAD model"""
+    console.print("[dim]重建模型...[/dim]")
+    if connector.rebuild():
+        console.print("[green]成功[/green] 重建完成")
+        return True
+    else:
+        console.print("[yellow]⚠ 重建可能有问题[/yellow]")
+        return False
+
+
+def _export_cad_file(connector, export_path, export_format):
+    """Export CAD file"""
+    console.print(f"[dim]导出到: {export_path}...[/dim]")
+    if connector.export_file(export_path, export_format.upper()):
+        console.print("[green]成功[/green] 导出成功")
+        console.print(f"  路径: [bold]{export_path}[/bold]")
+        return True
+    else:
+        console.print("[red]失败 导出失败[/red]")
+        return False
+
+
 @cli.command()
 @click.option(
     "--connect",
@@ -680,85 +814,30 @@ def cad(ctx, connect, open, list_params, set_param, rebuild, export, format):
 
     try:
         manager = CADManager()
-
-        # 连接CAD
-        if connect == "auto":
-            cad_name = manager.auto_connect()
-        else:
-            connector = manager.get_connector(connect)
-            if connector and connector.connect():
-                cad_name = connect
-                manager.active_cad = connect
-            else:
-                cad_name = None
-
-        if not cad_name:
-            console.print("[red]失败 无法连接到CAD软件[/red]")
-            console.print("[dim]请确保SolidWorks或FreeCAD已运行[/dim]")
-            sys.exit(1)
-
-        connector = manager.get_connector()
-        console.print(f"[green]成功[/green] 已连接到: [bold]{cad_name}[/bold]")
+        connector = _connect_cad(connect, manager)
 
         # 打开文件
         if open:
-            console.print(f"[dim]正在打开: {open}...[/dim]")
-            if connector.open_document(open):
-                console.print("[green]成功[/green] 文件已打开")
-            else:
-                console.print("[red]失败 无法打开文件[/red]")
+            if not _open_cad_file(connector, open):
                 return
 
         # 列出参数
         if list_params:
-            params = connector.get_parameters()
-            if params:
-                table = Table(title="模型参数", show_header=True)
-                table.add_column("名称", style="cyan")
-                table.add_column("值", style="green")
-                table.add_column("单位", style="dim")
-                table.add_column("描述", style="white")
-
-                for param in params[:20]:  # 限制显示前20个
-                    table.add_row(
-                        param.name,
-                        f"{param.value:.4f}",
-                        param.unit,
-                        param.description[:30],
-                    )
-
-                console.print(table)
-                console.print(f"\n共 {len(params)} 个参数")
-            else:
-                console.print("[yellow]未找到参数[/yellow]")
+            _list_cad_parameters(connector)
 
         # 设置参数
         if set_param:
             param_name, param_value = set_param
             param_value = float(param_value)
-
-            console.print(f"[dim]设置参数: {param_name} = {param_value}...[/dim]")
-            if connector.set_parameter(param_name, param_value):
-                console.print("[green]成功[/green] 参数已更新")
-            else:
-                console.print("[red]失败 参数设置失败[/red]")
+            _set_cad_parameter(connector, param_name, param_value)
 
         # 重建
         if rebuild:
-            console.print("[dim]重建模型...[/dim]")
-            if connector.rebuild():
-                console.print("[green]成功[/green] 重建完成")
-            else:
-                console.print("[yellow]⚠ 重建可能有问题[/yellow]")
+            _rebuild_cad_model(connector)
 
         # 导出
         if export:
-            console.print(f"[dim]导出到: {export}...[/dim]")
-            if connector.export_file(export, format.upper()):
-                console.print("[green]成功[/green] 导出成功")
-                console.print(f"  路径: [bold]{export}[/bold]")
-            else:
-                console.print("[red]失败 导出失败[/red]")
+            _export_cad_file(connector, export, format)
 
         # 关闭连接
         manager.disconnect_all()
@@ -1043,6 +1122,123 @@ def ai():
     pass
 
 
+def _display_ai_generation_config(description, output_dir, mock):
+    """Display AI generation configuration panel"""
+    console.print(
+        Panel.fit(
+            f"[bold cyan]AI模型生成[/bold cyan]\n"
+            f"描述: [green]{description}[/green]\n"
+            f"模式: [yellow]{'模拟' if mock else '真实FreeCAD'}[/yellow]\n"
+            f"输出: [blue]{output_dir}[/blue]",
+            title="生成配置",
+            border_style="cyan",
+        )
+    )
+
+
+def _execute_ai_generation(generator, description, output_dir, name, generate_report):
+    """Execute AI generation process"""
+    with console.status("[bold green]AI正在生成3D模型..."):
+        result = generator.generate_with_analysis(
+            description=description,
+            output_dir=output_dir,
+            name=name,
+            generate_report=generate_report,
+        )
+    return result
+
+
+def _display_parsed_results(parsed):
+    """Display parsed geometry results"""
+    console.print("\n[cyan]解析结果 解析结果:[/cyan]")
+    console.print(f"  形状: [green]{parsed['shape_type']}[/green]")
+    console.print("  参数:")
+    for param, value in parsed["parameters"].items():
+        console.print(f"    - {param}: [yellow]{value}[/yellow] mm")
+
+    if parsed.get("features"):
+        console.print(
+            f"  特征: [magenta]{', '.join(f['type'] for f in parsed['features'])}[/magenta]"
+        )
+
+
+def _display_output_files(files):
+    """Display output files information"""
+    console.print("\n[cyan]输出文件 输出文件:[/cyan]")
+    for file_type, file_path in files.items():
+        file_size = (
+            Path(file_path).stat().st_size / 1024 if Path(file_path).exists() else 0
+        )
+        console.print(
+            f"  - {file_type.upper()}: [green]{file_path}[/green] ([dim]{file_size:.1f} KB[/dim])"
+        )
+
+
+def _display_analysis_results(analysis):
+    """Display quality analysis results"""
+    console.print("\n[cyan]质量分析 质量分析:[/cyan]")
+    quality_score = analysis.get("quality_score", 0)
+
+    # 根据分数设置颜色
+    if quality_score >= 80:
+        score_color = "green"
+    elif quality_score >= 60:
+        score_color = "yellow"
+    else:
+        score_color = "red"
+
+    console.print(f"  质量评分: [{score_color}]{quality_score:.1f}/100[/{score_color}]")
+
+    if "geometry" in analysis:
+        geo = analysis["geometry"]
+        console.print(f"  体积: [dim]{geo.get('volume', 0):.2e} m^3[/dim]")
+        console.print(f"  顶点数: [dim]{geo.get('vertices', 0)}[/dim]")
+
+
+def _display_success_panel(files):
+    """Display success panel"""
+    console.print(
+        Panel.fit(
+            "[bold green]成功 模型生成成功![/bold green]\n"
+            f"FreeCAD模型: [blue]{files.get('fcstd', 'N/A')}[/blue]\n"
+            f"STEP文件: [blue]{files.get('step', 'N/A')}[/blue]",
+            border_style="green",
+        )
+    )
+
+
+def _display_next_steps(files, report_path):
+    """Display suggested next steps"""
+    console.print("\n[cyan]建议操作:[/cyan]")
+    console.print(f"  1. 查看模型: [dim]cae-cli parse {files.get('step', '')}[/dim]")
+    console.print(
+        f"  2. 运行优化: [dim]cae-cli optimize {files.get('fcstd', '')} -p Radius -r 1 10[/dim]"
+    )
+    console.print(f"  3. 分析报告: [dim]cat {report_path or ''}[/dim]")
+
+
+def _open_freecad_if_requested(open_flag, mock, files):
+    """Open FreeCAD if requested"""
+    if not open_flag or mock:
+        return
+
+    fcstd_path = files.get("fcstd")
+    if fcstd_path and Path(fcstd_path).exists():
+        console.print("\n[dim]正在打开FreeCAD...[/dim]")
+        import subprocess
+
+        try:
+            subprocess.Popen(
+                ["freecad", fcstd_path],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except:
+            console.print(
+                "[yellow]⚠️  无法自动打开FreeCAD，请手动打开文件[/yellow]"
+            )
+
+
 @ai.command("generate")
 @click.argument("description")
 @click.option(
@@ -1087,29 +1283,14 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
     from pathlib import Path
 
     try:
-        # 显示输入信息
-        console.print(
-            Panel.fit(
-                f"[bold cyan]AI模型生成[/bold cyan]\n"
-                f"描述: [green]{description}[/green]\n"
-                f"模式: [yellow]{'模拟' if mock else '真实FreeCAD'}[/yellow]\n"
-                f"输出: [blue]{output_dir}[/blue]",
-                title="生成配置",
-                border_style="cyan",
-            )
-        )
+        # 显示生成配置
+        _display_ai_generation_config(description, output_dir, mock)
 
         # 初始化生成器
         generator = AIModelGenerator(use_mock=mock)
 
         # 执行生成流程
-        with console.status("[bold green]AI正在生成3D模型..."):
-            result = generator.generate_with_analysis(
-                description=description,
-                output_dir=output_dir,
-                name=name,
-                generate_report=analyze,
-            )
+        result = _execute_ai_generation(generator, description, output_dir, name, analyze)
 
         if not result.get("success"):
             console.print(
@@ -1117,52 +1298,19 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
             )
             sys.exit(1)
 
-        # 显示解析结果
-        console.print("\n[cyan]解析结果 解析结果:[/cyan]")
+        # 获取结果数据
         parsed = result["parsed_geometry"]
-        console.print(f"  形状: [green]{parsed['shape_type']}[/green]")
-        console.print("  参数:")
-        for param, value in parsed["parameters"].items():
-            console.print(f"    - {param}: [yellow]{value}[/yellow] mm")
+        files = result["output_files"]
 
-        if parsed.get("features"):
-            console.print(
-                f"  特征: [magenta]{', '.join(f['type'] for f in parsed['features'])}[/magenta]"
-            )
+        # 显示解析结果
+        _display_parsed_results(parsed)
 
         # 显示输出文件
-        console.print("\n[cyan]输出文件 输出文件:[/cyan]")
-        files = result["output_files"]
-        for file_type, file_path in files.items():
-            file_size = (
-                Path(file_path).stat().st_size / 1024 if Path(file_path).exists() else 0
-            )
-            console.print(
-                f"  - {file_type.upper()}: [green]{file_path}[/green] ([dim]{file_size:.1f} KB[/dim])"
-            )
+        _display_output_files(files)
 
         # 显示分析结果
         if "detailed_analysis" in result:
-            console.print("\n[cyan]质量分析 质量分析:[/cyan]")
-            analysis = result["detailed_analysis"]
-            quality_score = analysis.get("quality_score", 0)
-
-            # 根据分数设置颜色
-            if quality_score >= 80:
-                score_color = "green"
-            elif quality_score >= 60:
-                score_color = "yellow"
-            else:
-                score_color = "red"
-
-            console.print(
-                f"  质量评分: [{score_color}]{quality_score:.1f}/100[/{score_color}]"
-            )
-
-            if "geometry" in analysis:
-                geo = analysis["geometry"]
-                console.print(f"  体积: [dim]{geo.get('volume', 0):.2e} m^3[/dim]")
-                console.print(f"  顶点数: [dim]{geo.get('vertices', 0)}[/dim]")
+            _display_analysis_results(result["detailed_analysis"])
 
         # 显示报告路径
         if "report_path" in result:
@@ -1171,42 +1319,13 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
             )
 
         # 成功提示
-        console.print(
-            Panel.fit(
-                "[bold green]成功 模型生成成功![/bold green]\n"
-                f"FreeCAD模型: [blue]{files.get('fcstd', 'N/A')}[/blue]\n"
-                f"STEP文件: [blue]{files.get('step', 'N/A')}[/blue]",
-                border_style="green",
-            )
-        )
+        _display_success_panel(files)
 
         # 提示下一步操作
-        console.print("\n[cyan]建议操作:[/cyan]")
-        console.print(
-            f"  1. 查看模型: [dim]cae-cli parse {files.get('step', '')}[/dim]"
-        )
-        console.print(
-            f"  2. 运行优化: [dim]cae-cli optimize {files.get('fcstd', '')} -p Radius -r 1 10[/dim]"
-        )
-        console.print(f"  3. 分析报告: [dim]cat {result.get('report_path', '')}[/dim]")
+        _display_next_steps(files, result.get("report_path"))
 
         # 如果指定了--open，尝试打开FreeCAD
-        if open and not mock:
-            fcstd_path = files.get("fcstd")
-            if fcstd_path and Path(fcstd_path).exists():
-                console.print("\n[dim]正在打开FreeCAD...[/dim]")
-                import subprocess
-
-                try:
-                    subprocess.Popen(
-                        ["freecad", fcstd_path],
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL,
-                    )
-                except:
-                    console.print(
-                        "[yellow]⚠️  无法自动打开FreeCAD，请手动打开文件[/yellow]"
-                    )
+        _open_freecad_if_requested(open, mock, files)
 
     except Exception as e:
         console.print(f"[red]失败 错误: {e}[/red]")
@@ -1332,6 +1451,52 @@ def macro(output_dir, type, format, cli_path):
     from sw_helper.integrations.sw_macro import SolidWorksMacroGenerator
     from pathlib import Path
 
+    def _generate_export_macro(generator, output_path, export_format, call_cli, cli_path):
+        """Generate export macro"""
+        macro_code = generator.generate_export_macro(
+            output_path=str(output_path / "exported.step"),
+            export_format=export_format.upper(),
+            call_cli=call_cli,
+            cli_path=cli_path,
+        )
+        macro_file = output_path / "CAE_Export.bas"
+        generator.save_macro(macro_code, str(macro_file))
+        console.print(f"[green]成功[/green] 导出宏: {macro_file}")
+        return macro_file
+
+    def _generate_parametric_macro(generator, output_path):
+        """Generate parametric macro"""
+        macro_code = generator.generate_parameter_macro()
+        macro_file = output_path / "CAE_Parametric.bas"
+        generator.save_macro(macro_code, str(macro_file))
+        console.print(f"[green]成功[/green] 参数宏: {macro_file}")
+        return macro_file
+
+    def _generate_full_macro(generator, output_path, cli_path):
+        """Generate full integration macro"""
+        macro_code = generator.generate_full_integration_macro(cli_path)
+        macro_file = output_path / "CAE_FullIntegration.bas"
+        generator.save_macro(macro_code, str(macro_file))
+        console.print(f"[green]成功[/green] 完整集成宏: {macro_file}")
+        return macro_file
+
+    def _display_usage():
+        """Display macro usage instructions"""
+        console.print("\n[cyan]使用方法:[/cyan]")
+        console.print("1. 在SolidWorks中按 Alt+F11 打开VBA编辑器")
+        console.print("2. 文件 -> 导入文件，选择生成的.bas文件")
+        console.print("3. 运行宏即可实现自动化导出和分析")
+
+    def _display_full_features():
+        """Display full integration macro features"""
+        console.print("\n[dim]完整集成宏功能:[/dim]")
+        console.print("  - 修改圆角参数")
+        console.print("  - 重建模型")
+        console.print("  - 导出STEP文件")
+        console.print("  - 调用CLI分析")
+        console.print("  - 显示报告路径")
+        console.print("  - 支持优化循环")
+
     try:
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
@@ -1344,45 +1509,18 @@ def macro(output_dir, type, format, cli_path):
         generator = SolidWorksMacroGenerator()
 
         if type in ["export", "full"]:
-            # 生成导出宏
-            macro_code = generator.generate_export_macro(
-                output_path=str(output_path / "exported.step"),
-                export_format=format.upper(),
-                call_cli=(type == "full"),
-                cli_path=cli_path,
-            )
-
-            macro_file = output_path / "CAE_Export.bas"
-            generator.save_macro(macro_code, str(macro_file))
-            console.print(f"[green]成功[/green] 导出宏: {macro_file}")
+            _generate_export_macro(generator, output_path, format, (type == "full"), cli_path)
 
         if type in ["parametric", "full"]:
-            # 生成参数宏
-            macro_code = generator.generate_parameter_macro()
-            macro_file = output_path / "CAE_Parametric.bas"
-            generator.save_macro(macro_code, str(macro_file))
-            console.print(f"[green]成功[/green] 参数宏: {macro_file}")
+            _generate_parametric_macro(generator, output_path)
 
         if type == "full":
-            # 生成完整集成宏
-            macro_code = generator.generate_full_integration_macro(cli_path)
-            macro_file = output_path / "CAE_FullIntegration.bas"
-            generator.save_macro(macro_code, str(macro_file))
-            console.print(f"[green]成功[/green] 完整集成宏: {macro_file}")
+            _generate_full_macro(generator, output_path, cli_path)
 
-        console.print("\n[cyan]使用方法:[/cyan]")
-        console.print("1. 在SolidWorks中按 Alt+F11 打开VBA编辑器")
-        console.print("2. 文件 -> 导入文件，选择生成的.bas文件")
-        console.print("3. 运行宏即可实现自动化导出和分析")
+        _display_usage()
 
         if type == "full":
-            console.print("\n[dim]完整集成宏功能:[/dim]")
-            console.print("  - 修改圆角参数")
-            console.print("  - 重建模型")
-            console.print("  - 导出STEP文件")
-            console.print("  - 调用CLI分析")
-            console.print("  - 显示报告路径")
-            console.print("  - 支持优化循环")
+            _display_full_features()
 
     except Exception as e:
         console.print(f"[red]失败 错误: {e}[/red]")
@@ -1390,6 +1528,50 @@ def macro(output_dir, type, format, cli_path):
 
 
 # ==================== Chat交互命令 ====================
+
+
+def _configure_llm_for_chat(model, api_key, mock, chat_instance):
+    """Configure LLM client for chat"""
+    if not mock and model != "auto":
+        if model == "openai":
+            api_key = api_key or click.prompt(
+                "OpenAI API Key", hide_input=True, confirmation_prompt=False
+            )
+            chat_instance.llm_client = create_openai_client(api_key=api_key)
+        elif model == "anthropic":
+            api_key = api_key or click.prompt(
+                "Anthropic API Key", hide_input=True, confirmation_prompt=False
+            )
+            from sw_helper.ai.llm_client import create_anthropic_client
+
+            chat_instance.llm_client = create_anthropic_client(api_key=api_key)
+        elif model == "deepseek":
+            api_key = api_key or click.prompt(
+                "DeepSeek API Key", hide_input=True, confirmation_prompt=False
+            )
+            config = LLMConfig(
+                provider=LLMProvider.DEEPSEEK,
+                model="deepseek-chat",
+                api_key=api_key,
+            )
+            chat_instance.llm_client = LLMClient(config)
+        elif model == "ollama":
+            chat_instance.llm_client = create_ollama_client()
+
+        console.print(f"[green]成功 {model} 模型已配置[/green]")
+    elif mock:
+        console.print("[yellow]⚠ 模拟模式 - 不使用AI，直接执行命令[/yellow]")
+
+
+def _display_chat_start_panel():
+    """Display chat start panel"""
+    console.print(
+        Panel.fit(
+            "[bold cyan]🚀 启动CAE-CLI智能助手[/bold cyan]\n"
+            "集成MCP + LLM + FreeCAD的交互式设计环境",
+            border_style="cyan",
+        )
+    )
 
 
 @cli.command()
@@ -1419,7 +1601,7 @@ def chat(model, api_key, mock):
         cae-cli chat
 
         # Use OpenAI
-        cae-cli chat --model openai --api-key sk-xxx
+        cae-cli chat --model openai --api-key YOUR_API_KEY_HERE
 
         # Use local Ollama
         cae-cli chat --model ollama
@@ -1444,6 +1626,36 @@ def chat(model, api_key, mock):
         create_ollama_client,
     )
 
+    def _configure_llm(chat_instance):
+        """Configure LLM client for chat"""
+        if not mock and model != "auto":
+            if model == "openai":
+                actual_api_key = api_key or click.prompt(
+                    "OpenAI API Key", hide_input=True, confirmation_prompt=False
+                )
+                chat_instance.llm_client = create_openai_client(api_key=actual_api_key)
+            elif model == "anthropic":
+                actual_api_key = api_key or click.prompt(
+                    "Anthropic API Key", hide_input=True, confirmation_prompt=False
+                )
+                chat_instance.llm_client = create_anthropic_client(api_key=actual_api_key)
+            elif model == "deepseek":
+                actual_api_key = api_key or click.prompt(
+                    "DeepSeek API Key", hide_input=True, confirmation_prompt=False
+                )
+                config = LLMConfig(
+                    provider=LLMProvider.DEEPSEEK,
+                    model="deepseek-chat",
+                    api_key=actual_api_key,
+                )
+                chat_instance.llm_client = LLMClient(config)
+            elif model == "ollama":
+                chat_instance.llm_client = create_ollama_client()
+
+            console.print(f"[green]成功 {model} 模型已配置[/green]")
+        elif mock:
+            console.print("[yellow]⚠ 模拟模式 - 不使用AI，直接执行命令[/yellow]")
+
     try:
         console.print(
             Panel.fit(
@@ -1454,39 +1666,7 @@ def chat(model, api_key, mock):
         )
 
         chat_instance = OpencodeStyleChat()
-
-        # 配置LLM
-        if not mock and model != "auto":
-            if model == "openai":
-                api_key = api_key or click.prompt(
-                    "OpenAI API Key", hide_input=True, confirmation_prompt=False
-                )
-                chat_instance.llm_client = create_openai_client(api_key=api_key)
-            elif model == "anthropic":
-                api_key = api_key or click.prompt(
-                    "Anthropic API Key", hide_input=True, confirmation_prompt=False
-                )
-                from sw_helper.ai.llm_client import create_anthropic_client
-
-                chat_instance.llm_client = create_anthropic_client(api_key=api_key)
-            elif model == "deepseek":
-                api_key = api_key or click.prompt(
-                    "DeepSeek API Key", hide_input=True, confirmation_prompt=False
-                )
-                config = LLMConfig(
-                    provider=LLMProvider.DEEPSEEK,
-                    model="deepseek-chat",
-                    api_key=api_key,
-                )
-                chat_instance.llm_client = LLMClient(config)
-            elif model == "ollama":
-                chat_instance.llm_client = create_ollama_client()
-
-            console.print(f"[green]成功 {model} 模型已配置[/green]")
-        elif mock:
-            console.print("[yellow]⚠ 模拟模式 - 不使用AI，直接执行命令[/yellow]")
-
-        # 启动聊天
+        _configure_llm(chat_instance)
         asyncio.run(chat_instance.start())
 
     except KeyboardInterrupt:
@@ -2802,6 +2982,125 @@ def mcp_call(tool_name, arguments):
             console.print(f"[red]失败 执行失败: {e}[/red]")
 
     asyncio.run(run_tool())
+
+
+# ==================== 主菜单命令 ====================
+
+@cli.command()
+def menu():
+    """
+    启动CAE-CLI主菜单 - 三个并列顶层模块入口
+
+    三个并列模块：
+      - 工作模式：纯粹工具箱（分析、优化、报告生成）
+      - 知识顾问：快速检索手册、材料参数、公差标准
+      - 辅助学习：系统性学习、教学式解释、进度追踪
+
+    风格：深红科技暗黑系 + 荧光红高亮
+    """
+    from sw_helper.main_menu import start_main_menu
+
+    try:
+        start_main_menu()
+    except KeyboardInterrupt:
+        console.print(f"\n[{HIGHLIGHT_RED}]再见！[{HIGHLIGHT_RED}]")
+    except Exception as e:
+        console.print(f"[red]启动主菜单失败: {e}[/red]")
+        if ctx.obj.get("verbose"):
+            console.print_exception()
+
+
+@cli.command()
+@click.option('--local', is_flag=True, help="审查本地未提交的变更")
+@click.option('--pr', type=int, help="审查指定PR编号的变更")
+@click.option('--format', 'output_format', type=click.Choice(['text', 'json'], case_sensitive=False),
+              default='text', help="输出格式: text 或 json")
+def review(local, pr, output_format):
+    """
+    智能代码审查
+
+    分析代码变更，检查安全、性能、可维护性问题。
+    支持两种模式：
+      --local：审查本地未提交的变更
+      --pr NUMBER：审查指定PR的变更
+
+    示例：
+      cae-cli review --local
+      cae-cli review --pr 123
+      cae-cli review --local --format json
+    """
+    # 如果请求JSON格式，使用utils下的PR审查工具
+    if output_format == 'json':
+        import subprocess
+        import sys
+
+        # 构建命令参数
+        cmd = [sys.executable, '-m', 'sw_helper.utils.pr_review', '--output', 'json', '--no-rag']
+
+        if local:
+            # 对于本地变更，比较HEAD和HEAD~1
+            cmd.extend(['--base', 'HEAD~1', '--head', 'HEAD'])
+        elif pr:
+            # PR模式 - 简化处理，使用默认分支比较
+            console.print(f"[yellow]注意: PR {pr} 审查使用默认分支比较[/yellow]")
+            cmd.extend(['--branch', 'main'])
+        else:
+            # 默认：比较当前分支与main
+            cmd.extend(['--branch', 'main'])
+
+        # 执行命令
+        result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
+
+        # 提取JSON输出（工具可能输出日志信息，JSON在最后）
+        stdout_text = result.stdout if result.stdout is not None else ""
+        stderr_text = result.stderr if result.stderr is not None else ""
+
+        output_lines = stdout_text.strip().split('\n')
+        json_start = None
+
+        # 查找JSON开始位置
+        for i, line in enumerate(output_lines):
+            line = line.strip()
+            if line.startswith('{'):
+                json_start = i
+                break
+
+        if json_start is not None:
+            json_str = '\n'.join(output_lines[json_start:])
+            try:
+                # 验证JSON有效性并重新格式化输出
+                import json
+                json_data = json.loads(json_str)
+                # 输出纯JSON
+                print(json.dumps(json_data, indent=2, ensure_ascii=True))
+            except json.JSONDecodeError as e:
+                # JSON解析失败，输出原始内容
+                print(f"[ERROR] JSON解析失败: {e}")
+                print(stdout_text)
+        else:
+            # 没有找到JSON，输出原始内容
+            print(stdout_text)
+
+        if stderr_text:
+            console.print(f"[yellow]{stderr_text}[/yellow]")
+
+        # 传递退出码
+        sys.exit(result.returncode)
+    else:
+        # 默认行为：使用原有的review_command
+        try:
+            # 尝试绝对导入
+            from sw_helper.pr_review import review_command
+        except ImportError:
+            # 回退到相对导入
+            from .pr_review import review_command
+
+        try:
+            review_command(local=local, pr=pr)
+        except KeyboardInterrupt:
+            console.print(f"\n[{HIGHLIGHT_RED}]审查已取消[/{HIGHLIGHT_RED}]")
+        except Exception as e:
+            console.print(f"[red]审查失败: {e}[/red]")
 
 
 # 入口点
