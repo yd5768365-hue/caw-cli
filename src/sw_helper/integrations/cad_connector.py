@@ -1,235 +1,174 @@
 """
-CAD连接器管理器 - 统一管理多个CAD软件的连接
-
-提供CAD软件的自动检测、连接和切换功能，
-支持SolidWorks、FreeCAD等主流CAD软件。
+CAD连接器模块 - 使用pywin32连接SolidWorks和FreeCAD
+实现参数修改、重建模型、导出文件
 """
 
-from typing import Optional, Dict, Any, List
 from pathlib import Path
-import sys
-
-# 尝试导入基础连接器
-try:
-    from integrations._base.connectors import CADConnector
-except ImportError:
-    CADConnector = None
+from typing import Optional, List
+from dataclasses import dataclass
 
 
-class CADManager:
-    """CAD连接器管理器
-    
-    负责管理多个CAD软件的连接，提供统一的接口
-    支持自动检测和手动选择CAD软件
-    """
+@dataclass
+class Parameter:
+    """参数数据类"""
 
-    def __init__(self):
-        self.connectors: Dict[str, Any] = {}
-        self.active_cad: Optional[str] = None
-        self._available_cads: List[str] = []
-
-    def auto_connect(self) -> Optional[str]:
-        """自动检测并连接可用的CAD软件
-        
-        按优先级尝试连接:
-        1. FreeCAD
-        2. SolidWorks
-        
-        Returns:
-            Optional[str]: 成功连接的CAD名称，未找到则返回None
-        """
-        # 尝试FreeCAD
-        cad_name = self._try_connect_freecad()
-        if cad_name:
-            self.active_cad = cad_name
-            return cad_name
-
-        # 尝试SolidWorks
-        cad_name = self._try_connect_solidworks()
-        if cad_name:
-            self.active_cad = cad_name
-            return cad_name
-
-        return None
-
-    def _try_connect_freecad(self) -> Optional[str]:
-        """尝试连接FreeCAD"""
-        try:
-            from integrations.cad.freecad import FreeCADConnector
-            
-            connector = FreeCADConnector()
-            if connector.connect():
-                self.connectors["freecad"] = connector
-                self._available_cads.append("freecad")
-                return "freecad"
-        except ImportError:
-            pass
-        except Exception:
-            pass
-        return None
-
-    def _try_connect_solidworks(self) -> Optional[str]:
-        """尝试连接SolidWorks（需要Windows环境）"""
-        try:
-            # 使用本地定义的SolidWorksConnector类
-            connector = SolidWorksConnector()
-            if connector.connect():
-                self.connectors["solidworks"] = connector
-                self._available_cads.append("solidworks")
-                return "solidworks"
-        except ImportError:
-            pass
-        except Exception:
-            pass
-        return None
-
-    def get_connector(self, cad_name: Optional[str] = None) -> Optional[Any]:
-        """获取指定CAD的连接器
-        
-        Args:
-            cad_name: CAD名称，如果为None则返回当前激活的连接器
-            
-        Returns:
-            Optional[Any]: CAD连接器实例
-        """
-        if cad_name is None:
-            cad_name = self.active_cad
-        
-        if cad_name is None:
-            return None
-            
-        return self.connectors.get(cad_name)
-
-    def connect(self, cad_name: str) -> bool:
-        """连接到指定的CAD软件
-        
-        Args:
-            cad_name: CAD名称 ("solidworks", "freecad")
-            
-        Returns:
-            bool: 连接是否成功
-        """
-        if cad_name == "solidworks":
-            result = self._try_connect_solidworks()
-        elif cad_name == "freecad":
-            result = self._try_connect_freecad()
-        else:
-            return False
-            
-        if result:
-            self.active_cad = result
-            return True
-        return False
-
-    def disconnect_all(self) -> None:
-        """断开所有CAD连接"""
-        for name, connector in self.connectors.items():
-            try:
-                if hasattr(connector, 'disconnect'):
-                    connector.disconnect()
-                elif hasattr(connector, 'close_document'):
-                    connector.close_document()
-            except Exception:
-                pass
-        
-        self.connectors.clear()
-        self.active_cad = None
-
-    def list_available(self) -> List[str]:
-        """列出所有可用的CAD软件
-        
-        Returns:
-            List[str]: 可用的CAD名称列表
-        """
-        return self._available_cads.copy()
-
-    def get_active_cad(self) -> Optional[str]:
-        """获取当前激活的CAD软件名称
-        
-        Returns:
-            Optional[str]: 当前激活的CAD名称
-        """
-        return self.active_cad
+    name: str
+    value: float
+    unit: str = "mm"
+    description: str = ""
+    modifiable: bool = True
 
 
 class SolidWorksConnector:
-    """SolidWorks连接器
-    
-    注意: 此连接器需要SolidWorks安装且仅在Windows环境下可用
-    """
-    
+    """SolidWorks连接器 - 使用COM API"""
+
     def __init__(self):
-        self.sws_app = None
+        self.sw_app = None
         self.active_doc = None
         self.is_connected = False
 
     def connect(self) -> bool:
-        """连接到SolidWorks实例"""
+        """连接到SolidWorks"""
         try:
-            # 尝试使用Python的win32com连接SolidWorks
-            try:
-                import win32com.client
-                import pythoncom
-                pythoncom.CoInitialize()
-            except ImportError:
-                print("警告: win32com/pywin32不可用，无法连接SolidWorks")
-                print("提示: pip install pywin32")
-                return False
-            
-            self.sws_app = win32com.client.Dispatch("SldWorks.Application")
-            self.sws_app.Visible = True
+            import win32com.client
+
+            # 尝试连接已运行的SolidWorks实例
+            self.sw_app = win32com.client.Dispatch("SldWorks.Application")
+            self.sw_app.Visible = True
             self.is_connected = True
+
             return True
+
         except Exception as e:
             print(f"连接SolidWorks失败: {e}")
             return False
 
-    def load_model(self, file_path: Path) -> bool:
-        """加载CAD模型文件"""
+    def open_document(self, file_path: str) -> bool:
+        """打开文档"""
         if not self.is_connected:
             if not self.connect():
                 return False
 
         try:
-            file_path = str(file_path.resolve())
+            file_path = str(Path(file_path).resolve())
+
+            # 定义文件类型常量
+            doc_types = {
+                ".sldprt": 1,  # 零件
+                ".sldasm": 2,  # 装配体
+                ".slddrw": 3,  # 工程图
+            }
+
+            ext = Path(file_path).suffix.lower()
+            doc_type = doc_types.get(ext, 1)
+
             # 打开文档
-            self.active_doc = self.sws_app.OpenDoc(file_path, 1)  # 1 = swDocPART
-            if self.active_doc:
-                return True
-            return False
+            errors = 0
+            warnings = 0
+            self.active_doc = self.sw_app.OpenDoc6(
+                file_path, doc_type, 0, "", errors, warnings
+            )
+
+            return self.active_doc is not None
+
         except Exception as e:
             print(f"打开文档失败: {e}")
             return False
 
-    def get_parameter(self, name: str) -> Optional[float]:
-        """获取指定参数的值"""
+    def get_parameters(self) -> List[Parameter]:
+        """获取所有参数"""
         if not self.active_doc:
-            return None
-        
-        try:
-            # 获取文档的定制属性
-            custom_props = self.active_doc.CustomPropertyManager
-            if custom_props:
-                value = custom_props.Get(name)
-                if value:
-                    return float(value)
-        except Exception:
-            pass
-        return None
+            return []
 
-    def set_parameter(self, name: str, value: float) -> bool:
+        params = []
+
+        try:
+            # 获取自定义属性
+            cust_prop = self.active_doc.Extension.CustomPropertyManager("")
+
+            # 获取尺寸参数
+            model = self.active_doc
+
+            # 遍历特征获取尺寸
+            feat = model.FirstFeature
+            while feat:
+                if feat.GetTypeName() in ["Dimension", "BaseFlange", "Extrude"]:
+                    try:
+                        # 获取特征的尺寸
+                        dim = feat.GetSpecificFeature2
+                        if hasattr(dim, "GetDimension"):
+                            d = dim.GetDimension(0)
+                            if d:
+                                params.append(
+                                    Parameter(
+                                        name=d.FullName,
+                                        value=d.Value * 1000,  # 转换为mm
+                                        unit="mm",
+                                        description=f"特征: {feat.Name}",
+                                    )
+                                )
+                    except:
+                        pass
+
+                feat = feat.GetNextFeature()
+
+            # 获取全局变量（方程式）
+            eq_mgr = model.GetEquationMgr
+            if eq_mgr:
+                for i in range(eq_mgr.GetCount):
+                    eq = eq_mgr.Equation(i)
+                    if eq:
+                        # 解析方程式
+                        parts = eq.split("=", 1)
+                        if len(parts) == 2:
+                            name = parts[0].strip().strip('"')
+                            try:
+                                value = float(parts[1])
+                                params.append(
+                                    Parameter(
+                                        name=name,
+                                        value=value,
+                                        unit="mm",
+                                        description="全局变量",
+                                    )
+                                )
+                            except:
+                                pass
+
+        except Exception as e:
+            print(f"获取参数失败: {e}")
+
+        return params
+
+    def set_parameter(self, param_name: str, value: float) -> bool:
         """设置参数值"""
         if not self.active_doc:
             return False
 
         try:
-            custom_props = self.active_doc.CustomPropertyManager
-            if custom_props:
-                custom_props.Set(name, str(value))
+            # 尝试作为尺寸参数设置
+            dim = self.active_doc.Parameter(param_name)
+            if dim:
+                # SolidWorks使用米为单位
+                dim.SystemValue = value / 1000
                 return True
+
+            # 尝试作为全局变量设置
+            eq_mgr = self.active_doc.GetEquationMgr
+            if eq_mgr:
+                for i in range(eq_mgr.GetCount):
+                    eq = eq_mgr.Equation(i)
+                    if eq and param_name in eq:
+                        # 更新方程式
+                        new_eq = f'"{param_name}" = {value}'
+                        eq_mgr.Equation(i, new_eq)
+                        return True
+
+            return False
+
         except Exception as e:
             print(f"设置参数失败: {e}")
-        return False
+            return False
 
     def rebuild(self) -> bool:
         """重建模型"""
@@ -237,31 +176,293 @@ class SolidWorksConnector:
             return False
 
         try:
-            self.active_doc.EditRebuild3()
+            # 强制重建
+            self.active_doc.EditRebuild3
             return True
-        except Exception:
+        except Exception as e:
+            print(f"重建失败: {e}")
             return False
 
-    def export_step(self, output_path: Path) -> bool:
-        """导出为STEP格式"""
+    def export_file(self, output_path: str, format_type: str = "STEP") -> bool:
+        """导出文件"""
         if not self.active_doc:
             return False
 
         try:
-            export_data = self.sws_app.GetExportFileData(1)  # 1 = step
-            result = self.active_doc.SaveAs3(str(output_path), 0, 0)
-            return result == 0
+            output_path = str(Path(output_path))
+
+            # 根据格式选择导出方式
+            format_map = {
+                "STEP": (".step", True),
+                "STL": (".stl", False),
+                "IGES": (".iges", True),
+                "PDF": (".pdf", False),
+                "PARASOLID": (".x_t", True),
+            }
+
+            ext, use_save = format_map.get(format_type.upper(), (".step", True))
+
+            # 确保扩展名正确
+            if not output_path.endswith(ext):
+                output_path += ext
+
+            if use_save:
+                # 使用SaveAs
+                errors = 0
+                warnings = 0
+                result = self.active_doc.SaveAs3(output_path, 0, 2)
+                return result == 0
+            else:
+                # 特殊导出（如STL）
+                if format_type.upper() == "STL":
+                    stl_exporter = self.active_doc.Extension.GetSTLExporter
+                    if stl_exporter:
+                        stl_exporter.ExportBinary = False
+                        stl_exporter.ExportPath = output_path
+                        return stl_exporter.Save
+
+            return False
+
         except Exception as e:
             print(f"导出失败: {e}")
             return False
 
-    def get_supported_formats(self):
-        """获取支持的导出格式"""
-        from integrations._base.connectors import FileFormat
-        return [
-            FileFormat.STEP,
-            FileFormat.STL,
-            FileFormat.IGES,
-            FileFormat.SLDPRT,
-            FileFormat.SLDASM,
-        ]
+    def close_document(self, save: bool = False):
+        """关闭文档"""
+        if self.active_doc:
+            try:
+                self.sw_app.CloseDoc(self.active_doc.GetTitle)
+                self.active_doc = None
+            except:
+                pass
+
+    def disconnect(self):
+        """断开连接"""
+        self.close_document()
+        self.sw_app = None
+        self.is_connected = False
+
+
+class FreeCADConnector:
+    """FreeCAD连接器"""
+
+    def __init__(self):
+        self.fc_app = None
+        self.active_doc = None
+        self.is_connected = False
+
+    def connect(self) -> bool:
+        """连接到FreeCAD"""
+        try:
+            # 尝试导入FreeCAD
+            import FreeCAD as App
+            import Part
+
+            self.fc_app = App
+            self.is_connected = True
+
+            return True
+
+        except ImportError:
+            print("未找到FreeCAD模块，请确保已安装FreeCAD并配置Python路径")
+            return False
+        except Exception as e:
+            print(f"连接FreeCAD失败: {e}")
+            return False
+
+    def open_document(self, file_path: str) -> bool:
+        """打开文档"""
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            file_path = str(Path(file_path).resolve())
+            self.active_doc = self.fc_app.open(file_path)
+
+            return self.active_doc is not None
+
+        except Exception as e:
+            print(f"打开文档失败: {e}")
+            return False
+
+    def get_parameters(self) -> List[Parameter]:
+        """获取参数"""
+        if not self.active_doc:
+            return []
+
+        params = []
+
+        try:
+            # FreeCAD使用电子表格或约束
+            for obj in self.active_doc.Objects:
+                # 检查是否有约束
+                if hasattr(obj, "Constraints"):
+                    for constraint in obj.Constraints:
+                        if hasattr(constraint, "Value"):
+                            params.append(
+                                Parameter(
+                                    name=constraint.Name,
+                                    value=constraint.Value,
+                                    unit="mm",
+                                    description=f"对象: {obj.Name}",
+                                )
+                            )
+
+                # 检查属性
+                if hasattr(obj, "Length"):
+                    params.append(
+                        Parameter(
+                            name=f"{obj.Name}.Length", value=obj.Length, unit="mm"
+                        )
+                    )
+
+        except Exception as e:
+            print(f"获取参数失败: {e}")
+
+        return params
+
+    def set_parameter(self, param_name: str, value: float) -> bool:
+        """设置参数"""
+        if not self.active_doc:
+            return False
+
+        try:
+            # 解析参数名（格式：ObjectName.Property）
+            parts = param_name.split(".", 1)
+
+            if len(parts) == 2:
+                obj_name, prop_name = parts
+                obj = self.active_doc.getObject(obj_name)
+
+                if obj and hasattr(obj, prop_name):
+                    setattr(obj, prop_name, value)
+                    return True
+            else:
+                # 尝试查找约束
+                for obj in self.active_doc.Objects:
+                    if hasattr(obj, "Constraints"):
+                        for i, constraint in enumerate(obj.Constraints):
+                            if constraint.Name == param_name:
+                                # 更新约束值
+                                obj.setDatum(i, value)
+                                return True
+
+            return False
+
+        except Exception as e:
+            print(f"设置参数失败: {e}")
+            return False
+
+    def rebuild(self) -> bool:
+        """重新计算文档"""
+        if not self.active_doc:
+            return False
+
+        try:
+            self.active_doc.recompute()
+            return True
+        except Exception as e:
+            print(f"重建失败: {e}")
+            return False
+
+    def export_file(self, output_path: str, format_type: str = "STEP") -> bool:
+        """导出文件"""
+        if not self.active_doc:
+            return False
+
+        try:
+
+            output_path = str(Path(output_path))
+
+            # 选择导出格式
+            format_map = {
+                "STEP": ".step",
+                "STL": ".stl",
+                "IGES": ".iges",
+                "BREP": ".brep",
+                "OBJ": ".obj",
+            }
+
+            ext = format_map.get(format_type.upper(), ".step")
+            if not output_path.endswith(ext):
+                output_path += ext
+
+            # 导出
+            if format_type.upper() == "STEP":
+                import Import
+
+                Import.export(
+                    [
+                        obj
+                        for obj in self.active_doc.Objects
+                        if obj.isDerivedFrom("Part::Feature")
+                    ],
+                    output_path,
+                )
+                return True
+            elif format_type.upper() == "STL":
+                # 导出STL
+                for obj in self.active_doc.Objects:
+                    if obj.isDerivedFrom("Part::Feature"):
+                        obj.Shape.exportStl(output_path)
+                        return True
+
+            return False
+
+        except Exception as e:
+            print(f"导出失败: {e}")
+            return False
+
+    def close_document(self, save: bool = False):
+        """关闭文档"""
+        if self.active_doc:
+            try:
+                if save:
+                    self.active_doc.save()
+                self.fc_app.closeDocument(self.active_doc.Name)
+                self.active_doc = None
+            except:
+                pass
+
+    def disconnect(self):
+        """断开连接"""
+        self.close_document()
+        self.fc_app = None
+        self.is_connected = False
+
+
+class CADManager:
+    """CAD管理器 - 统一管理多个CAD软件"""
+
+    def __init__(self):
+        self.connectors = {
+            "solidworks": SolidWorksConnector(),
+            "freecad": FreeCADConnector(),
+        }
+        self.active_cad = None
+
+    def auto_connect(self) -> str:
+        """自动连接可用的CAD软件"""
+        for name, connector in self.connectors.items():
+            if connector.connect():
+                self.active_cad = name
+                print(f"成功连接到: {name}")
+                return name
+
+        print("未能连接到任何CAD软件")
+        return None
+
+    def get_connector(self, cad_name: Optional[str] = None):
+        """获取连接器"""
+        if cad_name:
+            return self.connectors.get(cad_name.lower())
+        elif self.active_cad:
+            return self.connectors.get(self.active_cad)
+        return None
+
+    def disconnect_all(self):
+        """断开所有连接"""
+        for connector in self.connectors.values():
+            connector.disconnect()
+        self.active_cad = None

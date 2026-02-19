@@ -84,22 +84,15 @@ class WorkflowEngine:
         ],
     }
 
-    def __init__(
-        self,
-        cad_connector: CADConnector,
-        cae_connector: CAEConnector,
-        mesher_connector: Optional[CAEConnector] = None,
-    ):
+    def __init__(self, cad_connector: CADConnector, cae_connector: CAEConnector):
         """初始化工作流引擎
 
         Args:
             cad_connector: CAD连接器实例
             cae_connector: CAE连接器实例
-            mesher_connector: 可选的独立网格生成器连接器
         """
         self.cad_connector = cad_connector
         self.cae_connector = cae_connector
-        self.mesher_connector = mesher_connector
         self.steps: List[WorkflowStep] = []
         self.current_step: Optional[WorkflowStep] = None
         self.status: WorkflowStatus = WorkflowStatus.PENDING
@@ -374,19 +367,15 @@ class WorkflowEngine:
             if not step_file or not step_file.exists():
                 raise RuntimeError("未找到STEP文件用于网格生成")
 
-            # 确定使用哪个连接器进行网格生成
-            # 优先使用独立的网格生成器，否则使用CAE连接器
-            mesher = self.mesher_connector if self.mesher_connector else self.cae_connector
-
-            # 连接网格生成器
-            if not mesher.connect():
-                raise RuntimeError("网格生成器连接失败")
+            # 连接到CAE软件进行网格生成
+            if not self.cae_connector.connect():
+                raise RuntimeError("CAE连接失败")
 
             output_dir = Path(config.get("output_dir", Path.cwd() / "workflow_output"))
             mesh_file = output_dir / "mesh.msh"
             element_size = config.get("mesh_element_size", 2.0)
 
-            if not mesher.generate_mesh(step_file, mesh_file, element_size):
+            if not self.cae_connector.generate_mesh(step_file, mesh_file, element_size):
                 raise RuntimeError("网格生成失败")
 
             return {"file": mesh_file, "element_size": element_size}
@@ -477,14 +466,7 @@ class WorkflowEngine:
                         break
 
             if not result_file or not result_file.exists():
-                # 返回模拟的应力分析结果（Mock模式）
-                return {
-                    "max_stress": 150.5,
-                    "min_stress": 10.2,
-                    "max_displacement": 0.5,
-                    "safety_factor": 2.5,
-                    "von_mises_stress": 145.8
-                }
+                raise RuntimeError("未找到结果文件用于后处理")
 
             results = self.cae_connector.read_results(result_file)
             self.results.update(results)
@@ -501,24 +483,6 @@ class WorkflowEngine:
             else:
                 # 返回模拟结果
                 return {"natural_frequencies": [10.5, 25.3, 42.8, 67.1]}
-
-        elif action == "extract_optimized_shape":
-            # 拓扑优化结果提取
-            output_dir = Path(config.get("output_dir", Path.cwd() / "workflow_output"))
-            result_file = output_dir / "optimized_shape.stl"
-            if result_file and result_file.exists():
-                results = self.cae_connector.read_results(result_file)
-                self.results.update(results)
-                return results
-            else:
-                # 返回模拟的拓扑优化结果
-                return {
-                    "optimized_volume_ratio": 0.35,
-                    "compliance": 125.6,
-                    "max_stress": 180.2,
-                    "iterations": 45,
-                    "convergence": True,
-                }
 
         else:
             raise ValueError(f"未知的后处理操作: {action}")
