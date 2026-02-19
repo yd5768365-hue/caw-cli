@@ -1,0 +1,53 @@
+# SW-CAE-Helper 配置文件
+defaults:
+  # 几何解析设置
+  geometry:
+    default_format: step
+    tolerance: 0.001
+    max_file_size_mb: 100
+  
+  # 网格分析设置
+  mesh:
+    quality_threshold: 0.1
+    min_element_size: 0.1
+    max_element_size: 10.0
+  
+  # 材料设置
+  material:
+    default_material: Q235
+    safety_factor: 1.5
+    temperature_unit: celsius
+  
+  # 报告设置
+  report:
+    template: default
+    output_format: json
+    include_charts: true
+  
+  # 日志设置
+  logging:
+    level: INFO
+    file: logs/sw_helper.log
+    max_size_mb: 10
+    backup_count: 5
+
+# 软件集成路径
+integrations:
+  solidworks:
+    path: null  # 自动检测
+    version: null
+  freecad:
+    path: null  # 自动检测
+    version: null
+  ansys:
+    path: null
+    version: null
+  abaqus:
+    path: null
+    version: null
+
+# 用户自定义设置
+user:
+  name: null
+  email: null
+  company: null

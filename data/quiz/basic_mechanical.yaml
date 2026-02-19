@@ -1,0 +1,177 @@
+# 基础机械知识自测题库
+# 包含8个选择题，覆盖材料、紧固件、公差配合、标准件等基础知识点
+
+version: "1.0"
+created_date: "2026-02-13"
+description: "机械工程基础知识点自测题库 - 适用于大一学生"
+total_questions: 8
+categories:
+  - materials
+  - fasteners
+  - tolerances
+  - standard_parts
+
+questions:
+  # ==================== 材料知识 ====================
+  - id: "MAT001"
+    knowledge_id: "materials#Q235"
+    question: "Q235钢材的屈服强度是多少？"
+    explanation: "Q235是普通碳素结构钢，'Q'表示屈服强度，'235'表示屈服强度为235 MPa。"
+    category: "materials"
+    difficulty: "easy"
+    tags:
+      - "材料"
+      - "钢"
+      - "力学性能"
+    options:
+      - text: "235 MPa"
+        correct: true
+      - text: "345 MPa"
+        correct: false
+      - text: "450 MPa"
+        correct: false
+      - text: "500 MPa"
+        correct: false
+
+  - id: "MAT002"
+    knowledge_id: "materials#45钢"
+    question: "45钢属于哪种类型的钢材？其主要用途是什么？"
+    explanation: "45钢是中碳结构钢，含碳量约0.45%，具有良好的综合机械性能，常用于轴、齿轮、连杆等重要零件。"
+    category: "materials"
+    difficulty: "medium"
+    tags:
+      - "材料"
+      - "中碳钢"
+      - "结构钢"
+    options:
+      - text: "低碳渗碳钢，用于表面硬化零件"
+        correct: false
+      - text: "中碳结构钢，用于轴、齿轮等重要零件"
+        correct: true
+      - text: "高碳钢，用于弹簧、轧辊"
+        correct: false
+      - text: "不锈钢，用于化工设备"
+        correct: false
+
+  - id: "MAT003"
+    knowledge_id: "materials#合金钢"
+    question: "40Cr合金钢中的'Cr'表示什么元素？这种钢材的主要特点是什么？"
+    explanation: "'Cr'表示铬元素。40Cr是铬合金结构钢，具有良好的综合机械性能和淬透性，经调质处理后用于重要齿轮、轴、连杆等。"
+    category: "materials"
+    difficulty: "medium"
+    tags:
+      - "材料"
+      - "合金钢"
+      - "铬钢"
+    options:
+      - text: "铬，具有优良的耐腐蚀性"
+        correct: false
+      - text: "铬，具有良好的综合机械性能和淬透性"
+        correct: true
+      - text: "碳，提高硬度和强度"
+        correct: false
+      - text: "钼，提高高温强度"
+        correct: false
+
+  # ==================== 紧固件知识 ====================
+  - id: "FAST001"
+    knowledge_id: "fasteners#M10"
+    question: "M10螺栓的标准螺距是多少？"
+    explanation: "M10螺栓的公称直径为10mm，标准螺距为1.5mm。这是机械设计中最常用的螺栓规格之一。"
+    category: "fasteners"
+    difficulty: "easy"
+    tags:
+      - "紧固件"
+      - "螺栓"
+      - "规格"
+    options:
+      - text: "1.0 mm"
+        correct: false
+      - text: "1.25 mm"
+        correct: false
+      - text: "1.5 mm"
+        correct: true
+      - text: "1.75 mm"
+        correct: false
+
+  - id: "FAST002"
+    knowledge_id: "fasteners#强度等级"
+    question: "8.8级高强度螺栓的最小抗拉强度和最小屈服强度分别是多少？"
+    explanation: "8.8级螺栓中，第一个数字8表示最小抗拉强度为800 MPa，第二个数字8表示屈服强度与抗拉强度的比值为0.8，因此最小屈服强度为640 MPa。"
+    category: "fasteners"
+    difficulty: "medium"
+    tags:
+      - "紧固件"
+      - "螺栓"
+      - "强度等级"
+    options:
+      - text: "抗拉强度800 MPa，屈服强度640 MPa"
+        correct: true
+      - text: "抗拉强度400 MPa，屈服强度320 MPa"
+        correct: false
+      - text: "抗拉强度1000 MPa，屈服强度900 MPa"
+        correct: false
+      - text: "抗拉强度1200 MPa，屈服强度1080 MPa"
+        correct: false
+
+  # ==================== 公差配合知识 ====================
+  - id: "TOL001"
+    knowledge_id: "tolerances#公差等级"
+    question: "IT7公差等级通常用于哪种精度要求的配合？"
+    explanation: "IT7属于中等精度公差等级，常用于中等精度配合，如齿轮、联轴器等零件的配合。"
+    category: "tolerances"
+    difficulty: "medium"
+    tags:
+      - "公差"
+      - "配合"
+      - "精度"
+    options:
+      - text: "高精度量仪、精密机械"
+        correct: false
+      - text: "中等精度配合，如齿轮、联轴器"
+        correct: true
+      - text: "低精度配合，如支架、外壳"
+        correct: false
+      - text: "粗糙配合，如农业机械"
+        correct: false
+
+  - id: "TOL002"
+    knowledge_id: "tolerances#配合类型"
+    question: "以下哪种情况描述的是'间隙配合'？"
+    explanation: "间隙配合是指孔的尺寸大于轴的尺寸，两者之间有间隙，用于滑动轴承、齿轮啮合等需要相对运动的场合。"
+    category: "tolerances"
+    difficulty: "easy"
+    tags:
+      - "公差"
+      - "配合"
+      - "间隙配合"
+    options:
+      - text: "孔的尺寸大于轴的尺寸，有间隙"
+        correct: true
+      - text: "孔的尺寸小于轴的尺寸，有过盈"
+        correct: false
+      - text: "孔的尺寸与轴的尺寸相近，可能有间隙或过盈"
+        correct: false
+      - text: "孔的尺寸等于轴的尺寸，无间隙"
+        correct: false
+
+  # ==================== 标准件知识 ====================
+  - id: "STD001"
+    knowledge_id: "standard_parts#轴承"
+    question: "深沟球轴承的主要特点是什么？"
+    explanation: "深沟球轴承是最常见的滚动轴承类型，能承受径向载荷和一定的轴向载荷，结构简单、使用方便、摩擦系数小，适用于高速旋转场合。"
+    category: "standard_parts"
+    difficulty: "medium"
+    tags:
+      - "标准件"
+      - "轴承"
+      - "深沟球轴承"
+    options:
+      - text: "只能承受径向载荷，结构简单"
+        correct: false
+      - text: "能承受径向和轴向载荷，适用于高速旋转"
+        correct: true
+      - text: "专门承受轴向载荷，用于推力场合"
+        correct: false
+      - text: "能承受重载荷，用于低速重载场合"
+        correct: false

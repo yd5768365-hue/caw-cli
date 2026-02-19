@@ -1,0 +1,142 @@
+{
+  "zh": {
+    "title": "CAE-CLI 交互模式",
+    "welcome": "欢迎使用 CAE-CLI 交互模式",
+    "menu_title": "CAE-CLI 交互模式",
+    "menu": {
+      "analyze": "分析模型",
+      "optimize": "参数优化",
+      "ai_generate": "AI生成模型",
+      "handbook": "知识库查询 (Handbook)",
+      "exit": "退出"
+    },
+    "descriptions": {
+      "analyze": "分析几何或网格质量",
+      "optimize": "参数优化",
+      "ai_generate": "AI模型生成",
+      "handbook": "查询机械手册知识库",
+      "exit": "退出交互模式"
+    },
+    "prompts": {
+      "direct_command": "[dim]输入命令直接执行 (例如: 'analyze test.step')[/dim]",
+      "enter_choice": "\\n请输入选择 (1-5) 或命令",
+      "press_continue": "\\n按 Enter 继续...",
+      "interrupted": "[yellow]用户中断[/yellow]",
+      "error": "[red]错误: {error}[/red]",
+      "invalid_choice": "[yellow]请输入有效的选择或命令[/yellow]",
+      "thank_you": "\\n[green]感谢使用 CAE-CLI![/green]"
+    },
+    "analyze": {
+      "enter_file": "输入模型文件路径",
+      "options": "\\n[cyan]分析选项:[/cyan]",
+      "parse": "  - [bold]parse[/bold]: 解析几何文件",
+      "analyze": "  - [bold]analyze[/bold]: 分析网格质量",
+      "material": "  - [bold]material[/bold]: 查询材料属性",
+      "enter_analysis_type": "输入分析类型",
+      "enter_material_name": "输入材料名称",
+      "material_not_found": "[yellow]未找到材料 '{material_name}'[/yellow]"
+    },
+    "optimize": {
+      "enter_cad_file": "输入 CAD 文件路径 (.FCStd)",
+      "enter_parameter": "输入要优化的参数",
+      "enter_param_range": "输入参数范围 (最小值 最大值)",
+      "enter_steps": "输入步数",
+      "best_result": "\\n[green]最佳结果:[/green]",
+      "parameter": "参数: {parameter_name} = {parameter_value:.2f} mm",
+      "quality_score": "质量评分: {quality_score:.1f}/100",
+      "allowable_stress": "许用应力: {allowable_stress:.1f} MPa",
+      "safety_factor": "安全系数: {safety_factor:.2f}",
+      "no_results": "[yellow]未获得结果[/yellow]"
+    },
+    "ai_generate": {
+      "enter_description": "输入模型描述"
+    },
+    "handbook": {
+      "title": "知识库查询",
+      "welcome": "[green]📚 机械手册知识库查询[/green]\\n\\n输入关键词查询机械设计相关知识\\n示例: 40Cr, M10螺栓, 圆角, 公差, Q235\\n\\n[dim]输入 'back' 或按 Enter 返回主菜单[/dim]",
+      "enter_keyword": "\\n请输入关键词",
+      "searching": "\\n[cyan]正在搜索: {keyword}[/cyan]",
+      "not_found": "[red]未找到相关内容，试试其他关键词：材料、螺栓、公差、圆角等[/red]",
+      "found_results": "[green]找到 {count} 个匹配结果:[/green]",
+      "continue_search": "\\n继续搜索? (y/n)",
+      "query_error": "[red]查询错误: {error}[/red]",
+      "back_to_menu": "[yellow]返回主菜单[/yellow]",
+      "press_enter": "\\n按 Enter 继续..."
+    },
+    "columns": {
+      "option": "选项",
+      "operation": "操作",
+      "description": "描述"
+    }
+  },
+  "en": {
+    "title": "CAE-CLI Interactive Mode",
+    "welcome": "Welcome to CAE-CLI Interactive Mode",
+    "menu_title": "CAE-CLI Interactive Mode",
+    "menu": {
+      "analyze": "Analyze Model",
+      "optimize": "Optimize Parameter",
+      "ai_generate": "AI Generate Model",
+      "handbook": "Knowledge Base Query (Handbook)",
+      "exit": "Exit"
+    },
+    "descriptions": {
+      "analyze": "Analyze geometry or mesh quality",
+      "optimize": "Parameter optimization",
+      "ai_generate": "AI model generation",
+      "handbook": "Query mechanical handbook knowledge base",
+      "exit": "Exit interactive mode"
+    },
+    "prompts": {
+      "direct_command": "[dim]Type a command directly (e.g., 'analyze test.step') to execute[/dim]",
+      "enter_choice": "\\nEnter your choice (1-5) or command",
+      "press_continue": "\\nPress Enter to continue...",
+      "interrupted": "[yellow]Interrupted by user[/yellow]",
+      "error": "[red]Error: {error}[/red]",
+      "invalid_choice": "[yellow]Please enter a valid choice or command[/yellow]",
+      "thank_you": "\\n[green]Thank you for using CAE-CLI![/green]"
+    },
+    "analyze": {
+      "enter_file": "Enter model file path",
+      "options": "\\n[cyan]Analysis options:[/cyan]",
+      "parse": "  - [bold]parse[/bold]: Parse geometry file",
+      "analyze": "  - [bold]analyze[/bold]: Analyze mesh quality",
+      "material": "  - [bold]material[/bold]: Query material properties",
+      "enter_analysis_type": "Enter analysis type",
+      "enter_material_name": "Enter material name",
+      "material_not_found": "[yellow]Material '{material_name}' not found[/yellow]"
+    },
+    "optimize": {
+      "enter_cad_file": "Enter CAD file path (.FCStd)",
+      "enter_parameter": "Enter parameter to optimize",
+      "enter_param_range": "Enter parameter range (min max)",
+      "enter_steps": "Enter number of steps",
+      "best_result": "\\n[green]Best result:[/green]",
+      "parameter": "Parameter: {parameter_name} = {parameter_value:.2f} mm",
+      "quality_score": "Quality Score: {quality_score:.1f}/100",
+      "allowable_stress": "Allowable Stress: {allowable_stress:.1f} MPa",
+      "safety_factor": "Safety Factor: {safety_factor:.2f}",
+      "no_results": "[yellow]No results obtained[/yellow]"
+    },
+    "ai_generate": {
+      "enter_description": "Enter model description"
+    },
+    "handbook": {
+      "title": "Knowledge Base Query",
+      "welcome": "[green]📚 Mechanical Handbook Knowledge Base[/green]\\n\\nEnter keywords to query mechanical design knowledge\\nExamples: 40Cr, M10 bolt, fillet, tolerance, Q235\\n\\n[dim]Enter 'back' or press Enter to return to main menu[/dim]",
+      "enter_keyword": "\\nEnter keyword",
+      "searching": "\\n[cyan]Searching: {keyword}[/cyan]",
+      "not_found": "[red]No relevant content found, try other keywords: materials, bolts, tolerance, fillet, etc.[/red]",
+      "found_results": "[green]Found {count} matching results:[/green]",
+      "continue_search": "\\nContinue searching? (y/n)",
+      "query_error": "[red]Query error: {error}[/red]",
+      "back_to_menu": "[yellow]Return to main menu[/yellow]",
+      "press_enter": "\\nPress Enter to continue..."
+    },
+    "columns": {
+      "option": "Option",
+      "operation": "Operation",
+      "description": "Description"
+    }
+  }
+}

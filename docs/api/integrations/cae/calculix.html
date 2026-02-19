@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>integrations.cae.calculix API documentation</title>
+<meta name="description" content="CalculiX连接器 - 开源有限元分析软件集成 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>integrations.cae.calculix</code></h1>
+</header>
+<section id="section-intro">
+<p>CalculiX连接器 - 开源有限元分析软件集成</p>
+<p>CalculiX是一个基于GNU GPL许可证的开源有限元分析软件，
+支持线性和非线性结构分析、热分析、流体分析等。</p>
+<p>此连接器提供与CalculiX命令行工具(ccx)的标准化接口。</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="integrations.cae.calculix.CalculiXConnector"><code class="flex name class">
+<span>class <span class="ident">CalculiXConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CalculiXConnector(CAEConnector):
+    &#34;&#34;&#34;CalculiX有限元分析软件连接器&#34;&#34;&#34;
+
+    def __init__(self):
+        self.ccx_path = None
+        self.is_connected = False
+        self.work_dir = None
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到CalculiX实例（检查ccx命令是否可用）&#34;&#34;&#34;
+        try:
+            # 查找ccx命令
+            ccx_path = shutil.which(&#34;ccx&#34;)
+            if ccx_path:
+                self.ccx_path = Path(ccx_path)
+                self.is_connected = True
+                print(f&#34;✓ 找到CalculiX: {self.ccx_path}&#34;)
+                return True
+            else:
+                print(&#34;✗ 未找到CalculiX (ccx)命令&#34;)
+                print(&#34;提示: 请安装CalculiX并确保ccx在PATH中&#34;)
+                print(&#34;      Ubuntu/Debian: sudo apt-get install calculix-ccx&#34;)
+                print(&#34;      Windows: 从https://www.calculix.de/下载&#34;)
+                return False
+
+        except Exception as e:
+            print(f&#34;连接CalculiX失败: {e}&#34;)
+            return False
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        &#34;&#34;&#34;从几何文件生成网格
+
+        注意：CalculiX本身不包含网格生成器，此方法会尝试调用Gmsh生成网格。
+        如果Gmsh不可用，则创建一个简单的.inp文件占位符。
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            # 尝试使用Gmsh生成网格（如果可用）
+            try:
+                from integrations.mesher.gmsh import GmshConnector
+
+                gmsh_connector = GmshConnector()
+                if gmsh_connector.connect():
+                    print(&#34;使用Gmsh生成网格...&#34;)
+                    success = gmsh_connector.generate_mesh(geometry_file, mesh_file, element_size)
+                    if success:
+                        # 转换为CalculiX格式
+                        if mesh_file.suffix.lower() == &#34;.msh&#34;:
+                            inp_file = mesh_file.with_suffix(&#34;.inp&#34;)
+                            success = gmsh_connector.convert_to_calculix_inp(mesh_file)
+                            if success:
+                                mesh_file = inp_file
+                        return True
+            except ImportError:
+                print(&#34;Gmsh不可用，使用内置网格生成器&#34;)
+            except Exception as gmsh_error:
+                print(f&#34;Gmsh网格生成失败: {gmsh_error}&#34;)
+
+            # 确保输出目录存在
+            mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # 创建简单的.inp文件（示例）
+            with open(mesh_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(self._create_sample_inp(geometry_file, element_size))
+
+            print(f&#34;✓ 生成网格文件: {mesh_file}&#34;)
+            print(&#34;  注意：这是一个示例网格，建议安装Gmsh以获得高质量网格&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;生成网格失败: {e}&#34;)
+            return False
+
+    def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+        &#34;&#34;&#34;设置仿真分析
+
+        根据配置创建CalculiX输入文件(.inp)
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                raise RuntimeError(&#34;CalculiX未连接&#34;)
+
+        try:
+            # 创建临时工作目录
+            if not self.work_dir:
+                self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;calculix_&#34;))
+
+            # 生成输入文件名
+            input_file = self.work_dir / f&#34;{mesh_file.stem}.inp&#34;
+
+            # 根据配置类型生成不同的输入文件
+            analysis_type = config.get(&#34;analysis_type&#34;, &#34;static&#34;)
+
+            if analysis_type == &#34;static&#34;:
+                inp_content = self._create_static_analysis(mesh_file, config)
+            elif analysis_type == &#34;modal&#34;:
+                inp_content = self._create_modal_analysis(mesh_file, config)
+            elif analysis_type == &#34;thermal&#34;:
+                inp_content = self._create_thermal_analysis(mesh_file, config)
+            else:
+                raise ValueError(f&#34;不支持的分析类型: {analysis_type}&#34;)
+
+            # 写入输入文件
+            with open(input_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(inp_content)
+
+            print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+            return input_file
+
+        except Exception as e:
+            print(f&#34;设置仿真失败: {e}&#34;)
+            raise
+
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        &#34;&#34;&#34;运行仿真分析&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            # 设置输出目录
+            if not output_dir:
+                output_dir = input_file.parent
+
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            # 准备命令参数
+            input_stem = input_file.stem
+            cmd = [str(self.ccx_path), &#34;-i&#34;, input_stem]
+
+            print(f&#34;⏳ 运行CalculiX仿真: {&#39; &#39;.join(cmd)}&#34;)
+
+            # 切换到输入文件目录运行
+            cwd = input_file.parent
+            result = subprocess.run(
+                cmd,
+                cwd=cwd,
+                capture_output=True,
+                text=True,
+                timeout=300,  # 5分钟超时
+            )
+
+            # 检查结果
+            if result.returncode == 0:
+                print(&#34;✓ 仿真完成&#34;)
+
+                # 检查输出文件
+                expected_files = [f&#34;{input_stem}.frd&#34;, f&#34;{input_stem}.dat&#34;]
+                for f in expected_files:
+                    if (cwd / f).exists():
+                        shutil.move(cwd / f, output_dir / f)
+
+                return True
+            else:
+                print(f&#34;✗ 仿真失败 (退出码: {result.returncode})&#34;)
+                if result.stderr:
+                    print(&#34;错误输出:&#34;)
+                    print(result.stderr[:500])  # 只显示前500字符
+                return False
+
+        except subprocess.TimeoutExpired:
+            print(&#34;✗ 仿真超时 (5分钟)&#34;)
+            return False
+        except Exception as e:
+            print(f&#34;运行仿真失败: {e}&#34;)
+            return False
+
+    def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;读取仿真结果
+
+        解析.frd结果文件，提取关键结果数据。
+        注意：完整解析.frd文件较复杂，这里只提取基本信息。
+        &#34;&#34;&#34;
+        try:
+            if not result_file.exists():
+                raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+            results = {
+                &#34;file_path&#34;: str(result_file),
+                &#34;file_size&#34;: result_file.stat().st_size,
+                &#34;analysis_type&#34;: &#34;unknown&#34;,
+                &#34;nodes&#34;: 0,
+                &#34;elements&#34;: 0,
+                &#34;max_stress&#34;: None,
+                &#34;max_displacement&#34;: None,
+                &#34;success&#34;: True,
+            }
+
+            # 尝试解析.frd文件
+            if result_file.suffix.lower() == &#34;.frd&#34;:
+                results.update(self._parse_frd_file(result_file))
+
+            # 尝试解析.dat文件（如果有）
+            dat_file = result_file.with_suffix(&#34;.dat&#34;)
+            if dat_file.exists():
+                results.update(self._parse_dat_file(dat_file))
+
+            return results
+
+        except Exception as e:
+            print(f&#34;读取结果失败: {e}&#34;)
+            return {
+                &#34;file_path&#34;: str(result_file),
+                &#34;error&#34;: str(e),
+                &#34;success&#34;: False,
+            }
+
+    def get_supported_analysis_types(self) -&gt; List[str]:
+        &#34;&#34;&#34;获取支持的分析类型&#34;&#34;&#34;
+        return [&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;]
+
+    # ========== 内部辅助方法 ==========
+
+    def _create_sample_inp(self, geometry_file: Path, element_size: float) -&gt; str:
+        &#34;&#34;&#34;创建示例.inp文件&#34;&#34;&#34;
+        return f&#34;&#34;&#34;** Sample CalculiX input file
+** Generated from: {geometry_file.name}
+** Element size: {element_size} mm
+
+*NODE
+1, 0.0, 0.0, 0.0
+2, 10.0, 0.0, 0.0
+3, 10.0, 5.0, 0.0
+4, 0.0, 5.0, 0.0
+5, 0.0, 0.0, 3.0
+6, 10.0, 0.0, 3.0
+7, 10.0, 5.0, 3.0
+8, 0.0, 5.0, 3.0
+
+*ELEMENT, TYPE=C3D8, ELSET=PART1
+1, 1, 2, 3, 4, 5, 6, 7, 8
+
+*MATERIAL, NAME=STEEL
+*ELASTIC
+210000.0, 0.3
+*DENSITY
+7.85E-9
+
+*SOLID SECTION, ELSET=PART1, MATERIAL=STEEL
+
+*STEP
+*STATIC
+*BOUNDARY
+1, 1, 3, 0.0  # 固定节点1的XYZ方向
+4, 1, 3, 0.0  # 固定节点4的XYZ方向
+
+*CLOAD
+8, 3, -100.0  # 在节点8的Z方向施加-100N载荷
+
+*NODE PRINT
+U
+*EL PRINT
+S
+*END STEP
+&#34;&#34;&#34;
+
+    def _create_static_analysis(self, mesh_file: Path, config: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;创建静态分析输入文件&#34;&#34;&#34;
+        material = config.get(
+            &#34;material&#34;, {&#34;E&#34;: 210000.0, &#34;nu&#34;: 0.3, &#34;density&#34;: 7.85e-9}
+        )
+        loads = config.get(&#34;loads&#34;, [])
+        constraints = config.get(&#34;constraints&#34;, [])
+
+        inp = f&#34;&#34;&#34;** Static analysis input file
+** Mesh: {mesh_file.name}
+** Material: {material.get(&#34;name&#34;, &#34;STEEL&#34;)}
+
+*INCLUDE, INPUT={mesh_file.name}
+
+*MATERIAL, NAME={material.get(&#34;name&#34;, &#34;STEEL&#34;)}
+*ELASTIC
+{material.get(&#34;E&#34;, 210000.0)}, {material.get(&#34;nu&#34;, 0.3)}
+*DENSITY
+{material.get(&#34;density&#34;, 7.85e-9)}
+
+*STEP
+*STATIC
+&#34;&#34;&#34;
+
+        # 添加边界条件
+        for constraint in constraints:
+            inp += f&#34;*BOUNDARY\n&#34;
+            inp += f&#34;{constraint.get(&#39;node_set&#39;, &#39;FIXED&#39;)}, {constraint.get(&#39;dofs&#39;, &#39;1,3,0.0&#39;)}\n&#34;
+
+        # 添加载荷
+        for load in loads:
+            inp += f&#34;*CLOAD\n&#34;
+            inp += f&#34;{load.get(&#39;node_set&#39;, &#39;LOAD_NODES&#39;)}, {load.get(&#39;dof&#39;, 3)}, {load.get(&#39;value&#39;, -100.0)}\n&#34;
+
+        inp += &#34;&#34;&#34;*NODE PRINT
+U
+*EL PRINT
+S,E
+*END STEP
+&#34;&#34;&#34;
+
+        return inp
+
+    def _create_modal_analysis(self, mesh_file: Path, config: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;创建模态分析输入文件&#34;&#34;&#34;
+        num_modes = config.get(&#34;num_modes&#34;, 10)
+
+        inp = f&#34;&#34;&#34;** Modal analysis input file
+** Mesh: {mesh_file.name}
+** Number of modes: {num_modes}
+
+*INCLUDE, INPUT={mesh_file.name}
+
+*MATERIAL, NAME=STEEL
+*ELASTIC
+210000.0, 0.3
+*DENSITY
+7.85E-9
+
+*STEP
+*FREQUENCY
+{num_modes}
+*BOUNDARY
+FIXED, 1, 3, 0.0
+*NODE PRINT
+U
+*EL PRINT
+S,E
+*END STEP
+&#34;&#34;&#34;
+
+        return inp
+
+    def _create_thermal_analysis(self, mesh_file: Path, config: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;创建热分析输入文件&#34;&#34;&#34;
+        inp = f&#34;&#34;&#34;** Thermal analysis input file
+** Mesh: {mesh_file.name}
+
+*INCLUDE, INPUT={mesh_file.name}
+
+*MATERIAL, NAME=STEEL
+*CONDUCTIVITY
+50.0
+*SPECIFIC HEAT
+500.0
+*DENSITY
+7.85E-9
+
+*STEP
+*HEAT TRANSFER
+*BOUNDARY
+FIXED, 11, 11, 293.0  # 固定温度293K
+*DFLUX
+HEAT_FLUX, 12, 1000.0  # 热通量1000W/m²
+*NODE PRINT
+NT
+*EL PRINT
+HFL
+*END STEP
+&#34;&#34;&#34;
+
+        return inp
+
+    def _parse_frd_file(self, frd_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.frd文件（简化版本）&#34;&#34;&#34;
+        results = {
+            &#34;analysis_type&#34;: &#34;unknown&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+            &#34;steps&#34;: [],
+        }
+
+        try:
+            with open(frd_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                lines = f.readlines()
+
+            node_count = 0
+            element_count = 0
+            current_step = None
+
+            for line in lines:
+                if &#34;C CalculiX&#34; in line:
+                    results[&#34;analysis_type&#34;] = line.strip()
+                elif &#34;1PSTEP&#34; in line:
+                    # 新的分析步
+                    parts = line.split()
+                    if len(parts) &gt;= 4:
+                        step_num = int(parts[2])
+                        step_type = parts[3]
+                        current_step = {
+                            &#34;number&#34;: step_num,
+                            &#34;type&#34;: step_type,
+                            &#34;time&#34;: 0.0,
+                        }
+                        results[&#34;steps&#34;].append(current_step)
+                elif &#34;2C&#34; in line and &#34;DISPLACEMENT&#34; in line:
+                    results[&#34;has_displacements&#34;] = True
+                elif &#34;2C&#34; in line and &#34;STRESS&#34; in line:
+                    results[&#34;has_stresses&#34;] = True
+                elif &#34; -1&#34; in line and &#34; 1 &#34; in line:
+                    # 节点定义
+                    node_count += 1
+                elif &#34; -1&#34; in line and &#34; 2 &#34; in line:
+                    # 单元定义
+                    element_count += 1
+
+            results[&#34;nodes&#34;] = node_count
+            results[&#34;elements&#34;] = element_count
+
+        except Exception as e:
+            print(f&#34;解析.frd文件失败: {e}&#34;)
+
+        return results
+
+    def _parse_dat_file(self, dat_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.dat文件（简化版本）&#34;&#34;&#34;
+        results = {
+            &#34;max_displacement&#34;: 0.0,
+            &#34;max_stress&#34;: 0.0,
+            &#34;reactions&#34;: [],
+        }
+
+        try:
+            with open(dat_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                content = f.read()
+
+            # 简单搜索关键信息
+            import re
+
+            # 查找最大位移
+            disp_pattern = r&#34;displacement.*?magnitude.*?(\d+\.\d+E?[+-]?\d*)&#34;
+            disp_matches = re.findall(disp_pattern, content, re.IGNORECASE)
+            if disp_matches:
+                try:
+                    results[&#34;max_displacement&#34;] = float(disp_matches[-1])
+                except:
+                    pass
+
+            # 查找最大应力
+            stress_pattern = r&#34;stress.*?(\d+\.\d+E?[+-]?\d*)&#34;
+            stress_matches = re.findall(stress_pattern, content, re.IGNORECASE)
+            if stress_matches:
+                try:
+                    results[&#34;max_stress&#34;] = float(stress_matches[-1])
+                except:
+                    pass
+
+        except Exception as e:
+            print(f&#34;解析.dat文件失败: {e}&#34;)
+
+        return results
+
+    def cleanup(self):
+        &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+        if self.work_dir and self.work_dir.exists():
+            try:
+                shutil.rmtree(self.work_dir)
+                self.work_dir = None
+            except:
+                pass</code></pre>
+</details>
+<div class="desc"><p>CalculiX有限元分析软件连接器</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="integrations.cae.calculix.CalculiXConnectorMock" href="#integrations.cae.calculix.CalculiXConnectorMock">CalculiXConnectorMock</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.cae.calculix.CalculiXConnector.cleanup"><code class="name flex">
+<span>def <span class="ident">cleanup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cleanup(self):
+    &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+    if self.work_dir and self.work_dir.exists():
+        try:
+            shutil.rmtree(self.work_dir)
+            self.work_dir = None
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>清理工作目录</p></div>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到CalculiX实例（检查ccx命令是否可用）&#34;&#34;&#34;
+    try:
+        # 查找ccx命令
+        ccx_path = shutil.which(&#34;ccx&#34;)
+        if ccx_path:
+            self.ccx_path = Path(ccx_path)
+            self.is_connected = True
+            print(f&#34;✓ 找到CalculiX: {self.ccx_path}&#34;)
+            return True
+        else:
+            print(&#34;✗ 未找到CalculiX (ccx)命令&#34;)
+            print(&#34;提示: 请安装CalculiX并确保ccx在PATH中&#34;)
+            print(&#34;      Ubuntu/Debian: sudo apt-get install calculix-ccx&#34;)
+            print(&#34;      Windows: 从https://www.calculix.de/下载&#34;)
+            return False
+
+    except Exception as e:
+        print(f&#34;连接CalculiX失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到CalculiX实例（检查ccx命令是否可用）</p></div>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnector.generate_mesh"><code class="name flex">
+<span>def <span class="ident">generate_mesh</span></span>(<span>self,<br>geometry_file: pathlib._local.Path,<br>mesh_file: pathlib._local.Path,<br>element_size: float = 2.0) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_mesh(
+    self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+) -&gt; bool:
+    &#34;&#34;&#34;从几何文件生成网格
+
+    注意：CalculiX本身不包含网格生成器，此方法会尝试调用Gmsh生成网格。
+    如果Gmsh不可用，则创建一个简单的.inp文件占位符。
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        # 尝试使用Gmsh生成网格（如果可用）
+        try:
+            from integrations.mesher.gmsh import GmshConnector
+
+            gmsh_connector = GmshConnector()
+            if gmsh_connector.connect():
+                print(&#34;使用Gmsh生成网格...&#34;)
+                success = gmsh_connector.generate_mesh(geometry_file, mesh_file, element_size)
+                if success:
+                    # 转换为CalculiX格式
+                    if mesh_file.suffix.lower() == &#34;.msh&#34;:
+                        inp_file = mesh_file.with_suffix(&#34;.inp&#34;)
+                        success = gmsh_connector.convert_to_calculix_inp(mesh_file)
+                        if success:
+                            mesh_file = inp_file
+                    return True
+        except ImportError:
+            print(&#34;Gmsh不可用，使用内置网格生成器&#34;)
+        except Exception as gmsh_error:
+            print(f&#34;Gmsh网格生成失败: {gmsh_error}&#34;)
+
+        # 确保输出目录存在
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # 创建简单的.inp文件（示例）
+        with open(mesh_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(self._create_sample_inp(geometry_file, element_size))
+
+        print(f&#34;✓ 生成网格文件: {mesh_file}&#34;)
+        print(&#34;  注意：这是一个示例网格，建议安装Gmsh以获得高质量网格&#34;)
+        return True
+
+    except Exception as e:
+        print(f&#34;生成网格失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>从几何文件生成网格</p>
+<p>注意：CalculiX本身不包含网格生成器，此方法会尝试调用Gmsh生成网格。
+如果Gmsh不可用，则创建一个简单的.inp文件占位符。</p></div>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types"><code class="name flex">
+<span>def <span class="ident">get_supported_analysis_types</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_supported_analysis_types(self) -&gt; List[str]:
+    &#34;&#34;&#34;获取支持的分析类型&#34;&#34;&#34;
+    return [&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;]</code></pre>
+</details>
+<div class="desc"><p>获取支持的分析类型</p></div>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnector.read_results"><code class="name flex">
+<span>def <span class="ident">read_results</span></span>(<span>self, result_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;读取仿真结果
+
+    解析.frd结果文件，提取关键结果数据。
+    注意：完整解析.frd文件较复杂，这里只提取基本信息。
+    &#34;&#34;&#34;
+    try:
+        if not result_file.exists():
+            raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+        results = {
+            &#34;file_path&#34;: str(result_file),
+            &#34;file_size&#34;: result_file.stat().st_size,
+            &#34;analysis_type&#34;: &#34;unknown&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+            &#34;max_stress&#34;: None,
+            &#34;max_displacement&#34;: None,
+            &#34;success&#34;: True,
+        }
+
+        # 尝试解析.frd文件
+        if result_file.suffix.lower() == &#34;.frd&#34;:
+            results.update(self._parse_frd_file(result_file))
+
+        # 尝试解析.dat文件（如果有）
+        dat_file = result_file.with_suffix(&#34;.dat&#34;)
+        if dat_file.exists():
+            results.update(self._parse_dat_file(dat_file))
+
+        return results
+
+    except Exception as e:
+        print(f&#34;读取结果失败: {e}&#34;)
+        return {
+            &#34;file_path&#34;: str(result_file),
+            &#34;error&#34;: str(e),
+            &#34;success&#34;: False,
+        }</code></pre>
+</details>
+<div class="desc"><p>读取仿真结果</p>
+<p>解析.frd结果文件，提取关键结果数据。
+注意：完整解析.frd文件较复杂，这里只提取基本信息。</p></div>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnector.run_simulation"><code class="name flex">
+<span>def <span class="ident">run_simulation</span></span>(<span>self,<br>input_file: pathlib._local.Path,<br>output_dir: pathlib._local.Path | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_simulation(
+    self, input_file: Path, output_dir: Optional[Path] = None
+) -&gt; bool:
+    &#34;&#34;&#34;运行仿真分析&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        # 设置输出目录
+        if not output_dir:
+            output_dir = input_file.parent
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # 准备命令参数
+        input_stem = input_file.stem
+        cmd = [str(self.ccx_path), &#34;-i&#34;, input_stem]
+
+        print(f&#34;⏳ 运行CalculiX仿真: {&#39; &#39;.join(cmd)}&#34;)
+
+        # 切换到输入文件目录运行
+        cwd = input_file.parent
+        result = subprocess.run(
+            cmd,
+            cwd=cwd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5分钟超时
+        )
+
+        # 检查结果
+        if result.returncode == 0:
+            print(&#34;✓ 仿真完成&#34;)
+
+            # 检查输出文件
+            expected_files = [f&#34;{input_stem}.frd&#34;, f&#34;{input_stem}.dat&#34;]
+            for f in expected_files:
+                if (cwd / f).exists():
+                    shutil.move(cwd / f, output_dir / f)
+
+            return True
+        else:
+            print(f&#34;✗ 仿真失败 (退出码: {result.returncode})&#34;)
+            if result.stderr:
+                print(&#34;错误输出:&#34;)
+                print(result.stderr[:500])  # 只显示前500字符
+            return False
+
+    except subprocess.TimeoutExpired:
+        print(&#34;✗ 仿真超时 (5分钟)&#34;)
+        return False
+    except Exception as e:
+        print(f&#34;运行仿真失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>运行仿真分析</p></div>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnector.setup_simulation"><code class="name flex">
+<span>def <span class="ident">setup_simulation</span></span>(<span>self, mesh_file: pathlib._local.Path, config: Dict[str, Any]) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+    &#34;&#34;&#34;设置仿真分析
+
+    根据配置创建CalculiX输入文件(.inp)
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            raise RuntimeError(&#34;CalculiX未连接&#34;)
+
+    try:
+        # 创建临时工作目录
+        if not self.work_dir:
+            self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;calculix_&#34;))
+
+        # 生成输入文件名
+        input_file = self.work_dir / f&#34;{mesh_file.stem}.inp&#34;
+
+        # 根据配置类型生成不同的输入文件
+        analysis_type = config.get(&#34;analysis_type&#34;, &#34;static&#34;)
+
+        if analysis_type == &#34;static&#34;:
+            inp_content = self._create_static_analysis(mesh_file, config)
+        elif analysis_type == &#34;modal&#34;:
+            inp_content = self._create_modal_analysis(mesh_file, config)
+        elif analysis_type == &#34;thermal&#34;:
+            inp_content = self._create_thermal_analysis(mesh_file, config)
+        else:
+            raise ValueError(f&#34;不支持的分析类型: {analysis_type}&#34;)
+
+        # 写入输入文件
+        with open(input_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(inp_content)
+
+        print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+        return input_file
+
+    except Exception as e:
+        print(f&#34;设置仿真失败: {e}&#34;)
+        raise</code></pre>
+</details>
+<div class="desc"><p>设置仿真分析</p>
+<p>根据配置创建CalculiX输入文件(.inp)</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.cae.calculix.CalculiXConnectorMock"><code class="flex name class">
+<span>class <span class="ident">CalculiXConnectorMock</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CalculiXConnectorMock(CalculiXConnector):
+    &#34;&#34;&#34;CalculiX连接器模拟器（用于测试）&#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__()
+        self.mock_mode = True
+
+    def connect(self) -&gt; bool:
+        print(&#34;[模拟模式] 连接CalculiX&#34;)
+        self.is_connected = True
+        return True
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 生成网格: {geometry_file} -&gt; {mesh_file}&#34;)
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+        mesh_file.write_text(&#34;** Mock mesh file\n&#34;)
+        return True
+
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 运行仿真: {input_file}&#34;)
+        if output_dir:
+            output_dir.mkdir(parents=True, exist_ok=True)
+            # 创建模拟结果文件
+            stem = input_file.stem
+            (output_dir / f&#34;{stem}.frd&#34;).write_text(&#34;** Mock FRD file\n&#34;)
+            (output_dir / f&#34;{stem}.dat&#34;).write_text(&#34;** Mock DAT file\n&#34;)
+        return True</code></pre>
+</details>
+<div class="desc"><p>CalculiX连接器模拟器（用于测试）</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="integrations.cae.calculix.CalculiXConnector" href="#integrations.cae.calculix.CalculiXConnector">CalculiXConnector</a></li>
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="integrations.cae.calculix.CalculiXConnector" href="#integrations.cae.calculix.CalculiXConnector">CalculiXConnector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.cleanup" href="#integrations.cae.calculix.CalculiXConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.connect" href="#integrations.cae.calculix.CalculiXConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.generate_mesh" href="#integrations.cae.calculix.CalculiXConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types" href="#integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.read_results" href="#integrations.cae.calculix.CalculiXConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.run_simulation" href="#integrations.cae.calculix.CalculiXConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.setup_simulation" href="#integrations.cae.calculix.CalculiXConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="integrations.cae" href="index.html">integrations.cae</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="integrations.cae.calculix.CalculiXConnector" href="#integrations.cae.calculix.CalculiXConnector">CalculiXConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.cleanup" href="#integrations.cae.calculix.CalculiXConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.connect" href="#integrations.cae.calculix.CalculiXConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.generate_mesh" href="#integrations.cae.calculix.CalculiXConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types" href="#integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.read_results" href="#integrations.cae.calculix.CalculiXConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.run_simulation" href="#integrations.cae.calculix.CalculiXConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.setup_simulation" href="#integrations.cae.calculix.CalculiXConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.cae.calculix.CalculiXConnectorMock" href="#integrations.cae.calculix.CalculiXConnectorMock">CalculiXConnectorMock</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

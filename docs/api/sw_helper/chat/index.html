@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.chat API documentation</title>
+<meta name="description" content="Chat交互模块">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.chat</code></h1>
+</header>
+<section id="section-intro">
+<p>Chat交互模块</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.chat.interactive" href="interactive.html">sw_helper.chat.interactive</a></code></dt>
+<dd>
+<div class="desc"><p>交互式AI Chat模式 - 类似opencode的智能助手
+集成MCP工具和LLM，实现自然语言控制CAE-CLI</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.chat.start_chat_mode"><code class="name flex">
+<span>async def <span class="ident">start_chat_mode</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def start_chat_mode():
+    &#34;&#34;&#34;启动Chat模式的入口函数&#34;&#34;&#34;
+    chat = OpencodeStyleChat()
+    await chat.start()</code></pre>
+</details>
+<div class="desc"><p>启动Chat模式的入口函数</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.chat.OpencodeStyleChat"><code class="flex name class">
+<span>class <span class="ident">OpencodeStyleChat</span></span>
+<span>(</span><span>llm_client: <a title="sw_helper.ai.llm_client.LLMClient" href="../ai/llm_client.html#sw_helper.ai.llm_client.LLMClient">LLMClient</a> | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OpencodeStyleChat:
+    &#34;&#34;&#34;
+    opencode风格的交互式Chat
+    集成MCP + LLM + CAE-CLI
+    &#34;&#34;&#34;
+
+    def __init__(self, llm_client: Optional[LLMClient] = None):
+        self.llm_client = llm_client
+        self.mcp_server = get_freecad_mcp_server()
+        self.mcp_transport = InMemoryMCPTransport(self.mcp_server.server)
+        self.running = False
+        self.command_history: List[str] = []
+
+    async def start(self):
+        &#34;&#34;&#34;启动交互式聊天&#34;&#34;&#34;
+        self.running = True
+
+        # 显示欢迎信息
+        self._print_welcome()
+
+        # 初始化LLM
+        if not self.llm_client:
+            await self._setup_llm()
+
+        # 添加系统提示
+        if self.llm_client:
+            self.llm_client.conversation_history.append(
+                {&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: SYSTEM_PROMPT}
+            )
+
+        # 主循环
+        while self.running:
+            try:
+                # 获取用户输入
+                user_input = await self._get_input()
+
+                if not user_input.strip():
+                    continue
+
+                # 处理特殊命令
+                if user_input.startswith(&#34;/&#34;):
+                    await self._handle_command(user_input)
+                    continue
+
+                # 处理自然语言
+                await self._process_natural_language(user_input)
+
+            except KeyboardInterrupt:
+                console.print(&#34;\n[yellow]再见！[/yellow]&#34;)
+                break
+            except Exception as e:
+                console.print(f&#34;[red]错误: {e}[/red]&#34;)
+
+    def _print_welcome(self):
+        &#34;&#34;&#34;打印欢迎信息&#34;&#34;&#34;
+        welcome_text = &#34;&#34;&#34;
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║              🤖 CAE-CLI Smart Assistant                      ║
+║                                                              ║
+║     集成 FreeCAD MCP + AI LLM 的智能工程助手                  ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+支持的命令:
+  /help          - 显示帮助
+  /tools         - 列出可用工具
+  /connect       - 连接FreeCAD
+  /mode &lt;type&gt;   - 切换模式 (auto/mcp/cli)
+  /clear         - 清空对话
+  /exit          - 退出
+
+示例对话:
+  &#34;创建一个长100宽50高30的立方体&#34;
+  &#34;打开文件 model.FCStd&#34;
+  &#34;优化圆角半径从2到15&#34;
+  &#34;分析当前模型的质量&#34;
+
+开始您的CAE智能设计之旅！
+        &#34;&#34;&#34;
+        console.print(Panel(welcome_text, border_style=&#34;cyan&#34;))
+
+    async def _setup_llm(self):
+        &#34;&#34;&#34;设置LLM客户端&#34;&#34;&#34;
+        console.print(&#34;\n[yellow]选择AI模型提供商:[/yellow]&#34;)
+        console.print(&#34;1. OpenAI (GPT-4)&#34;)
+        console.print(&#34;2. Anthropic (Claude)&#34;)
+        console.print(&#34;3. DeepSeek&#34;)
+        console.print(&#34;4. Ollama (本地模型)&#34;)
+        console.print(&#34;5. 跳过 (仅使用MCP工具)&#34;)
+
+        choice = Prompt.ask(&#34;请选择&#34;, choices=[&#34;1&#34;, &#34;2&#34;, &#34;3&#34;, &#34;4&#34;, &#34;5&#34;], default=&#34;1&#34;)
+
+        if choice == &#34;1&#34;:
+            api_key = Prompt.ask(&#34;OpenAI API Key&#34;, password=True)
+            self.llm_client = create_openai_client(api_key=api_key)
+            console.print(&#34;[green]✓ OpenAI客户端已配置[/green]&#34;)
+        elif choice == &#34;2&#34;:
+            api_key = Prompt.ask(&#34;Anthropic API Key&#34;, password=True)
+            from sw_helper.ai.llm_client import create_anthropic_client
+
+            self.llm_client = create_anthropic_client(api_key=api_key)
+            console.print(&#34;[green]✓ Anthropic客户端已配置[/green]&#34;)
+        elif choice == &#34;3&#34;:
+            api_key = Prompt.ask(&#34;DeepSeek API Key&#34;, password=True)
+            config = LLMConfig(
+                provider=LLMProvider.DEEPSEEK, model=&#34;deepseek-chat&#34;, api_key=api_key
+            )
+            self.llm_client = LLMClient(config)
+            console.print(&#34;[green]✓ DeepSeek客户端已配置[/green]&#34;)
+        elif choice == &#34;4&#34;:
+            model = Prompt.ask(&#34;模型名称&#34;, default=&#34;llama2&#34;)
+            self.llm_client = create_ollama_client(model=model)
+            console.print(&#34;[green]✓ Ollama客户端已配置[/green]&#34;)
+        else:
+            console.print(&#34;[yellow]⚠ 未配置LLM，将仅使用MCP工具[/yellow]&#34;)
+
+    async def _get_input(self) -&gt; str:
+        &#34;&#34;&#34;获取用户输入&#34;&#34;&#34;
+        return Prompt.ask(&#34;\n[bold cyan]You[/bold cyan]&#34;)
+
+    async def _handle_command(self, command: str):
+        &#34;&#34;&#34;处理特殊命令&#34;&#34;&#34;
+        cmd_parts = command.split()
+        cmd = cmd_parts[0].lower()
+        args = cmd_parts[1:]
+
+        if cmd == &#34;/exit&#34; or cmd == &#34;/quit&#34;:
+            self.running = False
+            console.print(&#34;[yellow]再见！[/yellow]&#34;)
+
+        elif cmd == &#34;/help&#34;:
+            self._print_help()
+
+        elif cmd == &#34;/tools&#34;:
+            await self._list_tools()
+
+        elif cmd == &#34;/connect&#34;:
+            await self._connect_freecad()
+
+        elif cmd == &#34;/clear&#34;:
+            if self.llm_client:
+                self.llm_client.clear_history()
+            console.print(&#34;[green]✓ 对话历史已清空[/green]&#34;)
+
+        elif cmd == &#34;/mode&#34;:
+            if args:
+                mode = args[0]
+                console.print(f&#34;[green]✓ 切换到 {mode} 模式[/green]&#34;)
+            else:
+                console.print(&#34;[yellow]用法: /mode &lt;auto/mcp/cli&gt;[/yellow]&#34;)
+        else:
+            console.print(f&#34;[red]未知命令: {cmd}[/red]&#34;)
+
+    def _print_help(self):
+        &#34;&#34;&#34;打印帮助信息&#34;&#34;&#34;
+        help_text = &#34;&#34;&#34;
+## 可用命令
+
+### 系统命令
+- `/help` - 显示帮助
+- `/exit` - 退出程序
+- `/clear` - 清空对话历史
+- `/tools` - 列出所有MCP工具
+- `/connect` - 连接FreeCAD
+
+### FreeCAD工具
+你可以用自然语言描述操作，例如:
+- &#34;创建一个立方体，长100宽50高30&#34;
+- &#34;打开文件 model.FCStd&#34;
+- &#34;设置圆角半径为10mm&#34;
+- &#34;导出为STEP格式&#34;
+- &#34;优化厚度参数从5到20&#34;
+
+### CAE分析
+- &#34;分析当前模型的网格质量&#34;
+- &#34;查询材料Q235的属性&#34;
+- &#34;生成分析报告&#34;
+
+### 提示
+如果不配置LLM，系统将直接解析命令并执行。
+配置LLM后，AI会理解复杂指令并规划执行步骤。
+        &#34;&#34;&#34;
+        console.print(Markdown(help_text))
+
+    async def _list_tools(self):
+        &#34;&#34;&#34;列出可用工具&#34;&#34;&#34;
+        tools = self.mcp_server.server.tools
+
+        console.print(&#34;\n[bold cyan]可用工具列表:[/bold cyan]&#34;)
+        for name, tool in tools.items():
+            console.print(f&#34;\n[green]{name}[/green]&#34;)
+            console.print(f&#34;  {tool.description}&#34;)
+
+    async def _connect_freecad(self):
+        &#34;&#34;&#34;连接FreeCAD&#34;&#34;&#34;
+        with console.status(&#34;[bold green]连接FreeCAD...&#34;):
+            # 调用MCP工具
+            message = MCPMessage(
+                method=&#34;tools/call&#34;,
+                params={&#34;name&#34;: &#34;freecad_connect&#34;, &#34;arguments&#34;: {&#34;use_mock&#34;: True}},
+            )
+            response = await self.mcp_transport.handle_client_message(message)
+
+            if response.result:
+                content = response.result.get(&#34;content&#34;, [{}])[0].get(&#34;text&#34;, &#34;&#34;)
+                result = json.loads(content)
+                if result.get(&#34;success&#34;):
+                    console.print(f&#34;[green]✓ {result.get(&#39;message&#39;)}[/green]&#34;)
+                else:
+                    console.print(&#34;[red]✗ 连接失败[/red]&#34;)
+            else:
+                console.print(&#34;[red]✗ 连接错误[/red]&#34;)
+
+    async def _process_natural_language(self, text: str):
+        &#34;&#34;&#34;处理自然语言输入&#34;&#34;&#34;
+
+        # 如果没有LLM，直接解析执行
+        if not self.llm_client:
+            await self._direct_execute(text)
+            return
+
+        # 使用LLM理解意图
+        try:
+            async with self.llm_client:
+                # 获取可用工具列表
+                tools_list = await self._get_tools_for_llm()
+
+                # 调用LLM
+                with console.status(&#34;[bold green]AI思考中...&#34;) as status:
+                    response = await self.llm_client.chat(text, tools=tools_list)
+
+                # 显示AI回复
+                console.print(&#34;\n[bold green]AI[/bold green]&#34;)
+                console.print(Panel(response, border_style=&#34;green&#34;))
+
+                # 检查是否需要执行工具
+                await self._check_and_execute_tools(response)
+
+        except Exception as e:
+            console.print(f&#34;[red]AI处理错误: {e}[/red]&#34;)
+            # 回退到直接执行
+            await self._direct_execute(text)
+
+    async def _direct_execute(self, text: str):
+        &#34;&#34;&#34;直接解析并执行命令&#34;&#34;&#34;
+        # 简单的关键字匹配
+        text_lower = text.lower()
+
+        if &#34;创建&#34; in text_lower or &#34;create&#34; in text_lower:
+            await self._handle_create(text)
+        elif &#34;打开&#34; in text_lower or &#34;open&#34; in text_lower:
+            await self._handle_open(text)
+        elif &#34;优化&#34; in text_lower or &#34;optimize&#34; in text_lower:
+            await self._handle_optimize(text)
+        elif &#34;分析&#34; in text_lower or &#34;analyze&#34; in text_lower:
+            await self._handle_analyze(text)
+        else:
+            console.print(&#34;[yellow]无法理解的命令，尝试使用 /help 查看帮助[/yellow]&#34;)
+
+    async def _handle_create(self, text: str):
+        &#34;&#34;&#34;处理创建命令&#34;&#34;&#34;
+        # 解析参数
+        import re
+
+        # 提取数字
+        numbers = re.findall(r&#34;(\d+\.?\d*)&#34;, text)
+
+        if &#34;立方&#34; in text or &#34;box&#34; in text:
+            # 创建立方体
+            params = {
+                &#34;length&#34;: float(numbers[0]) if len(numbers) &gt; 0 else 100,
+                &#34;width&#34;: float(numbers[1]) if len(numbers) &gt; 1 else 50,
+                &#34;height&#34;: float(numbers[2]) if len(numbers) &gt; 2 else 30,
+            }
+
+            message = MCPMessage(
+                method=&#34;tools/call&#34;,
+                params={&#34;name&#34;: &#34;freecad_create_box&#34;, &#34;arguments&#34;: params},
+            )
+
+        elif &#34;圆柱&#34; in text or &#34;cylinder&#34; in text:
+            # 创建圆柱
+            params = {
+                &#34;radius&#34;: float(numbers[0]) if len(numbers) &gt; 0 else 25,
+                &#34;height&#34;: float(numbers[1]) if len(numbers) &gt; 1 else 50,
+            }
+
+            message = MCPMessage(
+                method=&#34;tools/call&#34;,
+                params={&#34;name&#34;: &#34;freecad_create_cylinder&#34;, &#34;arguments&#34;: params},
+            )
+        else:
+            console.print(&#34;[yellow]支持的形状: 立方体、圆柱体[/yellow]&#34;)
+            return
+
+        # 执行
+        with console.status(&#34;[bold green]创建模型...&#34;):
+            response = await self.mcp_transport.handle_client_message(message)
+            if response.result:
+                content = response.result.get(&#34;content&#34;, [{}])[0].get(&#34;text&#34;, &#34;&#34;)
+                result = json.loads(content)
+                console.print(f&#34;[green]✓ {result.get(&#39;message&#39;, &#39;创建完成&#39;)}[/green]&#34;)
+
+    async def _handle_open(self, text: str):
+        &#34;&#34;&#34;处理打开文件命令&#34;&#34;&#34;
+        import re
+
+        # 提取文件路径
+        match = re.search(r&#34;[\w\\/]+\.\w+&#34;, text)
+        if match:
+            file_path = match.group()
+            message = MCPMessage(
+                method=&#34;tools/call&#34;,
+                params={&#34;name&#34;: &#34;freecad_open&#34;, &#34;arguments&#34;: {&#34;file_path&#34;: file_path}},
+            )
+
+            with console.status(f&#34;[bold green]打开 {file_path}...&#34;):
+                response = await self.mcp_transport.handle_client_message(message)
+                if response.result:
+                    console.print(&#34;[green]✓ 文件已打开[/green]&#34;)
+        else:
+            console.print(&#34;[yellow]请提供文件路径[/yellow]&#34;)
+
+    async def _handle_optimize(self, text: str):
+        &#34;&#34;&#34;处理优化命令&#34;&#34;&#34;
+        console.print(&#34;[yellow]优化功能需要在打开的模型上执行[/yellow]&#34;)
+        console.print(&#34;使用: cae-cli optimize &lt;file&gt; -p &lt;param&gt; -r &lt;min&gt; &lt;max&gt;&#34;)
+
+    async def _handle_analyze(self, text: str):
+        &#34;&#34;&#34;处理分析命令&#34;&#34;&#34;
+        message = MCPMessage(
+            method=&#34;tools/call&#34;, params={&#34;name&#34;: &#34;freecad_analyze&#34;, &#34;arguments&#34;: {}}
+        )
+
+        with console.status(&#34;[bold green]分析模型...&#34;):
+            response = await self.mcp_transport.handle_client_message(message)
+            if response.result:
+                content = response.result.get(&#34;content&#34;, [{}])[0].get(&#34;text&#34;, &#34;&#34;)
+                result = json.loads(content)
+                console.print(
+                    f&#34;[green]✓ 质量评分: {result.get(&#39;quality_score&#39;, 0)}/100[/green]&#34;
+                )
+
+    async def _get_tools_for_llm(self) -&gt; List[Dict]:
+        &#34;&#34;&#34;获取工具列表（用于LLM function calling）&#34;&#34;&#34;
+        tools = []
+        for name, tool in self.mcp_server.server.tools.items():
+            tools.append(
+                {
+                    &#34;type&#34;: &#34;function&#34;,
+                    &#34;function&#34;: {
+                        &#34;name&#34;: name,
+                        &#34;description&#34;: tool.description,
+                        &#34;parameters&#34;: tool.input_schema,
+                    },
+                }
+            )
+        return tools
+
+    async def _check_and_execute_tools(self, response: str):
+        &#34;&#34;&#34;检查AI回复中是否包含工具调用并执行&#34;&#34;&#34;
+        # 这里简化实现，实际应该解析LLM的工具调用格式
+        # 检查常见的执行关键词
+        if &#34;执行&#34; in response or &#34;调用&#34; in response:
+            console.print(&#34;[dim]AI建议执行相关操作[/dim]&#34;)</code></pre>
+</details>
+<div class="desc"><p>opencode风格的交互式Chat
+集成MCP + LLM + CAE-CLI</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.chat.OpencodeStyleChat.start"><code class="name flex">
+<span>async def <span class="ident">start</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def start(self):
+    &#34;&#34;&#34;启动交互式聊天&#34;&#34;&#34;
+    self.running = True
+
+    # 显示欢迎信息
+    self._print_welcome()
+
+    # 初始化LLM
+    if not self.llm_client:
+        await self._setup_llm()
+
+    # 添加系统提示
+    if self.llm_client:
+        self.llm_client.conversation_history.append(
+            {&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: SYSTEM_PROMPT}
+        )
+
+    # 主循环
+    while self.running:
+        try:
+            # 获取用户输入
+            user_input = await self._get_input()
+
+            if not user_input.strip():
+                continue
+
+            # 处理特殊命令
+            if user_input.startswith(&#34;/&#34;):
+                await self._handle_command(user_input)
+                continue
+
+            # 处理自然语言
+            await self._process_natural_language(user_input)
+
+        except KeyboardInterrupt:
+            console.print(&#34;\n[yellow]再见！[/yellow]&#34;)
+            break
+        except Exception as e:
+            console.print(f&#34;[red]错误: {e}[/red]&#34;)</code></pre>
+</details>
+<div class="desc"><p>启动交互式聊天</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.chat.interactive" href="interactive.html">sw_helper.chat.interactive</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.chat.start_chat_mode" href="#sw_helper.chat.start_chat_mode">start_chat_mode</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.chat.OpencodeStyleChat" href="#sw_helper.chat.OpencodeStyleChat">OpencodeStyleChat</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.chat.OpencodeStyleChat.start" href="#sw_helper.chat.OpencodeStyleChat.start">start</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

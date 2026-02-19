@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.ai.llm_client API documentation</title>
+<meta name="description" content="AI LLM集成 - 支持OpenAI/Claude/本地模型
+实现类似opencode的交互式AI助手">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.ai.llm_client</code></h1>
+</header>
+<section id="section-intro">
+<p>AI LLM集成 - 支持OpenAI/Claude/本地模型
+实现类似opencode的交互式AI助手</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.ai.llm_client.create_anthropic_client"><code class="name flex">
+<span>def <span class="ident">create_anthropic_client</span></span>(<span>model: str = 'claude-3-sonnet-20240229', api_key: str | None = None) ‑> <a title="sw_helper.ai.llm_client.LLMClient" href="#sw_helper.ai.llm_client.LLMClient">LLMClient</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_anthropic_client(
+    model: str = &#34;claude-3-sonnet-20240229&#34;, api_key: Optional[str] = None
+) -&gt; LLMClient:
+    &#34;&#34;&#34;创建Anthropic客户端&#34;&#34;&#34;
+    config = LLMConfig(
+        provider=LLMProvider.ANTHROPIC,
+        model=model,
+        api_key=api_key or os.getenv(&#34;ANTHROPIC_API_KEY&#34;),
+    )
+    return LLMClient(config)</code></pre>
+</details>
+<div class="desc"><p>创建Anthropic客户端</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.create_ollama_client"><code class="name flex">
+<span>def <span class="ident">create_ollama_client</span></span>(<span>model: str = 'llama2', api_base: str = 'http://localhost:11434') ‑> <a title="sw_helper.ai.llm_client.LLMClient" href="#sw_helper.ai.llm_client.LLMClient">LLMClient</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_ollama_client(
+    model: str = &#34;llama2&#34;, api_base: str = &#34;http://localhost:11434&#34;
+) -&gt; LLMClient:
+    &#34;&#34;&#34;创建Ollama本地模型客户端&#34;&#34;&#34;
+    config = LLMConfig(provider=LLMProvider.OLLAMA, model=model, api_base=api_base)
+    return LLMClient(config)</code></pre>
+</details>
+<div class="desc"><p>创建Ollama本地模型客户端</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.create_openai_client"><code class="name flex">
+<span>def <span class="ident">create_openai_client</span></span>(<span>model: str = 'gpt-4', api_key: str | None = None) ‑> <a title="sw_helper.ai.llm_client.LLMClient" href="#sw_helper.ai.llm_client.LLMClient">LLMClient</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_openai_client(
+    model: str = &#34;gpt-4&#34;, api_key: Optional[str] = None
+) -&gt; LLMClient:
+    &#34;&#34;&#34;创建OpenAI客户端&#34;&#34;&#34;
+    config = LLMConfig(
+        provider=LLMProvider.OPENAI,
+        model=model,
+        api_key=api_key or os.getenv(&#34;OPENAI_API_KEY&#34;),
+    )
+    return LLMClient(config)</code></pre>
+</details>
+<div class="desc"><p>创建OpenAI客户端</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.ai.llm_client.LLMClient"><code class="flex name class">
+<span>class <span class="ident">LLMClient</span></span>
+<span>(</span><span>config: <a title="sw_helper.ai.llm_client.LLMConfig" href="#sw_helper.ai.llm_client.LLMConfig">LLMConfig</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LLMClient:
+    &#34;&#34;&#34;
+    LLM客户端
+    支持多种模型提供商
+    &#34;&#34;&#34;
+
+    def __init__(self, config: LLMConfig):
+        self.config = config
+        self.session: Optional[aiohttp.ClientSession] = None
+        self.conversation_history: List[Message] = []
+
+    async def __aenter__(self):
+        self.session = aiohttp.ClientSession()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        if self.session:
+            await self.session.close()
+
+    async def chat(self, message: str, tools: Optional[List[Dict]] = None) -&gt; str:
+        &#34;&#34;&#34;
+        发送聊天消息
+
+        Args:
+            message: 用户消息
+            tools: 可用工具列表（用于function calling）
+
+        Returns:
+            AI回复
+        &#34;&#34;&#34;
+        # 添加用户消息到历史
+        self.conversation_history.append(Message(role=&#34;user&#34;, content=message))
+
+        # 根据提供商调用不同的API
+        if self.config.provider == LLMProvider.OPENAI:
+            response = await self._call_openai(tools)
+        elif self.config.provider == LLMProvider.ANTHROPIC:
+            response = await self._call_anthropic(tools)
+        elif self.config.provider == LLMProvider.DEEPSEEK:
+            response = await self._call_deepseek(tools)
+        elif self.config.provider == LLMProvider.OLLAMA:
+            response = await self._call_ollama(tools)
+        else:
+            response = await self._call_custom(tools)
+
+        # 添加AI回复到历史
+        self.conversation_history.append(Message(role=&#34;assistant&#34;, content=response))
+
+        return response
+
+    async def chat_stream(
+        self, message: str, tools: Optional[List[Dict]] = None
+    ) -&gt; AsyncGenerator[str, None]:
+        &#34;&#34;&#34;
+        流式聊天
+
+        Yields:
+            流式响应片段
+        &#34;&#34;&#34;
+        # 添加用户消息到历史
+        self.conversation_history.append(Message(role=&#34;user&#34;, content=message))
+
+        full_response = &#34;&#34;
+
+        if self.config.provider == LLMProvider.OPENAI:
+            async for chunk in self._call_openai_stream(tools):
+                full_response += chunk
+                yield chunk
+        elif self.config.provider == LLMProvider.ANTHROPIC:
+            async for chunk in self._call_anthropic_stream(tools):
+                full_response += chunk
+                yield chunk
+        else:
+            # 非流式API模拟流式
+            response = await self.chat(message, tools)
+            # 按句子分割输出
+            import re
+
+            sentences = re.split(&#34;([。！？.!?]\\s*)&#34;, response)
+            for sentence in sentences:
+                if sentence:
+                    yield sentence
+                    await asyncio.sleep(0.05)  # 模拟打字效果
+
+        # 添加完整回复到历史
+        self.conversation_history.append(
+            Message(role=&#34;assistant&#34;, content=full_response)
+        )
+
+    async def _call_openai(self, tools: Optional[List[Dict]] = None) -&gt; str:
+        &#34;&#34;&#34;调用OpenAI API&#34;&#34;&#34;
+        api_key = self.config.api_key or os.getenv(&#34;OPENAI_API_KEY&#34;)
+        if not api_key:
+            raise ValueError(&#34;OpenAI API key not found&#34;)
+
+        url = &#34;https://api.openai.com/v1/chat/completions&#34;
+        headers = {
+            &#34;Authorization&#34;: f&#34;Bearer {api_key}&#34;,
+            &#34;Content-Type&#34;: &#34;application/json&#34;,
+        }
+
+        messages = [
+            {&#34;role&#34;: m.role, &#34;content&#34;: m.content} for m in self.conversation_history
+        ]
+
+        payload = {
+            &#34;model&#34;: self.config.model,
+            &#34;messages&#34;: messages,
+            &#34;temperature&#34;: self.config.temperature,
+            &#34;max_tokens&#34;: self.config.max_tokens,
+        }
+
+        if tools:
+            payload[&#34;tools&#34;] = tools
+            payload[&#34;tool_choice&#34;] = &#34;auto&#34;
+
+        async with self.session.post(url, headers=headers, json=payload) as resp:
+            if resp.status != 200:
+                error = await resp.text()
+                raise Exception(f&#34;OpenAI API error: {error}&#34;)
+
+            data = await resp.json()
+            choice = data[&#34;choices&#34;][0]
+
+            # 检查是否有工具调用
+            if &#34;tool_calls&#34; in choice[&#34;message&#34;]:
+                # 处理工具调用
+                return await self._handle_tool_calls(choice[&#34;message&#34;][&#34;tool_calls&#34;])
+
+            return choice[&#34;message&#34;][&#34;content&#34;]
+
+    async def _call_openai_stream(
+        self, tools: Optional[List[Dict]] = None
+    ) -&gt; AsyncGenerator[str, None]:
+        &#34;&#34;&#34;流式调用OpenAI API&#34;&#34;&#34;
+        api_key = self.config.api_key or os.getenv(&#34;OPENAI_API_KEY&#34;)
+        url = &#34;https://api.openai.com/v1/chat/completions&#34;
+        headers = {
+            &#34;Authorization&#34;: f&#34;Bearer {api_key}&#34;,
+            &#34;Content-Type&#34;: &#34;application/json&#34;,
+        }
+
+        messages = [
+            {&#34;role&#34;: m.role, &#34;content&#34;: m.content} for m in self.conversation_history
+        ]
+
+        payload = {
+            &#34;model&#34;: self.config.model,
+            &#34;messages&#34;: messages,
+            &#34;temperature&#34;: self.config.temperature,
+            &#34;max_tokens&#34;: self.config.max_tokens,
+            &#34;stream&#34;: True,
+        }
+
+        if tools:
+            payload[&#34;tools&#34;] = tools
+            payload[&#34;tool_choice&#34;] = &#34;auto&#34;
+
+        async with self.session.post(url, headers=headers, json=payload) as resp:
+            async for line in resp.content:
+                line = line.decode(&#34;utf-8&#34;).strip()
+                if line.startswith(&#34;data: &#34;):
+                    data_str = line[6:]
+                    if data_str == &#34;[DONE]&#34;:
+                        break
+                    try:
+                        data = json.loads(data_str)
+                        if &#34;choices&#34; in data and len(data[&#34;choices&#34;]) &gt; 0:
+                            delta = data[&#34;choices&#34;][0].get(&#34;delta&#34;, {})
+                            if &#34;content&#34; in delta and delta[&#34;content&#34;]:
+                                yield delta[&#34;content&#34;]
+                    except json.JSONDecodeError:
+                        continue
+
+    async def _call_anthropic(self, tools: Optional[List[Dict]] = None) -&gt; str:
+        &#34;&#34;&#34;调用Anthropic Claude API&#34;&#34;&#34;
+        api_key = self.config.api_key or os.getenv(&#34;ANTHROPIC_API_KEY&#34;)
+        if not api_key:
+            raise ValueError(&#34;Anthropic API key not found&#34;)
+
+        url = &#34;https://api.anthropic.com/v1/messages&#34;
+        headers = {&#34;x-api-key&#34;: api_key, &#34;Content-Type&#34;: &#34;application/json&#34;}
+
+        # 构建消息
+        system_msg = &#34;&#34;
+        messages = []
+        for m in self.conversation_history:
+            if m.role == &#34;system&#34;:
+                system_msg = m.content
+            else:
+                messages.append({&#34;role&#34;: m.role, &#34;content&#34;: m.content})
+
+        payload = {
+            &#34;model&#34;: self.config.model,
+            &#34;messages&#34;: messages,
+            &#34;temperature&#34;: self.config.temperature,
+            &#34;max_tokens&#34;: self.config.max_tokens,
+        }
+
+        if system_msg:
+            payload[&#34;system&#34;] = system_msg
+
+        async with self.session.post(url, headers=headers, json=payload) as resp:
+            if resp.status != 200:
+                error = await resp.text()
+                raise Exception(f&#34;Anthropic API error: {error}&#34;)
+
+            data = await resp.json()
+            return data[&#34;content&#34;][0][&#34;text&#34;]
+
+    async def _call_anthropic_stream(
+        self, tools: Optional[List[Dict]] = None
+    ) -&gt; AsyncGenerator[str, None]:
+        &#34;&#34;&#34;流式调用Anthropic API&#34;&#34;&#34;
+        # 简化实现，实际应该使用SSE
+        response = await self._call_anthropic(tools)
+        for char in response:
+            yield char
+            await asyncio.sleep(0.01)
+
+    async def _call_deepseek(self, tools: Optional[List[Dict]] = None) -&gt; str:
+        &#34;&#34;&#34;调用DeepSeek API&#34;&#34;&#34;
+        api_key = self.config.api_key or os.getenv(&#34;DEEPSEEK_API_KEY&#34;)
+        if not api_key:
+            raise ValueError(&#34;DeepSeek API key not found&#34;)
+
+        url = &#34;https://api.deepseek.com/v1/chat/completions&#34;
+        headers = {
+            &#34;Authorization&#34;: f&#34;Bearer {api_key}&#34;,
+            &#34;Content-Type&#34;: &#34;application/json&#34;,
+        }
+
+        messages = [
+            {&#34;role&#34;: m.role, &#34;content&#34;: m.content} for m in self.conversation_history
+        ]
+
+        payload = {
+            &#34;model&#34;: self.config.model,
+            &#34;messages&#34;: messages,
+            &#34;temperature&#34;: self.config.temperature,
+            &#34;max_tokens&#34;: self.config.max_tokens,
+        }
+
+        async with self.session.post(url, headers=headers, json=payload) as resp:
+            if resp.status != 200:
+                error = await resp.text()
+                raise Exception(f&#34;DeepSeek API error: {error}&#34;)
+
+            data = await resp.json()
+            return data[&#34;choices&#34;][0][&#34;message&#34;][&#34;content&#34;]
+
+    async def _call_ollama(self, tools: Optional[List[Dict]] = None) -&gt; str:
+        &#34;&#34;&#34;调用Ollama本地模型&#34;&#34;&#34;
+        url = self.config.api_base or &#34;http://localhost:11434&#34;
+        url = f&#34;{url}/api/chat&#34;
+
+        messages = [
+            {&#34;role&#34;: m.role, &#34;content&#34;: m.content} for m in self.conversation_history
+        ]
+
+        payload = {&#34;model&#34;: self.config.model, &#34;messages&#34;: messages, &#34;stream&#34;: False}
+
+        async with self.session.post(url, json=payload) as resp:
+            if resp.status != 200:
+                error = await resp.text()
+                raise Exception(f&#34;Ollama error: {error}&#34;)
+
+            data = await resp.json()
+            return data[&#34;message&#34;][&#34;content&#34;]
+
+    async def _call_custom(self, tools: Optional[List[Dict]] = None) -&gt; str:
+        &#34;&#34;&#34;调用自定义API&#34;&#34;&#34;
+        if not self.config.api_base:
+            raise ValueError(&#34;Custom API base URL not set&#34;)
+
+        headers = {}
+        if self.config.api_key:
+            headers[&#34;Authorization&#34;] = f&#34;Bearer {self.config.api_key}&#34;
+        headers[&#34;Content-Type&#34;] = &#34;application/json&#34;
+
+        messages = [
+            {&#34;role&#34;: m.role, &#34;content&#34;: m.content} for m in self.conversation_history
+        ]
+
+        payload = {
+            &#34;model&#34;: self.config.model,
+            &#34;messages&#34;: messages,
+            &#34;temperature&#34;: self.config.temperature,
+            &#34;max_tokens&#34;: self.config.max_tokens,
+        }
+
+        async with self.session.post(
+            self.config.api_base, headers=headers, json=payload
+        ) as resp:
+            if resp.status != 200:
+                error = await resp.text()
+                raise Exception(f&#34;Custom API error: {error}&#34;)
+
+            data = await resp.json()
+            # 假设标准格式
+            return data[&#34;choices&#34;][0][&#34;message&#34;][&#34;content&#34;]
+
+    async def _handle_tool_calls(self, tool_calls: List[Dict]) -&gt; str:
+        &#34;&#34;&#34;处理工具调用（简化实现）&#34;&#34;&#34;
+        # 实际应该调用MCP工具
+        return &#34;[工具调用结果]&#34;
+
+    def clear_history(self):
+        &#34;&#34;&#34;清空对话历史&#34;&#34;&#34;
+        self.conversation_history.clear()
+
+    def get_history(self) -&gt; List[Message]:
+        &#34;&#34;&#34;获取对话历史&#34;&#34;&#34;
+        return self.conversation_history.copy()</code></pre>
+</details>
+<div class="desc"><p>LLM客户端
+支持多种模型提供商</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.ai.llm_client.LLMClient.chat"><code class="name flex">
+<span>async def <span class="ident">chat</span></span>(<span>self, message: str, tools: List[Dict] | None = None) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def chat(self, message: str, tools: Optional[List[Dict]] = None) -&gt; str:
+    &#34;&#34;&#34;
+    发送聊天消息
+
+    Args:
+        message: 用户消息
+        tools: 可用工具列表（用于function calling）
+
+    Returns:
+        AI回复
+    &#34;&#34;&#34;
+    # 添加用户消息到历史
+    self.conversation_history.append(Message(role=&#34;user&#34;, content=message))
+
+    # 根据提供商调用不同的API
+    if self.config.provider == LLMProvider.OPENAI:
+        response = await self._call_openai(tools)
+    elif self.config.provider == LLMProvider.ANTHROPIC:
+        response = await self._call_anthropic(tools)
+    elif self.config.provider == LLMProvider.DEEPSEEK:
+        response = await self._call_deepseek(tools)
+    elif self.config.provider == LLMProvider.OLLAMA:
+        response = await self._call_ollama(tools)
+    else:
+        response = await self._call_custom(tools)
+
+    # 添加AI回复到历史
+    self.conversation_history.append(Message(role=&#34;assistant&#34;, content=response))
+
+    return response</code></pre>
+</details>
+<div class="desc"><p>发送聊天消息</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>用户消息</dd>
+<dt><strong><code>tools</code></strong></dt>
+<dd>可用工具列表（用于function calling）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>AI回复</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMClient.chat_stream"><code class="name flex">
+<span>async def <span class="ident">chat_stream</span></span>(<span>self, message: str, tools: List[Dict] | None = None) ‑> AsyncGenerator[str, None]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def chat_stream(
+    self, message: str, tools: Optional[List[Dict]] = None
+) -&gt; AsyncGenerator[str, None]:
+    &#34;&#34;&#34;
+    流式聊天
+
+    Yields:
+        流式响应片段
+    &#34;&#34;&#34;
+    # 添加用户消息到历史
+    self.conversation_history.append(Message(role=&#34;user&#34;, content=message))
+
+    full_response = &#34;&#34;
+
+    if self.config.provider == LLMProvider.OPENAI:
+        async for chunk in self._call_openai_stream(tools):
+            full_response += chunk
+            yield chunk
+    elif self.config.provider == LLMProvider.ANTHROPIC:
+        async for chunk in self._call_anthropic_stream(tools):
+            full_response += chunk
+            yield chunk
+    else:
+        # 非流式API模拟流式
+        response = await self.chat(message, tools)
+        # 按句子分割输出
+        import re
+
+        sentences = re.split(&#34;([。！？.!?]\\s*)&#34;, response)
+        for sentence in sentences:
+            if sentence:
+                yield sentence
+                await asyncio.sleep(0.05)  # 模拟打字效果
+
+    # 添加完整回复到历史
+    self.conversation_history.append(
+        Message(role=&#34;assistant&#34;, content=full_response)
+    )</code></pre>
+</details>
+<div class="desc"><p>流式聊天</p>
+<h2 id="yields">Yields</h2>
+<p>流式响应片段</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMClient.clear_history"><code class="name flex">
+<span>def <span class="ident">clear_history</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clear_history(self):
+    &#34;&#34;&#34;清空对话历史&#34;&#34;&#34;
+    self.conversation_history.clear()</code></pre>
+</details>
+<div class="desc"><p>清空对话历史</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMClient.get_history"><code class="name flex">
+<span>def <span class="ident">get_history</span></span>(<span>self) ‑> List[<a title="sw_helper.ai.llm_client.Message" href="#sw_helper.ai.llm_client.Message">Message</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_history(self) -&gt; List[Message]:
+    &#34;&#34;&#34;获取对话历史&#34;&#34;&#34;
+    return self.conversation_history.copy()</code></pre>
+</details>
+<div class="desc"><p>获取对话历史</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig"><code class="flex name class">
+<span>class <span class="ident">LLMConfig</span></span>
+<span>(</span><span>provider: <a title="sw_helper.ai.llm_client.LLMProvider" href="#sw_helper.ai.llm_client.LLMProvider">LLMProvider</a>,<br>model: str,<br>api_key: str | None = None,<br>api_base: str | None = None,<br>temperature: float = 0.7,<br>max_tokens: int = 4000,<br>timeout: int = 60)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class LLMConfig:
+    &#34;&#34;&#34;LLM配置&#34;&#34;&#34;
+
+    provider: LLMProvider
+    model: str
+    api_key: Optional[str] = None
+    api_base: Optional[str] = None
+    temperature: float = 0.7
+    max_tokens: int = 4000
+    timeout: int = 60</code></pre>
+</details>
+<div class="desc"><p>LLM配置</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.ai.llm_client.LLMConfig.api_base"><code class="name">var <span class="ident">api_base</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig.api_key"><code class="name">var <span class="ident">api_key</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig.max_tokens"><code class="name">var <span class="ident">max_tokens</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig.model"><code class="name">var <span class="ident">model</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig.provider"><code class="name">var <span class="ident">provider</span> : <a title="sw_helper.ai.llm_client.LLMProvider" href="#sw_helper.ai.llm_client.LLMProvider">LLMProvider</a></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig.temperature"><code class="name">var <span class="ident">temperature</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMConfig.timeout"><code class="name">var <span class="ident">timeout</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMProvider"><code class="flex name class">
+<span>class <span class="ident">LLMProvider</span></span>
+<span>(</span><span>*args, **kwds)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LLMProvider(Enum):
+    &#34;&#34;&#34;支持的LLM提供商&#34;&#34;&#34;
+
+    OPENAI = &#34;openai&#34;
+    ANTHROPIC = &#34;anthropic&#34;
+    DEEPSEEK = &#34;deepseek&#34;
+    OLLAMA = &#34;ollama&#34;  # 本地模型
+    CUSTOM = &#34;custom&#34;</code></pre>
+</details>
+<div class="desc"><p>支持的LLM提供商</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sw_helper.ai.llm_client.LLMProvider.ANTHROPIC"><code class="name">var <span class="ident">ANTHROPIC</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMProvider.CUSTOM"><code class="name">var <span class="ident">CUSTOM</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMProvider.DEEPSEEK"><code class="name">var <span class="ident">DEEPSEEK</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMProvider.OLLAMA"><code class="name">var <span class="ident">OLLAMA</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.LLMProvider.OPENAI"><code class="name">var <span class="ident">OPENAI</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.llm_client.Message"><code class="flex name class">
+<span>class <span class="ident">Message</span></span>
+<span>(</span><span>role: str,<br>content: str,<br>tool_calls: List[Dict] | None = None,<br>tool_call_id: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Message:
+    &#34;&#34;&#34;聊天消息&#34;&#34;&#34;
+
+    role: str  # system, user, assistant, tool
+    content: str
+    tool_calls: Optional[List[Dict]] = None
+    tool_call_id: Optional[str] = None</code></pre>
+</details>
+<div class="desc"><p>聊天消息</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.ai.llm_client.Message.content"><code class="name">var <span class="ident">content</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.Message.role"><code class="name">var <span class="ident">role</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.Message.tool_call_id"><code class="name">var <span class="ident">tool_call_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.llm_client.Message.tool_calls"><code class="name">var <span class="ident">tool_calls</span> : List[Dict] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.ai" href="index.html">sw_helper.ai</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.ai.llm_client.create_anthropic_client" href="#sw_helper.ai.llm_client.create_anthropic_client">create_anthropic_client</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.create_ollama_client" href="#sw_helper.ai.llm_client.create_ollama_client">create_ollama_client</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.create_openai_client" href="#sw_helper.ai.llm_client.create_openai_client">create_openai_client</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.ai.llm_client.LLMClient" href="#sw_helper.ai.llm_client.LLMClient">LLMClient</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.llm_client.LLMClient.chat" href="#sw_helper.ai.llm_client.LLMClient.chat">chat</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMClient.chat_stream" href="#sw_helper.ai.llm_client.LLMClient.chat_stream">chat_stream</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMClient.clear_history" href="#sw_helper.ai.llm_client.LLMClient.clear_history">clear_history</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMClient.get_history" href="#sw_helper.ai.llm_client.LLMClient.get_history">get_history</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.llm_client.LLMConfig" href="#sw_helper.ai.llm_client.LLMConfig">LLMConfig</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.api_base" href="#sw_helper.ai.llm_client.LLMConfig.api_base">api_base</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.api_key" href="#sw_helper.ai.llm_client.LLMConfig.api_key">api_key</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.max_tokens" href="#sw_helper.ai.llm_client.LLMConfig.max_tokens">max_tokens</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.model" href="#sw_helper.ai.llm_client.LLMConfig.model">model</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.provider" href="#sw_helper.ai.llm_client.LLMConfig.provider">provider</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.temperature" href="#sw_helper.ai.llm_client.LLMConfig.temperature">temperature</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMConfig.timeout" href="#sw_helper.ai.llm_client.LLMConfig.timeout">timeout</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.llm_client.LLMProvider" href="#sw_helper.ai.llm_client.LLMProvider">LLMProvider</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.llm_client.LLMProvider.ANTHROPIC" href="#sw_helper.ai.llm_client.LLMProvider.ANTHROPIC">ANTHROPIC</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMProvider.CUSTOM" href="#sw_helper.ai.llm_client.LLMProvider.CUSTOM">CUSTOM</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMProvider.DEEPSEEK" href="#sw_helper.ai.llm_client.LLMProvider.DEEPSEEK">DEEPSEEK</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMProvider.OLLAMA" href="#sw_helper.ai.llm_client.LLMProvider.OLLAMA">OLLAMA</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.LLMProvider.OPENAI" href="#sw_helper.ai.llm_client.LLMProvider.OPENAI">OPENAI</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.llm_client.Message" href="#sw_helper.ai.llm_client.Message">Message</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.llm_client.Message.content" href="#sw_helper.ai.llm_client.Message.content">content</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.Message.role" href="#sw_helper.ai.llm_client.Message.role">role</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.Message.tool_call_id" href="#sw_helper.ai.llm_client.Message.tool_call_id">tool_call_id</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client.Message.tool_calls" href="#sw_helper.ai.llm_client.Message.tool_calls">tool_calls</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

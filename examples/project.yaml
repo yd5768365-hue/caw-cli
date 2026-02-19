@@ -1,0 +1,146 @@
+# project.yaml - CAE-CLI 仿真配置文件示例
+# 此文件展示如何使用标准化配置定义仿真工作流
+
+project:
+  name: "支架静力分析"
+  description: "分析支架在载荷下的应力和变形"
+
+cad:
+  software: "freecad"
+  model: "bracket.FCStd"
+  parameters:
+    thickness:
+      value: 5.0
+      unit: "mm"
+      description: "板厚"
+    fillet_radius:
+      value: 3.0
+      unit: "mm"
+      description: "圆角半径"
+    hole_diameter:
+      value: 10.0
+      unit: "mm"
+      description: "孔径"
+
+mesh:
+  generator: "gmsh"
+  element_type: "tetrahedron"
+  element_size: 2.0
+  quality:
+    aspect_ratio_max: 5.0
+    skewness_max: 0.8
+    orthogonal_quality_min: 0.1
+
+material:
+  name: "Q235"
+  properties:
+    - name: "elastic_modulus"
+      value: 210e9
+      unit: "Pa"
+      description: "弹性模量"
+    - name: "poisson_ratio"
+      value: 0.3
+      unit: ""
+      description: "泊松比"
+    - name: "yield_strength"
+      value: 235e6
+      unit: "Pa"
+      description: "屈服强度"
+    - name: "density"
+      value: 7850
+      unit: "kg/m³"
+      description: "密度"
+
+analysis:
+  type: "static"
+  solver: "calculix"
+  
+  loads:
+    - type: "force"
+      location: "top_surface"
+      value: -1000.0
+      direction: [0, 0, -1]
+      distribution: "uniform"
+      description: "垂直向下载荷"
+    
+    - type: "pressure"
+      location: "side_surface"
+      value: 0.5e6
+      unit: "Pa"
+      description: "侧向压力"
+
+  constraints:
+    - type: "fixed"
+      location: "bottom_surface"
+      degrees_of_freedom: [true, true, true, false, false, false]
+      description: "底面固定"
+    
+    - type: "symmetry"
+      location: "symmetry_plane"
+      normal: [1, 0, 0]
+      description: "对称约束"
+
+solver_settings:
+  max_iterations: 100
+  tolerance: 1e-6
+  solver_type: "direct"
+  num_processors: 4
+  output_interval: 10
+
+output:
+  directory: "./simulation_results"
+  formats:
+    - "vtk"
+    - "json"
+    - "csv"
+  report_format: "html"
+  visualization:
+    create_contours: true
+    create_deformation: true
+    create_slice_plots: true
+
+workflow:
+  name: "stress_analysis"
+  steps:
+    - ["cad", "load_model"]
+    - ["cad", "set_parameters"]
+    - ["cad", "rebuild"]
+    - ["cad", "export_step"]
+    - ["mesher", "generate_mesh"]
+    - ["cae", "setup_static_analysis"]
+    - ["cae", "solve"]
+    - ["postprocess", "extract_stress"]
+    - ["postprocess", "generate_report"]
+
+postprocessing:
+  extract:
+    - "max_stress"
+    - "max_displacement"
+    - "safety_factor"
+    - "stress_concentration"
+  thresholds:
+    max_stress_warning: 180e6
+    max_stress_critical: 200e6
+    min_safety_factor: 1.5
+
+optimization:
+  enabled: false
+  parameters:
+    - name: "thickness"
+      min: 3.0
+      max: 10.0
+      step: 0.5
+    - name: "fillet_radius"
+      min: 1.0
+      max: 8.0
+      step: 0.5
+  objective: "minimize_mass"
+  constraint: "max_stress < 200e6"
+  algorithm: "genetic"
+  iterations: 50
+
+metadata:
+  author: "CAE-CLI用户"
+  created: "2026-02-11"
+  version: "1.0"
+  tags: ["static", "structural", "optimization"]

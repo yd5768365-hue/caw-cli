@@ -1,0 +1,11 @@
+{
+  "user_id": "default_user",
+  "progress": [],
+  "achievements": [],
+  "statistics": {
+    "total_study_time_seconds": 0,
+    "completed_topics": 0,
+    "average_quiz_score": 0,
+    "last_study_date": null
+  }
+}

@@ -1,0 +1,2035 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.ai API documentation</title>
+<meta name="description" content="AI辅助设计模块">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.ai</code></h1>
+</header>
+<section id="section-intro">
+<p>AI辅助设计模块</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.ai.generator" href="generator.html">sw_helper.ai.generator</a></code></dt>
+<dd>
+<div class="desc"><p>AI集成模块 - 支持几何生成和优化建议</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.ai.llm_client" href="llm_client.html">sw_helper.ai.llm_client</a></code></dt>
+<dd>
+<div class="desc"><p>AI LLM集成 - 支持OpenAI/Claude/本地模型
+实现类似opencode的交互式AI助手</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.ai.model_generator" href="model_generator.html">sw_helper.ai.model_generator</a></code></dt>
+<dd>
+<div class="desc"><p>AI模型生成器 - 自然语言到3D模型
+支持解析文本描述并自动生成FreeCAD模型</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.ai.AIGenerator"><code class="flex name class">
+<span>class <span class="ident">AIGenerator</span></span>
+<span>(</span><span>api_key: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AIGenerator:
+    &#34;&#34;&#34;AI几何生成器 - 基于LLM的几何描述生成&#34;&#34;&#34;
+
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key
+        self.provider = None
+        self._setup_provider()
+
+    def _setup_provider(self):
+        &#34;&#34;&#34;设置AI提供商&#34;&#34;&#34;
+        # 检查环境变量或配置文件
+        import os
+
+        # 优先使用传入的api_key
+        if self.api_key:
+            return
+
+        # 尝试从环境变量获取
+        providers = {
+            &#34;OPENAI_API_KEY&#34;: &#34;openai&#34;,
+            &#34;ANTHROPIC_API_KEY&#34;: &#34;anthropic&#34;,
+            &#34;GEMINI_API_KEY&#34;: &#34;google&#34;,
+            &#34;DEEPSEEK_API_KEY&#34;: &#34;deepseek&#34;,
+        }
+
+        for env_var, provider in providers.items():
+            if os.getenv(env_var):
+                self.api_key = os.getenv(env_var)
+                self.provider = provider
+                break
+
+    def generate_geometry_prompt(
+        self, description: str, constraints: Optional[Dict] = None
+    ) -&gt; str:
+        &#34;&#34;&#34;生成几何结构的提示词
+
+        Args:
+            description: 自然语言描述，如&#34;带圆角的立方体，边长100mm，圆角R5&#34;
+            constraints: 约束条件
+
+        Returns:
+            结构化提示词
+        &#34;&#34;&#34;
+        prompt = f&#34;&#34;&#34;你是一个CAD几何设计专家。请根据以下描述生成参数化的几何结构定义。
+
+描述: {description}
+
+请生成以下格式的JSON响应:
+{{
+    &#34;type&#34;: &#34;几何类型(如: cube, cylinder, bracket, shell)&#34;,
+    &#34;parameters&#34;: {{
+        &#34;参数名&#34;: {{&#34;value&#34;: 值, &#34;unit&#34;: &#34;单位&#34;, &#34;description&#34;: &#34;描述&#34;, &#34;modifiable&#34;: true/false}}
+    }},
+    &#34;features&#34;: [
+        {{&#34;type&#34;: &#34;特征类型&#34;, &#34;parameters&#34;: {{}}}}
+    ],
+    &#34;material&#34;: &#34;建议材料&#34;,
+    &#34;manufacturing_notes&#34;: [&#34;制造注意事项&#34;],
+    &#34;optimization_hints&#34;: [&#34;优化建议&#34;]
+}}
+
+要求:
+1. 所有尺寸参数必须是可修改的
+2. 考虑制造可行性
+3. 包含工程最佳实践
+4. 标注关键尺寸和公差
+&#34;&#34;&#34;
+        return prompt
+
+    def parse_geometry_description(self, description: str) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析几何描述并返回结构化数据
+
+        这里可以实现与真实AI API的集成，现在返回模拟数据
+        &#34;&#34;&#34;
+        # TODO: 集成真实的AI API调用
+        # 模拟返回一个带圆角立方体的结构
+        return {
+            &#34;type&#34;: &#34;cube_with_fillet&#34;,
+            &#34;parameters&#34;: {
+                &#34;length&#34;: {
+                    &#34;value&#34;: 100,
+                    &#34;unit&#34;: &#34;mm&#34;,
+                    &#34;description&#34;: &#34;长度&#34;,
+                    &#34;modifiable&#34;: True,
+                    &#34;range&#34;: [50, 200],
+                },
+                &#34;width&#34;: {
+                    &#34;value&#34;: 80,
+                    &#34;unit&#34;: &#34;mm&#34;,
+                    &#34;description&#34;: &#34;宽度&#34;,
+                    &#34;modifiable&#34;: True,
+                    &#34;range&#34;: [40, 160],
+                },
+                &#34;height&#34;: {
+                    &#34;value&#34;: 60,
+                    &#34;unit&#34;: &#34;mm&#34;,
+                    &#34;description&#34;: &#34;高度&#34;,
+                    &#34;modifiable&#34;: True,
+                    &#34;range&#34;: [30, 120],
+                },
+                &#34;fillet_radius&#34;: {
+                    &#34;value&#34;: 5,
+                    &#34;unit&#34;: &#34;mm&#34;,
+                    &#34;description&#34;: &#34;圆角半径&#34;,
+                    &#34;modifiable&#34;: True,
+                    &#34;range&#34;: [1, 15],
+                },
+            },
+            &#34;features&#34;: [
+                {&#34;type&#34;: &#34;extrude&#34;, &#34;sketch&#34;: &#34;rectangle&#34;, &#34;depth&#34;: &#34;height&#34;},
+                {&#34;type&#34;: &#34;fillet&#34;, &#34;edges&#34;: &#34;all_edges&#34;, &#34;radius&#34;: &#34;fillet_radius&#34;},
+            ],
+            &#34;material&#34;: &#34;铝合金6061&#34;,
+            &#34;manufacturing_notes&#34;: [
+                &#34;建议CNC加工&#34;,
+                &#34;圆角处注意刀具半径补偿&#34;,
+                &#34;表面粗糙度Ra3.2&#34;,
+            ],
+            &#34;optimization_hints&#34;: [
+                &#34;圆角半径增大可降低应力集中&#34;,
+                &#34;壁厚均匀有利于铸造&#34;,
+                &#34;考虑脱模斜度&#34;,
+            ],
+        }
+
+    def generate_optimization_suggestions(
+        self,
+        current_params: Dict[str, Any],
+        quality_metrics: Dict[str, Any],
+        target: str = &#34;strength&#34;,
+        knowledge_text: str = &#34;&#34;,
+    ) -&gt; List[Dict[str, Any]]:
+        &#34;&#34;&#34;基于当前参数和质量指标生成优化建议
+
+        Args:
+            current_params: 当前参数
+            quality_metrics: 质量指标
+            target: 优化目标 (strength, weight, cost, manufacturability)
+            knowledge_text: 知识库内容，用于提供专业建议
+
+        Returns:
+            优化建议列表
+        &#34;&#34;&#34;
+        suggestions = []
+
+        # 基于质量指标生成建议
+        if quality_metrics.get(&#34;max_stress&#34;, 0) &gt; 200e6:  # 200MPa
+            suggestions.append(
+                {
+                    &#34;type&#34;: &#34;increase_thickness&#34;,
+                    &#34;parameter&#34;: &#34;wall_thickness&#34;,
+                    &#34;current&#34;: current_params.get(&#34;wall_thickness&#34;, 5),
+                    &#34;suggested&#34;: current_params.get(&#34;wall_thickness&#34;, 5) * 1.2,
+                    &#34;reason&#34;: &#34;应力过高，建议增加壁厚&#34;,
+                    &#34;expected_improvement&#34;: &#34;应力降低约15%&#34;,
+                }
+            )
+
+        if quality_metrics.get(&#34;safety_factor&#34;, 2) &lt; 1.5:
+            suggestions.append(
+                {
+                    &#34;type&#34;: &#34;material_upgrade&#34;,
+                    &#34;current&#34;: current_params.get(&#34;material&#34;, &#34;Q235&#34;),
+                    &#34;suggested&#34;: &#34;Q345&#34;,
+                    &#34;reason&#34;: &#34;安全系数不足，建议升级材料&#34;,
+                    &#34;expected_improvement&#34;: &#34;强度提升约47%&#34;,
+                }
+            )
+
+        # 圆角优化
+        if &#34;fillet_radius&#34; in current_params:
+            suggestions.append(
+                {
+                    &#34;type&#34;: &#34;fillet_optimization&#34;,
+                    &#34;parameter&#34;: &#34;fillet_radius&#34;,
+                    &#34;current&#34;: current_params[&#34;fillet_radius&#34;],
+                    &#34;suggested&#34;: current_params[&#34;fillet_radius&#34;] * 1.5,
+                    &#34;reason&#34;: &#34;增大圆角可降低应力集中&#34;,
+                    &#34;expected_improvement&#34;: &#34;应力集中系数降低&#34;,
+                }
+            )
+
+        return suggestions
+
+    def generate_design_variants(
+        self, base_params: Dict[str, Any], num_variants: int = 3
+    ) -&gt; List[Dict[str, Any]]:
+        &#34;&#34;&#34;生成设计变体
+
+        Args:
+            base_params: 基础参数
+            num_variants: 变体数量
+
+        Returns:
+            设计变体列表
+        &#34;&#34;&#34;
+        variants = []
+
+        for i in range(num_variants):
+            variant = {&#34;id&#34;: i + 1, &#34;name&#34;: f&#34;变体 {i + 1}&#34;, &#34;parameters&#34;: {}}
+
+            # 生成参数变体
+            for param_name, param_info in base_params.items():
+                if isinstance(param_info, dict) and param_info.get(&#34;modifiable&#34;):
+                    current = param_info[&#34;value&#34;]
+                    variation = 0.1 * (i + 1)  # 10%, 20%, 30% 变化
+
+                    # 根据奇偶决定增减
+                    if i % 2 == 0:
+                        new_value = current * (1 + variation)
+                    else:
+                        new_value = current * (1 - variation)
+
+                    # 限制在范围内
+                    min_val = param_info.get(&#34;range&#34;, [current * 0.5, current * 1.5])[0]
+                    max_val = param_info.get(&#34;range&#34;, [current * 0.5, current * 1.5])[1]
+                    new_value = max(min_val, min(max_val, new_value))
+
+                    variant[&#34;parameters&#34;][param_name] = {
+                        **param_info,
+                        &#34;value&#34;: round(new_value, 2),
+                    }
+                else:
+                    variant[&#34;parameters&#34;][param_name] = param_info
+
+            variants.append(variant)
+
+        return variants</code></pre>
+</details>
+<div class="desc"><p>AI几何生成器 - 基于LLM的几何描述生成</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.ai.AIGenerator.generate_design_variants"><code class="name flex">
+<span>def <span class="ident">generate_design_variants</span></span>(<span>self, base_params: Dict[str, Any], num_variants: int = 3) ‑> List[Dict[str, Any]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_design_variants(
+    self, base_params: Dict[str, Any], num_variants: int = 3
+) -&gt; List[Dict[str, Any]]:
+    &#34;&#34;&#34;生成设计变体
+
+    Args:
+        base_params: 基础参数
+        num_variants: 变体数量
+
+    Returns:
+        设计变体列表
+    &#34;&#34;&#34;
+    variants = []
+
+    for i in range(num_variants):
+        variant = {&#34;id&#34;: i + 1, &#34;name&#34;: f&#34;变体 {i + 1}&#34;, &#34;parameters&#34;: {}}
+
+        # 生成参数变体
+        for param_name, param_info in base_params.items():
+            if isinstance(param_info, dict) and param_info.get(&#34;modifiable&#34;):
+                current = param_info[&#34;value&#34;]
+                variation = 0.1 * (i + 1)  # 10%, 20%, 30% 变化
+
+                # 根据奇偶决定增减
+                if i % 2 == 0:
+                    new_value = current * (1 + variation)
+                else:
+                    new_value = current * (1 - variation)
+
+                # 限制在范围内
+                min_val = param_info.get(&#34;range&#34;, [current * 0.5, current * 1.5])[0]
+                max_val = param_info.get(&#34;range&#34;, [current * 0.5, current * 1.5])[1]
+                new_value = max(min_val, min(max_val, new_value))
+
+                variant[&#34;parameters&#34;][param_name] = {
+                    **param_info,
+                    &#34;value&#34;: round(new_value, 2),
+                }
+            else:
+                variant[&#34;parameters&#34;][param_name] = param_info
+
+        variants.append(variant)
+
+    return variants</code></pre>
+</details>
+<div class="desc"><p>生成设计变体</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>base_params</code></strong></dt>
+<dd>基础参数</dd>
+<dt><strong><code>num_variants</code></strong></dt>
+<dd>变体数量</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>设计变体列表</p></div>
+</dd>
+<dt id="sw_helper.ai.AIGenerator.generate_geometry_prompt"><code class="name flex">
+<span>def <span class="ident">generate_geometry_prompt</span></span>(<span>self, description: str, constraints: Dict | None = None) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    def generate_geometry_prompt(
+        self, description: str, constraints: Optional[Dict] = None
+    ) -&gt; str:
+        &#34;&#34;&#34;生成几何结构的提示词
+
+        Args:
+            description: 自然语言描述，如&#34;带圆角的立方体，边长100mm，圆角R5&#34;
+            constraints: 约束条件
+
+        Returns:
+            结构化提示词
+        &#34;&#34;&#34;
+        prompt = f&#34;&#34;&#34;你是一个CAD几何设计专家。请根据以下描述生成参数化的几何结构定义。
+
+描述: {description}
+
+请生成以下格式的JSON响应:
+{{
+    &#34;type&#34;: &#34;几何类型(如: cube, cylinder, bracket, shell)&#34;,
+    &#34;parameters&#34;: {{
+        &#34;参数名&#34;: {{&#34;value&#34;: 值, &#34;unit&#34;: &#34;单位&#34;, &#34;description&#34;: &#34;描述&#34;, &#34;modifiable&#34;: true/false}}
+    }},
+    &#34;features&#34;: [
+        {{&#34;type&#34;: &#34;特征类型&#34;, &#34;parameters&#34;: {{}}}}
+    ],
+    &#34;material&#34;: &#34;建议材料&#34;,
+    &#34;manufacturing_notes&#34;: [&#34;制造注意事项&#34;],
+    &#34;optimization_hints&#34;: [&#34;优化建议&#34;]
+}}
+
+要求:
+1. 所有尺寸参数必须是可修改的
+2. 考虑制造可行性
+3. 包含工程最佳实践
+4. 标注关键尺寸和公差
+&#34;&#34;&#34;
+        return prompt</code></pre>
+</details>
+<div class="desc"><p>生成几何结构的提示词</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>description</code></strong></dt>
+<dd>自然语言描述，如"带圆角的立方体，边长100mm，圆角R5"</dd>
+<dt><strong><code>constraints</code></strong></dt>
+<dd>约束条件</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>结构化提示词</p></div>
+</dd>
+<dt id="sw_helper.ai.AIGenerator.generate_optimization_suggestions"><code class="name flex">
+<span>def <span class="ident">generate_optimization_suggestions</span></span>(<span>self,<br>current_params: Dict[str, Any],<br>quality_metrics: Dict[str, Any],<br>target: str = 'strength',<br>knowledge_text: str = '') ‑> List[Dict[str, Any]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_optimization_suggestions(
+    self,
+    current_params: Dict[str, Any],
+    quality_metrics: Dict[str, Any],
+    target: str = &#34;strength&#34;,
+    knowledge_text: str = &#34;&#34;,
+) -&gt; List[Dict[str, Any]]:
+    &#34;&#34;&#34;基于当前参数和质量指标生成优化建议
+
+    Args:
+        current_params: 当前参数
+        quality_metrics: 质量指标
+        target: 优化目标 (strength, weight, cost, manufacturability)
+        knowledge_text: 知识库内容，用于提供专业建议
+
+    Returns:
+        优化建议列表
+    &#34;&#34;&#34;
+    suggestions = []
+
+    # 基于质量指标生成建议
+    if quality_metrics.get(&#34;max_stress&#34;, 0) &gt; 200e6:  # 200MPa
+        suggestions.append(
+            {
+                &#34;type&#34;: &#34;increase_thickness&#34;,
+                &#34;parameter&#34;: &#34;wall_thickness&#34;,
+                &#34;current&#34;: current_params.get(&#34;wall_thickness&#34;, 5),
+                &#34;suggested&#34;: current_params.get(&#34;wall_thickness&#34;, 5) * 1.2,
+                &#34;reason&#34;: &#34;应力过高，建议增加壁厚&#34;,
+                &#34;expected_improvement&#34;: &#34;应力降低约15%&#34;,
+            }
+        )
+
+    if quality_metrics.get(&#34;safety_factor&#34;, 2) &lt; 1.5:
+        suggestions.append(
+            {
+                &#34;type&#34;: &#34;material_upgrade&#34;,
+                &#34;current&#34;: current_params.get(&#34;material&#34;, &#34;Q235&#34;),
+                &#34;suggested&#34;: &#34;Q345&#34;,
+                &#34;reason&#34;: &#34;安全系数不足，建议升级材料&#34;,
+                &#34;expected_improvement&#34;: &#34;强度提升约47%&#34;,
+            }
+        )
+
+    # 圆角优化
+    if &#34;fillet_radius&#34; in current_params:
+        suggestions.append(
+            {
+                &#34;type&#34;: &#34;fillet_optimization&#34;,
+                &#34;parameter&#34;: &#34;fillet_radius&#34;,
+                &#34;current&#34;: current_params[&#34;fillet_radius&#34;],
+                &#34;suggested&#34;: current_params[&#34;fillet_radius&#34;] * 1.5,
+                &#34;reason&#34;: &#34;增大圆角可降低应力集中&#34;,
+                &#34;expected_improvement&#34;: &#34;应力集中系数降低&#34;,
+            }
+        )
+
+    return suggestions</code></pre>
+</details>
+<div class="desc"><p>基于当前参数和质量指标生成优化建议</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>current_params</code></strong></dt>
+<dd>当前参数</dd>
+<dt><strong><code>quality_metrics</code></strong></dt>
+<dd>质量指标</dd>
+<dt><strong><code>target</code></strong></dt>
+<dd>优化目标 (strength, weight, cost, manufacturability)</dd>
+<dt><strong><code>knowledge_text</code></strong></dt>
+<dd>知识库内容，用于提供专业建议</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>优化建议列表</p></div>
+</dd>
+<dt id="sw_helper.ai.AIGenerator.parse_geometry_description"><code class="name flex">
+<span>def <span class="ident">parse_geometry_description</span></span>(<span>self, description: str) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_geometry_description(self, description: str) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;解析几何描述并返回结构化数据
+
+    这里可以实现与真实AI API的集成，现在返回模拟数据
+    &#34;&#34;&#34;
+    # TODO: 集成真实的AI API调用
+    # 模拟返回一个带圆角立方体的结构
+    return {
+        &#34;type&#34;: &#34;cube_with_fillet&#34;,
+        &#34;parameters&#34;: {
+            &#34;length&#34;: {
+                &#34;value&#34;: 100,
+                &#34;unit&#34;: &#34;mm&#34;,
+                &#34;description&#34;: &#34;长度&#34;,
+                &#34;modifiable&#34;: True,
+                &#34;range&#34;: [50, 200],
+            },
+            &#34;width&#34;: {
+                &#34;value&#34;: 80,
+                &#34;unit&#34;: &#34;mm&#34;,
+                &#34;description&#34;: &#34;宽度&#34;,
+                &#34;modifiable&#34;: True,
+                &#34;range&#34;: [40, 160],
+            },
+            &#34;height&#34;: {
+                &#34;value&#34;: 60,
+                &#34;unit&#34;: &#34;mm&#34;,
+                &#34;description&#34;: &#34;高度&#34;,
+                &#34;modifiable&#34;: True,
+                &#34;range&#34;: [30, 120],
+            },
+            &#34;fillet_radius&#34;: {
+                &#34;value&#34;: 5,
+                &#34;unit&#34;: &#34;mm&#34;,
+                &#34;description&#34;: &#34;圆角半径&#34;,
+                &#34;modifiable&#34;: True,
+                &#34;range&#34;: [1, 15],
+            },
+        },
+        &#34;features&#34;: [
+            {&#34;type&#34;: &#34;extrude&#34;, &#34;sketch&#34;: &#34;rectangle&#34;, &#34;depth&#34;: &#34;height&#34;},
+            {&#34;type&#34;: &#34;fillet&#34;, &#34;edges&#34;: &#34;all_edges&#34;, &#34;radius&#34;: &#34;fillet_radius&#34;},
+        ],
+        &#34;material&#34;: &#34;铝合金6061&#34;,
+        &#34;manufacturing_notes&#34;: [
+            &#34;建议CNC加工&#34;,
+            &#34;圆角处注意刀具半径补偿&#34;,
+            &#34;表面粗糙度Ra3.2&#34;,
+        ],
+        &#34;optimization_hints&#34;: [
+            &#34;圆角半径增大可降低应力集中&#34;,
+            &#34;壁厚均匀有利于铸造&#34;,
+            &#34;考虑脱模斜度&#34;,
+        ],
+    }</code></pre>
+</details>
+<div class="desc"><p>解析几何描述并返回结构化数据</p>
+<p>这里可以实现与真实AI API的集成，现在返回模拟数据</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.AIModelGenerator"><code class="flex name class">
+<span>class <span class="ident">AIModelGenerator</span></span>
+<span>(</span><span>use_mock: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AIModelGenerator:
+    &#34;&#34;&#34;AI模型生成器 - 主控制器&#34;&#34;&#34;
+
+    def __init__(self, use_mock: bool = False):
+        self.parser = NaturalLanguageParser()
+        self.generator = FreeCADModelGenerator(use_mock=use_mock)
+        self.use_mock = use_mock
+
+    def generate(
+        self,
+        description: str,
+        output_dir: str = &#34;./generated_models&#34;,
+        name: Optional[str] = None,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        完整的生成流程
+
+        Args:
+            description: 自然语言描述
+            output_dir: 输出目录
+            name: 模型名称（可选）
+
+        Returns:
+            结果字典
+        &#34;&#34;&#34;
+        print(f&#34;输入描述: {description}&#34;)
+        print(&#34;-&#34; * 60)
+
+        # 1. 解析描述
+        print(&#34;解析描述...&#34;)
+        geometry = self.parser.parse(description)
+        print(f&#34; 识别形状: {geometry.shape_type}&#34;)
+        print(f&#34; 参数: {geometry.parameters}&#34;)
+        if geometry.features:
+            print(f&#34; 特征: {[f[&#39;type&#39;] for f in geometry.features]}&#34;)
+
+        # 2. 连接FreeCAD
+        print(&#34;\n 连接FreeCAD...&#34;)
+        if not self.generator.connect():
+            return {&#34;success&#34;: False, &#34;error&#34;: &#34;无法连接FreeCAD&#34;}
+
+        # 3. 生成模型
+        print(&#34;\n  生成模型...&#34;)
+        if not self.generator.create_document():
+            return {&#34;success&#34;: False, &#34;error&#34;: &#34;无法创建文档&#34;}
+
+        if not self.generator.generate_geometry(geometry):
+            return {&#34;success&#34;: False, &#34;error&#34;: &#34;无法生成几何体&#34;}
+
+        # 4. 准备输出路径
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        if name is None:
+            # 根据描述自动生成名称
+            name = f&#34;{geometry.shape_type}_{int(geometry.parameters.get(&#39;length&#39;, 0))}&#34;
+
+        fcstd_path = output_path / f&#34;{name}.FCStd&#34;
+        step_path = output_path / f&#34;{name}.step&#34;
+
+        # 5. 保存和导出
+        print(&#34;\n保存 保存模型...&#34;)
+        if not self.generator.save(str(fcstd_path)):
+            return {&#34;success&#34;: False, &#34;error&#34;: &#34;保存失败&#34;}
+        print(f&#34; FCStd: {fcstd_path}&#34;)
+
+        print(&#34;\n 导出STEP...&#34;)
+        if not self.generator.export_step(str(step_path)):
+            return {&#34;success&#34;: False, &#34;error&#34;: &#34;导出失败&#34;}
+        print(f&#34; STEP: {step_path}&#34;)
+
+        # 6. 分析（可选）
+        analysis_result = None
+        if step_path.exists() and not self.use_mock:
+            print(&#34;\n 分析模型...&#34;)
+            try:
+                from sw_helper.geometry.parser import GeometryParser
+
+                parser = GeometryParser()
+                analysis_result = parser.parse(str(step_path))
+                print(f&#34; 体积: {analysis_result.get(&#39;volume&#39;, 0):.2e} m³&#34;)
+            except Exception as e:
+                print(f&#34;  分析失败: {e}&#34;)
+
+        # 7. 关闭
+        self.generator.close()
+
+        # 8. 返回结果
+        result = {
+            &#34;success&#34;: True,
+            &#34;description&#34;: description,
+            &#34;parsed_geometry&#34;: {
+                &#34;shape_type&#34;: geometry.shape_type,
+                &#34;parameters&#34;: geometry.parameters,
+                &#34;features&#34;: geometry.features,
+            },
+            &#34;output_files&#34;: {
+                &#34;fcstd&#34;: str(fcstd_path),
+                &#34;step&#34;: str(step_path),
+            },
+            &#34;analysis&#34;: analysis_result,
+        }
+
+        print(&#34;\n&#34; + &#34;=&#34; * 60)
+        print(&#34;成功 生成完成!&#34;)
+        print(&#34;=&#34; * 60)
+
+        return result
+
+    def generate_with_analysis(
+        self,
+        description: str,
+        output_dir: str = &#34;./generated_models&#34;,
+        name: Optional[str] = None,
+        generate_report: bool = True,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        生成模型并运行完整分析流程
+
+        这是 cae-cli ai generate 命令的核心实现
+        &#34;&#34;&#34;
+        # 1. 生成模型
+        result = self.generate(description, output_dir, name)
+
+        if not result[&#34;success&#34;]:
+            return result
+
+        step_path = result[&#34;output_files&#34;][&#34;step&#34;]
+
+        # 2. 运行分析（如果文件存在）
+        if Path(step_path).exists() and generate_report:
+            print(&#34;\n图表 运行质量分析...&#34;)
+
+            try:
+                # 几何分析
+                from sw_helper.geometry.parser import GeometryParser
+
+                geo_parser = GeometryParser()
+                geo_data = geo_parser.parse(step_path)
+
+                result[&#34;detailed_analysis&#34;] = {
+                    &#34;geometry&#34;: geo_data,
+                    &#34;quality_score&#34;: self._calculate_quality(geo_data),
+                }
+
+                print(
+                    f&#34; 质量评分: {result[&#39;detailed_analysis&#39;][&#39;quality_score&#39;]:.1f}/100&#34;
+                )
+
+                # 生成报告
+                report_path = Path(output_dir) / &#34;generation_report.md&#34;
+                self._generate_markdown_report(result, str(report_path))
+                result[&#34;report_path&#34;] = str(report_path)
+                print(f&#34; 报告: {report_path}&#34;)
+
+            except Exception as e:
+                print(f&#34;  详细分析失败: {e}&#34;)
+
+        return result
+
+    def _calculate_quality(self, geo_data: Dict) -&gt; float:
+        &#34;&#34;&#34;计算质量分数&#34;&#34;&#34;
+        score = 70.0
+
+        volume = geo_data.get(&#34;volume&#34;, 0)
+        if 0.0001 &lt; volume &lt; 0.01:
+            score += 15
+
+        vertices = geo_data.get(&#34;vertices&#34;, 0)
+        if 100 &lt; vertices &lt; 50000:
+            score += 10
+
+        return min(100, score)
+
+    def _generate_markdown_report(self, result: Dict, output_path: str):
+        &#34;&#34;&#34;生成Markdown报告&#34;&#34;&#34;
+        geo = result[&#34;parsed_geometry&#34;]
+
+        report = f&#34;&#34;&#34;# AI模型生成报告
+
+## 输入描述
+
+{result[&#34;description&#34;]}
+
+## 解析结果
+
+### 形状类型
+{geo[&#34;shape_type&#34;]}
+
+### 参数
+&#34;&#34;&#34;
+
+        for param, value in geo[&#34;parameters&#34;].items():
+            report += f&#34;- **{param}**: {value} mm\n&#34;
+
+        if geo[&#34;features&#34;]:
+            report += &#34;\n### 特征\n&#34;
+            for feature in geo[&#34;features&#34;]:
+                report += f&#34;- {feature[&#39;type&#39;]}: {feature}\n&#34;
+
+        report += f&#34;&#34;&#34;
+## 输出文件
+
+- **FreeCAD模型**: `{result[&#34;output_files&#34;][&#34;fcstd&#34;]}`
+- **STEP文件**: `{result[&#34;output_files&#34;][&#34;step&#34;]}`
+
+## 分析结果
+
+&#34;&#34;&#34;
+
+        if &#34;detailed_analysis&#34; in result:
+            analysis = result[&#34;detailed_analysis&#34;]
+            report += f&#34;**质量评分**: {analysis[&#39;quality_score&#39;]:.1f}/100\n\n&#34;
+
+            if &#34;geometry&#34; in analysis:
+                geo_data = analysis[&#34;geometry&#34;]
+                report += f&#34;&#34;&#34;### 几何信息
+
+- 体积: {geo_data.get(&#34;volume&#34;, 0):.2e} m³
+- 表面积: {geo_data.get(&#34;surface_area&#34;, 0):.2e} m²
+- 顶点数: {geo_data.get(&#34;vertices&#34;, 0)}
+- 面数: {geo_data.get(&#34;faces&#34;, 0)}
+&#34;&#34;&#34;
+
+        report += &#34;&#34;&#34;
+---
+*Generated by CAE-CLI AI Generator*
+&#34;&#34;&#34;
+
+        with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(report)</code></pre>
+</details>
+<div class="desc"><p>AI模型生成器 - 主控制器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.ai.AIModelGenerator.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self,<br>description: str,<br>output_dir: str = './generated_models',<br>name: str | None = None) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate(
+    self,
+    description: str,
+    output_dir: str = &#34;./generated_models&#34;,
+    name: Optional[str] = None,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    完整的生成流程
+
+    Args:
+        description: 自然语言描述
+        output_dir: 输出目录
+        name: 模型名称（可选）
+
+    Returns:
+        结果字典
+    &#34;&#34;&#34;
+    print(f&#34;输入描述: {description}&#34;)
+    print(&#34;-&#34; * 60)
+
+    # 1. 解析描述
+    print(&#34;解析描述...&#34;)
+    geometry = self.parser.parse(description)
+    print(f&#34; 识别形状: {geometry.shape_type}&#34;)
+    print(f&#34; 参数: {geometry.parameters}&#34;)
+    if geometry.features:
+        print(f&#34; 特征: {[f[&#39;type&#39;] for f in geometry.features]}&#34;)
+
+    # 2. 连接FreeCAD
+    print(&#34;\n 连接FreeCAD...&#34;)
+    if not self.generator.connect():
+        return {&#34;success&#34;: False, &#34;error&#34;: &#34;无法连接FreeCAD&#34;}
+
+    # 3. 生成模型
+    print(&#34;\n  生成模型...&#34;)
+    if not self.generator.create_document():
+        return {&#34;success&#34;: False, &#34;error&#34;: &#34;无法创建文档&#34;}
+
+    if not self.generator.generate_geometry(geometry):
+        return {&#34;success&#34;: False, &#34;error&#34;: &#34;无法生成几何体&#34;}
+
+    # 4. 准备输出路径
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    if name is None:
+        # 根据描述自动生成名称
+        name = f&#34;{geometry.shape_type}_{int(geometry.parameters.get(&#39;length&#39;, 0))}&#34;
+
+    fcstd_path = output_path / f&#34;{name}.FCStd&#34;
+    step_path = output_path / f&#34;{name}.step&#34;
+
+    # 5. 保存和导出
+    print(&#34;\n保存 保存模型...&#34;)
+    if not self.generator.save(str(fcstd_path)):
+        return {&#34;success&#34;: False, &#34;error&#34;: &#34;保存失败&#34;}
+    print(f&#34; FCStd: {fcstd_path}&#34;)
+
+    print(&#34;\n 导出STEP...&#34;)
+    if not self.generator.export_step(str(step_path)):
+        return {&#34;success&#34;: False, &#34;error&#34;: &#34;导出失败&#34;}
+    print(f&#34; STEP: {step_path}&#34;)
+
+    # 6. 分析（可选）
+    analysis_result = None
+    if step_path.exists() and not self.use_mock:
+        print(&#34;\n 分析模型...&#34;)
+        try:
+            from sw_helper.geometry.parser import GeometryParser
+
+            parser = GeometryParser()
+            analysis_result = parser.parse(str(step_path))
+            print(f&#34; 体积: {analysis_result.get(&#39;volume&#39;, 0):.2e} m³&#34;)
+        except Exception as e:
+            print(f&#34;  分析失败: {e}&#34;)
+
+    # 7. 关闭
+    self.generator.close()
+
+    # 8. 返回结果
+    result = {
+        &#34;success&#34;: True,
+        &#34;description&#34;: description,
+        &#34;parsed_geometry&#34;: {
+            &#34;shape_type&#34;: geometry.shape_type,
+            &#34;parameters&#34;: geometry.parameters,
+            &#34;features&#34;: geometry.features,
+        },
+        &#34;output_files&#34;: {
+            &#34;fcstd&#34;: str(fcstd_path),
+            &#34;step&#34;: str(step_path),
+        },
+        &#34;analysis&#34;: analysis_result,
+    }
+
+    print(&#34;\n&#34; + &#34;=&#34; * 60)
+    print(&#34;成功 生成完成!&#34;)
+    print(&#34;=&#34; * 60)
+
+    return result</code></pre>
+</details>
+<div class="desc"><p>完整的生成流程</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>description</code></strong></dt>
+<dd>自然语言描述</dd>
+<dt><strong><code>output_dir</code></strong></dt>
+<dd>输出目录</dd>
+<dt><strong><code>name</code></strong></dt>
+<dd>模型名称（可选）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>结果字典</p></div>
+</dd>
+<dt id="sw_helper.ai.AIModelGenerator.generate_with_analysis"><code class="name flex">
+<span>def <span class="ident">generate_with_analysis</span></span>(<span>self,<br>description: str,<br>output_dir: str = './generated_models',<br>name: str | None = None,<br>generate_report: bool = True) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_with_analysis(
+    self,
+    description: str,
+    output_dir: str = &#34;./generated_models&#34;,
+    name: Optional[str] = None,
+    generate_report: bool = True,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    生成模型并运行完整分析流程
+
+    这是 cae-cli ai generate 命令的核心实现
+    &#34;&#34;&#34;
+    # 1. 生成模型
+    result = self.generate(description, output_dir, name)
+
+    if not result[&#34;success&#34;]:
+        return result
+
+    step_path = result[&#34;output_files&#34;][&#34;step&#34;]
+
+    # 2. 运行分析（如果文件存在）
+    if Path(step_path).exists() and generate_report:
+        print(&#34;\n图表 运行质量分析...&#34;)
+
+        try:
+            # 几何分析
+            from sw_helper.geometry.parser import GeometryParser
+
+            geo_parser = GeometryParser()
+            geo_data = geo_parser.parse(step_path)
+
+            result[&#34;detailed_analysis&#34;] = {
+                &#34;geometry&#34;: geo_data,
+                &#34;quality_score&#34;: self._calculate_quality(geo_data),
+            }
+
+            print(
+                f&#34; 质量评分: {result[&#39;detailed_analysis&#39;][&#39;quality_score&#39;]:.1f}/100&#34;
+            )
+
+            # 生成报告
+            report_path = Path(output_dir) / &#34;generation_report.md&#34;
+            self._generate_markdown_report(result, str(report_path))
+            result[&#34;report_path&#34;] = str(report_path)
+            print(f&#34; 报告: {report_path}&#34;)
+
+        except Exception as e:
+            print(f&#34;  详细分析失败: {e}&#34;)
+
+    return result</code></pre>
+</details>
+<div class="desc"><p>生成模型并运行完整分析流程</p>
+<p>这是 cae-cli ai generate 命令的核心实现</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.DesignAssistant"><code class="flex name class">
+<span>class <span class="ident">DesignAssistant</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DesignAssistant:
+    &#34;&#34;&#34;设计助手 - 提供交互式设计建议&#34;&#34;&#34;
+
+    def __init__(self):
+        self.ai_generator = AIGenerator()
+        self.conversation_history = []
+
+    def ask(self, question: str, context: Optional[Dict] = None) -&gt; str:
+        &#34;&#34;&#34;问答式交互设计
+
+        Args:
+            question: 用户问题
+            context: 当前设计上下文
+
+        Returns:
+            AI回答
+        &#34;&#34;&#34;
+        # 记录对话
+        self.conversation_history.append({&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: question})
+
+        # 模拟AI回答（实际实现应调用API）
+        responses = {
+            &#34;圆角&#34;: &#34;圆角半径建议取壁厚的0.5-1倍，既能降低应力集中又不过度削弱结构。&#34;,
+            &#34;材料&#34;: &#34;对于承重结构，建议选择Q345或更高强度的材料。&#34;,
+            &#34;网格&#34;: &#34;建议关键区域网格尺寸不大于2mm，圆角处局部加密。&#34;,
+        }
+
+        # 简单关键词匹配
+        answer = &#34;这是一个很好的问题。根据工程经验，我建议：\n\n&#34;
+
+        for keyword, response in responses.items():
+            if keyword in question:
+                answer += f&#34;• {response}\n&#34;
+
+        if answer == &#34;这是一个很好的问题。根据工程经验，我建议：\n\n&#34;:
+            answer += &#34;• 请提供更具体的设计参数，我可以给出更准确的建议。\n&#34;
+            answer += &#34;• 建议先进行静力分析，评估当前设计的安全性。\n&#34;
+            answer += &#34;• 考虑制造工艺限制，确保设计可制造。\n&#34;
+
+        self.conversation_history.append({&#34;role&#34;: &#34;assistant&#34;, &#34;content&#34;: answer})
+
+        return answer
+
+    def generate_design_report(self, design_data: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;生成设计报告
+
+        Args:
+            design_data: 设计数据
+
+        Returns:
+            报告文本
+        &#34;&#34;&#34;
+        report = f&#34;&#34;&#34;# 设计分析报告
+
+## 设计概述
+- 类型: {design_data.get(&#34;type&#34;, &#34;未知&#34;)}
+- 材料: {design_data.get(&#34;material&#34;, &#34;未指定&#34;)}
+
+## 关键参数
+&#34;&#34;&#34;
+
+        for param_name, param_info in design_data.get(&#34;parameters&#34;, {}).items():
+            report += f&#34;- {param_info.get(&#39;description&#39;, param_name)}: {param_info.get(&#39;value&#39;)} {param_info.get(&#39;unit&#39;, &#39;&#39;)}\n&#34;
+
+        report += &#34;\n## 制造建议\n&#34;
+        for note in design_data.get(&#34;manufacturing_notes&#34;, []):
+            report += f&#34;- {note}\n&#34;
+
+        report += &#34;\n## 优化建议\n&#34;
+        for hint in design_data.get(&#34;optimization_hints&#34;, []):
+            report += f&#34;- {hint}\n&#34;
+
+        return report</code></pre>
+</details>
+<div class="desc"><p>设计助手 - 提供交互式设计建议</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.ai.DesignAssistant.ask"><code class="name flex">
+<span>def <span class="ident">ask</span></span>(<span>self, question: str, context: Dict | None = None) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ask(self, question: str, context: Optional[Dict] = None) -&gt; str:
+    &#34;&#34;&#34;问答式交互设计
+
+    Args:
+        question: 用户问题
+        context: 当前设计上下文
+
+    Returns:
+        AI回答
+    &#34;&#34;&#34;
+    # 记录对话
+    self.conversation_history.append({&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: question})
+
+    # 模拟AI回答（实际实现应调用API）
+    responses = {
+        &#34;圆角&#34;: &#34;圆角半径建议取壁厚的0.5-1倍，既能降低应力集中又不过度削弱结构。&#34;,
+        &#34;材料&#34;: &#34;对于承重结构，建议选择Q345或更高强度的材料。&#34;,
+        &#34;网格&#34;: &#34;建议关键区域网格尺寸不大于2mm，圆角处局部加密。&#34;,
+    }
+
+    # 简单关键词匹配
+    answer = &#34;这是一个很好的问题。根据工程经验，我建议：\n\n&#34;
+
+    for keyword, response in responses.items():
+        if keyword in question:
+            answer += f&#34;• {response}\n&#34;
+
+    if answer == &#34;这是一个很好的问题。根据工程经验，我建议：\n\n&#34;:
+        answer += &#34;• 请提供更具体的设计参数，我可以给出更准确的建议。\n&#34;
+        answer += &#34;• 建议先进行静力分析，评估当前设计的安全性。\n&#34;
+        answer += &#34;• 考虑制造工艺限制，确保设计可制造。\n&#34;
+
+    self.conversation_history.append({&#34;role&#34;: &#34;assistant&#34;, &#34;content&#34;: answer})
+
+    return answer</code></pre>
+</details>
+<div class="desc"><p>问答式交互设计</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>question</code></strong></dt>
+<dd>用户问题</dd>
+<dt><strong><code>context</code></strong></dt>
+<dd>当前设计上下文</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>AI回答</p></div>
+</dd>
+<dt id="sw_helper.ai.DesignAssistant.generate_design_report"><code class="name flex">
+<span>def <span class="ident">generate_design_report</span></span>(<span>self, design_data: Dict[str, Any]) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    def generate_design_report(self, design_data: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;生成设计报告
+
+        Args:
+            design_data: 设计数据
+
+        Returns:
+            报告文本
+        &#34;&#34;&#34;
+        report = f&#34;&#34;&#34;# 设计分析报告
+
+## 设计概述
+- 类型: {design_data.get(&#34;type&#34;, &#34;未知&#34;)}
+- 材料: {design_data.get(&#34;material&#34;, &#34;未指定&#34;)}
+
+## 关键参数
+&#34;&#34;&#34;
+
+        for param_name, param_info in design_data.get(&#34;parameters&#34;, {}).items():
+            report += f&#34;- {param_info.get(&#39;description&#39;, param_name)}: {param_info.get(&#39;value&#39;)} {param_info.get(&#39;unit&#39;, &#39;&#39;)}\n&#34;
+
+        report += &#34;\n## 制造建议\n&#34;
+        for note in design_data.get(&#34;manufacturing_notes&#34;, []):
+            report += f&#34;- {note}\n&#34;
+
+        report += &#34;\n## 优化建议\n&#34;
+        for hint in design_data.get(&#34;optimization_hints&#34;, []):
+            report += f&#34;- {hint}\n&#34;
+
+        return report</code></pre>
+</details>
+<div class="desc"><p>生成设计报告</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>design_data</code></strong></dt>
+<dd>设计数据</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>报告文本</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.FreeCADModelGenerator"><code class="flex name class">
+<span>class <span class="ident">FreeCADModelGenerator</span></span>
+<span>(</span><span>use_mock: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADModelGenerator:
+    &#34;&#34;&#34;FreeCAD模型生成器&#34;&#34;&#34;
+
+    def __init__(self, use_mock: bool = False):
+        self.doc = None
+        self.fc_app = None
+        self.use_mock = use_mock
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到FreeCAD&#34;&#34;&#34;
+        if self.use_mock:
+            print(&#34;[模拟模式] 连接FreeCAD&#34;)
+            return True
+
+        try:
+            import FreeCAD as App
+            import Part
+
+            self.fc_app = App
+            return True
+        except ImportError:
+            print(&#34;FreeCAD未安装，切换到模拟模式&#34;)
+            self.use_mock = True
+            return True
+
+    def create_document(self, name: str = &#34;GeneratedModel&#34;) -&gt; bool:
+        &#34;&#34;&#34;创建新文档&#34;&#34;&#34;
+        if self.use_mock:
+            print(f&#34;[模拟模式] 创建文档: {name}&#34;)
+            return True
+
+        try:
+            self.doc = self.fc_app.newDocument(name)
+            return True
+        except Exception as e:
+            print(f&#34;创建文档失败: {e}&#34;)
+            return False
+
+    def generate_geometry(self, geometry: ParsedGeometry) -&gt; bool:
+        &#34;&#34;&#34;
+        根据解析结果生成几何体
+
+        Args:
+            geometry: 解析后的几何描述
+
+        Returns:
+            是否成功
+        &#34;&#34;&#34;
+        if self.use_mock:
+            print(f&#34;[模拟模式] 生成{geometry.shape_type}&#34;)
+            print(f&#34;  参数: {geometry.parameters}&#34;)
+            return True
+
+        try:
+            import Part
+
+            shape_type = geometry.shape_type
+            params = geometry.parameters
+
+            if shape_type == &#34;box&#34;:
+                # 创建立方体
+                length = params.get(&#34;length&#34;, 100)
+                width = params.get(&#34;width&#34;, 50)
+                height = params.get(&#34;height&#34;, 30)
+
+                # 创建草图
+                body = self.doc.addObject(&#34;PartDesign::Body&#34;, &#34;Body&#34;)
+                sketch = body.newObject(&#34;Sketcher::SketchObject&#34;, &#34;Sketch&#34;)
+
+                # 创建矩形
+                sketch.addGeometry(
+                    Part.LineSegment(
+                        self.fc_app.Vector(0, 0, 0), self.fc_app.Vector(length, 0, 0)
+                    ),
+                    False,
+                )
+                sketch.addGeometry(
+                    Part.LineSegment(
+                        self.fc_app.Vector(length, 0, 0),
+                        self.fc_app.Vector(length, width, 0),
+                    ),
+                    False,
+                )
+                sketch.addGeometry(
+                    Part.LineSegment(
+                        self.fc_app.Vector(length, width, 0),
+                        self.fc_app.Vector(0, width, 0),
+                    ),
+                    False,
+                )
+                sketch.addGeometry(
+                    Part.LineSegment(
+                        self.fc_app.Vector(0, width, 0), self.fc_app.Vector(0, 0, 0)
+                    ),
+                    False,
+                )
+
+                # 拉伸
+                pad = body.newObject(&#34;PartDesign::Pad&#34;, &#34;Pad&#34;)
+                pad.Profile = sketch
+                pad.Length = height
+
+            elif shape_type == &#34;cylinder&#34;:
+                radius = params.get(&#34;radius&#34;, 25)
+                height = params.get(&#34;height&#34;, 50)
+
+                # 直接创建圆柱
+                cylinder = Part.makeCylinder(radius, height)
+                obj = self.doc.addObject(&#34;Part::Feature&#34;, &#34;Cylinder&#34;)
+                obj.Shape = cylinder
+
+            elif shape_type == &#34;sphere&#34;:
+                radius = params.get(&#34;radius&#34;, 30)
+
+                sphere = Part.makeSphere(radius)
+                obj = self.doc.addObject(&#34;Part::Feature&#34;, &#34;Sphere&#34;)
+                obj.Shape = sphere
+
+            # 添加圆角特征
+            for feature in geometry.features:
+                if feature[&#34;type&#34;] == &#34;fillet&#34;:
+                    self._apply_fillet(feature[&#34;radius&#34;])
+
+            # 重建文档
+            self.doc.recompute()
+            return True
+
+        except Exception as e:
+            print(f&#34;生成几何体失败: {e}&#34;)
+            import traceback
+
+            traceback.print_exc()
+            return False
+
+    def _apply_fillet(self, radius: float):
+        &#34;&#34;&#34;应用圆角&#34;&#34;&#34;
+        if self.use_mock or not self.doc:
+            return
+
+        try:
+            # 找到Body并添加圆角
+            for obj in self.doc.Objects:
+                if obj.isDerivedFrom(&#34;PartDesign::Body&#34;):
+                    fillet = obj.newObject(&#34;PartDesign::Fillet&#34;, &#34;Fillet&#34;)
+                    fillet.Radius = radius
+                    # 这里简化处理，实际应该遍历所有边
+                    break
+        except Exception as e:
+            print(f&#34;应用圆角失败: {e}&#34;)
+
+    def save(self, filepath: str) -&gt; bool:
+        &#34;&#34;&#34;保存为.FCStd文件&#34;&#34;&#34;
+        if self.use_mock:
+            print(f&#34;[模拟模式] 保存: {filepath}&#34;)
+            Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+            Path(filepath).touch()
+            return True
+
+        try:
+            self.doc.saveAs(filepath)
+            return True
+        except Exception as e:
+            print(f&#34;保存失败: {e}&#34;)
+            return False
+
+    def export_step(self, filepath: str) -&gt; bool:
+        &#34;&#34;&#34;导出为STEP格式&#34;&#34;&#34;
+        if self.use_mock:
+            print(f&#34;[模拟模式] 导出STEP: {filepath}&#34;)
+            Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+            Path(filepath).touch()
+            return True
+
+        try:
+            import Import
+
+            objects = [
+                obj for obj in self.doc.Objects if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+            ]
+            if objects:
+                Import.export(objects, filepath)
+                return True
+            return False
+        except Exception as e:
+            print(f&#34;导出失败: {e}&#34;)
+            return False
+
+    def close(self):
+        &#34;&#34;&#34;关闭文档&#34;&#34;&#34;
+        if self.doc and not self.use_mock:
+            try:
+                self.fc_app.closeDocument(self.doc.Name)
+            except:
+                pass</code></pre>
+</details>
+<div class="desc"><p>FreeCAD模型生成器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.ai.FreeCADModelGenerator.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self):
+    &#34;&#34;&#34;关闭文档&#34;&#34;&#34;
+    if self.doc and not self.use_mock:
+        try:
+            self.fc_app.closeDocument(self.doc.Name)
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>关闭文档</p></div>
+</dd>
+<dt id="sw_helper.ai.FreeCADModelGenerator.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到FreeCAD&#34;&#34;&#34;
+    if self.use_mock:
+        print(&#34;[模拟模式] 连接FreeCAD&#34;)
+        return True
+
+    try:
+        import FreeCAD as App
+        import Part
+
+        self.fc_app = App
+        return True
+    except ImportError:
+        print(&#34;FreeCAD未安装，切换到模拟模式&#34;)
+        self.use_mock = True
+        return True</code></pre>
+</details>
+<div class="desc"><p>连接到FreeCAD</p></div>
+</dd>
+<dt id="sw_helper.ai.FreeCADModelGenerator.create_document"><code class="name flex">
+<span>def <span class="ident">create_document</span></span>(<span>self, name: str = 'GeneratedModel') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_document(self, name: str = &#34;GeneratedModel&#34;) -&gt; bool:
+    &#34;&#34;&#34;创建新文档&#34;&#34;&#34;
+    if self.use_mock:
+        print(f&#34;[模拟模式] 创建文档: {name}&#34;)
+        return True
+
+    try:
+        self.doc = self.fc_app.newDocument(name)
+        return True
+    except Exception as e:
+        print(f&#34;创建文档失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>创建新文档</p></div>
+</dd>
+<dt id="sw_helper.ai.FreeCADModelGenerator.export_step"><code class="name flex">
+<span>def <span class="ident">export_step</span></span>(<span>self, filepath: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_step(self, filepath: str) -&gt; bool:
+    &#34;&#34;&#34;导出为STEP格式&#34;&#34;&#34;
+    if self.use_mock:
+        print(f&#34;[模拟模式] 导出STEP: {filepath}&#34;)
+        Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+        Path(filepath).touch()
+        return True
+
+    try:
+        import Import
+
+        objects = [
+            obj for obj in self.doc.Objects if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+        ]
+        if objects:
+            Import.export(objects, filepath)
+            return True
+        return False
+    except Exception as e:
+        print(f&#34;导出失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>导出为STEP格式</p></div>
+</dd>
+<dt id="sw_helper.ai.FreeCADModelGenerator.generate_geometry"><code class="name flex">
+<span>def <span class="ident">generate_geometry</span></span>(<span>self,<br>geometry: <a title="sw_helper.ai.model_generator.ParsedGeometry" href="model_generator.html#sw_helper.ai.model_generator.ParsedGeometry">ParsedGeometry</a>) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_geometry(self, geometry: ParsedGeometry) -&gt; bool:
+    &#34;&#34;&#34;
+    根据解析结果生成几何体
+
+    Args:
+        geometry: 解析后的几何描述
+
+    Returns:
+        是否成功
+    &#34;&#34;&#34;
+    if self.use_mock:
+        print(f&#34;[模拟模式] 生成{geometry.shape_type}&#34;)
+        print(f&#34;  参数: {geometry.parameters}&#34;)
+        return True
+
+    try:
+        import Part
+
+        shape_type = geometry.shape_type
+        params = geometry.parameters
+
+        if shape_type == &#34;box&#34;:
+            # 创建立方体
+            length = params.get(&#34;length&#34;, 100)
+            width = params.get(&#34;width&#34;, 50)
+            height = params.get(&#34;height&#34;, 30)
+
+            # 创建草图
+            body = self.doc.addObject(&#34;PartDesign::Body&#34;, &#34;Body&#34;)
+            sketch = body.newObject(&#34;Sketcher::SketchObject&#34;, &#34;Sketch&#34;)
+
+            # 创建矩形
+            sketch.addGeometry(
+                Part.LineSegment(
+                    self.fc_app.Vector(0, 0, 0), self.fc_app.Vector(length, 0, 0)
+                ),
+                False,
+            )
+            sketch.addGeometry(
+                Part.LineSegment(
+                    self.fc_app.Vector(length, 0, 0),
+                    self.fc_app.Vector(length, width, 0),
+                ),
+                False,
+            )
+            sketch.addGeometry(
+                Part.LineSegment(
+                    self.fc_app.Vector(length, width, 0),
+                    self.fc_app.Vector(0, width, 0),
+                ),
+                False,
+            )
+            sketch.addGeometry(
+                Part.LineSegment(
+                    self.fc_app.Vector(0, width, 0), self.fc_app.Vector(0, 0, 0)
+                ),
+                False,
+            )
+
+            # 拉伸
+            pad = body.newObject(&#34;PartDesign::Pad&#34;, &#34;Pad&#34;)
+            pad.Profile = sketch
+            pad.Length = height
+
+        elif shape_type == &#34;cylinder&#34;:
+            radius = params.get(&#34;radius&#34;, 25)
+            height = params.get(&#34;height&#34;, 50)
+
+            # 直接创建圆柱
+            cylinder = Part.makeCylinder(radius, height)
+            obj = self.doc.addObject(&#34;Part::Feature&#34;, &#34;Cylinder&#34;)
+            obj.Shape = cylinder
+
+        elif shape_type == &#34;sphere&#34;:
+            radius = params.get(&#34;radius&#34;, 30)
+
+            sphere = Part.makeSphere(radius)
+            obj = self.doc.addObject(&#34;Part::Feature&#34;, &#34;Sphere&#34;)
+            obj.Shape = sphere
+
+        # 添加圆角特征
+        for feature in geometry.features:
+            if feature[&#34;type&#34;] == &#34;fillet&#34;:
+                self._apply_fillet(feature[&#34;radius&#34;])
+
+        # 重建文档
+        self.doc.recompute()
+        return True
+
+    except Exception as e:
+        print(f&#34;生成几何体失败: {e}&#34;)
+        import traceback
+
+        traceback.print_exc()
+        return False</code></pre>
+</details>
+<div class="desc"><p>根据解析结果生成几何体</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry</code></strong></dt>
+<dd>解析后的几何描述</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>是否成功</p></div>
+</dd>
+<dt id="sw_helper.ai.FreeCADModelGenerator.save"><code class="name flex">
+<span>def <span class="ident">save</span></span>(<span>self, filepath: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save(self, filepath: str) -&gt; bool:
+    &#34;&#34;&#34;保存为.FCStd文件&#34;&#34;&#34;
+    if self.use_mock:
+        print(f&#34;[模拟模式] 保存: {filepath}&#34;)
+        Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+        Path(filepath).touch()
+        return True
+
+    try:
+        self.doc.saveAs(filepath)
+        return True
+    except Exception as e:
+        print(f&#34;保存失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>保存为.FCStd文件</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.NaturalLanguageParser"><code class="flex name class">
+<span>class <span class="ident">NaturalLanguageParser</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NaturalLanguageParser:
+    &#34;&#34;&#34;自然语言解析器&#34;&#34;&#34;
+
+    # 形状关键词映射
+    SHAPE_KEYWORDS = {
+        &#34;立方体&#34;: &#34;box&#34;,
+        &#34;长方体&#34;: &#34;box&#34;,
+        &#34;方块&#34;: &#34;box&#34;,
+        &#34;box&#34;: &#34;box&#34;,
+        &#34;圆柱&#34;: &#34;cylinder&#34;,
+        &#34;圆柱体&#34;: &#34;cylinder&#34;,
+        &#34;cylinder&#34;: &#34;cylinder&#34;,
+        &#34;球&#34;: &#34;sphere&#34;,
+        &#34;球体&#34;: &#34;sphere&#34;,
+        &#34;sphere&#34;: &#34;sphere&#34;,
+        &#34;圆锥&#34;: &#34;cone&#34;,
+        &#34;圆锥体&#34;: &#34;cone&#34;,
+        &#34;cone&#34;: &#34;cone&#34;,
+        &#34;圆环&#34;: &#34;torus&#34;,
+        &#34;torus&#34;: &#34;torus&#34;,
+        &#34;支架&#34;: &#34;bracket&#34;,
+        &#34;bracket&#34;: &#34;bracket&#34;,
+        &#34;板&#34;: &#34;plate&#34;,
+        &#34;plate&#34;: &#34;plate&#34;,
+    }
+
+    # 参数关键词映射
+    PARAM_PATTERNS = {
+        &#34;length&#34;: [
+            r&#34;长[度]?[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;(\d+\.?\d*)\s*mm?[\s]*长&#34;,
+            r&#34;length[\s:]+(\d+\.?\d*)&#34;,
+        ],
+        &#34;width&#34;: [
+            r&#34;宽[度]?[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;(\d+\.?\d*)\s*mm?[\s]*宽&#34;,
+            r&#34;width[\s:]+(\d+\.?\d*)&#34;,
+        ],
+        &#34;height&#34;: [
+            r&#34;高[度]?[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;(\d+\.?\d*)\s*mm?[\s]*高&#34;,
+            r&#34;height[\s:]+(\d+\.?\d*)&#34;,
+        ],
+        &#34;radius&#34;: [
+            r&#34;半径[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;R[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;radius[\s:]+(\d+\.?\d*)&#34;,
+        ],
+        &#34;diameter&#34;: [
+            r&#34;直径[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;D[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;diameter[\s:]+(\d+\.?\d*)&#34;,
+        ],
+        &#34;fillet_radius&#34;: [
+            r&#34;圆角[半径]?[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;倒角[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;fillet[\s:]+(\d+\.?\d*)&#34;,
+        ],
+        &#34;thickness&#34;: [
+            r&#34;厚度[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;厚[\s为是:]+(\d+\.?\d*)&#34;,
+            r&#34;thickness[\s:]+(\d+\.?\d*)&#34;,
+        ],
+    }
+
+    def parse(self, description: str) -&gt; ParsedGeometry:
+        &#34;&#34;&#34;
+        解析自然语言描述
+
+        Args:
+            description: 如&#34;带圆角的立方体，长100宽50高30圆角10&#34;
+
+        Returns:
+            ParsedGeometry对象
+        &#34;&#34;&#34;
+        description = description.lower().strip()
+
+        # 1. 识别形状类型
+        shape_type = self._detect_shape(description)
+
+        # 2. 提取参数
+        parameters = self._extract_parameters(description)
+
+        # 3. 识别特征
+        features = self._detect_features(description)
+
+        # 4. 识别材料
+        material = self._detect_material(description)
+
+        # 5. 设置默认值
+        parameters = self._set_defaults(shape_type, parameters)
+
+        return ParsedGeometry(
+            shape_type=shape_type,
+            parameters=parameters,
+            features=features,
+            material=material,
+            description=description,
+        )
+
+    def _detect_shape(self, desc: str) -&gt; str:
+        &#34;&#34;&#34;检测形状类型&#34;&#34;&#34;
+        for keyword, shape in self.SHAPE_KEYWORDS.items():
+            if keyword in desc:
+                return shape
+        return &#34;box&#34;  # 默认为立方体
+
+    def _extract_parameters(self, desc: str) -&gt; Dict[str, float]:
+        &#34;&#34;&#34;提取尺寸参数&#34;&#34;&#34;
+        params = {}
+
+        for param_name, patterns in self.PARAM_PATTERNS.items():
+            for pattern in patterns:
+                match = re.search(pattern, desc, re.IGNORECASE)
+                if match:
+                    try:
+                        value = float(match.group(1))
+                        params[param_name] = value
+                        break
+                    except (ValueError, IndexError):
+                        continue
+
+        return params
+
+    def _detect_features(self, desc: str) -&gt; List[Dict[str, Any]]:
+        &#34;&#34;&#34;检测特征（圆角、孔等）&#34;&#34;&#34;
+        features = []
+
+        # 检测圆角
+        fillet_match = re.search(
+            r&#34;圆角[半径]?[\s为是:]+(\d+\.?\d*)&#34;, desc, re.IGNORECASE
+        )
+        if fillet_match:
+            features.append(
+                {
+                    &#34;type&#34;: &#34;fillet&#34;,
+                    &#34;radius&#34;: float(fillet_match.group(1)),
+                    &#34;edges&#34;: &#34;all&#34;,
+                }
+            )
+
+        # 检测孔
+        hole_match = re.search(r&#34;(\d+\.?\d*)\s*mm?[\s]*孔&#34;, desc, re.IGNORECASE)
+        if hole_match:
+            features.append({&#34;type&#34;: &#34;hole&#34;, &#34;diameter&#34;: float(hole_match.group(1))})
+
+        return features
+
+    def _detect_material(self, desc: str) -&gt; Optional[str]:
+        &#34;&#34;&#34;检测材料&#34;&#34;&#34;
+        materials = {
+            &#34;钢&#34;: &#34;steel&#34;,
+            &#34;steel&#34;: &#34;steel&#34;,
+            &#34;铝&#34;: &#34;aluminum&#34;,
+            &#34;铝合金&#34;: &#34;aluminum&#34;,
+            &#34;aluminum&#34;: &#34;aluminum&#34;,
+            &#34;铜&#34;: &#34;copper&#34;,
+            &#34;copper&#34;: &#34;copper&#34;,
+            &#34;塑料&#34;: &#34;plastic&#34;,
+            &#34;plastic&#34;: &#34;plastic&#34;,
+        }
+
+        for keyword, material in materials.items():
+            if keyword in desc:
+                return material
+        return None
+
+    def _set_defaults(self, shape: str, params: Dict[str, float]) -&gt; Dict[str, float]:
+        &#34;&#34;&#34;设置默认值&#34;&#34;&#34;
+        defaults = {
+            &#34;box&#34;: {&#34;length&#34;: 100, &#34;width&#34;: 50, &#34;height&#34;: 30},
+            &#34;cylinder&#34;: {&#34;radius&#34;: 25, &#34;height&#34;: 50},
+            &#34;sphere&#34;: {&#34;radius&#34;: 30},
+            &#34;cone&#34;: {&#34;radius&#34;: 25, &#34;height&#34;: 50},
+        }
+
+        shape_defaults = defaults.get(shape, {})
+
+        # 合并默认值和用户参数
+        for key, value in shape_defaults.items():
+            if key not in params:
+                params[key] = value
+
+        return params</code></pre>
+</details>
+<div class="desc"><p>自然语言解析器</p></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="sw_helper.ai.NaturalLanguageParser.PARAM_PATTERNS"><code class="name">var <span class="ident">PARAM_PATTERNS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.NaturalLanguageParser.SHAPE_KEYWORDS"><code class="name">var <span class="ident">SHAPE_KEYWORDS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.ai.NaturalLanguageParser.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>self, description: str) ‑> <a title="sw_helper.ai.model_generator.ParsedGeometry" href="model_generator.html#sw_helper.ai.model_generator.ParsedGeometry">ParsedGeometry</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse(self, description: str) -&gt; ParsedGeometry:
+    &#34;&#34;&#34;
+    解析自然语言描述
+
+    Args:
+        description: 如&#34;带圆角的立方体，长100宽50高30圆角10&#34;
+
+    Returns:
+        ParsedGeometry对象
+    &#34;&#34;&#34;
+    description = description.lower().strip()
+
+    # 1. 识别形状类型
+    shape_type = self._detect_shape(description)
+
+    # 2. 提取参数
+    parameters = self._extract_parameters(description)
+
+    # 3. 识别特征
+    features = self._detect_features(description)
+
+    # 4. 识别材料
+    material = self._detect_material(description)
+
+    # 5. 设置默认值
+    parameters = self._set_defaults(shape_type, parameters)
+
+    return ParsedGeometry(
+        shape_type=shape_type,
+        parameters=parameters,
+        features=features,
+        material=material,
+        description=description,
+    )</code></pre>
+</details>
+<div class="desc"><p>解析自然语言描述</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>description</code></strong></dt>
+<dd>如"带圆角的立方体，长100宽50高30圆角10"</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>ParsedGeometry对象</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.ai.ParsedGeometry"><code class="flex name class">
+<span>class <span class="ident">ParsedGeometry</span></span>
+<span>(</span><span>shape_type: str,<br>parameters: Dict[str, float],<br>features: List[Dict[str, Any]],<br>material: str | None = None,<br>description: str = '')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class ParsedGeometry:
+    &#34;&#34;&#34;解析后的几何描述&#34;&#34;&#34;
+
+    shape_type: str  # box, cylinder, sphere, etc.
+    parameters: Dict[str, float]  # 尺寸参数
+    features: List[Dict[str, Any]]  # 特征（如圆角、孔等）
+    material: Optional[str] = None
+    description: str = &#34;&#34;</code></pre>
+</details>
+<div class="desc"><p>解析后的几何描述</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.ai.ParsedGeometry.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.ParsedGeometry.features"><code class="name">var <span class="ident">features</span> : List[Dict[str, Any]]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.ParsedGeometry.material"><code class="name">var <span class="ident">material</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.ParsedGeometry.parameters"><code class="name">var <span class="ident">parameters</span> : Dict[str, float]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.ai.ParsedGeometry.shape_type"><code class="name">var <span class="ident">shape_type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.ai.generator" href="generator.html">sw_helper.ai.generator</a></code></li>
+<li><code><a title="sw_helper.ai.llm_client" href="llm_client.html">sw_helper.ai.llm_client</a></code></li>
+<li><code><a title="sw_helper.ai.model_generator" href="model_generator.html">sw_helper.ai.model_generator</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.ai.AIGenerator" href="#sw_helper.ai.AIGenerator">AIGenerator</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.AIGenerator.generate_design_variants" href="#sw_helper.ai.AIGenerator.generate_design_variants">generate_design_variants</a></code></li>
+<li><code><a title="sw_helper.ai.AIGenerator.generate_geometry_prompt" href="#sw_helper.ai.AIGenerator.generate_geometry_prompt">generate_geometry_prompt</a></code></li>
+<li><code><a title="sw_helper.ai.AIGenerator.generate_optimization_suggestions" href="#sw_helper.ai.AIGenerator.generate_optimization_suggestions">generate_optimization_suggestions</a></code></li>
+<li><code><a title="sw_helper.ai.AIGenerator.parse_geometry_description" href="#sw_helper.ai.AIGenerator.parse_geometry_description">parse_geometry_description</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.AIModelGenerator" href="#sw_helper.ai.AIModelGenerator">AIModelGenerator</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.AIModelGenerator.generate" href="#sw_helper.ai.AIModelGenerator.generate">generate</a></code></li>
+<li><code><a title="sw_helper.ai.AIModelGenerator.generate_with_analysis" href="#sw_helper.ai.AIModelGenerator.generate_with_analysis">generate_with_analysis</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.DesignAssistant" href="#sw_helper.ai.DesignAssistant">DesignAssistant</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.DesignAssistant.ask" href="#sw_helper.ai.DesignAssistant.ask">ask</a></code></li>
+<li><code><a title="sw_helper.ai.DesignAssistant.generate_design_report" href="#sw_helper.ai.DesignAssistant.generate_design_report">generate_design_report</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.FreeCADModelGenerator" href="#sw_helper.ai.FreeCADModelGenerator">FreeCADModelGenerator</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.ai.FreeCADModelGenerator.close" href="#sw_helper.ai.FreeCADModelGenerator.close">close</a></code></li>
+<li><code><a title="sw_helper.ai.FreeCADModelGenerator.connect" href="#sw_helper.ai.FreeCADModelGenerator.connect">connect</a></code></li>
+<li><code><a title="sw_helper.ai.FreeCADModelGenerator.create_document" href="#sw_helper.ai.FreeCADModelGenerator.create_document">create_document</a></code></li>
+<li><code><a title="sw_helper.ai.FreeCADModelGenerator.export_step" href="#sw_helper.ai.FreeCADModelGenerator.export_step">export_step</a></code></li>
+<li><code><a title="sw_helper.ai.FreeCADModelGenerator.generate_geometry" href="#sw_helper.ai.FreeCADModelGenerator.generate_geometry">generate_geometry</a></code></li>
+<li><code><a title="sw_helper.ai.FreeCADModelGenerator.save" href="#sw_helper.ai.FreeCADModelGenerator.save">save</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.NaturalLanguageParser" href="#sw_helper.ai.NaturalLanguageParser">NaturalLanguageParser</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.NaturalLanguageParser.PARAM_PATTERNS" href="#sw_helper.ai.NaturalLanguageParser.PARAM_PATTERNS">PARAM_PATTERNS</a></code></li>
+<li><code><a title="sw_helper.ai.NaturalLanguageParser.SHAPE_KEYWORDS" href="#sw_helper.ai.NaturalLanguageParser.SHAPE_KEYWORDS">SHAPE_KEYWORDS</a></code></li>
+<li><code><a title="sw_helper.ai.NaturalLanguageParser.parse" href="#sw_helper.ai.NaturalLanguageParser.parse">parse</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.ai.ParsedGeometry" href="#sw_helper.ai.ParsedGeometry">ParsedGeometry</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.ai.ParsedGeometry.description" href="#sw_helper.ai.ParsedGeometry.description">description</a></code></li>
+<li><code><a title="sw_helper.ai.ParsedGeometry.features" href="#sw_helper.ai.ParsedGeometry.features">features</a></code></li>
+<li><code><a title="sw_helper.ai.ParsedGeometry.material" href="#sw_helper.ai.ParsedGeometry.material">material</a></code></li>
+<li><code><a title="sw_helper.ai.ParsedGeometry.parameters" href="#sw_helper.ai.ParsedGeometry.parameters">parameters</a></code></li>
+<li><code><a title="sw_helper.ai.ParsedGeometry.shape_type" href="#sw_helper.ai.ParsedGeometry.shape_type">shape_type</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

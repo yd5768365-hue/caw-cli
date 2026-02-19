@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.mechanics.physics_formulas API documentation</title>
+<meta name="description" content="力学计算公式模块
+包含材料力学、结构力学常用公式的Python实现">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.mechanics.physics_formulas</code></h1>
+</header>
+<section id="section-intro">
+<p>力学计算公式模块
+包含材料力学、结构力学常用公式的Python实现</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.mechanics.physics_formulas.calc_max_shear"><code class="name flex">
+<span>def <span class="ident">calc_max_shear</span></span>(<span>s1: float, s3: float) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_max_shear(
+    s1: float,
+    s3: float,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算最大剪应力
+    ——第三强度理论（最大剪应力理论 / Tresca）
+
+    物理意义：
+        常用于脆性材料或保守设计，
+        认为材料在最大剪应力达到极限时破坏。
+
+    公式来源：
+        《机械设计手册》— 第三强度理论
+
+    参数说明：
+        s1 (float): 最大主应力，单位 Pa
+        s3 (float): 最小主应力，单位 Pa
+
+    返回值：
+        float: 最大剪应力，单位 Pa
+    &#34;&#34;&#34;
+    return 0.5 * abs(s1 - s3)</code></pre>
+</details>
+<div class="desc"><p>计算最大剪应力
+——第三强度理论（最大剪应力理论 / Tresca）</p>
+<p>物理意义：
+常用于脆性材料或保守设计，
+认为材料在最大剪应力达到极限时破坏。</p>
+<p>公式来源：
+《机械设计手册》— 第三强度理论</p>
+<p>参数说明：
+s1 (float): 最大主应力，单位 Pa
+s3 (float): 最小主应力，单位 Pa</p>
+<p>返回值：
+float: 最大剪应力，单位 Pa</p></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calc_principal_stresses"><code class="name flex">
+<span>def <span class="ident">calc_principal_stresses</span></span>(<span>sigma_x: float, sigma_y: float, tau_xy: float) ‑> Tuple[float, float]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_principal_stresses(
+    sigma_x: float,
+    sigma_y: float,
+    tau_xy: float,
+) -&gt; Tuple[float, float]:
+    &#34;&#34;&#34;
+    计算平面应力状态下的第一、第二主应力（σ1, σ2）
+
+    物理意义：
+        基于材料力学中主应力变换公式，用于确定材料在
+        平面应力状态下的极值正应力。
+
+    公式来源：
+        《机械设计手册》— 应力分析章节（Mohr 圆）
+
+    参数说明：
+        sigma_x (float): x 方向正应力，单位 Pa
+        sigma_y (float): y 方向正应力，单位 Pa
+        tau_xy  (float): 剪应力，单位 Pa
+
+    返回值：
+        Tuple[float, float]:
+            - sigma_1: 第一主应力（最大），单位 Pa
+            - sigma_2: 第二主应力（最小），单位 Pa
+    &#34;&#34;&#34;
+    avg = 0.5 * (sigma_x + sigma_y)
+    radius = math.sqrt(((sigma_x - sigma_y) / 2.0) ** 2 + tau_xy**2)
+
+    sigma_1 = avg + radius
+    sigma_2 = avg - radius
+
+    return sigma_1, sigma_2</code></pre>
+</details>
+<div class="desc"><p>计算平面应力状态下的第一、第二主应力（σ1, σ2）</p>
+<p>物理意义：
+基于材料力学中主应力变换公式，用于确定材料在
+平面应力状态下的极值正应力。</p>
+<p>公式来源：
+《机械设计手册》— 应力分析章节（Mohr 圆）</p>
+<p>参数说明：
+sigma_x (float): x 方向正应力，单位 Pa
+sigma_y (float): y 方向正应力，单位 Pa
+tau_xy
+(float): 剪应力，单位 Pa</p>
+<p>返回值：
+Tuple[float, float]:
+- sigma_1: 第一主应力（最大），单位 Pa
+- sigma_2: 第二主应力（最小），单位 Pa</p></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calc_von_mises"><code class="name flex">
+<span>def <span class="ident">calc_von_mises</span></span>(<span>s1: float, s2: float, s3: float) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_von_mises(
+    s1: float,
+    s2: float,
+    s3: float,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算等效应力（von Mises 应力）
+    ——第四强度理论（畸变能理论）
+
+    物理意义：
+        用于延性材料的屈服判据，认为材料在
+        畸变能达到临界值时发生屈服。
+
+    公式来源：
+        《机械设计手册》— 第四强度理论
+
+    参数说明：
+        s1 (float): 第一主应力，单位 Pa
+        s2 (float): 第二主应力，单位 Pa
+        s3 (float): 第三主应力，单位 Pa
+
+    返回值：
+        float: von Mises 等效应力，单位 Pa
+    &#34;&#34;&#34;
+    return math.sqrt(0.5 * ((s1 - s2) ** 2 + (s2 - s3) ** 2 + (s3 - s1) ** 2))</code></pre>
+</details>
+<div class="desc"><p>计算等效应力（von Mises 应力）
+——第四强度理论（畸变能理论）</p>
+<p>物理意义：
+用于延性材料的屈服判据，认为材料在
+畸变能达到临界值时发生屈服。</p>
+<p>公式来源：
+《机械设计手册》— 第四强度理论</p>
+<p>参数说明：
+s1 (float): 第一主应力，单位 Pa
+s2 (float): 第二主应力，单位 Pa
+s3 (float): 第三主应力，单位 Pa</p>
+<p>返回值：
+float: von Mises 等效应力，单位 Pa</p></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calculate_buckling_load"><code class="name flex">
+<span>def <span class="ident">calculate_buckling_load</span></span>(<span>youngs_modulus: float,<br>moment_of_inertia: float,<br>length: float,<br>end_condition: str = 'pinned-pinned') ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_buckling_load(
+    youngs_modulus: float,
+    moment_of_inertia: float,
+    length: float,
+    end_condition: str = &#34;pinned-pinned&#34;,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算欧拉屈曲载荷
+
+    Args:
+        youngs_modulus: 弹性模量 (Pa)
+        moment_of_inertia: 截面惯性矩 (m^4)
+        length: 杆件长度 (m)
+        end_condition: 边界条件 (&#34;pinned-pinned&#34;, &#34;fixed-fixed&#34;, &#34;fixed-pinned&#34;, &#34;fixed-free&#34;)
+
+    Returns:
+        float: 临界屈曲载荷 (N)
+    &#34;&#34;&#34;
+    # 有效长度系数
+    k_factors = {
+        &#34;pinned-pinned&#34;: 1.0,
+        &#34;fixed-fixed&#34;: 0.5,
+        &#34;fixed-pinned&#34;: 0.7,
+        &#34;fixed-free&#34;: 2.0,
+    }
+
+    if end_condition not in k_factors:
+        raise ValueError(f&#34;不支持的边界条件: {end_condition}&#34;)
+
+    k = k_factors[end_condition]
+    effective_length = k * length
+
+    # 欧拉屈曲公式
+    critical_load = (math.pi**2 * youngs_modulus * moment_of_inertia) / (
+        effective_length**2
+    )
+
+    return critical_load</code></pre>
+</details>
+<div class="desc"><p>计算欧拉屈曲载荷</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>youngs_modulus</code></strong></dt>
+<dd>弹性模量 (Pa)</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩 (m^4)</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>杆件长度 (m)</dd>
+<dt><strong><code>end_condition</code></strong></dt>
+<dd>边界条件 ("pinned-pinned", "fixed-fixed", "fixed-pinned", "fixed-free")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>临界屈曲载荷 (N)</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calculate_deflection"><code class="name flex">
+<span>def <span class="ident">calculate_deflection</span></span>(<span>load: float,<br>length: float,<br>youngs_modulus: float,<br>moment_of_inertia: float,<br>load_type: str = 'point_center') ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_deflection(
+    load: float,
+    length: float,
+    youngs_modulus: float,
+    moment_of_inertia: float,
+    load_type: str = &#34;point_center&#34;,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算梁的挠度
+
+    Args:
+        load: 载荷 (N)
+        length: 梁长度 (m)
+        youngs_modulus: 弹性模量 (Pa)
+        moment_of_inertia: 截面惯性矩 (m^4)
+        load_type: 载荷类型 (&#34;point_center&#34;, &#34;uniform&#34;, &#34;point_end&#34;)
+
+    Returns:
+        float: 最大挠度 (m)
+    &#34;&#34;&#34;
+    deflection_formulas = {
+        &#34;point_center&#34;: lambda P, L, E, I: (P * L**3) / (48 * E * I),
+        &#34;uniform&#34;: lambda w, L, E, I: (5 * w * L**4) / (384 * E * I),
+        &#34;point_end&#34;: lambda P, L, E, I: (P * L**3) / (3 * E * I),
+    }
+
+    if load_type not in deflection_formulas:
+        raise ValueError(f&#34;不支持的载荷类型: {load_type}&#34;)
+
+    formula = deflection_formulas[load_type]
+    return formula(load, length, youngs_modulus, moment_of_inertia)</code></pre>
+</details>
+<div class="desc"><p>计算梁的挠度</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>load</code></strong></dt>
+<dd>载荷 (N)</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>梁长度 (m)</dd>
+<dt><strong><code>youngs_modulus</code></strong></dt>
+<dd>弹性模量 (Pa)</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩 (m^4)</dd>
+<dt><strong><code>load_type</code></strong></dt>
+<dd>载荷类型 ("point_center", "uniform", "point_end")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>最大挠度 (m)</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calculate_principal_stresses"><code class="name flex">
+<span>def <span class="ident">calculate_principal_stresses</span></span>(<span>stress_tensor: numpy.ndarray) ‑> Tuple[float, float, float]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_principal_stresses(
+    stress_tensor: np.ndarray,
+) -&gt; Tuple[float, float, float]:
+    &#34;&#34;&#34;
+    计算主应力
+
+    Args:
+        stress_tensor: 3x3应力张量
+
+    Returns:
+        Tuple[float, float, float]: (σ1, σ2, σ3) 主应力，从大到小排序
+    &#34;&#34;&#34;
+    # 使用numpy计算特征值
+    eigenvalues = np.linalg.eigvalsh(stress_tensor)
+    # 从大到小排序
+    sorted_eigenvalues = sorted(eigenvalues, reverse=True)
+    return tuple(sorted_eigenvalues)</code></pre>
+</details>
+<div class="desc"><p>计算主应力</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>stress_tensor</code></strong></dt>
+<dd>3x3应力张量</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Tuple[float, float, float]</code></dt>
+<dd>(σ1, σ2, σ3) 主应力，从大到小排序</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calculate_safety_factor"><code class="name flex">
+<span>def <span class="ident">calculate_safety_factor</span></span>(<span>applied_stress: float,<br>material_yield_strength: float,<br>material_tensile_strength: float,<br>material_type: str = 'ductile') ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_safety_factor(
+    applied_stress: float,
+    material_yield_strength: float,
+    material_tensile_strength: float,
+    material_type: str = &#34;ductile&#34;,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算安全系数
+
+    Args:
+        applied_stress: 施加的应力 (Pa)
+        material_yield_strength: 材料屈服强度 (Pa)
+        material_tensile_strength: 材料抗拉强度 (Pa)
+        material_type: 材料类型 (&#34;ductile&#34; 塑性 / &#34;brittle&#34; 脆性)
+
+    Returns:
+        float: 安全系数
+    &#34;&#34;&#34;
+    if applied_stress &lt;= 0:
+        raise ValueError(&#34;施加应力必须大于0&#34;)
+
+    if material_type == &#34;ductile&#34;:
+        # 塑性材料基于屈服强度
+        safety_factor = material_yield_strength / applied_stress
+    else:
+        # 脆性材料基于抗拉强度
+        safety_factor = material_tensile_strength / applied_stress
+
+    return safety_factor</code></pre>
+</details>
+<div class="desc"><p>计算安全系数</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>applied_stress</code></strong></dt>
+<dd>施加的应力 (Pa)</dd>
+<dt><strong><code>material_yield_strength</code></strong></dt>
+<dd>材料屈服强度 (Pa)</dd>
+<dt><strong><code>material_tensile_strength</code></strong></dt>
+<dd>材料抗拉强度 (Pa)</dd>
+<dt><strong><code>material_type</code></strong></dt>
+<dd>材料类型 ("ductile" 塑性 / "brittle" 脆性)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>安全系数</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.physics_formulas.calculate_von_mises_stress"><code class="name flex">
+<span>def <span class="ident">calculate_von_mises_stress</span></span>(<span>stress_tensor: numpy.ndarray) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_von_mises_stress(stress_tensor: np.ndarray) -&gt; float:
+    &#34;&#34;&#34;
+    计算Von Mises等效应力
+
+    Args:
+        stress_tensor: 3x3应力张量 [σ_x, τ_xy, τ_xz; τ_yx, σ_y, τ_yz; τ_zx, τ_zy, σ_z]
+
+    Returns:
+        float: Von Mises等效应力
+    &#34;&#34;&#34;
+    # 检查numpy可用性
+    if stress_tensor.shape != (3, 3):
+        raise ValueError(&#34;应力张量必须是3x3矩阵&#34;)
+
+    # 提取应力分量
+    σ_x = stress_tensor[0, 0]
+    σ_y = stress_tensor[1, 1]
+    σ_z = stress_tensor[2, 2]
+    τ_xy = stress_tensor[0, 1]
+    τ_xz = stress_tensor[0, 2]
+    τ_yz = stress_tensor[1, 2]
+
+    # Von Mises公式
+    σ_vm = math.sqrt(
+        0.5 * ((σ_x - σ_y) ** 2 + (σ_y - σ_z) ** 2 + (σ_z - σ_x) ** 2)
+        + 3 * (τ_xy**2 + τ_xz**2 + τ_yz**2)
+    )
+
+    return σ_vm</code></pre>
+</details>
+<div class="desc"><p>计算Von Mises等效应力</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>stress_tensor</code></strong></dt>
+<dd>3x3应力张量 [σ_x, τ_xy, τ_xz; τ_yx, σ_y, τ_yz; τ_zx, τ_zy, σ_z]</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>Von Mises等效应力</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper.mechanics" href="index.html">sw_helper.mechanics</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.mechanics.physics_formulas.calc_max_shear" href="#sw_helper.mechanics.physics_formulas.calc_max_shear">calc_max_shear</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calc_principal_stresses" href="#sw_helper.mechanics.physics_formulas.calc_principal_stresses">calc_principal_stresses</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calc_von_mises" href="#sw_helper.mechanics.physics_formulas.calc_von_mises">calc_von_mises</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calculate_buckling_load" href="#sw_helper.mechanics.physics_formulas.calculate_buckling_load">calculate_buckling_load</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calculate_deflection" href="#sw_helper.mechanics.physics_formulas.calculate_deflection">calculate_deflection</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calculate_principal_stresses" href="#sw_helper.mechanics.physics_formulas.calculate_principal_stresses">calculate_principal_stresses</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calculate_safety_factor" href="#sw_helper.mechanics.physics_formulas.calculate_safety_factor">calculate_safety_factor</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas.calculate_von_mises_stress" href="#sw_helper.mechanics.physics_formulas.calculate_von_mises_stress">calculate_von_mises_stress</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

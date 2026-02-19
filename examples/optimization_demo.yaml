@@ -1,0 +1,162 @@
+# optimization_demo.yaml - 悬臂梁参数优化示例
+# 此文件演示如何通过CAE-CLI自动化工作流进行参数优化
+# 工作流：CAD参数修改 → 几何导出 → 网格生成 → 仿真求解 → 结果提取
+
+project:
+  name: "悬臂梁厚度优化"
+  description: "优化悬臂梁厚度以最小化重量同时满足应力约束"
+
+cad:
+  software: "freecad"
+  model: "cantilever.FCStd"  # 假设的FreeCAD模型文件
+  parameters:
+    thickness:
+      value: 10.0  # 初始值，将在优化中变化
+      unit: "mm"
+      description: "梁的厚度"
+      optimization:
+        min: 5.0
+        max: 20.0
+        step: 1.0
+    length:
+      value: 200.0
+      unit: "mm"
+      description: "梁的长度"
+    width:
+      value: 30.0
+      unit: "mm"
+      description: "梁的宽度"
+
+mesh:
+  generator: "gmsh"
+  element_type: "tetrahedron"
+  element_size: 3.0
+  quality:
+    aspect_ratio_max: 4.0
+    skewness_max: 0.7
+    orthogonal_quality_min: 0.2
+
+material:
+  name: "Q235"
+  properties:
+    - name: "elastic_modulus"
+      value: 210e9
+      unit: "Pa"
+      description: "弹性模量"
+    - name: "poisson_ratio"
+      value: 0.3
+      unit: ""
+      description: "泊松比"
+    - name: "yield_strength"
+      value: 235e6
+      unit: "Pa"
+      description: "屈服强度"
+    - name: "density"
+      value: 7850
+      unit: "kg/m³"
+      description: "密度"
+
+analysis:
+  type: "static"
+  solver: "calculix"
+  
+  loads:
+    - type: "force"
+      location: "free_end"
+      value: -500.0  # N
+      direction: [0, 0, -1]
+      distribution: "uniform"
+      description: "自由端垂直向下载荷"
+  
+  constraints:
+    - type: "fixed"
+      location: "fixed_end"
+      degrees_of_freedom: [true, true, true, false, false, false]
+      description: "固定端约束"
+
+solver_settings:
+  max_iterations: 200
+  tolerance: 1e-6
+  solver_type: "iterative"
+  num_processors: 2
+  output_interval: 20
+
+output:
+  directory: "./optimization_results"
+  formats:
+    - "vtk"
+    - "json"
+  report_format: "html"
+  visualization:
+    create_contours: true
+    create_deformation: true
+    create_slice_plots: false
+
+workflow:
+  name: "stress_analysis"
+  steps:
+    - ["cad", "load_model"]
+    - ["cad", "set_parameters"]
+    - ["cad", "rebuild"]
+    - ["cad", "export_step"]
+    - ["mesher", "generate_mesh"]
+    - ["cae", "setup_static_analysis"]
+    - ["cae", "solve"]
+    - ["postprocess", "extract_stress"]
+    - ["postprocess", "extract_displacement"]
+    - ["postprocess", "calculate_safety_factor"]
+
+postprocessing:
+  extract:
+    - "max_stress"
+    - "max_displacement"
+    - "safety_factor"
+    - "mass"
+    - "volume"
+  thresholds:
+    max_stress_warning: 180e6
+    max_stress_critical: 235e6  # 屈服强度
+    min_safety_factor: 1.2
+    max_displacement: 10.0  # mm
+
+optimization:
+  enabled: true
+  objective: "minimize_mass"  # 目标：最小化质量
+  constraints:
+    - "max_stress < 235e6"  # 应力约束：小于屈服强度
+    - "safety_factor > 1.2"  # 安全系数约束
+    - "max_displacement < 10.0"  # 位移约束
+  algorithm: "parameter_sweep"  # 参数扫描法
+  parameters_to_optimize:
+    - name: "thickness"
+      min: 5.0
+      max: 20.0
+      steps: 16  # 5, 6, 7, ..., 20
+      step_type: "linear"
+  evaluation_metrics:
+    - "mass"
+    - "max_stress"
+    - "safety_factor"
+    - "max_displacement"
+  stop_criteria:
+    max_iterations: 20
+    convergence_tolerance: 0.01
+    time_limit_minutes: 60
+
+metadata:
+  author: "CAE-CLI Demo"
+  created: "2026-02-11"
+  version: "1.0"
+  tags: ["optimization", "cantilever", "structural", "parameter_study"]
+  notes: |
+    此示例演示完整的参数优化工作流：
+    1. 厚度参数从5mm到20mm变化（16个步骤）
+    2. 每个厚度值执行完整仿真
+    3. 提取质量、应力、安全系数、位移结果
+    4. 寻找满足约束的最小质量设计
+    
+    运行命令：
+    cae-cli workflow optimization_demo.yaml --workflow stress_analysis -o ./results
+    
+    或使用优化专用命令：
+    cae-cli optimize cantilever.FCStd -p thickness -r 5 20 --steps 16 --cad freecad

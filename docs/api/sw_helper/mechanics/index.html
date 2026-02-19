@@ -1,0 +1,2347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.mechanics API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.mechanics</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.mechanics.engine" href="engine.html">sw_helper.mechanics.engine</a></code></dt>
+<dd>
+<div class="desc"><p>力学计算引擎
+整合材料数据库、单位转换和力学公式</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.mechanics.interface" href="interface.html">sw_helper.mechanics.interface</a></code></dt>
+<dd>
+<div class="desc"><p>力学模块接口
+为CLI提供统一的力学计算接口，并处理报告渲染</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.mechanics.physics_formulas" href="physics_formulas.html">sw_helper.mechanics.physics_formulas</a></code></dt>
+<dd>
+<div class="desc"><p>力学计算公式模块
+包含材料力学、结构力学常用公式的Python实现</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.mechanics.calc_max_shear"><code class="name flex">
+<span>def <span class="ident">calc_max_shear</span></span>(<span>s1: float, s3: float) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_max_shear(
+    s1: float,
+    s3: float,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算最大剪应力
+    ——第三强度理论（最大剪应力理论 / Tresca）
+
+    物理意义：
+        常用于脆性材料或保守设计，
+        认为材料在最大剪应力达到极限时破坏。
+
+    公式来源：
+        《机械设计手册》— 第三强度理论
+
+    参数说明：
+        s1 (float): 最大主应力，单位 Pa
+        s3 (float): 最小主应力，单位 Pa
+
+    返回值：
+        float: 最大剪应力，单位 Pa
+    &#34;&#34;&#34;
+    return 0.5 * abs(s1 - s3)</code></pre>
+</details>
+<div class="desc"><p>计算最大剪应力
+——第三强度理论（最大剪应力理论 / Tresca）</p>
+<p>物理意义：
+常用于脆性材料或保守设计，
+认为材料在最大剪应力达到极限时破坏。</p>
+<p>公式来源：
+《机械设计手册》— 第三强度理论</p>
+<p>参数说明：
+s1 (float): 最大主应力，单位 Pa
+s3 (float): 最小主应力，单位 Pa</p>
+<p>返回值：
+float: 最大剪应力，单位 Pa</p></div>
+</dd>
+<dt id="sw_helper.mechanics.calc_principal_stresses"><code class="name flex">
+<span>def <span class="ident">calc_principal_stresses</span></span>(<span>sigma_x: float, sigma_y: float, tau_xy: float) ‑> Tuple[float, float]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_principal_stresses(
+    sigma_x: float,
+    sigma_y: float,
+    tau_xy: float,
+) -&gt; Tuple[float, float]:
+    &#34;&#34;&#34;
+    计算平面应力状态下的第一、第二主应力（σ1, σ2）
+
+    物理意义：
+        基于材料力学中主应力变换公式，用于确定材料在
+        平面应力状态下的极值正应力。
+
+    公式来源：
+        《机械设计手册》— 应力分析章节（Mohr 圆）
+
+    参数说明：
+        sigma_x (float): x 方向正应力，单位 Pa
+        sigma_y (float): y 方向正应力，单位 Pa
+        tau_xy  (float): 剪应力，单位 Pa
+
+    返回值：
+        Tuple[float, float]:
+            - sigma_1: 第一主应力（最大），单位 Pa
+            - sigma_2: 第二主应力（最小），单位 Pa
+    &#34;&#34;&#34;
+    avg = 0.5 * (sigma_x + sigma_y)
+    radius = math.sqrt(((sigma_x - sigma_y) / 2.0) ** 2 + tau_xy**2)
+
+    sigma_1 = avg + radius
+    sigma_2 = avg - radius
+
+    return sigma_1, sigma_2</code></pre>
+</details>
+<div class="desc"><p>计算平面应力状态下的第一、第二主应力（σ1, σ2）</p>
+<p>物理意义：
+基于材料力学中主应力变换公式，用于确定材料在
+平面应力状态下的极值正应力。</p>
+<p>公式来源：
+《机械设计手册》— 应力分析章节（Mohr 圆）</p>
+<p>参数说明：
+sigma_x (float): x 方向正应力，单位 Pa
+sigma_y (float): y 方向正应力，单位 Pa
+tau_xy
+(float): 剪应力，单位 Pa</p>
+<p>返回值：
+Tuple[float, float]:
+- sigma_1: 第一主应力（最大），单位 Pa
+- sigma_2: 第二主应力（最小），单位 Pa</p></div>
+</dd>
+<dt id="sw_helper.mechanics.calc_von_mises"><code class="name flex">
+<span>def <span class="ident">calc_von_mises</span></span>(<span>s1: float, s2: float, s3: float) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_von_mises(
+    s1: float,
+    s2: float,
+    s3: float,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算等效应力（von Mises 应力）
+    ——第四强度理论（畸变能理论）
+
+    物理意义：
+        用于延性材料的屈服判据，认为材料在
+        畸变能达到临界值时发生屈服。
+
+    公式来源：
+        《机械设计手册》— 第四强度理论
+
+    参数说明：
+        s1 (float): 第一主应力，单位 Pa
+        s2 (float): 第二主应力，单位 Pa
+        s3 (float): 第三主应力，单位 Pa
+
+    返回值：
+        float: von Mises 等效应力，单位 Pa
+    &#34;&#34;&#34;
+    return math.sqrt(0.5 * ((s1 - s2) ** 2 + (s2 - s3) ** 2 + (s3 - s1) ** 2))</code></pre>
+</details>
+<div class="desc"><p>计算等效应力（von Mises 应力）
+——第四强度理论（畸变能理论）</p>
+<p>物理意义：
+用于延性材料的屈服判据，认为材料在
+畸变能达到临界值时发生屈服。</p>
+<p>公式来源：
+《机械设计手册》— 第四强度理论</p>
+<p>参数说明：
+s1 (float): 第一主应力，单位 Pa
+s2 (float): 第二主应力，单位 Pa
+s3 (float): 第三主应力，单位 Pa</p>
+<p>返回值：
+float: von Mises 等效应力，单位 Pa</p></div>
+</dd>
+<dt id="sw_helper.mechanics.calculate_buckling_load"><code class="name flex">
+<span>def <span class="ident">calculate_buckling_load</span></span>(<span>youngs_modulus: float,<br>moment_of_inertia: float,<br>length: float,<br>end_condition: str = 'pinned-pinned') ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_buckling_load(
+    youngs_modulus: float,
+    moment_of_inertia: float,
+    length: float,
+    end_condition: str = &#34;pinned-pinned&#34;,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算欧拉屈曲载荷
+
+    Args:
+        youngs_modulus: 弹性模量 (Pa)
+        moment_of_inertia: 截面惯性矩 (m^4)
+        length: 杆件长度 (m)
+        end_condition: 边界条件 (&#34;pinned-pinned&#34;, &#34;fixed-fixed&#34;, &#34;fixed-pinned&#34;, &#34;fixed-free&#34;)
+
+    Returns:
+        float: 临界屈曲载荷 (N)
+    &#34;&#34;&#34;
+    # 有效长度系数
+    k_factors = {
+        &#34;pinned-pinned&#34;: 1.0,
+        &#34;fixed-fixed&#34;: 0.5,
+        &#34;fixed-pinned&#34;: 0.7,
+        &#34;fixed-free&#34;: 2.0,
+    }
+
+    if end_condition not in k_factors:
+        raise ValueError(f&#34;不支持的边界条件: {end_condition}&#34;)
+
+    k = k_factors[end_condition]
+    effective_length = k * length
+
+    # 欧拉屈曲公式
+    critical_load = (math.pi**2 * youngs_modulus * moment_of_inertia) / (
+        effective_length**2
+    )
+
+    return critical_load</code></pre>
+</details>
+<div class="desc"><p>计算欧拉屈曲载荷</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>youngs_modulus</code></strong></dt>
+<dd>弹性模量 (Pa)</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩 (m^4)</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>杆件长度 (m)</dd>
+<dt><strong><code>end_condition</code></strong></dt>
+<dd>边界条件 ("pinned-pinned", "fixed-fixed", "fixed-pinned", "fixed-free")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>临界屈曲载荷 (N)</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.calculate_deflection"><code class="name flex">
+<span>def <span class="ident">calculate_deflection</span></span>(<span>load: float,<br>length: float,<br>youngs_modulus: float,<br>moment_of_inertia: float,<br>load_type: str = 'point_center') ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_deflection(
+    load: float,
+    length: float,
+    youngs_modulus: float,
+    moment_of_inertia: float,
+    load_type: str = &#34;point_center&#34;,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算梁的挠度
+
+    Args:
+        load: 载荷 (N)
+        length: 梁长度 (m)
+        youngs_modulus: 弹性模量 (Pa)
+        moment_of_inertia: 截面惯性矩 (m^4)
+        load_type: 载荷类型 (&#34;point_center&#34;, &#34;uniform&#34;, &#34;point_end&#34;)
+
+    Returns:
+        float: 最大挠度 (m)
+    &#34;&#34;&#34;
+    deflection_formulas = {
+        &#34;point_center&#34;: lambda P, L, E, I: (P * L**3) / (48 * E * I),
+        &#34;uniform&#34;: lambda w, L, E, I: (5 * w * L**4) / (384 * E * I),
+        &#34;point_end&#34;: lambda P, L, E, I: (P * L**3) / (3 * E * I),
+    }
+
+    if load_type not in deflection_formulas:
+        raise ValueError(f&#34;不支持的载荷类型: {load_type}&#34;)
+
+    formula = deflection_formulas[load_type]
+    return formula(load, length, youngs_modulus, moment_of_inertia)</code></pre>
+</details>
+<div class="desc"><p>计算梁的挠度</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>load</code></strong></dt>
+<dd>载荷 (N)</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>梁长度 (m)</dd>
+<dt><strong><code>youngs_modulus</code></strong></dt>
+<dd>弹性模量 (Pa)</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩 (m^4)</dd>
+<dt><strong><code>load_type</code></strong></dt>
+<dd>载荷类型 ("point_center", "uniform", "point_end")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>最大挠度 (m)</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.calculate_principal_stresses"><code class="name flex">
+<span>def <span class="ident">calculate_principal_stresses</span></span>(<span>stress_tensor: numpy.ndarray) ‑> Tuple[float, float, float]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_principal_stresses(
+    stress_tensor: np.ndarray,
+) -&gt; Tuple[float, float, float]:
+    &#34;&#34;&#34;
+    计算主应力
+
+    Args:
+        stress_tensor: 3x3应力张量
+
+    Returns:
+        Tuple[float, float, float]: (σ1, σ2, σ3) 主应力，从大到小排序
+    &#34;&#34;&#34;
+    # 使用numpy计算特征值
+    eigenvalues = np.linalg.eigvalsh(stress_tensor)
+    # 从大到小排序
+    sorted_eigenvalues = sorted(eigenvalues, reverse=True)
+    return tuple(sorted_eigenvalues)</code></pre>
+</details>
+<div class="desc"><p>计算主应力</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>stress_tensor</code></strong></dt>
+<dd>3x3应力张量</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Tuple[float, float, float]</code></dt>
+<dd>(σ1, σ2, σ3) 主应力，从大到小排序</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.calculate_safety_factor"><code class="name flex">
+<span>def <span class="ident">calculate_safety_factor</span></span>(<span>applied_stress: float,<br>material_yield_strength: float,<br>material_tensile_strength: float,<br>material_type: str = 'ductile') ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_safety_factor(
+    applied_stress: float,
+    material_yield_strength: float,
+    material_tensile_strength: float,
+    material_type: str = &#34;ductile&#34;,
+) -&gt; float:
+    &#34;&#34;&#34;
+    计算安全系数
+
+    Args:
+        applied_stress: 施加的应力 (Pa)
+        material_yield_strength: 材料屈服强度 (Pa)
+        material_tensile_strength: 材料抗拉强度 (Pa)
+        material_type: 材料类型 (&#34;ductile&#34; 塑性 / &#34;brittle&#34; 脆性)
+
+    Returns:
+        float: 安全系数
+    &#34;&#34;&#34;
+    if applied_stress &lt;= 0:
+        raise ValueError(&#34;施加应力必须大于0&#34;)
+
+    if material_type == &#34;ductile&#34;:
+        # 塑性材料基于屈服强度
+        safety_factor = material_yield_strength / applied_stress
+    else:
+        # 脆性材料基于抗拉强度
+        safety_factor = material_tensile_strength / applied_stress
+
+    return safety_factor</code></pre>
+</details>
+<div class="desc"><p>计算安全系数</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>applied_stress</code></strong></dt>
+<dd>施加的应力 (Pa)</dd>
+<dt><strong><code>material_yield_strength</code></strong></dt>
+<dd>材料屈服强度 (Pa)</dd>
+<dt><strong><code>material_tensile_strength</code></strong></dt>
+<dd>材料抗拉强度 (Pa)</dd>
+<dt><strong><code>material_type</code></strong></dt>
+<dd>材料类型 ("ductile" 塑性 / "brittle" 脆性)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>安全系数</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.calculate_von_mises_stress"><code class="name flex">
+<span>def <span class="ident">calculate_von_mises_stress</span></span>(<span>stress_tensor: numpy.ndarray) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_von_mises_stress(stress_tensor: np.ndarray) -&gt; float:
+    &#34;&#34;&#34;
+    计算Von Mises等效应力
+
+    Args:
+        stress_tensor: 3x3应力张量 [σ_x, τ_xy, τ_xz; τ_yx, σ_y, τ_yz; τ_zx, τ_zy, σ_z]
+
+    Returns:
+        float: Von Mises等效应力
+    &#34;&#34;&#34;
+    # 检查numpy可用性
+    if stress_tensor.shape != (3, 3):
+        raise ValueError(&#34;应力张量必须是3x3矩阵&#34;)
+
+    # 提取应力分量
+    σ_x = stress_tensor[0, 0]
+    σ_y = stress_tensor[1, 1]
+    σ_z = stress_tensor[2, 2]
+    τ_xy = stress_tensor[0, 1]
+    τ_xz = stress_tensor[0, 2]
+    τ_yz = stress_tensor[1, 2]
+
+    # Von Mises公式
+    σ_vm = math.sqrt(
+        0.5 * ((σ_x - σ_y) ** 2 + (σ_y - σ_z) ** 2 + (σ_z - σ_x) ** 2)
+        + 3 * (τ_xy**2 + τ_xz**2 + τ_yz**2)
+    )
+
+    return σ_vm</code></pre>
+</details>
+<div class="desc"><p>计算Von Mises等效应力</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>stress_tensor</code></strong></dt>
+<dd>3x3应力张量 [σ_x, τ_xy, τ_xz; τ_yx, σ_y, τ_yz; τ_zx, τ_zy, σ_z]</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>Von Mises等效应力</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.mechanics.MechanicsEngine"><code class="flex name class">
+<span>class <span class="ident">MechanicsEngine</span></span>
+<span>(</span><span>materials_db_path: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MechanicsEngine:
+    &#34;&#34;&#34;力学计算引擎&#34;&#34;&#34;
+
+    def __init__(self, materials_db_path: Optional[str] = None):
+        &#34;&#34;&#34;
+        初始化力学计算引擎
+
+        Args:
+            materials_db_path: 材料数据库路径，默认为项目data/materials.json
+        &#34;&#34;&#34;
+        # 加载材料数据库
+        if materials_db_path is None:
+            # 默认路径：项目根目录下的data/materials.json
+            project_root = Path(__file__).parent.parent.parent.parent
+            self.db_path = project_root / &#34;data&#34; / &#34;materials.json&#34;
+        else:
+            self.db_path = Path(materials_db_path)
+
+        self.materials = self._load_materials()
+
+        # 初始化单位转换系统
+        self.ureg = None
+        if HAS_PINT:
+            self.ureg = pint.UnitRegistry()
+            self._setup_units()
+
+    def _load_materials(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;加载材料数据库&#34;&#34;&#34;
+        try:
+            if self.db_path.exists():
+                with open(self.db_path, &#34;r&#34;, encoding=&#34;utf-8&#34;) as f:
+                    return json.load(f)
+            else:
+                raise FileNotFoundError(f&#34;材料数据库不存在: {self.db_path}&#34;)
+        except Exception as e:
+            print(f&#34;警告: 无法加载材料数据库: {e}&#34;)
+            # 返回空数据库，允许程序继续运行
+            return {}
+
+    def _setup_units(self):
+        &#34;&#34;&#34;设置单位系统&#34;&#34;&#34;
+        if not self.ureg:
+            return
+
+        # 定义常用单位别名
+        self.ureg.define(&#34;newton_per_mm2 = newton / millimeter ** 2&#34;)
+        self.ureg.define(&#34;MPa = megapascal&#34;)
+        self.ureg.define(&#34;GPa = gigapascal&#34;)
+        self.ureg.define(&#34;kN = kilonewton&#34;)
+
+    def convert_units(self, value: float, from_unit: str, to_unit: str) -&gt; float:
+        &#34;&#34;&#34;
+        单位转换
+
+        Args:
+            value: 数值
+            from_unit: 原单位
+            to_unit: 目标单位
+
+        Returns:
+            转换后的数值
+        &#34;&#34;&#34;
+        if not self.ureg:
+            # 如果没有pint，进行简单转换
+            return self._simple_unit_conversion(value, from_unit, to_unit)
+
+        try:
+            quantity = value * self.ureg(from_unit)
+            converted = quantity.to(to_unit)
+            return converted.magnitude
+        except Exception as e:
+            print(f&#34;单位转换失败 {from_unit} -&gt; {to_unit}: {e}&#34;)
+            return value
+
+    def _simple_unit_conversion(
+        self, value: float, from_unit: str, to_unit: str
+    ) -&gt; float:
+        &#34;&#34;&#34;简单单位转换（用于没有pint的情况）&#34;&#34;&#34;
+        # 常用单位转换映射
+        pressure_conversions = {
+            (&#34;MPa&#34;, &#34;Pa&#34;): lambda x: x * 1e6,
+            (&#34;Pa&#34;, &#34;MPa&#34;): lambda x: x / 1e6,
+            (&#34;N/mm^2&#34;, &#34;Pa&#34;): lambda x: x * 1e6,
+            (&#34;Pa&#34;, &#34;N/mm^2&#34;): lambda x: x / 1e6,
+            (&#34;GPa&#34;, &#34;Pa&#34;): lambda x: x * 1e9,
+            (&#34;Pa&#34;, &#34;GPa&#34;): lambda x: x / 1e9,
+        }
+
+        force_conversions = {
+            (&#34;kN&#34;, &#34;N&#34;): lambda x: x * 1000,
+            (&#34;N&#34;, &#34;kN&#34;): lambda x: x / 1000,
+        }
+
+        length_conversions = {
+            (&#34;mm&#34;, &#34;m&#34;): lambda x: x / 1000,
+            (&#34;m&#34;, &#34;mm&#34;): lambda x: x * 1000,
+            (&#34;cm&#34;, &#34;m&#34;): lambda x: x / 100,
+            (&#34;m&#34;, &#34;cm&#34;): lambda x: x * 100,
+        }
+
+        # 合并所有转换
+        all_conversions = {
+            **pressure_conversions,
+            **force_conversions,
+            **length_conversions,
+        }
+
+        key = (from_unit, to_unit)
+        if key in all_conversions:
+            return all_conversions[key](value)
+
+        # 如果单位相同
+        if from_unit == to_unit:
+            return value
+
+        raise ValueError(f&#34;不支持的单位转换: {from_unit} -&gt; {to_unit}&#34;)
+
+    def get_material(self, material_name: str) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        获取材料属性
+
+        Args:
+            material_name: 材料名称
+
+        Returns:
+            材料属性字典
+
+        Raises:
+            KeyError: 材料不存在时抛出
+        &#34;&#34;&#34;
+        material = self.materials.get(material_name)
+        if not material:
+            raise KeyError(f&#34;材料 &#39;{material_name}&#39; 不在数据库中&#34;)
+        return material
+
+    def determine_material_type(self, material_name: str) -&gt; str:
+        &#34;&#34;&#34;
+        判断材料类型（塑性/脆性）
+
+        Args:
+            material_name: 材料名称
+
+        Returns:
+            &#34;ductile&#34; (塑性) 或 &#34;brittle&#34; (脆性)
+        &#34;&#34;&#34;
+        material = self.get_material(material_name)
+        material_type = material.get(&#34;type&#34;, &#34;&#34;)
+
+        # 基于材料类型判断
+        brittle_keywords = [&#34;铸铁&#34;, &#34;陶瓷&#34;, &#34;玻璃&#34;, &#34;脆性&#34;]
+        ductile_keywords = [&#34;钢&#34;, &#34;铝&#34;, &#34;铜&#34;, &#34;塑性&#34;, &#34;韧&#34;]
+
+        material_type_lower = material_type.lower()
+
+        for keyword in brittle_keywords:
+            if keyword in material_type_lower:
+                return &#34;brittle&#34;
+
+        # 默认为塑性材料
+        return &#34;ductile&#34;
+
+    def calculate_stress_analysis(
+        self,
+        stress_tensor: np.ndarray,
+        material_name: str,
+        applied_force: Optional[float] = None,
+        force_unit: str = &#34;N&#34;,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        综合应力分析
+
+        Args:
+            stress_tensor: 3x3应力张量 (Pa)
+            material_name: 材料名称
+            applied_force: 施加的力（可选）
+            force_unit: 力的单位
+
+        Returns:
+            应力分析结果字典
+        &#34;&#34;&#34;
+        # 获取材料属性
+        material = self.get_material(material_name)
+        yield_strength = material.get(&#34;yield_strength&#34;, 0)
+        tensile_strength = material.get(&#34;tensile_strength&#34;, 0)
+
+        # 计算Von Mises应力
+        von_mises = calculate_von_mises_stress(stress_tensor)
+
+        # 计算主应力
+        principal_stresses = calculate_principal_stresses(stress_tensor)
+
+        # 判断材料类型
+        material_type = self.determine_material_type(material_name)
+
+        # 计算安全系数
+        if material_type == &#34;ductile&#34;:
+            reference_strength = yield_strength
+        else:
+            reference_strength = tensile_strength
+
+        safety_factor = calculate_safety_factor(
+            applied_stress=von_mises,
+            material_yield_strength=yield_strength,
+            material_tensile_strength=tensile_strength,
+            material_type=material_type,
+        )
+
+        # 单位转换（如果需要）
+        if applied_force and force_unit != &#34;N&#34;:
+            applied_force = self.convert_units(applied_force, force_unit, &#34;N&#34;)
+
+        return {
+            &#34;material&#34;: material_name,
+            &#34;material_type&#34;: material_type,
+            &#34;von_mises_stress&#34;: von_mises,
+            &#34;principal_stresses&#34;: principal_stresses,
+            &#34;safety_factor&#34;: safety_factor,
+            &#34;yield_strength&#34;: yield_strength,
+            &#34;tensile_strength&#34;: tensile_strength,
+            &#34;applied_force&#34;: applied_force,
+            &#34;is_safe&#34;: safety_factor &gt;= 1.0,
+        }
+
+    def calculate_buckling_safety(
+        self,
+        material_name: str,
+        cross_section_area: float,
+        moment_of_inertia: float,
+        length: float,
+        applied_force: float,
+        end_condition: str = &#34;pinned-pinned&#34;,
+        area_unit: str = &#34;m^2&#34;,
+        length_unit: str = &#34;m&#34;,
+        force_unit: str = &#34;N&#34;,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        屈曲安全分析
+
+        Args:
+            material_name: 材料名称
+            cross_section_area: 截面积
+            moment_of_inertia: 截面惯性矩
+            length: 长度
+            applied_force: 施加的力
+            end_condition: 边界条件
+            area_unit: 面积单位
+            length_unit: 长度单位
+            force_unit: 力单位
+
+        Returns:
+            屈曲分析结果
+        &#34;&#34;&#34;
+        # 单位转换到SI
+        area = self.convert_units(cross_section_area, area_unit, &#34;m^2&#34;)
+        length_m = self.convert_units(length, length_unit, &#34;m&#34;)
+        force_n = self.convert_units(applied_force, force_unit, &#34;N&#34;)
+        # 惯性矩单位是m^4，假设输入单位一致
+
+        # 获取材料属性
+        material = self.get_material(material_name)
+        elastic_modulus = material.get(&#34;elastic_modulus&#34;, 0)
+
+        # 计算屈曲临界载荷
+        critical_load = calculate_buckling_load(
+            youngs_modulus=elastic_modulus,
+            moment_of_inertia=moment_of_inertia,
+            length=length_m,
+            end_condition=end_condition,
+        )
+
+        # 计算屈曲安全系数
+        buckling_safety = critical_load / force_n if force_n &gt; 0 else float(&#34;inf&#34;)
+
+        # 计算压缩应力
+        compressive_stress = force_n / area if area &gt; 0 else 0
+
+        return {
+            &#34;material&#34;: material_name,
+            &#34;elastic_modulus&#34;: elastic_modulus,
+            &#34;critical_buckling_load&#34;: critical_load,
+            &#34;applied_force&#34;: force_n,
+            &#34;buckling_safety_factor&#34;: buckling_safety,
+            &#34;compressive_stress&#34;: compressive_stress,
+            &#34;is_stable&#34;: buckling_safety &gt;= 1.0,
+        }
+
+    def calculate_deflection_analysis(
+        self,
+        load: float,
+        length: float,
+        material_name: str,
+        moment_of_inertia: float,
+        load_type: str = &#34;point_center&#34;,
+        load_unit: str = &#34;N&#34;,
+        length_unit: str = &#34;m&#34;,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        挠度分析
+
+        Args:
+            load: 载荷
+            length: 长度
+            material_name: 材料名称
+            moment_of_inertia: 截面惯性矩
+            load_type: 载荷类型
+            load_unit: 载荷单位
+            length_unit: 长度单位
+
+        Returns:
+            挠度分析结果
+        &#34;&#34;&#34;
+        # 单位转换
+        load_n = self.convert_units(load, load_unit, &#34;N&#34;)
+        length_m = self.convert_units(length, length_unit, &#34;m&#34;)
+
+        # 获取材料属性
+        material = self.get_material(material_name)
+        elastic_modulus = material.get(&#34;elastic_modulus&#34;, 0)
+
+        # 计算挠度
+        deflection = calculate_deflection(
+            load=load_n,
+            length=length_m,
+            youngs_modulus=elastic_modulus,
+            moment_of_inertia=moment_of_inertia,
+            load_type=load_type,
+        )
+
+        # 计算允许挠度（通常为长度的1/250）
+        allowable_deflection = length_m / 250
+
+        # 挠度安全系数
+        deflection_safety = (
+            allowable_deflection / deflection if deflection &gt; 0 else float(&#34;inf&#34;)
+        )
+
+        return {
+            &#34;material&#34;: material_name,
+            &#34;elastic_modulus&#34;: elastic_modulus,
+            &#34;deflection&#34;: deflection,
+            &#34;allowable_deflection&#34;: allowable_deflection,
+            &#34;deflection_safety_factor&#34;: deflection_safety,
+            &#34;is_within_limit&#34;: deflection &lt;= allowable_deflection,
+        }
+
+    @staticmethod
+    def evaluate_material_theory(elongation: float) -&gt; str:
+        &#34;&#34;&#34;
+        根据材料伸长率判断材料类型
+
+        判定规则（机械设计常规经验）：
+            - 伸长率 &gt; 5%  → 延性材料（Ductile）
+            - 伸长率 ≤ 5% → 脆性材料（Brittle）
+
+        参数：
+            elongation (float): 断后伸长率，单位 %
+
+        返回：
+            str: &#34;Ductile&#34; 或 &#34;Brittle&#34;
+        &#34;&#34;&#34;
+        return &#34;Ductile&#34; if elongation &gt; 5.0 else &#34;Brittle&#34;
+
+    def solve_safety_factor(
+        self,
+        force: float,
+        area: float,
+        material_name: str,
+        force_unit: str = &#34;N&#34;,
+        area_unit: str = &#34;m^2&#34;,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        强度校核主函数（安全系数计算）
+
+        计算流程：
+            1. 单位统一（自动转为 SI）
+            2. 计算名义正应力
+            3. 计算主应力
+            4. 根据材料延展性选择强度理论
+            5. 计算等效应力
+            6. 计算安全系数
+
+        参数说明：
+            force (float): 外载荷
+            area  (float): 承载面积
+            material_name (str): 材料名称
+            force_unit (str): 力的单位
+            area_unit (str): 面积的单位
+
+        返回：
+            Dict[str, Any]: 包含安全系数和详细计算结果
+        &#34;&#34;&#34;
+        # 单位转换到SI
+        force_si = self.convert_units(force, force_unit, &#34;N&#34;)
+        area_si = self.convert_units(area, area_unit, &#34;m^2&#34;)
+
+        # 计算名义应力
+        sigma = force_si / area_si if area_si &gt; 0 else 0
+
+        # 假设单向受拉，平面应力状态
+        sigma_x = sigma
+        sigma_y = 0.0
+        tau_xy = 0.0
+
+        # 计算主应力
+        s1, s2 = calc_principal_stresses(sigma_x, sigma_y, tau_xy)
+        s3 = 0.0
+
+        # 获取材料属性
+        material = self.get_material(material_name)
+
+        # 获取伸长率（如果不存在，根据材料类型推断）
+        elongation = material.get(&#34;elongation&#34;)
+        if elongation is None:
+            # 根据材料类型推断：钢类通常为延性，铸铁类为脆性
+            material_type = material.get(&#34;type&#34;, &#34;&#34;).lower()
+            if any(
+                keyword in material_type for keyword in [&#34;铸铁&#34;, &#34;陶瓷&#34;, &#34;玻璃&#34;, &#34;脆性&#34;]
+            ):
+                elongation = 3.0  # 脆性材料典型值
+            else:
+                elongation = 20.0  # 延性材料典型值
+
+        # 判断材料类型
+        material_type = self.evaluate_material_theory(elongation)
+
+        # 获取材料强度
+        yield_strength = material.get(&#34;yield_strength&#34;, 0)
+        ultimate_strength = material.get(&#34;tensile_strength&#34;, 0)
+
+        # 强度理论选择
+        if material_type == &#34;Ductile&#34;:
+            theory = &#34;von Mises (第四强度理论)&#34;
+            equivalent_stress = calc_von_mises(s1, s2, s3)
+            allowable = yield_strength
+        else:
+            theory = &#34;Max Shear (第三强度理论)&#34;
+            equivalent_stress = calc_max_shear(s1, s3)
+            allowable = ultimate_strength
+
+        # 计算安全系数
+        safety_factor = (
+            allowable / equivalent_stress if equivalent_stress &gt; 0 else float(&#34;inf&#34;)
+        )
+
+        # 构建结果
+        result = {
+            &#34;material&#34;: material_name,
+            &#34;force&#34;: force,
+            &#34;force_unit&#34;: force_unit,
+            &#34;area&#34;: area,
+            &#34;area_unit&#34;: area_unit,
+            &#34;nominal_stress&#34;: sigma,
+            &#34;principal_stresses&#34;: (s1, s2, s3),
+            &#34;material_type&#34;: material_type,
+            &#34;strength_theory&#34;: theory,
+            &#34;equivalent_stress&#34;: equivalent_stress,
+            &#34;allowable_strength&#34;: allowable,
+            &#34;safety_factor&#34;: safety_factor,
+            &#34;is_safe&#34;: safety_factor &gt;= 1.0,
+        }
+
+        # 如果Rich可用，生成表格报告
+        if HAS_RICH:
+            console = Console()
+            table = Table(title=&#34;CAE Safety Factor Evaluation&#34;)
+
+            table.add_column(&#34;Item&#34;, style=&#34;cyan&#34;, no_wrap=True)
+            table.add_column(&#34;Value&#34;, style=&#34;magenta&#34;)
+
+            table.add_row(&#34;Force&#34;, f&#34;{force} {force_unit}&#34;)
+            table.add_row(&#34;Area&#34;, f&#34;{area} {area_unit}&#34;)
+            table.add_row(&#34;Nominal Stress&#34;, f&#34;{sigma:.3e} Pa&#34;)
+            table.add_row(&#34;Material Type&#34;, material_type)
+            table.add_row(&#34;Strength Theory&#34;, theory)
+            table.add_row(&#34;Equivalent Stress&#34;, f&#34;{equivalent_stress:.3e} Pa&#34;)
+            table.add_row(&#34;Allowable Strength&#34;, f&#34;{allowable:.3e} Pa&#34;)
+            table.add_row(&#34;Safety Factor&#34;, f&#34;{safety_factor:.2f}&#34;)
+
+            console.print(table)
+
+        return result</code></pre>
+</details>
+<div class="desc"><p>力学计算引擎</p>
+<p>初始化力学计算引擎</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>materials_db_path</code></strong></dt>
+<dd>材料数据库路径，默认为项目data/materials.json</dd>
+</dl></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="sw_helper.mechanics.MechanicsEngine.evaluate_material_theory"><code class="name flex">
+<span>def <span class="ident">evaluate_material_theory</span></span>(<span>elongation: float) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def evaluate_material_theory(elongation: float) -&gt; str:
+    &#34;&#34;&#34;
+    根据材料伸长率判断材料类型
+
+    判定规则（机械设计常规经验）：
+        - 伸长率 &gt; 5%  → 延性材料（Ductile）
+        - 伸长率 ≤ 5% → 脆性材料（Brittle）
+
+    参数：
+        elongation (float): 断后伸长率，单位 %
+
+    返回：
+        str: &#34;Ductile&#34; 或 &#34;Brittle&#34;
+    &#34;&#34;&#34;
+    return &#34;Ductile&#34; if elongation &gt; 5.0 else &#34;Brittle&#34;</code></pre>
+</details>
+<div class="desc"><p>根据材料伸长率判断材料类型</p>
+<p>判定规则（机械设计常规经验）：
+- 伸长率 &gt; 5%
+→ 延性材料（Ductile）
+- 伸长率 ≤ 5% → 脆性材料（Brittle）</p>
+<p>参数：
+elongation (float): 断后伸长率，单位 %</p>
+<p>返回：
+str: "Ductile" 或 "Brittle"</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mechanics.MechanicsEngine.calculate_buckling_safety"><code class="name flex">
+<span>def <span class="ident">calculate_buckling_safety</span></span>(<span>self,<br>material_name: str,<br>cross_section_area: float,<br>moment_of_inertia: float,<br>length: float,<br>applied_force: float,<br>end_condition: str = 'pinned-pinned',<br>area_unit: str = 'm^2',<br>length_unit: str = 'm',<br>force_unit: str = 'N') ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_buckling_safety(
+    self,
+    material_name: str,
+    cross_section_area: float,
+    moment_of_inertia: float,
+    length: float,
+    applied_force: float,
+    end_condition: str = &#34;pinned-pinned&#34;,
+    area_unit: str = &#34;m^2&#34;,
+    length_unit: str = &#34;m&#34;,
+    force_unit: str = &#34;N&#34;,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    屈曲安全分析
+
+    Args:
+        material_name: 材料名称
+        cross_section_area: 截面积
+        moment_of_inertia: 截面惯性矩
+        length: 长度
+        applied_force: 施加的力
+        end_condition: 边界条件
+        area_unit: 面积单位
+        length_unit: 长度单位
+        force_unit: 力单位
+
+    Returns:
+        屈曲分析结果
+    &#34;&#34;&#34;
+    # 单位转换到SI
+    area = self.convert_units(cross_section_area, area_unit, &#34;m^2&#34;)
+    length_m = self.convert_units(length, length_unit, &#34;m&#34;)
+    force_n = self.convert_units(applied_force, force_unit, &#34;N&#34;)
+    # 惯性矩单位是m^4，假设输入单位一致
+
+    # 获取材料属性
+    material = self.get_material(material_name)
+    elastic_modulus = material.get(&#34;elastic_modulus&#34;, 0)
+
+    # 计算屈曲临界载荷
+    critical_load = calculate_buckling_load(
+        youngs_modulus=elastic_modulus,
+        moment_of_inertia=moment_of_inertia,
+        length=length_m,
+        end_condition=end_condition,
+    )
+
+    # 计算屈曲安全系数
+    buckling_safety = critical_load / force_n if force_n &gt; 0 else float(&#34;inf&#34;)
+
+    # 计算压缩应力
+    compressive_stress = force_n / area if area &gt; 0 else 0
+
+    return {
+        &#34;material&#34;: material_name,
+        &#34;elastic_modulus&#34;: elastic_modulus,
+        &#34;critical_buckling_load&#34;: critical_load,
+        &#34;applied_force&#34;: force_n,
+        &#34;buckling_safety_factor&#34;: buckling_safety,
+        &#34;compressive_stress&#34;: compressive_stress,
+        &#34;is_stable&#34;: buckling_safety &gt;= 1.0,
+    }</code></pre>
+</details>
+<div class="desc"><p>屈曲安全分析</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>material_name</code></strong></dt>
+<dd>材料名称</dd>
+<dt><strong><code>cross_section_area</code></strong></dt>
+<dd>截面积</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>长度</dd>
+<dt><strong><code>applied_force</code></strong></dt>
+<dd>施加的力</dd>
+<dt><strong><code>end_condition</code></strong></dt>
+<dd>边界条件</dd>
+<dt><strong><code>area_unit</code></strong></dt>
+<dd>面积单位</dd>
+<dt><strong><code>length_unit</code></strong></dt>
+<dd>长度单位</dd>
+<dt><strong><code>force_unit</code></strong></dt>
+<dd>力单位</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>屈曲分析结果</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsEngine.calculate_deflection_analysis"><code class="name flex">
+<span>def <span class="ident">calculate_deflection_analysis</span></span>(<span>self,<br>load: float,<br>length: float,<br>material_name: str,<br>moment_of_inertia: float,<br>load_type: str = 'point_center',<br>load_unit: str = 'N',<br>length_unit: str = 'm') ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_deflection_analysis(
+    self,
+    load: float,
+    length: float,
+    material_name: str,
+    moment_of_inertia: float,
+    load_type: str = &#34;point_center&#34;,
+    load_unit: str = &#34;N&#34;,
+    length_unit: str = &#34;m&#34;,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    挠度分析
+
+    Args:
+        load: 载荷
+        length: 长度
+        material_name: 材料名称
+        moment_of_inertia: 截面惯性矩
+        load_type: 载荷类型
+        load_unit: 载荷单位
+        length_unit: 长度单位
+
+    Returns:
+        挠度分析结果
+    &#34;&#34;&#34;
+    # 单位转换
+    load_n = self.convert_units(load, load_unit, &#34;N&#34;)
+    length_m = self.convert_units(length, length_unit, &#34;m&#34;)
+
+    # 获取材料属性
+    material = self.get_material(material_name)
+    elastic_modulus = material.get(&#34;elastic_modulus&#34;, 0)
+
+    # 计算挠度
+    deflection = calculate_deflection(
+        load=load_n,
+        length=length_m,
+        youngs_modulus=elastic_modulus,
+        moment_of_inertia=moment_of_inertia,
+        load_type=load_type,
+    )
+
+    # 计算允许挠度（通常为长度的1/250）
+    allowable_deflection = length_m / 250
+
+    # 挠度安全系数
+    deflection_safety = (
+        allowable_deflection / deflection if deflection &gt; 0 else float(&#34;inf&#34;)
+    )
+
+    return {
+        &#34;material&#34;: material_name,
+        &#34;elastic_modulus&#34;: elastic_modulus,
+        &#34;deflection&#34;: deflection,
+        &#34;allowable_deflection&#34;: allowable_deflection,
+        &#34;deflection_safety_factor&#34;: deflection_safety,
+        &#34;is_within_limit&#34;: deflection &lt;= allowable_deflection,
+    }</code></pre>
+</details>
+<div class="desc"><p>挠度分析</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>load</code></strong></dt>
+<dd>载荷</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>长度</dd>
+<dt><strong><code>material_name</code></strong></dt>
+<dd>材料名称</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩</dd>
+<dt><strong><code>load_type</code></strong></dt>
+<dd>载荷类型</dd>
+<dt><strong><code>load_unit</code></strong></dt>
+<dd>载荷单位</dd>
+<dt><strong><code>length_unit</code></strong></dt>
+<dd>长度单位</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>挠度分析结果</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsEngine.calculate_stress_analysis"><code class="name flex">
+<span>def <span class="ident">calculate_stress_analysis</span></span>(<span>self,<br>stress_tensor: numpy.ndarray,<br>material_name: str,<br>applied_force: float | None = None,<br>force_unit: str = 'N') ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_stress_analysis(
+    self,
+    stress_tensor: np.ndarray,
+    material_name: str,
+    applied_force: Optional[float] = None,
+    force_unit: str = &#34;N&#34;,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    综合应力分析
+
+    Args:
+        stress_tensor: 3x3应力张量 (Pa)
+        material_name: 材料名称
+        applied_force: 施加的力（可选）
+        force_unit: 力的单位
+
+    Returns:
+        应力分析结果字典
+    &#34;&#34;&#34;
+    # 获取材料属性
+    material = self.get_material(material_name)
+    yield_strength = material.get(&#34;yield_strength&#34;, 0)
+    tensile_strength = material.get(&#34;tensile_strength&#34;, 0)
+
+    # 计算Von Mises应力
+    von_mises = calculate_von_mises_stress(stress_tensor)
+
+    # 计算主应力
+    principal_stresses = calculate_principal_stresses(stress_tensor)
+
+    # 判断材料类型
+    material_type = self.determine_material_type(material_name)
+
+    # 计算安全系数
+    if material_type == &#34;ductile&#34;:
+        reference_strength = yield_strength
+    else:
+        reference_strength = tensile_strength
+
+    safety_factor = calculate_safety_factor(
+        applied_stress=von_mises,
+        material_yield_strength=yield_strength,
+        material_tensile_strength=tensile_strength,
+        material_type=material_type,
+    )
+
+    # 单位转换（如果需要）
+    if applied_force and force_unit != &#34;N&#34;:
+        applied_force = self.convert_units(applied_force, force_unit, &#34;N&#34;)
+
+    return {
+        &#34;material&#34;: material_name,
+        &#34;material_type&#34;: material_type,
+        &#34;von_mises_stress&#34;: von_mises,
+        &#34;principal_stresses&#34;: principal_stresses,
+        &#34;safety_factor&#34;: safety_factor,
+        &#34;yield_strength&#34;: yield_strength,
+        &#34;tensile_strength&#34;: tensile_strength,
+        &#34;applied_force&#34;: applied_force,
+        &#34;is_safe&#34;: safety_factor &gt;= 1.0,
+    }</code></pre>
+</details>
+<div class="desc"><p>综合应力分析</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>stress_tensor</code></strong></dt>
+<dd>3x3应力张量 (Pa)</dd>
+<dt><strong><code>material_name</code></strong></dt>
+<dd>材料名称</dd>
+<dt><strong><code>applied_force</code></strong></dt>
+<dd>施加的力（可选）</dd>
+<dt><strong><code>force_unit</code></strong></dt>
+<dd>力的单位</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>应力分析结果字典</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsEngine.convert_units"><code class="name flex">
+<span>def <span class="ident">convert_units</span></span>(<span>self, value: float, from_unit: str, to_unit: str) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_units(self, value: float, from_unit: str, to_unit: str) -&gt; float:
+    &#34;&#34;&#34;
+    单位转换
+
+    Args:
+        value: 数值
+        from_unit: 原单位
+        to_unit: 目标单位
+
+    Returns:
+        转换后的数值
+    &#34;&#34;&#34;
+    if not self.ureg:
+        # 如果没有pint，进行简单转换
+        return self._simple_unit_conversion(value, from_unit, to_unit)
+
+    try:
+        quantity = value * self.ureg(from_unit)
+        converted = quantity.to(to_unit)
+        return converted.magnitude
+    except Exception as e:
+        print(f&#34;单位转换失败 {from_unit} -&gt; {to_unit}: {e}&#34;)
+        return value</code></pre>
+</details>
+<div class="desc"><p>单位转换</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong></dt>
+<dd>数值</dd>
+<dt><strong><code>from_unit</code></strong></dt>
+<dd>原单位</dd>
+<dt><strong><code>to_unit</code></strong></dt>
+<dd>目标单位</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>转换后的数值</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsEngine.determine_material_type"><code class="name flex">
+<span>def <span class="ident">determine_material_type</span></span>(<span>self, material_name: str) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def determine_material_type(self, material_name: str) -&gt; str:
+    &#34;&#34;&#34;
+    判断材料类型（塑性/脆性）
+
+    Args:
+        material_name: 材料名称
+
+    Returns:
+        &#34;ductile&#34; (塑性) 或 &#34;brittle&#34; (脆性)
+    &#34;&#34;&#34;
+    material = self.get_material(material_name)
+    material_type = material.get(&#34;type&#34;, &#34;&#34;)
+
+    # 基于材料类型判断
+    brittle_keywords = [&#34;铸铁&#34;, &#34;陶瓷&#34;, &#34;玻璃&#34;, &#34;脆性&#34;]
+    ductile_keywords = [&#34;钢&#34;, &#34;铝&#34;, &#34;铜&#34;, &#34;塑性&#34;, &#34;韧&#34;]
+
+    material_type_lower = material_type.lower()
+
+    for keyword in brittle_keywords:
+        if keyword in material_type_lower:
+            return &#34;brittle&#34;
+
+    # 默认为塑性材料
+    return &#34;ductile&#34;</code></pre>
+</details>
+<div class="desc"><p>判断材料类型（塑性/脆性）</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>material_name</code></strong></dt>
+<dd>材料名称</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>"ductile" (塑性) 或 "brittle" (脆性)</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsEngine.get_material"><code class="name flex">
+<span>def <span class="ident">get_material</span></span>(<span>self, material_name: str) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_material(self, material_name: str) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    获取材料属性
+
+    Args:
+        material_name: 材料名称
+
+    Returns:
+        材料属性字典
+
+    Raises:
+        KeyError: 材料不存在时抛出
+    &#34;&#34;&#34;
+    material = self.materials.get(material_name)
+    if not material:
+        raise KeyError(f&#34;材料 &#39;{material_name}&#39; 不在数据库中&#34;)
+    return material</code></pre>
+</details>
+<div class="desc"><p>获取材料属性</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>material_name</code></strong></dt>
+<dd>材料名称</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>材料属性字典</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code></dt>
+<dd>材料不存在时抛出</dd>
+</dl></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsEngine.solve_safety_factor"><code class="name flex">
+<span>def <span class="ident">solve_safety_factor</span></span>(<span>self,<br>force: float,<br>area: float,<br>material_name: str,<br>force_unit: str = 'N',<br>area_unit: str = 'm^2') ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_safety_factor(
+    self,
+    force: float,
+    area: float,
+    material_name: str,
+    force_unit: str = &#34;N&#34;,
+    area_unit: str = &#34;m^2&#34;,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    强度校核主函数（安全系数计算）
+
+    计算流程：
+        1. 单位统一（自动转为 SI）
+        2. 计算名义正应力
+        3. 计算主应力
+        4. 根据材料延展性选择强度理论
+        5. 计算等效应力
+        6. 计算安全系数
+
+    参数说明：
+        force (float): 外载荷
+        area  (float): 承载面积
+        material_name (str): 材料名称
+        force_unit (str): 力的单位
+        area_unit (str): 面积的单位
+
+    返回：
+        Dict[str, Any]: 包含安全系数和详细计算结果
+    &#34;&#34;&#34;
+    # 单位转换到SI
+    force_si = self.convert_units(force, force_unit, &#34;N&#34;)
+    area_si = self.convert_units(area, area_unit, &#34;m^2&#34;)
+
+    # 计算名义应力
+    sigma = force_si / area_si if area_si &gt; 0 else 0
+
+    # 假设单向受拉，平面应力状态
+    sigma_x = sigma
+    sigma_y = 0.0
+    tau_xy = 0.0
+
+    # 计算主应力
+    s1, s2 = calc_principal_stresses(sigma_x, sigma_y, tau_xy)
+    s3 = 0.0
+
+    # 获取材料属性
+    material = self.get_material(material_name)
+
+    # 获取伸长率（如果不存在，根据材料类型推断）
+    elongation = material.get(&#34;elongation&#34;)
+    if elongation is None:
+        # 根据材料类型推断：钢类通常为延性，铸铁类为脆性
+        material_type = material.get(&#34;type&#34;, &#34;&#34;).lower()
+        if any(
+            keyword in material_type for keyword in [&#34;铸铁&#34;, &#34;陶瓷&#34;, &#34;玻璃&#34;, &#34;脆性&#34;]
+        ):
+            elongation = 3.0  # 脆性材料典型值
+        else:
+            elongation = 20.0  # 延性材料典型值
+
+    # 判断材料类型
+    material_type = self.evaluate_material_theory(elongation)
+
+    # 获取材料强度
+    yield_strength = material.get(&#34;yield_strength&#34;, 0)
+    ultimate_strength = material.get(&#34;tensile_strength&#34;, 0)
+
+    # 强度理论选择
+    if material_type == &#34;Ductile&#34;:
+        theory = &#34;von Mises (第四强度理论)&#34;
+        equivalent_stress = calc_von_mises(s1, s2, s3)
+        allowable = yield_strength
+    else:
+        theory = &#34;Max Shear (第三强度理论)&#34;
+        equivalent_stress = calc_max_shear(s1, s3)
+        allowable = ultimate_strength
+
+    # 计算安全系数
+    safety_factor = (
+        allowable / equivalent_stress if equivalent_stress &gt; 0 else float(&#34;inf&#34;)
+    )
+
+    # 构建结果
+    result = {
+        &#34;material&#34;: material_name,
+        &#34;force&#34;: force,
+        &#34;force_unit&#34;: force_unit,
+        &#34;area&#34;: area,
+        &#34;area_unit&#34;: area_unit,
+        &#34;nominal_stress&#34;: sigma,
+        &#34;principal_stresses&#34;: (s1, s2, s3),
+        &#34;material_type&#34;: material_type,
+        &#34;strength_theory&#34;: theory,
+        &#34;equivalent_stress&#34;: equivalent_stress,
+        &#34;allowable_strength&#34;: allowable,
+        &#34;safety_factor&#34;: safety_factor,
+        &#34;is_safe&#34;: safety_factor &gt;= 1.0,
+    }
+
+    # 如果Rich可用，生成表格报告
+    if HAS_RICH:
+        console = Console()
+        table = Table(title=&#34;CAE Safety Factor Evaluation&#34;)
+
+        table.add_column(&#34;Item&#34;, style=&#34;cyan&#34;, no_wrap=True)
+        table.add_column(&#34;Value&#34;, style=&#34;magenta&#34;)
+
+        table.add_row(&#34;Force&#34;, f&#34;{force} {force_unit}&#34;)
+        table.add_row(&#34;Area&#34;, f&#34;{area} {area_unit}&#34;)
+        table.add_row(&#34;Nominal Stress&#34;, f&#34;{sigma:.3e} Pa&#34;)
+        table.add_row(&#34;Material Type&#34;, material_type)
+        table.add_row(&#34;Strength Theory&#34;, theory)
+        table.add_row(&#34;Equivalent Stress&#34;, f&#34;{equivalent_stress:.3e} Pa&#34;)
+        table.add_row(&#34;Allowable Strength&#34;, f&#34;{allowable:.3e} Pa&#34;)
+        table.add_row(&#34;Safety Factor&#34;, f&#34;{safety_factor:.2f}&#34;)
+
+        console.print(table)
+
+    return result</code></pre>
+</details>
+<div class="desc"><p>强度校核主函数（安全系数计算）</p>
+<p>计算流程：
+1. 单位统一（自动转为 SI）
+2. 计算名义正应力
+3. 计算主应力
+4. 根据材料延展性选择强度理论
+5. 计算等效应力
+6. 计算安全系数</p>
+<p>参数说明：
+force (float): 外载荷
+area
+(float): 承载面积
+material_name (str): 材料名称
+force_unit (str): 力的单位
+area_unit (str): 面积的单位</p>
+<p>返回：
+Dict[str, Any]: 包含安全系数和详细计算结果</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsInterface"><code class="flex name class">
+<span>class <span class="ident">MechanicsInterface</span></span>
+<span>(</span><span>materials_db_path: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MechanicsInterface:
+    &#34;&#34;&#34;力学模块接口类&#34;&#34;&#34;
+
+    def __init__(self, materials_db_path: Optional[str] = None):
+        &#34;&#34;&#34;
+        初始化力学接口
+
+        Args:
+            materials_db_path: 材料数据库路径
+        &#34;&#34;&#34;
+        self.engine = MechanicsEngine(materials_db_path)
+        self.console = Console() if HAS_RICH else None
+
+    def check_strength(
+        self,
+        model_file: Optional[str] = None,
+        force: Optional[float] = None,
+        material: Optional[str] = None,
+        force_unit: str = &#34;N&#34;,
+        stress_tensor: Optional[np.ndarray] = None,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        强度检查（主入口函数）
+
+        Args:
+            model_file: 模型文件路径（可选，未来扩展）
+            force: 施加的力
+            material: 材料名称
+            force_unit: 力的单位
+            stress_tensor: 应力张量（如果直接提供）
+
+        Returns:
+            强度分析结果
+        &#34;&#34;&#34;
+        # 如果没有提供应力张量，尝试从模型文件计算
+        # 目前先使用示例应力张量
+        if stress_tensor is None:
+            # 创建一个示例应力张量（未来从模型文件解析）
+            stress_tensor = np.array([[100e6, 20e6, 0], [20e6, 50e6, 0], [0, 0, 0]])
+
+        if material is None:
+            material = &#34;Q235&#34;  # 默认材料
+
+        # 执行应力分析
+        result = self.engine.calculate_stress_analysis(
+            stress_tensor=stress_tensor,
+            material_name=material,
+            applied_force=force,
+            force_unit=force_unit,
+        )
+
+        # 添加额外信息
+        result[&#34;model_file&#34;] = model_file
+        result[&#34;analysis_type&#34;] = &#34;strength_check&#34;
+
+        return result
+
+    def check_buckling(
+        self,
+        material: str,
+        cross_section_area: float,
+        moment_of_inertia: float,
+        length: float,
+        applied_force: float,
+        end_condition: str = &#34;pinned-pinned&#34;,
+        area_unit: str = &#34;m^2&#34;,
+        length_unit: str = &#34;m&#34;,
+        force_unit: str = &#34;N&#34;,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        屈曲检查
+
+        Args:
+            material: 材料名称
+            cross_section_area: 截面积
+            moment_of_inertia: 截面惯性矩
+            length: 长度
+            applied_force: 施加的力
+            end_condition: 边界条件
+            area_unit: 面积单位
+            length_unit: 长度单位
+            force_unit: 力单位
+
+        Returns:
+            屈曲分析结果
+        &#34;&#34;&#34;
+        return self.engine.calculate_buckling_safety(
+            material_name=material,
+            cross_section_area=cross_section_area,
+            moment_of_inertia=moment_of_inertia,
+            length=length,
+            applied_force=applied_force,
+            end_condition=end_condition,
+            area_unit=area_unit,
+            length_unit=length_unit,
+            force_unit=force_unit,
+        )
+
+    def check_deflection(
+        self,
+        load: float,
+        length: float,
+        material: str,
+        moment_of_inertia: float,
+        load_type: str = &#34;point_center&#34;,
+        load_unit: str = &#34;N&#34;,
+        length_unit: str = &#34;m&#34;,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;
+        挠度检查
+
+        Args:
+            load: 载荷
+            length: 长度
+            material: 材料名称
+            moment_of_inertia: 截面惯性矩
+            load_type: 载荷类型
+            load_unit: 载荷单位
+            length_unit: 长度单位
+
+        Returns:
+            挠度分析结果
+        &#34;&#34;&#34;
+        return self.engine.calculate_deflection_analysis(
+            load=load,
+            length=length,
+            material_name=material,
+            moment_of_inertia=moment_of_inertia,
+            load_type=load_type,
+            load_unit=load_unit,
+            length_unit=length_unit,
+        )
+
+    def generate_report(
+        self, analysis_results: Dict[str, Any], output_format: str = &#34;rich&#34;
+    ) -&gt; str:
+        &#34;&#34;&#34;
+        生成分析报告
+
+        Args:
+            analysis_results: 分析结果
+            output_format: 输出格式 (&#34;rich&#34;, &#34;json&#34;, &#34;text&#34;)
+
+        Returns:
+            报告字符串
+        &#34;&#34;&#34;
+        if output_format == &#34;json&#34;:
+            return json.dumps(analysis_results, indent=2, ensure_ascii=False)
+
+        if output_format == &#34;rich&#34; and HAS_RICH and self.console:
+            return self._generate_rich_report(analysis_results)
+
+        # 默认文本格式
+        return self._generate_text_report(analysis_results)
+
+    def _generate_rich_report(self, results: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;生成Rich格式报告&#34;&#34;&#34;
+        from rich.console import Console
+        from rich.table import Table
+        from rich.panel import Panel
+        from rich.text import Text
+        from rich import box
+
+        console = Console()
+
+        # 创建输出字符串
+        with console.capture() as capture:
+            self._render_rich_report(console, results)
+
+        return capture.get()
+
+    def _render_rich_report(self, console, results: Dict[str, Any]):
+        &#34;&#34;&#34;渲染Rich报告到控制台&#34;&#34;&#34;
+        analysis_type = results.get(&#34;analysis_type&#34;, &#34;unknown&#34;)
+
+        # 标题
+        console.print(
+            Panel.fit(
+                f&#34;[bold cyan]CAE-CLI 力学分析报告[/bold cyan]\n&#34;
+                f&#34;[dim]分析类型: {analysis_type}[/dim]&#34;,
+                border_style=&#34;cyan&#34;,
+            )
+        )
+
+        # 材料特征部分
+        material = results.get(&#34;material&#34;, &#34;未知材料&#34;)
+        material_type = results.get(&#34;material_type&#34;, &#34;未知类型&#34;)
+
+        material_table = Table(title=&#34;材料特征&#34;, box=box.ROUNDED, show_header=False)
+        material_table.add_column(&#34;属性&#34;, style=&#34;cyan&#34;)
+        material_table.add_column(&#34;值&#34;, style=&#34;white&#34;)
+
+        material_table.add_row(&#34;材料名称&#34;, material)
+        material_table.add_row(&#34;材料类型&#34;, material_type)
+
+        if &#34;yield_strength&#34; in results:
+            material_table.add_row(
+                &#34;屈服强度&#34;, f&#34;{results[&#39;yield_strength&#39;] / 1e6:.2f} MPa&#34;
+            )
+        if &#34;tensile_strength&#34; in results:
+            material_table.add_row(
+                &#34;抗拉强度&#34;, f&#34;{results[&#39;tensile_strength&#39;] / 1e6:.2f} MPa&#34;
+            )
+
+        console.print(material_table)
+        console.print()
+
+        # 公式计算路径
+        if analysis_type == &#34;strength_check&#34;:
+            self._render_strength_formulas(console, results)
+        elif &#34;buckling_safety_factor&#34; in results:
+            self._render_buckling_formulas(console, results)
+        elif &#34;deflection_safety_factor&#34; in results:
+            self._render_deflection_formulas(console, results)
+
+        # 安全系数显示
+        self._render_safety_factor(console, results)
+
+    def _render_strength_formulas(self, console, results: Dict[str, Any]):
+        &#34;&#34;&#34;渲染强度计算公式&#34;&#34;&#34;
+        formulas_panel = Panel(
+            &#34;[bold]应力分析公式:[/bold]\n&#34;
+            &#34;1. Von Mises等效应力: σ_vm = √[0.5((σ₁-σ₂)²+(σ₂-σ₃)²+(σ₃-σ₁)²)+3(τ₁₂²+τ₂₃²+τ₃₁²)]\n&#34;
+            &#34;2. 安全系数: SF = σ_yield / σ_vm (塑性材料)\n&#34;
+            &#34;3. 主应力: σ₁ ≥ σ₂ ≥ σ₃ (特征值分解)&#34;,
+            title=&#34;计算路径&#34;,
+            border_style=&#34;blue&#34;,
+        )
+        console.print(formulas_panel)
+
+        # 显示具体数值
+        if &#34;von_mises_stress&#34; in results:
+            vm_stress = results[&#34;von_mises_stress&#34;] / 1e6  # 转换为MPa
+            principal = results.get(&#34;principal_stresses&#34;, (0, 0, 0))
+
+            stress_table = Table(title=&#34;应力结果&#34;, box=box.SIMPLE)
+            stress_table.add_column(&#34;应力类型&#34;, style=&#34;cyan&#34;)
+            stress_table.add_column(&#34;数值 (MPa)&#34;, style=&#34;white&#34;)
+            stress_table.add_column(&#34;状态&#34;, style=&#34;green&#34;)
+
+            stress_table.add_row(
+                &#34;Von Mises等效应力&#34;,
+                f&#34;{vm_stress:.2f}&#34;,
+                &#34;[green]✓&#34; if vm_stress &lt; 235 else &#34;[red]✗&#34;,
+            )
+
+            for i, stress in enumerate(principal, 1):
+                stress_mpa = stress / 1e6
+                stress_table.add_row(f&#34;主应力 σ{i}&#34;, f&#34;{stress_mpa:.2f}&#34;, &#34;&#34;)
+
+            console.print(stress_table)
+            console.print()
+
+    def _render_buckling_formulas(self, console, results: Dict[str, Any]):
+        &#34;&#34;&#34;渲染屈曲计算公式&#34;&#34;&#34;
+        formulas_panel = Panel(
+            &#34;[bold]屈曲分析公式:[/bold]\n&#34;
+            &#34;1. 欧拉临界载荷: P_cr = π²EI/(KL)²\n&#34;
+            &#34;2. 屈曲安全系数: SF_buckling = P_cr / P_applied\n&#34;
+            &#34;3. 压缩应力: σ_comp = P_applied / A&#34;,
+            title=&#34;计算路径&#34;,
+            border_style=&#34;blue&#34;,
+        )
+        console.print(formulas_panel)
+
+        # 显示具体数值
+        buckling_table = Table(title=&#34;屈曲分析结果&#34;, box=box.SIMPLE)
+        buckling_table.add_column(&#34;参数&#34;, style=&#34;cyan&#34;)
+        buckling_table.add_column(&#34;数值&#34;, style=&#34;white&#34;)
+        buckling_table.add_column(&#34;单位&#34;, style=&#34;dim&#34;)
+
+        buckling_table.add_row(
+            &#34;临界屈曲载荷&#34;,
+            f&#34;{results.get(&#39;critical_buckling_load&#39;, 0) / 1000:.2f}&#34;,
+            &#34;kN&#34;,
+        )
+        buckling_table.add_row(
+            &#34;施加载荷&#34;, f&#34;{results.get(&#39;applied_force&#39;, 0) / 1000:.2f}&#34;, &#34;kN&#34;
+        )
+        buckling_table.add_row(
+            &#34;屈曲安全系数&#34;, f&#34;{results.get(&#39;buckling_safety_factor&#39;, 0):.2f}&#34;, &#34;&#34;
+        )
+        buckling_table.add_row(
+            &#34;压缩应力&#34;, f&#34;{results.get(&#39;compressive_stress&#39;, 0) / 1e6:.2f}&#34;, &#34;MPa&#34;
+        )
+
+        console.print(buckling_table)
+        console.print()
+
+    def _render_deflection_formulas(self, console, results: Dict[str, Any]):
+        &#34;&#34;&#34;渲染挠度计算公式&#34;&#34;&#34;
+        formulas_panel = Panel(
+            &#34;[bold]挠度分析公式:[/bold]\n&#34;
+            &#34;1. 简支梁中点集中载荷: δ = PL³/(48EI)\n&#34;
+            &#34;2. 允许挠度: δ_allow = L/250\n&#34;
+            &#34;3. 挠度安全系数: SF_deflection = δ_allow / δ&#34;,
+            title=&#34;计算路径&#34;,
+            border_style=&#34;blue&#34;,
+        )
+        console.print(formulas_panel)
+
+        # 显示具体数值
+        deflection_table = Table(title=&#34;挠度分析结果&#34;, box=box.SIMPLE)
+        deflection_table.add_column(&#34;参数&#34;, style=&#34;cyan&#34;)
+        deflection_table.add_column(&#34;数值&#34;, style=&#34;white&#34;)
+        deflection_table.add_column(&#34;单位&#34;, style=&#34;dim&#34;)
+
+        deflection = results.get(&#34;deflection&#34;, 0) * 1000  # 转换为mm
+        allowable = results.get(&#34;allowable_deflection&#34;, 0) * 1000
+
+        deflection_table.add_row(&#34;计算挠度&#34;, f&#34;{deflection:.3f}&#34;, &#34;mm&#34;)
+        deflection_table.add_row(&#34;允许挠度&#34;, f&#34;{allowable:.3f}&#34;, &#34;mm&#34;)
+        deflection_table.add_row(
+            &#34;挠度安全系数&#34;, f&#34;{results.get(&#39;deflection_safety_factor&#39;, 0):.2f}&#34;, &#34;&#34;
+        )
+
+        console.print(deflection_table)
+        console.print()
+
+    def _render_safety_factor(self, console, results: Dict[str, Any]):
+        &#34;&#34;&#34;渲染安全系数（带颜色预警）&#34;&#34;&#34;
+        safety_factor = None
+        factor_name = &#34;&#34;
+
+        # 确定使用哪个安全系数
+        if &#34;safety_factor&#34; in results:
+            safety_factor = results[&#34;safety_factor&#34;]
+            factor_name = &#34;强度安全系数&#34;
+        elif &#34;buckling_safety_factor&#34; in results:
+            safety_factor = results[&#34;buckling_safety_factor&#34;]
+            factor_name = &#34;屈曲安全系数&#34;
+        elif &#34;deflection_safety_factor&#34; in results:
+            safety_factor = results[&#34;deflection_safety_factor&#34;]
+            factor_name = &#34;挠度安全系数&#34;
+
+        if safety_factor is not None:
+            # 确定颜色
+            if safety_factor &lt; 1.0:
+                color = &#34;red&#34;
+                status = &#34;危险&#34;
+            elif safety_factor &lt; 1.5:
+                color = &#34;yellow&#34;
+                status = &#34;警告&#34;
+            else:
+                color = &#34;green&#34;
+                status = &#34;安全&#34;
+
+            # 创建安全系数面板
+            safety_text = Text()
+            safety_text.append(f&#34;{factor_name}: &#34;, style=&#34;bold&#34;)
+            safety_text.append(f&#34;{safety_factor:.3f}&#34;, style=f&#34;bold {color}&#34;)
+            safety_text.append(f&#34; ({status})&#34;, style=color)
+
+            safety_panel = Panel(safety_text, title=&#34;安全评估&#34;, border_style=color)
+            console.print(safety_panel)
+
+            # 添加结论
+            conclusion = &#34;结论: 设计&#34;
+            if safety_factor &lt; 1.0:
+                conclusion += &#34; [red bold]不满足[/red bold] 安全要求，需要重新设计。&#34;
+            elif safety_factor &lt; 1.5:
+                conclusion += (
+                    &#34; [yellow bold]基本满足[/yellow bold] 安全要求，建议优化。&#34;
+                )
+            else:
+                conclusion += &#34; [green bold]完全满足[/green bold] 安全要求，设计合理。&#34;
+
+            console.print(conclusion)
+
+    def _generate_text_report(self, results: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;生成文本格式报告&#34;&#34;&#34;
+        lines = []
+        lines.append(&#34;=&#34; * 60)
+        lines.append(&#34;CAE-CLI 力学分析报告&#34;)
+        lines.append(f&#34;分析类型: {results.get(&#39;analysis_type&#39;, &#39;unknown&#39;)}&#34;)
+        lines.append(&#34;=&#34; * 60)
+
+        # 材料特征
+        lines.append(&#34;\n[材料特征]&#34;)
+        lines.append(f&#34;  材料名称: {results.get(&#39;material&#39;, &#39;未知材料&#39;)}&#34;)
+        lines.append(f&#34;  材料类型: {results.get(&#39;material_type&#39;, &#39;未知类型&#39;)}&#34;)
+
+        if &#34;yield_strength&#34; in results:
+            lines.append(f&#34;  屈服强度: {results[&#39;yield_strength&#39;] / 1e6:.2f} MPa&#34;)
+        if &#34;tensile_strength&#34; in results:
+            lines.append(f&#34;  抗拉强度: {results[&#39;tensile_strength&#39;] / 1e6:.2f} MPa&#34;)
+
+        # 计算结果
+        if &#34;von_mises_stress&#34; in results:
+            lines.append(&#34;\n[应力分析结果]&#34;)
+            lines.append(
+                f&#34;  Von Mises等效应力: {results[&#39;von_mises_stress&#39;] / 1e6:.2f} MPa&#34;
+            )
+            principal = results.get(&#34;principal_stresses&#34;, (0, 0, 0))
+            for i, stress in enumerate(principal, 1):
+                lines.append(f&#34;  主应力 σ{i}: {stress / 1e6:.2f} MPa&#34;)
+
+        if &#34;buckling_safety_factor&#34; in results:
+            lines.append(&#34;\n[屈曲分析结果]&#34;)
+            lines.append(
+                f&#34;  临界屈曲载荷: {results.get(&#39;critical_buckling_load&#39;, 0) / 1000:.2f} kN&#34;
+            )
+            lines.append(f&#34;  施加载荷: {results.get(&#39;applied_force&#39;, 0) / 1000:.2f} kN&#34;)
+            lines.append(
+                f&#34;  屈曲安全系数: {results.get(&#39;buckling_safety_factor&#39;, 0):.2f}&#34;
+            )
+
+        if &#34;deflection_safety_factor&#34; in results:
+            lines.append(&#34;\n[挠度分析结果]&#34;)
+            deflection = results.get(&#34;deflection&#34;, 0) * 1000
+            allowable = results.get(&#34;allowable_deflection&#34;, 0) * 1000
+            lines.append(f&#34;  计算挠度: {deflection:.3f} mm&#34;)
+            lines.append(f&#34;  允许挠度: {allowable:.3f} mm&#34;)
+            lines.append(
+                f&#34;  挠度安全系数: {results.get(&#39;deflection_safety_factor&#39;, 0):.2f}&#34;
+            )
+
+        # 安全系数
+        safety_factor = None
+        if &#34;safety_factor&#34; in results:
+            safety_factor = results[&#34;safety_factor&#34;]
+        elif &#34;buckling_safety_factor&#34; in results:
+            safety_factor = results[&#34;buckling_safety_factor&#34;]
+        elif &#34;deflection_safety_factor&#34; in results:
+            safety_factor = results[&#34;deflection_safety_factor&#34;]
+
+        if safety_factor is not None:
+            lines.append(&#34;\n[安全评估]&#34;)
+            lines.append(f&#34;  安全系数: {safety_factor:.3f}&#34;)
+            if safety_factor &lt; 1.0:
+                lines.append(&#34;  状态: 危险 (安全系数 &lt; 1.0)&#34;)
+                lines.append(&#34;  结论: 设计不满足安全要求，需要重新设计。&#34;)
+            elif safety_factor &lt; 1.5:
+                lines.append(&#34;  状态: 警告 (1.0 ≤ 安全系数 &lt; 1.5)&#34;)
+                lines.append(&#34;  结论: 设计基本满足安全要求，建议优化。&#34;)
+            else:
+                lines.append(&#34;  状态: 安全 (安全系数 ≥ 1.5)&#34;)
+                lines.append(&#34;  结论: 设计完全满足安全要求，设计合理。&#34;)
+
+        lines.append(&#34;\n&#34; + &#34;=&#34; * 60)
+        return &#34;\n&#34;.join(lines)</code></pre>
+</details>
+<div class="desc"><p>力学模块接口类</p>
+<p>初始化力学接口</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>materials_db_path</code></strong></dt>
+<dd>材料数据库路径</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mechanics.MechanicsInterface.check_buckling"><code class="name flex">
+<span>def <span class="ident">check_buckling</span></span>(<span>self,<br>material: str,<br>cross_section_area: float,<br>moment_of_inertia: float,<br>length: float,<br>applied_force: float,<br>end_condition: str = 'pinned-pinned',<br>area_unit: str = 'm^2',<br>length_unit: str = 'm',<br>force_unit: str = 'N') ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_buckling(
+    self,
+    material: str,
+    cross_section_area: float,
+    moment_of_inertia: float,
+    length: float,
+    applied_force: float,
+    end_condition: str = &#34;pinned-pinned&#34;,
+    area_unit: str = &#34;m^2&#34;,
+    length_unit: str = &#34;m&#34;,
+    force_unit: str = &#34;N&#34;,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    屈曲检查
+
+    Args:
+        material: 材料名称
+        cross_section_area: 截面积
+        moment_of_inertia: 截面惯性矩
+        length: 长度
+        applied_force: 施加的力
+        end_condition: 边界条件
+        area_unit: 面积单位
+        length_unit: 长度单位
+        force_unit: 力单位
+
+    Returns:
+        屈曲分析结果
+    &#34;&#34;&#34;
+    return self.engine.calculate_buckling_safety(
+        material_name=material,
+        cross_section_area=cross_section_area,
+        moment_of_inertia=moment_of_inertia,
+        length=length,
+        applied_force=applied_force,
+        end_condition=end_condition,
+        area_unit=area_unit,
+        length_unit=length_unit,
+        force_unit=force_unit,
+    )</code></pre>
+</details>
+<div class="desc"><p>屈曲检查</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>material</code></strong></dt>
+<dd>材料名称</dd>
+<dt><strong><code>cross_section_area</code></strong></dt>
+<dd>截面积</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>长度</dd>
+<dt><strong><code>applied_force</code></strong></dt>
+<dd>施加的力</dd>
+<dt><strong><code>end_condition</code></strong></dt>
+<dd>边界条件</dd>
+<dt><strong><code>area_unit</code></strong></dt>
+<dd>面积单位</dd>
+<dt><strong><code>length_unit</code></strong></dt>
+<dd>长度单位</dd>
+<dt><strong><code>force_unit</code></strong></dt>
+<dd>力单位</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>屈曲分析结果</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsInterface.check_deflection"><code class="name flex">
+<span>def <span class="ident">check_deflection</span></span>(<span>self,<br>load: float,<br>length: float,<br>material: str,<br>moment_of_inertia: float,<br>load_type: str = 'point_center',<br>load_unit: str = 'N',<br>length_unit: str = 'm') ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_deflection(
+    self,
+    load: float,
+    length: float,
+    material: str,
+    moment_of_inertia: float,
+    load_type: str = &#34;point_center&#34;,
+    load_unit: str = &#34;N&#34;,
+    length_unit: str = &#34;m&#34;,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    挠度检查
+
+    Args:
+        load: 载荷
+        length: 长度
+        material: 材料名称
+        moment_of_inertia: 截面惯性矩
+        load_type: 载荷类型
+        load_unit: 载荷单位
+        length_unit: 长度单位
+
+    Returns:
+        挠度分析结果
+    &#34;&#34;&#34;
+    return self.engine.calculate_deflection_analysis(
+        load=load,
+        length=length,
+        material_name=material,
+        moment_of_inertia=moment_of_inertia,
+        load_type=load_type,
+        load_unit=load_unit,
+        length_unit=length_unit,
+    )</code></pre>
+</details>
+<div class="desc"><p>挠度检查</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>load</code></strong></dt>
+<dd>载荷</dd>
+<dt><strong><code>length</code></strong></dt>
+<dd>长度</dd>
+<dt><strong><code>material</code></strong></dt>
+<dd>材料名称</dd>
+<dt><strong><code>moment_of_inertia</code></strong></dt>
+<dd>截面惯性矩</dd>
+<dt><strong><code>load_type</code></strong></dt>
+<dd>载荷类型</dd>
+<dt><strong><code>load_unit</code></strong></dt>
+<dd>载荷单位</dd>
+<dt><strong><code>length_unit</code></strong></dt>
+<dd>长度单位</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>挠度分析结果</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsInterface.check_strength"><code class="name flex">
+<span>def <span class="ident">check_strength</span></span>(<span>self,<br>model_file: str | None = None,<br>force: float | None = None,<br>material: str | None = None,<br>force_unit: str = 'N',<br>stress_tensor: numpy.ndarray | None = None) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_strength(
+    self,
+    model_file: Optional[str] = None,
+    force: Optional[float] = None,
+    material: Optional[str] = None,
+    force_unit: str = &#34;N&#34;,
+    stress_tensor: Optional[np.ndarray] = None,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;
+    强度检查（主入口函数）
+
+    Args:
+        model_file: 模型文件路径（可选，未来扩展）
+        force: 施加的力
+        material: 材料名称
+        force_unit: 力的单位
+        stress_tensor: 应力张量（如果直接提供）
+
+    Returns:
+        强度分析结果
+    &#34;&#34;&#34;
+    # 如果没有提供应力张量，尝试从模型文件计算
+    # 目前先使用示例应力张量
+    if stress_tensor is None:
+        # 创建一个示例应力张量（未来从模型文件解析）
+        stress_tensor = np.array([[100e6, 20e6, 0], [20e6, 50e6, 0], [0, 0, 0]])
+
+    if material is None:
+        material = &#34;Q235&#34;  # 默认材料
+
+    # 执行应力分析
+    result = self.engine.calculate_stress_analysis(
+        stress_tensor=stress_tensor,
+        material_name=material,
+        applied_force=force,
+        force_unit=force_unit,
+    )
+
+    # 添加额外信息
+    result[&#34;model_file&#34;] = model_file
+    result[&#34;analysis_type&#34;] = &#34;strength_check&#34;
+
+    return result</code></pre>
+</details>
+<div class="desc"><p>强度检查（主入口函数）</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>model_file</code></strong></dt>
+<dd>模型文件路径（可选，未来扩展）</dd>
+<dt><strong><code>force</code></strong></dt>
+<dd>施加的力</dd>
+<dt><strong><code>material</code></strong></dt>
+<dd>材料名称</dd>
+<dt><strong><code>force_unit</code></strong></dt>
+<dd>力的单位</dd>
+<dt><strong><code>stress_tensor</code></strong></dt>
+<dd>应力张量（如果直接提供）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>强度分析结果</p></div>
+</dd>
+<dt id="sw_helper.mechanics.MechanicsInterface.generate_report"><code class="name flex">
+<span>def <span class="ident">generate_report</span></span>(<span>self, analysis_results: Dict[str, Any], output_format: str = 'rich') ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_report(
+    self, analysis_results: Dict[str, Any], output_format: str = &#34;rich&#34;
+) -&gt; str:
+    &#34;&#34;&#34;
+    生成分析报告
+
+    Args:
+        analysis_results: 分析结果
+        output_format: 输出格式 (&#34;rich&#34;, &#34;json&#34;, &#34;text&#34;)
+
+    Returns:
+        报告字符串
+    &#34;&#34;&#34;
+    if output_format == &#34;json&#34;:
+        return json.dumps(analysis_results, indent=2, ensure_ascii=False)
+
+    if output_format == &#34;rich&#34; and HAS_RICH and self.console:
+        return self._generate_rich_report(analysis_results)
+
+    # 默认文本格式
+    return self._generate_text_report(analysis_results)</code></pre>
+</details>
+<div class="desc"><p>生成分析报告</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>analysis_results</code></strong></dt>
+<dd>分析结果</dd>
+<dt><strong><code>output_format</code></strong></dt>
+<dd>输出格式 ("rich", "json", "text")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>报告字符串</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.mechanics.engine" href="engine.html">sw_helper.mechanics.engine</a></code></li>
+<li><code><a title="sw_helper.mechanics.interface" href="interface.html">sw_helper.mechanics.interface</a></code></li>
+<li><code><a title="sw_helper.mechanics.physics_formulas" href="physics_formulas.html">sw_helper.mechanics.physics_formulas</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.mechanics.calc_max_shear" href="#sw_helper.mechanics.calc_max_shear">calc_max_shear</a></code></li>
+<li><code><a title="sw_helper.mechanics.calc_principal_stresses" href="#sw_helper.mechanics.calc_principal_stresses">calc_principal_stresses</a></code></li>
+<li><code><a title="sw_helper.mechanics.calc_von_mises" href="#sw_helper.mechanics.calc_von_mises">calc_von_mises</a></code></li>
+<li><code><a title="sw_helper.mechanics.calculate_buckling_load" href="#sw_helper.mechanics.calculate_buckling_load">calculate_buckling_load</a></code></li>
+<li><code><a title="sw_helper.mechanics.calculate_deflection" href="#sw_helper.mechanics.calculate_deflection">calculate_deflection</a></code></li>
+<li><code><a title="sw_helper.mechanics.calculate_principal_stresses" href="#sw_helper.mechanics.calculate_principal_stresses">calculate_principal_stresses</a></code></li>
+<li><code><a title="sw_helper.mechanics.calculate_safety_factor" href="#sw_helper.mechanics.calculate_safety_factor">calculate_safety_factor</a></code></li>
+<li><code><a title="sw_helper.mechanics.calculate_von_mises_stress" href="#sw_helper.mechanics.calculate_von_mises_stress">calculate_von_mises_stress</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.mechanics.MechanicsEngine" href="#sw_helper.mechanics.MechanicsEngine">MechanicsEngine</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.calculate_buckling_safety" href="#sw_helper.mechanics.MechanicsEngine.calculate_buckling_safety">calculate_buckling_safety</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.calculate_deflection_analysis" href="#sw_helper.mechanics.MechanicsEngine.calculate_deflection_analysis">calculate_deflection_analysis</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.calculate_stress_analysis" href="#sw_helper.mechanics.MechanicsEngine.calculate_stress_analysis">calculate_stress_analysis</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.convert_units" href="#sw_helper.mechanics.MechanicsEngine.convert_units">convert_units</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.determine_material_type" href="#sw_helper.mechanics.MechanicsEngine.determine_material_type">determine_material_type</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.evaluate_material_theory" href="#sw_helper.mechanics.MechanicsEngine.evaluate_material_theory">evaluate_material_theory</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.get_material" href="#sw_helper.mechanics.MechanicsEngine.get_material">get_material</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsEngine.solve_safety_factor" href="#sw_helper.mechanics.MechanicsEngine.solve_safety_factor">solve_safety_factor</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mechanics.MechanicsInterface" href="#sw_helper.mechanics.MechanicsInterface">MechanicsInterface</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.mechanics.MechanicsInterface.check_buckling" href="#sw_helper.mechanics.MechanicsInterface.check_buckling">check_buckling</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsInterface.check_deflection" href="#sw_helper.mechanics.MechanicsInterface.check_deflection">check_deflection</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsInterface.check_strength" href="#sw_helper.mechanics.MechanicsInterface.check_strength">check_strength</a></code></li>
+<li><code><a title="sw_helper.mechanics.MechanicsInterface.generate_report" href="#sw_helper.mechanics.MechanicsInterface.generate_report">generate_report</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

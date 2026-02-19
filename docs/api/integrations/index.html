@@ -1,0 +1,4871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>integrations API documentation</title>
+<meta name="description" content="CAD/CAE集成模块 - 插件化架构 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Package <code>integrations</code></h1>
+</header>
+<section id="section-intro">
+<p>CAD/CAE集成模块 - 插件化架构</p>
+<p>此包提供CAD和CAE软件的标准化接口，支持插件化扩展。</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="integrations.cad" href="cad/index.html">integrations.cad</a></code></dt>
+<dd>
+<div class="desc"><p>CAD连接器模块 - 各种CAD软件的标准化接口</p></div>
+</dd>
+<dt><code class="name"><a title="integrations.cae" href="cae/index.html">integrations.cae</a></code></dt>
+<dd>
+<div class="desc"><p>CAE连接器模块 - 各种CAE软件的标准化接口</p></div>
+</dd>
+<dt><code class="name"><a title="integrations.mesher" href="mesher/index.html">integrations.mesher</a></code></dt>
+<dd>
+<div class="desc"><p>网格生成器模块 - 集成Gmsh等网格生成工具 …</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="integrations.CADConnector"><code class="flex name class">
+<span>class <span class="ident">CADConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CADConnector(ABC):
+    &#34;&#34;&#34;CAD软件连接器抽象基类
+
+    定义CAD软件必须实现的通用接口，包括模型加载、参数操作、
+    模型导出等核心功能。
+    &#34;&#34;&#34;
+
+    @abstractmethod
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到CAD软件实例
+
+        Returns:
+            bool: 连接是否成功
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def load_model(self, file_path: Path) -&gt; bool:
+        &#34;&#34;&#34;加载CAD模型文件
+
+        Args:
+            file_path: 模型文件路径
+
+        Returns:
+            bool: 加载是否成功
+
+        Raises:
+            FileNotFoundError: 文件不存在时
+            ValueError: 文件格式不支持时
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def get_parameter(self, name: str) -&gt; Optional[float]:
+        &#34;&#34;&#34;获取指定参数的值
+
+        Args:
+            name: 参数名称
+
+        Returns:
+            Optional[float]: 参数值，如果参数不存在则返回None
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def set_parameter(self, name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数值
+
+        Args:
+            name: 参数名称
+            value: 参数值
+
+        Returns:
+            bool: 设置是否成功
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def rebuild(self) -&gt; bool:
+        &#34;&#34;&#34;重建模型（应用参数变更）
+
+        Returns:
+            bool: 重建是否成功
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def export_step(self, output_path: Path) -&gt; bool:
+        &#34;&#34;&#34;导出为STEP格式文件
+
+        Args:
+            output_path: 输出文件路径
+
+        Returns:
+            bool: 导出是否成功
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def get_supported_formats(self) -&gt; List[FileFormat]:
+        &#34;&#34;&#34;获取支持的导出格式
+
+        Returns:
+            List[FileFormat]: 支持的格式列表
+        &#34;&#34;&#34;
+        pass
+
+    def export(self, output_path: Path, format_type: FileFormat) -&gt; bool:
+        &#34;&#34;&#34;导出模型到指定格式（通用实现）
+
+        Args:
+            output_path: 输出文件路径
+            format_type: 导出格式
+
+        Returns:
+            bool: 导出是否成功
+        &#34;&#34;&#34;
+        if format_type == FileFormat.STEP:
+            return self.export_step(output_path)
+        else:
+            raise NotImplementedError(f&#34;格式 {format_type} 尚未实现&#34;)
+
+    def get_software_info(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;获取软件信息
+
+        Returns:
+            Dict[str, Any]: 包含软件名称、版本等信息的字典
+        &#34;&#34;&#34;
+        return {
+            &#34;connector_type&#34;: &#34;CAD&#34;,
+            &#34;class_name&#34;: self.__class__.__name__,
+            &#34;supported_formats&#34;: [fmt.value for fmt in self.get_supported_formats()],
+        }</code></pre>
+</details>
+<div class="desc"><p>CAD软件连接器抽象基类</p>
+<p>定义CAD软件必须实现的通用接口，包括模型加载、参数操作、
+模型导出等核心功能。</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="integrations.cad.freecad.FreeCADConnector" href="cad/freecad.html#integrations.cad.freecad.FreeCADConnector">FreeCADConnector</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.CADConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到CAD软件实例
+
+    Returns:
+        bool: 连接是否成功
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>连接到CAD软件实例</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>连接是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.export"><code class="name flex">
+<span>def <span class="ident">export</span></span>(<span>self,<br>output_path: pathlib._local.Path,<br>format_type: <a title="core.types.FileFormat" href="../core/types.html#core.types.FileFormat">FileFormat</a>) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export(self, output_path: Path, format_type: FileFormat) -&gt; bool:
+    &#34;&#34;&#34;导出模型到指定格式（通用实现）
+
+    Args:
+        output_path: 输出文件路径
+        format_type: 导出格式
+
+    Returns:
+        bool: 导出是否成功
+    &#34;&#34;&#34;
+    if format_type == FileFormat.STEP:
+        return self.export_step(output_path)
+    else:
+        raise NotImplementedError(f&#34;格式 {format_type} 尚未实现&#34;)</code></pre>
+</details>
+<div class="desc"><p>导出模型到指定格式（通用实现）</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>output_path</code></strong></dt>
+<dd>输出文件路径</dd>
+<dt><strong><code>format_type</code></strong></dt>
+<dd>导出格式</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>导出是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.export_step"><code class="name flex">
+<span>def <span class="ident">export_step</span></span>(<span>self, output_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def export_step(self, output_path: Path) -&gt; bool:
+    &#34;&#34;&#34;导出为STEP格式文件
+
+    Args:
+        output_path: 输出文件路径
+
+    Returns:
+        bool: 导出是否成功
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>导出为STEP格式文件</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>output_path</code></strong></dt>
+<dd>输出文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>导出是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.get_parameter"><code class="name flex">
+<span>def <span class="ident">get_parameter</span></span>(<span>self, name: str) ‑> float | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def get_parameter(self, name: str) -&gt; Optional[float]:
+    &#34;&#34;&#34;获取指定参数的值
+
+    Args:
+        name: 参数名称
+
+    Returns:
+        Optional[float]: 参数值，如果参数不存在则返回None
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>获取指定参数的值</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>参数名称</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Optional[float]</code></dt>
+<dd>参数值，如果参数不存在则返回None</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.get_software_info"><code class="name flex">
+<span>def <span class="ident">get_software_info</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_software_info(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;获取软件信息
+
+    Returns:
+        Dict[str, Any]: 包含软件名称、版本等信息的字典
+    &#34;&#34;&#34;
+    return {
+        &#34;connector_type&#34;: &#34;CAD&#34;,
+        &#34;class_name&#34;: self.__class__.__name__,
+        &#34;supported_formats&#34;: [fmt.value for fmt in self.get_supported_formats()],
+    }</code></pre>
+</details>
+<div class="desc"><p>获取软件信息</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>包含软件名称、版本等信息的字典</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.get_supported_formats"><code class="name flex">
+<span>def <span class="ident">get_supported_formats</span></span>(<span>self) ‑> List[<a title="core.types.FileFormat" href="../core/types.html#core.types.FileFormat">FileFormat</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def get_supported_formats(self) -&gt; List[FileFormat]:
+    &#34;&#34;&#34;获取支持的导出格式
+
+    Returns:
+        List[FileFormat]: 支持的格式列表
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>获取支持的导出格式</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[<a title="integrations.FileFormat" href="#integrations.FileFormat">FileFormat</a>]</code></dt>
+<dd>支持的格式列表</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.load_model"><code class="name flex">
+<span>def <span class="ident">load_model</span></span>(<span>self, file_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def load_model(self, file_path: Path) -&gt; bool:
+    &#34;&#34;&#34;加载CAD模型文件
+
+    Args:
+        file_path: 模型文件路径
+
+    Returns:
+        bool: 加载是否成功
+
+    Raises:
+        FileNotFoundError: 文件不存在时
+        ValueError: 文件格式不支持时
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>加载CAD模型文件</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong></dt>
+<dd>模型文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>加载是否成功</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>文件不存在时</dd>
+<dt><code>ValueError</code></dt>
+<dd>文件格式不支持时</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.rebuild"><code class="name flex">
+<span>def <span class="ident">rebuild</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def rebuild(self) -&gt; bool:
+    &#34;&#34;&#34;重建模型（应用参数变更）
+
+    Returns:
+        bool: 重建是否成功
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>重建模型（应用参数变更）</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>重建是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CADConnector.set_parameter"><code class="name flex">
+<span>def <span class="ident">set_parameter</span></span>(<span>self, name: str, value: float) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def set_parameter(self, name: str, value: float) -&gt; bool:
+    &#34;&#34;&#34;设置参数值
+
+    Args:
+        name: 参数名称
+        value: 参数值
+
+    Returns:
+        bool: 设置是否成功
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>设置参数值</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>参数名称</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>参数值</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>设置是否成功</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.CAEConnector"><code class="flex name class">
+<span>class <span class="ident">CAEConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CAEConnector(ABC):
+    &#34;&#34;&#34;CAE仿真软件连接器抽象基类
+
+    定义CAE软件必须实现的通用接口，包括网格生成、求解设置、
+    仿真运行和结果提取等核心功能。
+    &#34;&#34;&#34;
+
+    @abstractmethod
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到CAE软件实例
+
+        Returns:
+            bool: 连接是否成功
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        &#34;&#34;&#34;从几何文件生成网格
+
+        Args:
+            geometry_file: 输入几何文件路径（STEP/STL等）
+            mesh_file: 输出网格文件路径
+            element_size: 单元尺寸（默认2.0）
+
+        Returns:
+            bool: 网格生成是否成功
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+        &#34;&#34;&#34;设置仿真分析
+
+        Args:
+            mesh_file: 网格文件路径
+            config: 仿真配置字典
+
+        Returns:
+            Path: 生成的输入文件路径
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        &#34;&#34;&#34;运行仿真分析
+
+        Args:
+            input_file: 输入文件路径
+            output_dir: 输出目录（可选）
+
+        Returns:
+            bool: 仿真是否成功完成
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;读取仿真结果
+
+        Args:
+            result_file: 结果文件路径
+
+        Returns:
+            Dict[str, Any]: 包含结果数据的字典
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def get_supported_analysis_types(self) -&gt; List[str]:
+        &#34;&#34;&#34;获取支持的分析类型
+
+        Returns:
+            List[str]: 支持的分析类型列表（如[&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;]）
+        &#34;&#34;&#34;
+        pass
+
+    def get_software_info(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;获取软件信息
+
+        Returns:
+            Dict[str, Any]: 包含软件名称、版本等信息的字典
+        &#34;&#34;&#34;
+        return {
+            &#34;connector_type&#34;: &#34;CAE&#34;,
+            &#34;class_name&#34;: self.__class__.__name__,
+            &#34;supported_analysis&#34;: self.get_supported_analysis_types(),
+        }</code></pre>
+</details>
+<div class="desc"><p>CAE仿真软件连接器抽象基类</p>
+<p>定义CAE软件必须实现的通用接口，包括网格生成、求解设置、
+仿真运行和结果提取等核心功能。</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="integrations.cae.calculix.CalculiXConnector" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector">CalculiXConnector</a></li>
+<li><a title="integrations.mesher.gmsh.GmshConnector" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector">GmshConnector</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.CAEConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到CAE软件实例
+
+    Returns:
+        bool: 连接是否成功
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>连接到CAE软件实例</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>连接是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CAEConnector.generate_mesh"><code class="name flex">
+<span>def <span class="ident">generate_mesh</span></span>(<span>self,<br>geometry_file: pathlib._local.Path,<br>mesh_file: pathlib._local.Path,<br>element_size: float = 2.0) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def generate_mesh(
+    self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+) -&gt; bool:
+    &#34;&#34;&#34;从几何文件生成网格
+
+    Args:
+        geometry_file: 输入几何文件路径（STEP/STL等）
+        mesh_file: 输出网格文件路径
+        element_size: 单元尺寸（默认2.0）
+
+    Returns:
+        bool: 网格生成是否成功
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>从几何文件生成网格</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_file</code></strong></dt>
+<dd>输入几何文件路径（STEP/STL等）</dd>
+<dt><strong><code>mesh_file</code></strong></dt>
+<dd>输出网格文件路径</dd>
+<dt><strong><code>element_size</code></strong></dt>
+<dd>单元尺寸（默认2.0）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>网格生成是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CAEConnector.get_software_info"><code class="name flex">
+<span>def <span class="ident">get_software_info</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_software_info(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;获取软件信息
+
+    Returns:
+        Dict[str, Any]: 包含软件名称、版本等信息的字典
+    &#34;&#34;&#34;
+    return {
+        &#34;connector_type&#34;: &#34;CAE&#34;,
+        &#34;class_name&#34;: self.__class__.__name__,
+        &#34;supported_analysis&#34;: self.get_supported_analysis_types(),
+    }</code></pre>
+</details>
+<div class="desc"><p>获取软件信息</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>包含软件名称、版本等信息的字典</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CAEConnector.get_supported_analysis_types"><code class="name flex">
+<span>def <span class="ident">get_supported_analysis_types</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def get_supported_analysis_types(self) -&gt; List[str]:
+    &#34;&#34;&#34;获取支持的分析类型
+
+    Returns:
+        List[str]: 支持的分析类型列表（如[&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;]）
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>获取支持的分析类型</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[str]</code></dt>
+<dd>支持的分析类型列表（如["static", "modal", "thermal"]）</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CAEConnector.read_results"><code class="name flex">
+<span>def <span class="ident">read_results</span></span>(<span>self, result_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;读取仿真结果
+
+    Args:
+        result_file: 结果文件路径
+
+    Returns:
+        Dict[str, Any]: 包含结果数据的字典
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>读取仿真结果</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>result_file</code></strong></dt>
+<dd>结果文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>包含结果数据的字典</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CAEConnector.run_simulation"><code class="name flex">
+<span>def <span class="ident">run_simulation</span></span>(<span>self,<br>input_file: pathlib._local.Path,<br>output_dir: pathlib._local.Path | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def run_simulation(
+    self, input_file: Path, output_dir: Optional[Path] = None
+) -&gt; bool:
+    &#34;&#34;&#34;运行仿真分析
+
+    Args:
+        input_file: 输入文件路径
+        output_dir: 输出目录（可选）
+
+    Returns:
+        bool: 仿真是否成功完成
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>运行仿真分析</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong></dt>
+<dd>输入文件路径</dd>
+<dt><strong><code>output_dir</code></strong></dt>
+<dd>输出目录（可选）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>仿真是否成功完成</dd>
+</dl></div>
+</dd>
+<dt id="integrations.CAEConnector.setup_simulation"><code class="name flex">
+<span>def <span class="ident">setup_simulation</span></span>(<span>self, mesh_file: pathlib._local.Path, config: Dict[str, Any]) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+    &#34;&#34;&#34;设置仿真分析
+
+    Args:
+        mesh_file: 网格文件路径
+        config: 仿真配置字典
+
+    Returns:
+        Path: 生成的输入文件路径
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>设置仿真分析</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>mesh_file</code></strong></dt>
+<dd>网格文件路径</dd>
+<dt><strong><code>config</code></strong></dt>
+<dd>仿真配置字典</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Path</code></dt>
+<dd>生成的输入文件路径</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.CalculiXConnector"><code class="flex name class">
+<span>class <span class="ident">CalculiXConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CalculiXConnector(CAEConnector):
+    &#34;&#34;&#34;CalculiX有限元分析软件连接器&#34;&#34;&#34;
+
+    def __init__(self):
+        self.ccx_path = None
+        self.is_connected = False
+        self.work_dir = None
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到CalculiX实例（检查ccx命令是否可用）&#34;&#34;&#34;
+        try:
+            # 查找ccx命令
+            ccx_path = shutil.which(&#34;ccx&#34;)
+            if ccx_path:
+                self.ccx_path = Path(ccx_path)
+                self.is_connected = True
+                print(f&#34;✓ 找到CalculiX: {self.ccx_path}&#34;)
+                return True
+            else:
+                print(&#34;✗ 未找到CalculiX (ccx)命令&#34;)
+                print(&#34;提示: 请安装CalculiX并确保ccx在PATH中&#34;)
+                print(&#34;      Ubuntu/Debian: sudo apt-get install calculix-ccx&#34;)
+                print(&#34;      Windows: 从https://www.calculix.de/下载&#34;)
+                return False
+
+        except Exception as e:
+            print(f&#34;连接CalculiX失败: {e}&#34;)
+            return False
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        &#34;&#34;&#34;从几何文件生成网格
+
+        注意：CalculiX本身不包含网格生成器，此方法会尝试调用Gmsh生成网格。
+        如果Gmsh不可用，则创建一个简单的.inp文件占位符。
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            # 尝试使用Gmsh生成网格（如果可用）
+            try:
+                from integrations.mesher.gmsh import GmshConnector
+
+                gmsh_connector = GmshConnector()
+                if gmsh_connector.connect():
+                    print(&#34;使用Gmsh生成网格...&#34;)
+                    success = gmsh_connector.generate_mesh(geometry_file, mesh_file, element_size)
+                    if success:
+                        # 转换为CalculiX格式
+                        if mesh_file.suffix.lower() == &#34;.msh&#34;:
+                            inp_file = mesh_file.with_suffix(&#34;.inp&#34;)
+                            success = gmsh_connector.convert_to_calculix_inp(mesh_file)
+                            if success:
+                                mesh_file = inp_file
+                        return True
+            except ImportError:
+                print(&#34;Gmsh不可用，使用内置网格生成器&#34;)
+            except Exception as gmsh_error:
+                print(f&#34;Gmsh网格生成失败: {gmsh_error}&#34;)
+
+            # 确保输出目录存在
+            mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # 创建简单的.inp文件（示例）
+            with open(mesh_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(self._create_sample_inp(geometry_file, element_size))
+
+            print(f&#34;✓ 生成网格文件: {mesh_file}&#34;)
+            print(&#34;  注意：这是一个示例网格，建议安装Gmsh以获得高质量网格&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;生成网格失败: {e}&#34;)
+            return False
+
+    def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+        &#34;&#34;&#34;设置仿真分析
+
+        根据配置创建CalculiX输入文件(.inp)
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                raise RuntimeError(&#34;CalculiX未连接&#34;)
+
+        try:
+            # 创建临时工作目录
+            if not self.work_dir:
+                self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;calculix_&#34;))
+
+            # 生成输入文件名
+            input_file = self.work_dir / f&#34;{mesh_file.stem}.inp&#34;
+
+            # 根据配置类型生成不同的输入文件
+            analysis_type = config.get(&#34;analysis_type&#34;, &#34;static&#34;)
+
+            if analysis_type == &#34;static&#34;:
+                inp_content = self._create_static_analysis(mesh_file, config)
+            elif analysis_type == &#34;modal&#34;:
+                inp_content = self._create_modal_analysis(mesh_file, config)
+            elif analysis_type == &#34;thermal&#34;:
+                inp_content = self._create_thermal_analysis(mesh_file, config)
+            else:
+                raise ValueError(f&#34;不支持的分析类型: {analysis_type}&#34;)
+
+            # 写入输入文件
+            with open(input_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(inp_content)
+
+            print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+            return input_file
+
+        except Exception as e:
+            print(f&#34;设置仿真失败: {e}&#34;)
+            raise
+
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        &#34;&#34;&#34;运行仿真分析&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            # 设置输出目录
+            if not output_dir:
+                output_dir = input_file.parent
+
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            # 准备命令参数
+            input_stem = input_file.stem
+            cmd = [str(self.ccx_path), &#34;-i&#34;, input_stem]
+
+            print(f&#34;⏳ 运行CalculiX仿真: {&#39; &#39;.join(cmd)}&#34;)
+
+            # 切换到输入文件目录运行
+            cwd = input_file.parent
+            result = subprocess.run(
+                cmd,
+                cwd=cwd,
+                capture_output=True,
+                text=True,
+                timeout=300,  # 5分钟超时
+            )
+
+            # 检查结果
+            if result.returncode == 0:
+                print(&#34;✓ 仿真完成&#34;)
+
+                # 检查输出文件
+                expected_files = [f&#34;{input_stem}.frd&#34;, f&#34;{input_stem}.dat&#34;]
+                for f in expected_files:
+                    if (cwd / f).exists():
+                        shutil.move(cwd / f, output_dir / f)
+
+                return True
+            else:
+                print(f&#34;✗ 仿真失败 (退出码: {result.returncode})&#34;)
+                if result.stderr:
+                    print(&#34;错误输出:&#34;)
+                    print(result.stderr[:500])  # 只显示前500字符
+                return False
+
+        except subprocess.TimeoutExpired:
+            print(&#34;✗ 仿真超时 (5分钟)&#34;)
+            return False
+        except Exception as e:
+            print(f&#34;运行仿真失败: {e}&#34;)
+            return False
+
+    def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;读取仿真结果
+
+        解析.frd结果文件，提取关键结果数据。
+        注意：完整解析.frd文件较复杂，这里只提取基本信息。
+        &#34;&#34;&#34;
+        try:
+            if not result_file.exists():
+                raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+            results = {
+                &#34;file_path&#34;: str(result_file),
+                &#34;file_size&#34;: result_file.stat().st_size,
+                &#34;analysis_type&#34;: &#34;unknown&#34;,
+                &#34;nodes&#34;: 0,
+                &#34;elements&#34;: 0,
+                &#34;max_stress&#34;: None,
+                &#34;max_displacement&#34;: None,
+                &#34;success&#34;: True,
+            }
+
+            # 尝试解析.frd文件
+            if result_file.suffix.lower() == &#34;.frd&#34;:
+                results.update(self._parse_frd_file(result_file))
+
+            # 尝试解析.dat文件（如果有）
+            dat_file = result_file.with_suffix(&#34;.dat&#34;)
+            if dat_file.exists():
+                results.update(self._parse_dat_file(dat_file))
+
+            return results
+
+        except Exception as e:
+            print(f&#34;读取结果失败: {e}&#34;)
+            return {
+                &#34;file_path&#34;: str(result_file),
+                &#34;error&#34;: str(e),
+                &#34;success&#34;: False,
+            }
+
+    def get_supported_analysis_types(self) -&gt; List[str]:
+        &#34;&#34;&#34;获取支持的分析类型&#34;&#34;&#34;
+        return [&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;]
+
+    # ========== 内部辅助方法 ==========
+
+    def _create_sample_inp(self, geometry_file: Path, element_size: float) -&gt; str:
+        &#34;&#34;&#34;创建示例.inp文件&#34;&#34;&#34;
+        return f&#34;&#34;&#34;** Sample CalculiX input file
+** Generated from: {geometry_file.name}
+** Element size: {element_size} mm
+
+*NODE
+1, 0.0, 0.0, 0.0
+2, 10.0, 0.0, 0.0
+3, 10.0, 5.0, 0.0
+4, 0.0, 5.0, 0.0
+5, 0.0, 0.0, 3.0
+6, 10.0, 0.0, 3.0
+7, 10.0, 5.0, 3.0
+8, 0.0, 5.0, 3.0
+
+*ELEMENT, TYPE=C3D8, ELSET=PART1
+1, 1, 2, 3, 4, 5, 6, 7, 8
+
+*MATERIAL, NAME=STEEL
+*ELASTIC
+210000.0, 0.3
+*DENSITY
+7.85E-9
+
+*SOLID SECTION, ELSET=PART1, MATERIAL=STEEL
+
+*STEP
+*STATIC
+*BOUNDARY
+1, 1, 3, 0.0  # 固定节点1的XYZ方向
+4, 1, 3, 0.0  # 固定节点4的XYZ方向
+
+*CLOAD
+8, 3, -100.0  # 在节点8的Z方向施加-100N载荷
+
+*NODE PRINT
+U
+*EL PRINT
+S
+*END STEP
+&#34;&#34;&#34;
+
+    def _create_static_analysis(self, mesh_file: Path, config: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;创建静态分析输入文件&#34;&#34;&#34;
+        material = config.get(
+            &#34;material&#34;, {&#34;E&#34;: 210000.0, &#34;nu&#34;: 0.3, &#34;density&#34;: 7.85e-9}
+        )
+        loads = config.get(&#34;loads&#34;, [])
+        constraints = config.get(&#34;constraints&#34;, [])
+
+        inp = f&#34;&#34;&#34;** Static analysis input file
+** Mesh: {mesh_file.name}
+** Material: {material.get(&#34;name&#34;, &#34;STEEL&#34;)}
+
+*INCLUDE, INPUT={mesh_file.name}
+
+*MATERIAL, NAME={material.get(&#34;name&#34;, &#34;STEEL&#34;)}
+*ELASTIC
+{material.get(&#34;E&#34;, 210000.0)}, {material.get(&#34;nu&#34;, 0.3)}
+*DENSITY
+{material.get(&#34;density&#34;, 7.85e-9)}
+
+*STEP
+*STATIC
+&#34;&#34;&#34;
+
+        # 添加边界条件
+        for constraint in constraints:
+            inp += f&#34;*BOUNDARY\n&#34;
+            inp += f&#34;{constraint.get(&#39;node_set&#39;, &#39;FIXED&#39;)}, {constraint.get(&#39;dofs&#39;, &#39;1,3,0.0&#39;)}\n&#34;
+
+        # 添加载荷
+        for load in loads:
+            inp += f&#34;*CLOAD\n&#34;
+            inp += f&#34;{load.get(&#39;node_set&#39;, &#39;LOAD_NODES&#39;)}, {load.get(&#39;dof&#39;, 3)}, {load.get(&#39;value&#39;, -100.0)}\n&#34;
+
+        inp += &#34;&#34;&#34;*NODE PRINT
+U
+*EL PRINT
+S,E
+*END STEP
+&#34;&#34;&#34;
+
+        return inp
+
+    def _create_modal_analysis(self, mesh_file: Path, config: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;创建模态分析输入文件&#34;&#34;&#34;
+        num_modes = config.get(&#34;num_modes&#34;, 10)
+
+        inp = f&#34;&#34;&#34;** Modal analysis input file
+** Mesh: {mesh_file.name}
+** Number of modes: {num_modes}
+
+*INCLUDE, INPUT={mesh_file.name}
+
+*MATERIAL, NAME=STEEL
+*ELASTIC
+210000.0, 0.3
+*DENSITY
+7.85E-9
+
+*STEP
+*FREQUENCY
+{num_modes}
+*BOUNDARY
+FIXED, 1, 3, 0.0
+*NODE PRINT
+U
+*EL PRINT
+S,E
+*END STEP
+&#34;&#34;&#34;
+
+        return inp
+
+    def _create_thermal_analysis(self, mesh_file: Path, config: Dict[str, Any]) -&gt; str:
+        &#34;&#34;&#34;创建热分析输入文件&#34;&#34;&#34;
+        inp = f&#34;&#34;&#34;** Thermal analysis input file
+** Mesh: {mesh_file.name}
+
+*INCLUDE, INPUT={mesh_file.name}
+
+*MATERIAL, NAME=STEEL
+*CONDUCTIVITY
+50.0
+*SPECIFIC HEAT
+500.0
+*DENSITY
+7.85E-9
+
+*STEP
+*HEAT TRANSFER
+*BOUNDARY
+FIXED, 11, 11, 293.0  # 固定温度293K
+*DFLUX
+HEAT_FLUX, 12, 1000.0  # 热通量1000W/m²
+*NODE PRINT
+NT
+*EL PRINT
+HFL
+*END STEP
+&#34;&#34;&#34;
+
+        return inp
+
+    def _parse_frd_file(self, frd_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.frd文件（简化版本）&#34;&#34;&#34;
+        results = {
+            &#34;analysis_type&#34;: &#34;unknown&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+            &#34;steps&#34;: [],
+        }
+
+        try:
+            with open(frd_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                lines = f.readlines()
+
+            node_count = 0
+            element_count = 0
+            current_step = None
+
+            for line in lines:
+                if &#34;C CalculiX&#34; in line:
+                    results[&#34;analysis_type&#34;] = line.strip()
+                elif &#34;1PSTEP&#34; in line:
+                    # 新的分析步
+                    parts = line.split()
+                    if len(parts) &gt;= 4:
+                        step_num = int(parts[2])
+                        step_type = parts[3]
+                        current_step = {
+                            &#34;number&#34;: step_num,
+                            &#34;type&#34;: step_type,
+                            &#34;time&#34;: 0.0,
+                        }
+                        results[&#34;steps&#34;].append(current_step)
+                elif &#34;2C&#34; in line and &#34;DISPLACEMENT&#34; in line:
+                    results[&#34;has_displacements&#34;] = True
+                elif &#34;2C&#34; in line and &#34;STRESS&#34; in line:
+                    results[&#34;has_stresses&#34;] = True
+                elif &#34; -1&#34; in line and &#34; 1 &#34; in line:
+                    # 节点定义
+                    node_count += 1
+                elif &#34; -1&#34; in line and &#34; 2 &#34; in line:
+                    # 单元定义
+                    element_count += 1
+
+            results[&#34;nodes&#34;] = node_count
+            results[&#34;elements&#34;] = element_count
+
+        except Exception as e:
+            print(f&#34;解析.frd文件失败: {e}&#34;)
+
+        return results
+
+    def _parse_dat_file(self, dat_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.dat文件（简化版本）&#34;&#34;&#34;
+        results = {
+            &#34;max_displacement&#34;: 0.0,
+            &#34;max_stress&#34;: 0.0,
+            &#34;reactions&#34;: [],
+        }
+
+        try:
+            with open(dat_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                content = f.read()
+
+            # 简单搜索关键信息
+            import re
+
+            # 查找最大位移
+            disp_pattern = r&#34;displacement.*?magnitude.*?(\d+\.\d+E?[+-]?\d*)&#34;
+            disp_matches = re.findall(disp_pattern, content, re.IGNORECASE)
+            if disp_matches:
+                try:
+                    results[&#34;max_displacement&#34;] = float(disp_matches[-1])
+                except:
+                    pass
+
+            # 查找最大应力
+            stress_pattern = r&#34;stress.*?(\d+\.\d+E?[+-]?\d*)&#34;
+            stress_matches = re.findall(stress_pattern, content, re.IGNORECASE)
+            if stress_matches:
+                try:
+                    results[&#34;max_stress&#34;] = float(stress_matches[-1])
+                except:
+                    pass
+
+        except Exception as e:
+            print(f&#34;解析.dat文件失败: {e}&#34;)
+
+        return results
+
+    def cleanup(self):
+        &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+        if self.work_dir and self.work_dir.exists():
+            try:
+                shutil.rmtree(self.work_dir)
+                self.work_dir = None
+            except:
+                pass</code></pre>
+</details>
+<div class="desc"><p>CalculiX有限元分析软件连接器</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="integrations.cae.calculix.CalculiXConnectorMock" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnectorMock">CalculiXConnectorMock</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.CalculiXConnector.cleanup"><code class="name flex">
+<span>def <span class="ident">cleanup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cleanup(self):
+    &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+    if self.work_dir and self.work_dir.exists():
+        try:
+            shutil.rmtree(self.work_dir)
+            self.work_dir = None
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>清理工作目录</p></div>
+</dd>
+<dt id="integrations.CalculiXConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到CalculiX实例（检查ccx命令是否可用）&#34;&#34;&#34;
+    try:
+        # 查找ccx命令
+        ccx_path = shutil.which(&#34;ccx&#34;)
+        if ccx_path:
+            self.ccx_path = Path(ccx_path)
+            self.is_connected = True
+            print(f&#34;✓ 找到CalculiX: {self.ccx_path}&#34;)
+            return True
+        else:
+            print(&#34;✗ 未找到CalculiX (ccx)命令&#34;)
+            print(&#34;提示: 请安装CalculiX并确保ccx在PATH中&#34;)
+            print(&#34;      Ubuntu/Debian: sudo apt-get install calculix-ccx&#34;)
+            print(&#34;      Windows: 从https://www.calculix.de/下载&#34;)
+            return False
+
+    except Exception as e:
+        print(f&#34;连接CalculiX失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到CalculiX实例（检查ccx命令是否可用）</p></div>
+</dd>
+<dt id="integrations.CalculiXConnector.generate_mesh"><code class="name flex">
+<span>def <span class="ident">generate_mesh</span></span>(<span>self,<br>geometry_file: pathlib._local.Path,<br>mesh_file: pathlib._local.Path,<br>element_size: float = 2.0) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_mesh(
+    self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+) -&gt; bool:
+    &#34;&#34;&#34;从几何文件生成网格
+
+    注意：CalculiX本身不包含网格生成器，此方法会尝试调用Gmsh生成网格。
+    如果Gmsh不可用，则创建一个简单的.inp文件占位符。
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        # 尝试使用Gmsh生成网格（如果可用）
+        try:
+            from integrations.mesher.gmsh import GmshConnector
+
+            gmsh_connector = GmshConnector()
+            if gmsh_connector.connect():
+                print(&#34;使用Gmsh生成网格...&#34;)
+                success = gmsh_connector.generate_mesh(geometry_file, mesh_file, element_size)
+                if success:
+                    # 转换为CalculiX格式
+                    if mesh_file.suffix.lower() == &#34;.msh&#34;:
+                        inp_file = mesh_file.with_suffix(&#34;.inp&#34;)
+                        success = gmsh_connector.convert_to_calculix_inp(mesh_file)
+                        if success:
+                            mesh_file = inp_file
+                    return True
+        except ImportError:
+            print(&#34;Gmsh不可用，使用内置网格生成器&#34;)
+        except Exception as gmsh_error:
+            print(f&#34;Gmsh网格生成失败: {gmsh_error}&#34;)
+
+        # 确保输出目录存在
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # 创建简单的.inp文件（示例）
+        with open(mesh_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(self._create_sample_inp(geometry_file, element_size))
+
+        print(f&#34;✓ 生成网格文件: {mesh_file}&#34;)
+        print(&#34;  注意：这是一个示例网格，建议安装Gmsh以获得高质量网格&#34;)
+        return True
+
+    except Exception as e:
+        print(f&#34;生成网格失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>从几何文件生成网格</p>
+<p>注意：CalculiX本身不包含网格生成器，此方法会尝试调用Gmsh生成网格。
+如果Gmsh不可用，则创建一个简单的.inp文件占位符。</p></div>
+</dd>
+<dt id="integrations.CalculiXConnector.get_supported_analysis_types"><code class="name flex">
+<span>def <span class="ident">get_supported_analysis_types</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_supported_analysis_types(self) -&gt; List[str]:
+    &#34;&#34;&#34;获取支持的分析类型&#34;&#34;&#34;
+    return [&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;]</code></pre>
+</details>
+<div class="desc"><p>获取支持的分析类型</p></div>
+</dd>
+<dt id="integrations.CalculiXConnector.read_results"><code class="name flex">
+<span>def <span class="ident">read_results</span></span>(<span>self, result_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;读取仿真结果
+
+    解析.frd结果文件，提取关键结果数据。
+    注意：完整解析.frd文件较复杂，这里只提取基本信息。
+    &#34;&#34;&#34;
+    try:
+        if not result_file.exists():
+            raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+        results = {
+            &#34;file_path&#34;: str(result_file),
+            &#34;file_size&#34;: result_file.stat().st_size,
+            &#34;analysis_type&#34;: &#34;unknown&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+            &#34;max_stress&#34;: None,
+            &#34;max_displacement&#34;: None,
+            &#34;success&#34;: True,
+        }
+
+        # 尝试解析.frd文件
+        if result_file.suffix.lower() == &#34;.frd&#34;:
+            results.update(self._parse_frd_file(result_file))
+
+        # 尝试解析.dat文件（如果有）
+        dat_file = result_file.with_suffix(&#34;.dat&#34;)
+        if dat_file.exists():
+            results.update(self._parse_dat_file(dat_file))
+
+        return results
+
+    except Exception as e:
+        print(f&#34;读取结果失败: {e}&#34;)
+        return {
+            &#34;file_path&#34;: str(result_file),
+            &#34;error&#34;: str(e),
+            &#34;success&#34;: False,
+        }</code></pre>
+</details>
+<div class="desc"><p>读取仿真结果</p>
+<p>解析.frd结果文件，提取关键结果数据。
+注意：完整解析.frd文件较复杂，这里只提取基本信息。</p></div>
+</dd>
+<dt id="integrations.CalculiXConnector.run_simulation"><code class="name flex">
+<span>def <span class="ident">run_simulation</span></span>(<span>self,<br>input_file: pathlib._local.Path,<br>output_dir: pathlib._local.Path | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_simulation(
+    self, input_file: Path, output_dir: Optional[Path] = None
+) -&gt; bool:
+    &#34;&#34;&#34;运行仿真分析&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        # 设置输出目录
+        if not output_dir:
+            output_dir = input_file.parent
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # 准备命令参数
+        input_stem = input_file.stem
+        cmd = [str(self.ccx_path), &#34;-i&#34;, input_stem]
+
+        print(f&#34;⏳ 运行CalculiX仿真: {&#39; &#39;.join(cmd)}&#34;)
+
+        # 切换到输入文件目录运行
+        cwd = input_file.parent
+        result = subprocess.run(
+            cmd,
+            cwd=cwd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5分钟超时
+        )
+
+        # 检查结果
+        if result.returncode == 0:
+            print(&#34;✓ 仿真完成&#34;)
+
+            # 检查输出文件
+            expected_files = [f&#34;{input_stem}.frd&#34;, f&#34;{input_stem}.dat&#34;]
+            for f in expected_files:
+                if (cwd / f).exists():
+                    shutil.move(cwd / f, output_dir / f)
+
+            return True
+        else:
+            print(f&#34;✗ 仿真失败 (退出码: {result.returncode})&#34;)
+            if result.stderr:
+                print(&#34;错误输出:&#34;)
+                print(result.stderr[:500])  # 只显示前500字符
+            return False
+
+    except subprocess.TimeoutExpired:
+        print(&#34;✗ 仿真超时 (5分钟)&#34;)
+        return False
+    except Exception as e:
+        print(f&#34;运行仿真失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>运行仿真分析</p></div>
+</dd>
+<dt id="integrations.CalculiXConnector.setup_simulation"><code class="name flex">
+<span>def <span class="ident">setup_simulation</span></span>(<span>self, mesh_file: pathlib._local.Path, config: Dict[str, Any]) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+    &#34;&#34;&#34;设置仿真分析
+
+    根据配置创建CalculiX输入文件(.inp)
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            raise RuntimeError(&#34;CalculiX未连接&#34;)
+
+    try:
+        # 创建临时工作目录
+        if not self.work_dir:
+            self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;calculix_&#34;))
+
+        # 生成输入文件名
+        input_file = self.work_dir / f&#34;{mesh_file.stem}.inp&#34;
+
+        # 根据配置类型生成不同的输入文件
+        analysis_type = config.get(&#34;analysis_type&#34;, &#34;static&#34;)
+
+        if analysis_type == &#34;static&#34;:
+            inp_content = self._create_static_analysis(mesh_file, config)
+        elif analysis_type == &#34;modal&#34;:
+            inp_content = self._create_modal_analysis(mesh_file, config)
+        elif analysis_type == &#34;thermal&#34;:
+            inp_content = self._create_thermal_analysis(mesh_file, config)
+        else:
+            raise ValueError(f&#34;不支持的分析类型: {analysis_type}&#34;)
+
+        # 写入输入文件
+        with open(input_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(inp_content)
+
+        print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+        return input_file
+
+    except Exception as e:
+        print(f&#34;设置仿真失败: {e}&#34;)
+        raise</code></pre>
+</details>
+<div class="desc"><p>设置仿真分析</p>
+<p>根据配置创建CalculiX输入文件(.inp)</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.CalculiXConnectorMock"><code class="flex name class">
+<span>class <span class="ident">CalculiXConnectorMock</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CalculiXConnectorMock(CalculiXConnector):
+    &#34;&#34;&#34;CalculiX连接器模拟器（用于测试）&#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__()
+        self.mock_mode = True
+
+    def connect(self) -&gt; bool:
+        print(&#34;[模拟模式] 连接CalculiX&#34;)
+        self.is_connected = True
+        return True
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 生成网格: {geometry_file} -&gt; {mesh_file}&#34;)
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+        mesh_file.write_text(&#34;** Mock mesh file\n&#34;)
+        return True
+
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 运行仿真: {input_file}&#34;)
+        if output_dir:
+            output_dir.mkdir(parents=True, exist_ok=True)
+            # 创建模拟结果文件
+            stem = input_file.stem
+            (output_dir / f&#34;{stem}.frd&#34;).write_text(&#34;** Mock FRD file\n&#34;)
+            (output_dir / f&#34;{stem}.dat&#34;).write_text(&#34;** Mock DAT file\n&#34;)
+        return True</code></pre>
+</details>
+<div class="desc"><p>CalculiX连接器模拟器（用于测试）</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="integrations.cae.calculix.CalculiXConnector" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector">CalculiXConnector</a></li>
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="integrations.cae.calculix.CalculiXConnector" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector">CalculiXConnector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.cleanup" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.connect" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.generate_mesh" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.read_results" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.run_simulation" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.cae.calculix.CalculiXConnector.setup_simulation" href="cae/calculix.html#integrations.cae.calculix.CalculiXConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="integrations.FileFormat"><code class="flex name class">
+<span>class <span class="ident">FileFormat</span></span>
+<span>(</span><span>*args, **kwds)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileFormat(Enum):
+    &#34;&#34;&#34;文件格式枚举 - 定义标准化的数据流格式
+
+    遵循 CAD → STEP → MSH → INP → VTK 的数据流路径
+    &#34;&#34;&#34;
+
+    # CAD格式
+    FCSTD = &#34;FCStd&#34;  # FreeCAD原生格式
+    SLDPRT = &#34;sldprt&#34;  # SolidWorks零件
+    SLDASM = &#34;sldasm&#34;  # SolidWorks装配体
+
+    # 几何交换格式
+    STEP = &#34;step&#34;  # ISO 10303标准
+    STL = &#34;stl&#34;  # 三角网格
+    IGES = &#34;iges&#34;  # 旧版交换格式
+    BREP = &#34;brep&#34;  # OpenCASCADE边界表示
+
+    # 网格格式
+    MSH = &#34;msh&#34;  # Gmsh网格格式
+    INP = &#34;inp&#34;  # Abaqus/CalculiX输入格式
+    BDF = &#34;bdf&#34;  # NASTRAN格式
+    CAS = &#34;cas&#34;  # Fluent格式
+
+    # 结果格式
+    VTK = &#34;vtk&#34;  # VTK可视化格式
+    FRD = &#34;frd&#34;  # CalculiX结果格式
+    ODB = &#34;odb&#34;  # Abaqus结果格式
+    RST = &#34;rst&#34;  # ANSYS结果格式
+
+    # 报告格式
+    JSON = &#34;json&#34;  # 结构化数据
+    HTML = &#34;html&#34;  # 网页报告
+    PDF = &#34;pdf&#34;  # 可打印报告
+    MARKDOWN = &#34;md&#34;  # Markdown文档</code></pre>
+</details>
+<div class="desc"><p>文件格式枚举 - 定义标准化的数据流格式</p>
+<p>遵循 CAD → STEP → MSH → INP → VTK 的数据流路径</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="integrations.FileFormat.BDF"><code class="name">var <span class="ident">BDF</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.BREP"><code class="name">var <span class="ident">BREP</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.CAS"><code class="name">var <span class="ident">CAS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.FCSTD"><code class="name">var <span class="ident">FCSTD</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.FRD"><code class="name">var <span class="ident">FRD</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.HTML"><code class="name">var <span class="ident">HTML</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.IGES"><code class="name">var <span class="ident">IGES</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.INP"><code class="name">var <span class="ident">INP</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.JSON"><code class="name">var <span class="ident">JSON</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.MARKDOWN"><code class="name">var <span class="ident">MARKDOWN</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.MSH"><code class="name">var <span class="ident">MSH</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.ODB"><code class="name">var <span class="ident">ODB</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.PDF"><code class="name">var <span class="ident">PDF</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.RST"><code class="name">var <span class="ident">RST</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.SLDASM"><code class="name">var <span class="ident">SLDASM</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.SLDPRT"><code class="name">var <span class="ident">SLDPRT</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.STEP"><code class="name">var <span class="ident">STEP</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.STL"><code class="name">var <span class="ident">STL</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="integrations.FileFormat.VTK"><code class="name">var <span class="ident">VTK</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.FreeCADConnector"><code class="flex name class">
+<span>class <span class="ident">FreeCADConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADConnector(CADConnector):
+    &#34;&#34;&#34;FreeCAD连接器 - 基于新架构的实现&#34;&#34;&#34;
+
+    def __init__(self):
+        self.fc_app = None
+        self.part_module = None
+        self.active_doc = None
+        self.is_connected = False
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到FreeCAD实例&#34;&#34;&#34;
+        try:
+            # 尝试导入FreeCAD
+            import FreeCAD as App
+            import Part
+
+            self.fc_app = App
+            self.part_module = Part
+            self.is_connected = True
+            return True
+
+        except ImportError:
+            # 如果直接导入失败，尝试添加FreeCAD路径
+            print(&#34;尝试添加FreeCAD路径...&#34;)
+
+            # 常见的FreeCAD安装路径
+            possible_paths = [
+                &#34;C:/Program Files/FreeCAD 0.21/bin&#34;,
+                &#34;C:/Program Files/FreeCAD 0.20/bin&#34;,
+                &#34;C:/Program Files/FreeCAD/bin&#34;,
+                &#34;/usr/lib/freecad-python3/lib&#34;,
+                &#34;/usr/lib/freecad/lib&#34;,
+                &#34;/Applications/FreeCAD.app/Contents/lib&#34;,
+            ]
+
+            fc_found = False
+            for path in possible_paths:
+                if Path(path).exists():
+                    sys.path.append(path)
+                    try:
+                        import FreeCAD as App
+                        import Part
+
+                        self.fc_app = App
+                        self.part_module = Part
+                        self.is_connected = True
+                        fc_found = True
+                        print(f&#34;OK: 从 {path} 加载FreeCAD成功&#34;)
+                        break
+                    except ImportError:
+                        continue
+
+            if not fc_found:
+                print(&#34;ERROR: 未能找到FreeCAD，请确保已安装并配置Python路径&#34;)
+                print(&#34;提示: 可以设置 FREECAD_LIB 环境变量指向FreeCAD的lib目录&#34;)
+                return False
+
+            return True
+
+        except Exception as e:
+            print(f&#34;连接FreeCAD失败: {e}&#34;)
+            return False
+
+    def load_model(self, file_path: Path) -&gt; bool:
+        &#34;&#34;&#34;加载CAD模型文件&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            file_path = str(file_path.resolve())
+
+            # 关闭当前文档（如果有）
+            if self.active_doc:
+                self.close_document()
+
+            # 打开文档
+            self.active_doc = self.fc_app.open(file_path)
+
+            if self.active_doc:
+                print(f&#34;✓ 已打开: {self.active_doc.Name}&#34;)
+                return True
+            else:
+                print(&#34;✗ 无法打开文档&#34;)
+                return False
+
+        except Exception as e:
+            print(f&#34;打开文档失败: {e}&#34;)
+            return False
+
+    def get_parameter(self, name: str) -&gt; Optional[float]:
+        &#34;&#34;&#34;获取指定参数的值&#34;&#34;&#34;
+        if not self.active_doc:
+            return None
+
+        # 使用现有方法查找参数
+        param = self._find_parameter_internal(name)
+        return param.value if param else None
+
+    def set_parameter(self, name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数值&#34;&#34;&#34;
+        if not self.active_doc:
+            print(&#34;✗ 没有打开的文档&#34;)
+            return False
+
+        try:
+            # 使用现有的参数设置逻辑
+            return self._set_parameter_internal(name, value)
+        except Exception as e:
+            print(f&#34;设置参数失败: {e}&#34;)
+            return False
+
+    def rebuild(self) -&gt; bool:
+        &#34;&#34;&#34;重建模型（应用参数变更）&#34;&#34;&#34;
+        if not self.active_doc:
+            print(&#34;✗ 没有打开的文档&#34;)
+            return False
+
+        try:
+            print(&#34;⏳ 重新计算文档...&#34;)
+            self.active_doc.recompute()
+            self.fc_app.ActiveDocument = self.active_doc
+            print(&#34;✓ 重建完成&#34;)
+            return True
+        except Exception as e:
+            print(f&#34;重建失败: {e}&#34;)
+            return False
+
+    def export_step(self, output_path: Path) -&gt; bool:
+        &#34;&#34;&#34;导出为STEP格式文件&#34;&#34;&#34;
+        return self._export_file_internal(output_path, &#34;STEP&#34;)
+
+    def get_supported_formats(self) -&gt; List[FileFormat]:
+        &#34;&#34;&#34;获取支持的导出格式&#34;&#34;&#34;
+        return [
+            FileFormat.STEP,
+            FileFormat.STL,
+            FileFormat.IGES,
+            FileFormat.BREP,
+            FileFormat.FCSTD,
+        ]
+
+    # ========== 内部辅助方法（保持与旧代码兼容）==========
+
+    def _get_parameters_internal(self) -&gt; List[FCParameter]:
+        &#34;&#34;&#34;获取所有参数（内部实现，保持与旧代码兼容）&#34;&#34;&#34;
+        if not self.active_doc:
+            return []
+
+        params = []
+
+        try:
+            # 遍历所有对象
+            for obj in self.active_doc.Objects:
+                # 检查Sketcher对象（草图约束）
+                if obj.isDerivedFrom(&#34;Sketcher::SketchObject&#34;):
+                    if hasattr(obj, &#34;Constraints&#34;):
+                        for i, constraint in enumerate(obj.Constraints):
+                            if hasattr(constraint, &#34;Value&#34;):
+                                params.append(
+                                    FCParameter(
+                                        name=constraint.Name
+                                        if hasattr(constraint, &#34;Name&#34;)
+                                        and constraint.Name
+                                        else f&#34;Constraint_{i}&#34;,
+                                        value=constraint.Value,
+                                        unit=&#34;mm&#34;,
+                                        obj_name=obj.Name,
+                                        constraint_index=i,
+                                    )
+                                )
+
+                # 检查PartDesign特征（如Pad、Pocket等）
+                if obj.isDerivedFrom(&#34;PartDesign::Feature&#34;):
+                    # 检查常见参数
+                    param_names = [
+                        &#34;Length&#34;,
+                        &#34;Width&#34;,
+                        &#34;Height&#34;,
+                        &#34;Radius&#34;,
+                        &#34;FilletRadius&#34;,
+                        &#34;Thickness&#34;,
+                    ]
+                    for param_name in param_names:
+                        if hasattr(obj, param_name):
+                            value = getattr(obj, param_name)
+                            if isinstance(value, (int, float)):
+                                params.append(
+                                    FCParameter(
+                                        name=f&#34;{obj.Name}.{param_name}&#34;,
+                                        value=float(value),
+                                        unit=&#34;mm&#34;,
+                                        obj_name=obj.Name,
+                                    )
+                                )
+
+                # 检查Fillet（圆角）
+                if obj.isDerivedFrom(&#34;PartDesign::Fillet&#34;):
+                    if hasattr(obj, &#34;Radius&#34;):
+                        params.append(
+                            FCParameter(
+                                name=f&#34;{obj.Name}.Radius&#34;,
+                                value=float(obj.Radius),
+                                unit=&#34;mm&#34;,
+                                obj_name=obj.Name,
+                            )
+                        )
+
+                # 检查Spreadsheet（电子表格中的参数）
+                if obj.isDerivedFrom(&#34;Spreadsheet::Sheet&#34;):
+                    # 获取电子表格中的单元格
+                    for cell in [&#34;A1&#34;, &#34;A2&#34;, &#34;A3&#34;, &#34;B1&#34;, &#34;B2&#34;, &#34;B3&#34;]:
+                        try:
+                            value = obj.get(cell)
+                            if isinstance(value, (int, float)):
+                                params.append(
+                                    FCParameter(
+                                        name=f&#34;Spreadsheet.{cell}&#34;,
+                                        value=float(value),
+                                        unit=&#34;mm&#34;,
+                                        obj_name=obj.Name,
+                                    )
+                                )
+                        except:
+                            pass
+
+        except Exception as e:
+            print(f&#34;获取参数失败: {e}&#34;)
+
+        return params
+
+    def _find_parameter_internal(self, param_name: str) -&gt; Optional[FCParameter]:
+        &#34;&#34;&#34;查找特定参数（内部实现）&#34;&#34;&#34;
+        params = self._get_parameters_internal()
+
+        # 精确匹配
+        for p in params:
+            if p.name == param_name:
+                return p
+
+        # 模糊匹配（部分匹配）
+        param_lower = param_name.lower()
+        for p in params:
+            if param_lower in p.name.lower():
+                return p
+
+        return None
+
+    def _set_parameter_internal(self, param_name: str, value: float) -&gt; bool:
+        &#34;&#34;&#34;设置参数值（内部实现，保持与旧代码兼容）&#34;&#34;&#34;
+        try:
+            # 支持的参数映射（标准化参数名称）
+            param_mapping = {
+                &#34;fillet_radius&#34;: [&#34;FilletRadius&#34;, &#34;Radius&#34;],
+                &#34;length&#34;: [&#34;Length&#34;],
+                &#34;width&#34;: [&#34;Width&#34;],
+                &#34;height&#34;: [&#34;Height&#34;],
+                &#34;hole_diameter&#34;: [&#34;Diameter&#34;],
+                &#34;thickness&#34;: [&#34;Thickness&#34;],
+                &#34;radius&#34;: [&#34;Radius&#34;],
+                &#34;diameter&#34;: [&#34;Diameter&#34;],
+            }
+
+            # 查找参数
+            param = self._find_parameter_internal(param_name)
+
+            if param:
+                obj = self.active_doc.getObject(param.obj_name)
+
+                if obj:
+                    # 如果是草图约束
+                    if param.constraint_index &gt;= 0 and hasattr(obj, &#34;Constraints&#34;):
+                        obj.setDatum(param.constraint_index, value)
+                        print(f&#34;✓ 设置约束 {param.name} = {value} mm&#34;)
+                        return True
+
+                    # 如果是对象属性（如 Fillet.Radius）
+                    if &#34;.&#34; in param.name:
+                        prop_name = param.name.split(&#34;.&#34;)[-1]
+                        if hasattr(obj, prop_name):
+                            setattr(obj, prop_name, value)
+                            print(f&#34;✓ 设置 {param.name} = {value} mm&#34;)
+                            return True
+
+                    # 直接设置属性
+                    for attr in [&#34;Length&#34;, &#34;Width&#34;, &#34;Height&#34;, &#34;Radius&#34;, &#34;Thickness&#34;]:
+                        if hasattr(obj, attr):
+                            setattr(obj, attr, value)
+                            print(f&#34;✓ 设置 {obj.Name}.{attr} = {value} mm&#34;)
+                            return True
+
+            # 尝试通过对象名称直接查找
+            if &#34;.&#34; in param_name:
+                parts = param_name.split(&#34;.&#34;)
+                if len(parts) == 2:
+                    obj_name, prop_name = parts
+                    obj = self.active_doc.getObject(obj_name)
+                    if obj and hasattr(obj, prop_name):
+                        setattr(obj, prop_name, value)
+                        print(f&#34;✓ 设置 {param_name} = {value} mm&#34;)
+                        return True
+
+            # 尝试全局搜索所有对象（支持常见参数类型）
+            target_param_lower = param_name.lower()
+
+            for obj in self.active_doc.Objects:
+                # 支持的属性类型
+                for attr in [
+                    &#34;Radius&#34;,
+                    &#34;Length&#34;,
+                    &#34;Width&#34;,
+                    &#34;Height&#34;,
+                    &#34;FilletRadius&#34;,
+                    &#34;Thickness&#34;,
+                    &#34;Diameter&#34;,
+                ]:
+                    if hasattr(obj, attr):
+                        # 检查属性名称是否匹配
+                        attr_lower = attr.lower()
+
+                        # 精确匹配或包含匹配
+                        if (
+                            attr_lower == target_param_lower
+                            or target_param_lower in attr_lower
+                        ):
+                            setattr(obj, attr, value)
+                            print(f&#34;✓ 设置 {obj.Name}.{attr} = {value} mm&#34;)
+                            return True
+
+                        # 检查参数名称是否在属性值中（如 Hole_Diameter 匹配 Diameter）
+                        for key, values in param_mapping.items():
+                            if key in target_param_lower:
+                                for possible_attr in values:
+                                    if hasattr(obj, possible_attr):
+                                        setattr(obj, possible_attr, value)
+                                        print(
+                                            f&#34;✓ 设置 {obj.Name}.{possible_attr} = {value} mm&#34;
+                                        )
+                                        return True
+
+            # 尝试在电子表格中查找
+            for obj in self.active_doc.Objects:
+                if obj.isDerivedFrom(&#34;Spreadsheet::Sheet&#34;):
+                    for cell in obj.getContents().keys():
+                        cell_content = obj.getContents()[cell]
+                        if (
+                            param_name.lower() in cell.lower()
+                            or param_name.lower() in str(cell_content).lower()
+                        ):
+                            try:
+                                obj.set(cell, str(value))
+                                print(f&#34;✓ 设置电子表格单元格 {cell} = {value} mm&#34;)
+                                return True
+                            except:
+                                continue
+
+            print(f&#34;✗ 未找到参数 &#39;{param_name}&#39;&#34;)
+            print(&#34;可用参数:&#34;)
+            params = self._get_parameters_internal()
+            for i, p in enumerate(params[:10]):
+                print(f&#34;  {i + 1}. {p.name} = {p.value} mm&#34;)
+
+            if len(params) &gt; 10:
+                print(f&#34;  ... 以及另外 {len(params) - 10} 个参数&#34;)
+
+            return False
+
+        except Exception as e:
+            print(f&#34;设置参数失败: {e}&#34;)
+            import traceback
+
+            traceback.print_exc()
+            return False
+
+    def _export_file_internal(self, output_path: Path, format_type: str) -&gt; bool:
+        &#34;&#34;&#34;导出文件（内部实现，保持与旧代码兼容）&#34;&#34;&#34;
+        if not self.active_doc:
+            print(&#34;✗ 没有打开的文档&#34;)
+            return False
+
+        try:
+            output_path = str(output_path)
+
+            # 根据格式选择导出方式
+            format_map = {
+                &#34;STEP&#34;: &#34;.step&#34;,
+                &#34;STL&#34;: &#34;.stl&#34;,
+                &#34;IGES&#34;: &#34;.iges&#34;,
+                &#34;BREP&#34;: &#34;.brep&#34;,
+                &#34;OBJ&#34;: &#34;.obj&#34;,
+            }
+
+            ext = format_map.get(format_type.upper(), &#34;.step&#34;)
+            if not output_path.endswith(ext):
+                output_path += ext
+
+            # 确保输出目录存在
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+            print(f&#34;⏳ 导出到: {output_path}&#34;)
+
+            # 导出STEP
+            if format_type.upper() == &#34;STEP&#34;:
+                import Import
+
+                # 收集所有Part对象
+                objects = [
+                    obj
+                    for obj in self.active_doc.Objects
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+                ]
+                if objects:
+                    Import.export(objects, output_path)
+                    print(f&#34;✓ 导出成功: {output_path}&#34;)
+                    return True
+                else:
+                    print(&#34;✗ 没有找到可导出的Part对象&#34;)
+                    return False
+
+            # 导出STL
+            elif format_type.upper() == &#34;STL&#34;:
+                for obj in self.active_doc.Objects:
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;) and hasattr(obj, &#34;Shape&#34;):
+                        obj.Shape.exportStl(output_path)
+                        print(f&#34;✓ 导出成功: {output_path}&#34;)
+                        return True
+                print(&#34;✗ 没有找到可导出的Shape&#34;)
+                return False
+
+            # 保存为FCStd（FreeCAD原生格式）
+            elif format_type.upper() == &#34;FCSTD&#34;:
+                self.active_doc.saveAs(output_path)
+                print(f&#34;✓ 保存成功: {output_path}&#34;)
+                return True
+
+            # 导出IGES
+            elif format_type.upper() == &#34;IGES&#34;:
+                import Import
+
+                objects = [
+                    obj
+                    for obj in self.active_doc.Objects
+                    if obj.isDerivedFrom(&#34;Part::Feature&#34;)
+                ]
+                if objects:
+                    Import.export(objects, output_path)
+                    print(f&#34;✓ 导出成功: {output_path}&#34;)
+                    return True
+                else:
+                    print(&#34;✗ 没有找到可导出的Part对象&#34;)
+                    return False
+
+            return False
+
+        except Exception as e:
+            print(f&#34;导出失败: {e}&#34;)
+            import traceback
+
+            traceback.print_exc()
+            return False
+
+    def close_document(self, save: bool = False):
+        &#34;&#34;&#34;关闭文档（兼容性方法）&#34;&#34;&#34;
+        if self.active_doc:
+            try:
+                if save:
+                    self.active_doc.save()
+                doc_name = self.active_doc.Name
+                self.fc_app.closeDocument(doc_name)
+                self.active_doc = None
+                print(f&#34;✓ 已关闭文档: {doc_name}&#34;)
+            except Exception as e:
+                print(f&#34;关闭文档时出错: {e}&#34;)
+
+    def disconnect(self):
+        &#34;&#34;&#34;断开连接（兼容性方法）&#34;&#34;&#34;
+        self.close_document(save=False)
+        self.fc_app = None
+        self.part_module = None
+        self.is_connected = False
+
+    # ========== 额外方法（向后兼容）==========
+
+    def open_document(self, file_path: str) -&gt; bool:
+        &#34;&#34;&#34;打开文档（向后兼容）&#34;&#34;&#34;
+        return self.load_model(Path(file_path))
+
+    def get_parameters(self) -&gt; List[FCParameter]:
+        &#34;&#34;&#34;获取所有参数（向后兼容）&#34;&#34;&#34;
+        return self._get_parameters_internal()
+
+    def find_parameter(self, param_name: str) -&gt; Optional[FCParameter]:
+        &#34;&#34;&#34;查找特定参数（向后兼容）&#34;&#34;&#34;
+        return self._find_parameter_internal(param_name)
+
+    def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+        &#34;&#34;&#34;导出文件（向后兼容）&#34;&#34;&#34;
+        return self._export_file_internal(Path(output_path), format_type)
+
+    def save_document(self, file_path: Optional[str] = None) -&gt; bool:
+        &#34;&#34;&#34;保存文档（向后兼容）&#34;&#34;&#34;
+        if not self.active_doc:
+            return False
+
+        try:
+            if file_path:
+                self.active_doc.saveAs(file_path)
+            else:
+                self.active_doc.save()
+            return True
+        except Exception as e:
+            print(f&#34;保存失败: {e}&#34;)
+            return False</code></pre>
+</details>
+<div class="desc"><p>FreeCAD连接器 - 基于新架构的实现</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>integrations._base.connectors.CADConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.FreeCADConnector.close_document"><code class="name flex">
+<span>def <span class="ident">close_document</span></span>(<span>self, save: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close_document(self, save: bool = False):
+    &#34;&#34;&#34;关闭文档（兼容性方法）&#34;&#34;&#34;
+    if self.active_doc:
+        try:
+            if save:
+                self.active_doc.save()
+            doc_name = self.active_doc.Name
+            self.fc_app.closeDocument(doc_name)
+            self.active_doc = None
+            print(f&#34;✓ 已关闭文档: {doc_name}&#34;)
+        except Exception as e:
+            print(f&#34;关闭文档时出错: {e}&#34;)</code></pre>
+</details>
+<div class="desc"><p>关闭文档（兼容性方法）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到FreeCAD实例&#34;&#34;&#34;
+    try:
+        # 尝试导入FreeCAD
+        import FreeCAD as App
+        import Part
+
+        self.fc_app = App
+        self.part_module = Part
+        self.is_connected = True
+        return True
+
+    except ImportError:
+        # 如果直接导入失败，尝试添加FreeCAD路径
+        print(&#34;尝试添加FreeCAD路径...&#34;)
+
+        # 常见的FreeCAD安装路径
+        possible_paths = [
+            &#34;C:/Program Files/FreeCAD 0.21/bin&#34;,
+            &#34;C:/Program Files/FreeCAD 0.20/bin&#34;,
+            &#34;C:/Program Files/FreeCAD/bin&#34;,
+            &#34;/usr/lib/freecad-python3/lib&#34;,
+            &#34;/usr/lib/freecad/lib&#34;,
+            &#34;/Applications/FreeCAD.app/Contents/lib&#34;,
+        ]
+
+        fc_found = False
+        for path in possible_paths:
+            if Path(path).exists():
+                sys.path.append(path)
+                try:
+                    import FreeCAD as App
+                    import Part
+
+                    self.fc_app = App
+                    self.part_module = Part
+                    self.is_connected = True
+                    fc_found = True
+                    print(f&#34;OK: 从 {path} 加载FreeCAD成功&#34;)
+                    break
+                except ImportError:
+                    continue
+
+        if not fc_found:
+            print(&#34;ERROR: 未能找到FreeCAD，请确保已安装并配置Python路径&#34;)
+            print(&#34;提示: 可以设置 FREECAD_LIB 环境变量指向FreeCAD的lib目录&#34;)
+            return False
+
+        return True
+
+    except Exception as e:
+        print(f&#34;连接FreeCAD失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到FreeCAD实例</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.disconnect"><code class="name flex">
+<span>def <span class="ident">disconnect</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disconnect(self):
+    &#34;&#34;&#34;断开连接（兼容性方法）&#34;&#34;&#34;
+    self.close_document(save=False)
+    self.fc_app = None
+    self.part_module = None
+    self.is_connected = False</code></pre>
+</details>
+<div class="desc"><p>断开连接（兼容性方法）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.export_file"><code class="name flex">
+<span>def <span class="ident">export_file</span></span>(<span>self, output_path: str, format_type: str = 'STEP') ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_file(self, output_path: str, format_type: str = &#34;STEP&#34;) -&gt; bool:
+    &#34;&#34;&#34;导出文件（向后兼容）&#34;&#34;&#34;
+    return self._export_file_internal(Path(output_path), format_type)</code></pre>
+</details>
+<div class="desc"><p>导出文件（向后兼容）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.export_step"><code class="name flex">
+<span>def <span class="ident">export_step</span></span>(<span>self, output_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_step(self, output_path: Path) -&gt; bool:
+    &#34;&#34;&#34;导出为STEP格式文件&#34;&#34;&#34;
+    return self._export_file_internal(output_path, &#34;STEP&#34;)</code></pre>
+</details>
+<div class="desc"><p>导出为STEP格式文件</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.find_parameter"><code class="name flex">
+<span>def <span class="ident">find_parameter</span></span>(<span>self, param_name: str) ‑> <a title="integrations.cad.freecad.FCParameter" href="cad/freecad.html#integrations.cad.freecad.FCParameter">FCParameter</a> | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_parameter(self, param_name: str) -&gt; Optional[FCParameter]:
+    &#34;&#34;&#34;查找特定参数（向后兼容）&#34;&#34;&#34;
+    return self._find_parameter_internal(param_name)</code></pre>
+</details>
+<div class="desc"><p>查找特定参数（向后兼容）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.get_parameter"><code class="name flex">
+<span>def <span class="ident">get_parameter</span></span>(<span>self, name: str) ‑> float | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameter(self, name: str) -&gt; Optional[float]:
+    &#34;&#34;&#34;获取指定参数的值&#34;&#34;&#34;
+    if not self.active_doc:
+        return None
+
+    # 使用现有方法查找参数
+    param = self._find_parameter_internal(name)
+    return param.value if param else None</code></pre>
+</details>
+<div class="desc"><p>获取指定参数的值</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.get_parameters"><code class="name flex">
+<span>def <span class="ident">get_parameters</span></span>(<span>self) ‑> List[<a title="integrations.cad.freecad.FCParameter" href="cad/freecad.html#integrations.cad.freecad.FCParameter">FCParameter</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameters(self) -&gt; List[FCParameter]:
+    &#34;&#34;&#34;获取所有参数（向后兼容）&#34;&#34;&#34;
+    return self._get_parameters_internal()</code></pre>
+</details>
+<div class="desc"><p>获取所有参数（向后兼容）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.get_supported_formats"><code class="name flex">
+<span>def <span class="ident">get_supported_formats</span></span>(<span>self) ‑> List[<a title="core.types.FileFormat" href="../core/types.html#core.types.FileFormat">FileFormat</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_supported_formats(self) -&gt; List[FileFormat]:
+    &#34;&#34;&#34;获取支持的导出格式&#34;&#34;&#34;
+    return [
+        FileFormat.STEP,
+        FileFormat.STL,
+        FileFormat.IGES,
+        FileFormat.BREP,
+        FileFormat.FCSTD,
+    ]</code></pre>
+</details>
+<div class="desc"><p>获取支持的导出格式</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.load_model"><code class="name flex">
+<span>def <span class="ident">load_model</span></span>(<span>self, file_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_model(self, file_path: Path) -&gt; bool:
+    &#34;&#34;&#34;加载CAD模型文件&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        file_path = str(file_path.resolve())
+
+        # 关闭当前文档（如果有）
+        if self.active_doc:
+            self.close_document()
+
+        # 打开文档
+        self.active_doc = self.fc_app.open(file_path)
+
+        if self.active_doc:
+            print(f&#34;✓ 已打开: {self.active_doc.Name}&#34;)
+            return True
+        else:
+            print(&#34;✗ 无法打开文档&#34;)
+            return False
+
+    except Exception as e:
+        print(f&#34;打开文档失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>加载CAD模型文件</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.open_document"><code class="name flex">
+<span>def <span class="ident">open_document</span></span>(<span>self, file_path: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def open_document(self, file_path: str) -&gt; bool:
+    &#34;&#34;&#34;打开文档（向后兼容）&#34;&#34;&#34;
+    return self.load_model(Path(file_path))</code></pre>
+</details>
+<div class="desc"><p>打开文档（向后兼容）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.rebuild"><code class="name flex">
+<span>def <span class="ident">rebuild</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rebuild(self) -&gt; bool:
+    &#34;&#34;&#34;重建模型（应用参数变更）&#34;&#34;&#34;
+    if not self.active_doc:
+        print(&#34;✗ 没有打开的文档&#34;)
+        return False
+
+    try:
+        print(&#34;⏳ 重新计算文档...&#34;)
+        self.active_doc.recompute()
+        self.fc_app.ActiveDocument = self.active_doc
+        print(&#34;✓ 重建完成&#34;)
+        return True
+    except Exception as e:
+        print(f&#34;重建失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>重建模型（应用参数变更）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.save_document"><code class="name flex">
+<span>def <span class="ident">save_document</span></span>(<span>self, file_path: str | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_document(self, file_path: Optional[str] = None) -&gt; bool:
+    &#34;&#34;&#34;保存文档（向后兼容）&#34;&#34;&#34;
+    if not self.active_doc:
+        return False
+
+    try:
+        if file_path:
+            self.active_doc.saveAs(file_path)
+        else:
+            self.active_doc.save()
+        return True
+    except Exception as e:
+        print(f&#34;保存失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>保存文档（向后兼容）</p></div>
+</dd>
+<dt id="integrations.FreeCADConnector.set_parameter"><code class="name flex">
+<span>def <span class="ident">set_parameter</span></span>(<span>self, name: str, value: float) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_parameter(self, name: str, value: float) -&gt; bool:
+    &#34;&#34;&#34;设置参数值&#34;&#34;&#34;
+    if not self.active_doc:
+        print(&#34;✗ 没有打开的文档&#34;)
+        return False
+
+    try:
+        # 使用现有的参数设置逻辑
+        return self._set_parameter_internal(name, value)
+    except Exception as e:
+        print(f&#34;设置参数失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>设置参数值</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.GmshConnector"><code class="flex name class">
+<span>class <span class="ident">GmshConnector</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GmshConnector(CAEConnector):
+    &#34;&#34;&#34;Gmsh网格生成器连接器&#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        self.gmsh_module: Optional[Any] = None
+        self.is_connected: bool = False
+        self.work_dir: Optional[Path] = None
+        self.current_model: Optional[Any] = None
+        self.ureg = pint.UnitRegistry()
+        self.mesh_options: Dict[str, Any] = {
+            &#34;element_size&#34;: 1.0,  # 默认单元尺寸 (mm)
+            &#34;algorithm&#34;: &#34;Delannay&#34;,  # Delannay, Frontal, Netgen
+            &#34;optimize&#34;: True,
+            &#34;quality_type&#34;: &#34;tetrahedron&#34;,  # tetrahedron, hexahedron, mixed
+            &#34;min_quality&#34;: 0.3,  # 最小网格质量阈值
+            &#34;max_quality&#34;: 1.0,  # 最大网格质量阈值
+        }
+
+    def _gmsh(self) -&gt; Any:
+        &#34;&#34;&#34;获取gmsh模块，确保已连接&#34;&#34;&#34;
+        if self.gmsh_module is None:
+            raise RuntimeError(&#34;Gmsh模块未初始化，请先调用connect()&#34;)
+        return self.gmsh_module
+
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到Gmsh实例（检查gmsh模块是否可用）&#34;&#34;&#34;
+        try:
+            import gmsh
+
+            self.gmsh_module = gmsh
+            self.is_connected = True
+            print(&#34;✓ 连接到Gmsh成功&#34;)
+            return True
+
+        except ImportError:
+            print(&#34;✗ 未找到Gmsh Python模块&#34;)
+            print(&#34;提示: 请安装Gmsh并确保Python绑定可用&#34;)
+            print(&#34;      pip install gmsh&#34;)
+            print(&#34;      或从 https://gmsh.info/ 下载&#34;)
+            return False
+
+        except Exception as e:
+            print(f&#34;连接Gmsh失败: {e}&#34;)
+            return False
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 1.0
+    ) -&gt; bool:
+        &#34;&#34;&#34;从几何文件生成网格
+
+        支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
+        输出格式: .msh (Gmsh格式)，可转换为其他格式
+
+        Args:
+            geometry_file: 输入几何文件路径
+            mesh_file: 输出网格文件路径
+            element_size: 单元尺寸 (mm，默认1.0)
+
+        Returns:
+            bool: 网格生成是否成功
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        # 确保gmsh_module已连接
+        assert self.gmsh_module is not None, &#34;Gmsh模块未初始化&#34;
+
+        try:
+            # 确保输出目录存在
+            mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # 检查输入文件是否存在
+            if not geometry_file.exists():
+                raise FileNotFoundError(f&#34;几何文件不存在: {geometry_file}&#34;)
+
+            # 获取文件格式
+            file_format = self._detect_file_format(geometry_file)
+
+            # 初始化Gmsh
+            self._gmsh().initialize()
+            self._gmsh().option.setNumber(&#34;General.Terminal&#34;, 1)
+
+            # 设置网格选项 (element_size 单位: mm → 转换为 m 供 Gmsh 使用)
+            element_size_m = (
+                self.ureg.Quantity(element_size, self.ureg.mm).to(self.ureg.m).magnitude
+            )
+            self._set_mesh_options(element_size_m)
+
+            # 导入几何
+            print(f&#34;⏳ 导入几何: {geometry_file.name}&#34;)
+            if file_format == &#34;step&#34;:
+                self.gmsh_module.merge(str(geometry_file))
+            elif file_format == &#34;stl&#34;:
+                self.gmsh_module.merge(str(geometry_file))
+            elif file_format == &#34;brep&#34;:
+                self.gmsh_module.open(str(geometry_file))
+            else:
+                # 通用导入
+                self.gmsh_module.merge(str(geometry_file))
+
+            # 同步几何模型
+            self.gmsh_module.model.geo.synchronize()
+
+            # 生成2D表面网格
+            print(&#34;⏳ 生成表面网格...&#34;)
+            self.gmsh_module.model.mesh.generate(2)
+
+            # 生成3D体积网格
+            print(&#34;⏳ 生成体积网格...&#34;)
+            self.gmsh_module.model.mesh.generate(3)
+
+            # 网格优化
+            if self.mesh_options[&#34;optimize&#34;]:
+                print(&#34;⏳ 优化网格质量...&#34;)
+                self.gmsh_module.model.mesh.optimize(&#34;Netgen&#34;)
+
+            # 检查网格质量
+            quality_ok = self._check_mesh_quality()
+            if not quality_ok:
+                print(&#34;⚠️ 网格质量警告: 部分单元质量较低&#34;)
+
+            # 保存网格文件
+            print(f&#34;⏳ 保存网格文件: {mesh_file}&#34;)
+            self.gmsh_module.write(str(mesh_file))
+
+            # 清理Gmsh
+            self.gmsh_module.finalize()
+
+            # 验证输出文件
+            if mesh_file.exists() and mesh_file.stat().st_size &gt; 0:
+                print(f&#34;✓ 网格生成成功: {mesh_file}&#34;)
+                print(f&#34;  文件大小: {mesh_file.stat().st_size / 1024:.1f} KB&#34;)
+
+                # 显示网格统计信息
+                self._print_mesh_stats(mesh_file)
+                return True
+            else:
+                print(&#34;✗ 网格文件生成失败&#34;)
+                return False
+
+        except Exception as e:
+            print(f&#34;生成网格失败: {e}&#34;)
+            # 确保清理Gmsh
+            try:
+                self.gmsh_module.finalize()
+            except:
+                pass
+            return False
+
+    def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+        &#34;&#34;&#34;设置仿真分析（对于网格生成器，此方法返回输入文件路径）
+
+        注意：Gmsh本身不是求解器，此方法用于创建转换后的输入文件
+        例如：将.msh转换为CalculiX .inp格式
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+        try:
+            # 创建临时工作目录
+            if not self.work_dir:
+                self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;gmsh_&#34;))
+
+            # 确定目标格式
+            target_format = config.get(&#34;target_format&#34;, &#34;inp&#34;)
+            input_file = self.work_dir / f&#34;{mesh_file.stem}.{target_format}&#34;
+
+            # 转换网格格式
+            if target_format == &#34;inp&#34;:
+                self._convert_to_inp(mesh_file, input_file)
+            elif target_format == &#34;bdf&#34;:
+                self._convert_to_bdf(mesh_file, input_file)
+            elif target_format == &#34;cas&#34;:
+                self._convert_to_cas(mesh_file, input_file)
+            else:
+                # 默认复制原始.msh文件
+                shutil.copy2(mesh_file, input_file)
+
+            print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+            return input_file
+
+        except Exception as e:
+            print(f&#34;设置仿真失败: {e}&#34;)
+            raise
+
+    def run_simulation(
+        self, input_file: Path, output_dir: Optional[Path] = None
+    ) -&gt; bool:
+        &#34;&#34;&#34;运行仿真分析（对于网格生成器，此方法无实际意义）
+
+        注意：Gmsh不是求解器，此方法仅用于兼容性
+        实际仿真应使用CalculiX、Abaqus等求解器
+        &#34;&#34;&#34;
+        print(f&#34;⚠️  Gmsh不是求解器，跳过仿真步骤&#34;)
+        print(f&#34;    输入文件: {input_file}&#34;)
+        print(f&#34;    请使用CAE求解器运行此文件&#34;)
+
+        # 为兼容性返回成功
+        return True
+
+    def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;读取仿真结果（对于网格生成器，此方法读取网格质量信息）&#34;&#34;&#34;
+        try:
+            if not result_file.exists():
+                raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+            results = {
+                &#34;file_path&#34;: str(result_file),
+                &#34;file_size&#34;: result_file.stat().st_size,
+                &#34;mesh_quality&#34;: {},
+                &#34;elements&#34;: 0,
+                &#34;nodes&#34;: 0,
+                &#34;element_types&#34;: {},
+            }
+
+            # 如果是.msh文件，解析网格信息
+            if result_file.suffix.lower() == &#34;.msh&#34;:
+                results.update(self._parse_msh_file(result_file))
+
+            # 如果是.inp文件，解析CalculiX网格信息
+            elif result_file.suffix.lower() == &#34;.inp&#34;:
+                results.update(self._parse_inp_file(result_file))
+
+            return results
+
+        except Exception as e:
+            print(f&#34;读取结果失败: {e}&#34;)
+            return {
+                &#34;file_path&#34;: str(result_file),
+                &#34;error&#34;: str(e),
+                &#34;success&#34;: False,
+            }
+
+    def get_supported_analysis_types(self) -&gt; List[str]:
+        &#34;&#34;&#34;获取支持的分析类型（对于网格生成器，返回空列表）&#34;&#34;&#34;
+        return []  # Gmsh不是求解器，不直接支持分析类型
+
+    def convert_to_calculix_inp(self, msh_path: Path) -&gt; Path:
+        &#34;&#34;&#34;将 .msh 文件转换为 CalculiX 兼容的 .inp 文件
+
+        Args:
+            msh_path: 输入 .msh 文件路径
+
+        Returns:
+            Path: 生成的 .inp 文件路径
+
+        Raises:
+            FileNotFoundError: 输入文件不存在时
+            RuntimeError: 转换失败时
+        &#34;&#34;&#34;
+        if not msh_path.exists():
+            raise FileNotFoundError(f&#34;MSH 文件不存在: {msh_path}&#34;)
+
+        # 创建输出文件路径
+        inp_path = msh_path.with_suffix(&#34;.inp&#34;)
+
+        # 使用内部转换方法
+        if not self._convert_to_inp(msh_path, inp_path):
+            raise RuntimeError(f&#34;转换为 CalculiX INP 格式失败: {msh_path}&#34;)
+
+        return inp_path
+
+    def convert_mesh_format(
+        self, input_mesh: Path, output_mesh: Path, target_format: str
+    ) -&gt; bool:
+        &#34;&#34;&#34;转换网格格式
+
+        Args:
+            input_mesh: 输入网格文件
+            output_mesh: 输出网格文件
+            target_format: 目标格式 (&#39;inp&#39;, &#39;bdf&#39;, &#39;cas&#39;, &#39;vtk&#39;)
+
+        Returns:
+            bool: 转换是否成功
+        &#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                return False
+
+        try:
+            format_map = {
+                &#34;inp&#34;: self._convert_to_inp,
+                &#34;bdf&#34;: self._convert_to_bdf,
+                &#34;cas&#34;: self._convert_to_cas,
+                &#34;vtk&#34;: self._convert_to_vtk,
+            }
+
+            if target_format not in format_map:
+                raise ValueError(f&#34;不支持的格式: {target_format}&#34;)
+
+            converter = format_map[target_format]
+            return converter(input_mesh, output_mesh)
+
+        except Exception as e:
+            print(f&#34;转换网格格式失败: {e}&#34;)
+            return False
+
+    def get_mesh_quality_report(self, mesh_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;获取网格质量报告&#34;&#34;&#34;
+        if not self.is_connected:
+            if not self.connect():
+                raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+        try:
+            # 初始化Gmsh并加载网格
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(mesh_file))
+
+            # 计算网格质量指标
+            quality_metrics = self._calculate_quality_metrics()
+
+            # 清理
+            self.gmsh_module.finalize()
+
+            return {
+                &#34;mesh_file&#34;: str(mesh_file),
+                &#34;quality_metrics&#34;: quality_metrics,
+                &#34;overall_quality&#34;: self._evaluate_overall_quality(quality_metrics),
+                &#34;recommendations&#34;: self._generate_quality_recommendations(
+                    quality_metrics
+                ),
+            }
+
+        except Exception as e:
+            print(f&#34;获取网格质量报告失败: {e}&#34;)
+            return {&#34;error&#34;: str(e)}
+
+    # ========== 内部辅助方法 ==========
+
+    def _detect_file_format(self, file_path: Path) -&gt; str:
+        &#34;&#34;&#34;检测文件格式&#34;&#34;&#34;
+        suffix = file_path.suffix.lower()
+        if suffix in [&#34;.step&#34;, &#34;.stp&#34;]:
+            return &#34;step&#34;
+        elif suffix in [&#34;.stl&#34;]:
+            return &#34;stl&#34;
+        elif suffix in [&#34;.brep&#34;]:
+            return &#34;brep&#34;
+        elif suffix in [&#34;.iges&#34;, &#34;.igs&#34;]:
+            return &#34;iges&#34;
+        elif suffix in [&#34;.msh&#34;]:
+            return &#34;msh&#34;
+        elif suffix in [&#34;.inp&#34;]:
+            return &#34;inp&#34;
+        else:
+            return &#34;unknown&#34;
+
+    def _set_mesh_options(self, element_size: float):
+        &#34;&#34;&#34;设置网格生成选项&#34;&#34;&#34;
+        self.gmsh_module.option.setNumber(&#34;Mesh.CharacteristicLengthMin&#34;, element_size)
+        self.gmsh_module.option.setNumber(&#34;Mesh.CharacteristicLengthMax&#34;, element_size)
+        self.gmsh_module.option.setNumber(&#34;Mesh.Algorithm&#34;, 5)  # Delannay
+        self.gmsh_module.option.setNumber(&#34;Mesh.Algorithm3D&#34;, 1)  # Delannay 3D
+        self.gmsh_module.option.setNumber(&#34;Mesh.Optimize&#34;, 1)
+        self.gmsh_module.option.setNumber(&#34;Mesh.QualityType&#34;, 2)  # Tetrahedron quality
+
+    def _check_mesh_quality(self) -&gt; bool:
+        &#34;&#34;&#34;检查网格质量&#34;&#34;&#34;
+        try:
+            # 获取质量统计
+            quality_stats = self.gmsh_module.model.mesh.getQualityStatistics()
+
+            min_quality = quality_stats[0]  # 最小质量
+            max_quality = quality_stats[1]  # 最大质量
+            avg_quality = quality_stats[2]  # 平均质量
+
+            print(f&#34;  网格质量统计:&#34;)
+            print(f&#34;    最小质量: {min_quality:.4f}&#34;)
+            print(f&#34;    最大质量: {max_quality:.4f}&#34;)
+            print(f&#34;    平均质量: {avg_quality:.4f}&#34;)
+
+            # 检查是否满足最小质量阈值
+            threshold = self.mesh_options[&#34;min_quality&#34;]
+            if min_quality &lt; threshold:
+                error_msg = (
+                    f&#34;网格质量过低: 最小质量 ({min_quality:.4f}) 低于阈值 ({threshold})。&#34;
+                    f&#34;建议减小单元尺寸或调整几何。&#34;
+                )
+                raise MeshQualityError(error_msg)
+
+            return True
+
+        except Exception as e:
+            print(f&#34;检查网格质量失败: {e}&#34;)
+            return True  # 如果检查失败，假设质量合格
+
+    def _print_mesh_stats(self, mesh_file: Path):
+        &#34;&#34;&#34;打印网格统计信息&#34;&#34;&#34;
+        try:
+            # 重新打开网格文件获取统计信息
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(mesh_file))
+
+            # 获取网格信息
+            node_count = self.gmsh_module.model.mesh.getNodes()[0].shape[0]
+            element_count = self.gmsh_module.model.mesh.getElements()[2][0].shape[0]
+
+            print(f&#34;  网格统计:&#34;)
+            print(f&#34;    节点数: {node_count}&#34;)
+            print(f&#34;    单元数: {element_count}&#34;)
+
+            self.gmsh_module.finalize()
+
+        except Exception as e:
+            print(f&#34;获取网格统计失败: {e}&#34;)
+
+    def _convert_to_inp(self, input_mesh: Path, output_inp: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为CalculiX .inp格式&#34;&#34;&#34;
+        try:
+            # 确保输出目录存在
+            output_inp.parent.mkdir(parents=True, exist_ok=True)
+
+            # 初始化Gmsh并加载网格
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(input_mesh))
+
+            # 获取网格数据
+            nodes = self.gmsh_module.model.mesh.getNodes()
+            elements = self.gmsh_module.model.mesh.getElements()
+
+            # 写入.inp格式
+            with open(output_inp, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#34;** Converted from Gmsh .msh format\n&#34;)
+                f.write(&#34;** Generated by CAE-CLI GmshConnector\n\n&#34;)
+
+                # 写入节点
+                f.write(&#34;*NODE\n&#34;)
+                for i, (node_id, coords) in enumerate(zip(nodes[0], nodes[1]), 1):
+                    x, y, z = coords[0], coords[1], coords[2]
+                    f.write(f&#34;{i}, {x:.6f}, {y:.6f}, {z:.6f}\n&#34;)
+
+                # 按单元类型分组写入单元
+                element_groups = {}
+
+                for elem_type, elem_tags, elem_nodes in zip(elements[0], elements[1], elements[2]):
+                    if elem_type not in element_groups:
+                        element_groups[elem_type] = []
+                    for tag, nodes_list in zip(elem_tags, elem_nodes):
+                        element_groups[elem_type].append((tag, nodes_list))
+
+                # 定义Gmsh到CalculiX的单元类型映射
+                elem_type_map = {
+                    4: &#34;C3D4&#34;,    # 四面体
+                    5: &#34;C3D8&#34;,    # 六面体
+                    1: &#34;CPS4&#34;,    # 四边形（平面应力）
+                    2: &#34;CPE4&#34;,    # 四边形（平面应变）
+                    3: &#34;C3D6&#34;,    # 三棱柱
+                    6: &#34;C3D10&#34;,   # 四面体（二次）
+                    7: &#34;C3D20&#34;    # 六面体（二次）
+                }
+
+                # 写入每个单元组
+                for gmsh_type, elems in element_groups.items():
+                    calculix_type = elem_type_map.get(gmsh_type)
+                    if calculix_type:
+                        f.write(f&#34;\n*ELEMENT, TYPE={calculix_type}, ELSET=PART1\n&#34;)
+                        for i, (tag, nodes_list) in enumerate(elems, 1):
+                            # 转换节点编号（Gmsh节点编号从1开始，CalculiX也是）
+                            nodes_str = &#34;, &#34;.join(str(int(n)) for n in nodes_list)
+                            f.write(f&#34;{i}, {nodes_str}\n&#34;)
+
+                # 写入固体截面定义
+                f.write(&#34;\n*SOLID SECTION, ELSET=PART1, MATERIAL=DEFAULT_MATERIAL\n&#34;)
+
+            self.gmsh_module.finalize()
+            print(f&#34;✓ 转换成功: {input_mesh.name} -&gt; {output_inp.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为INP格式失败: {e}&#34;)
+            return False
+
+    def _convert_to_bdf(self, input_mesh: Path, output_bdf: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为NASTRAN .bdf格式&#34;&#34;&#34;
+        try:
+            # 简化实现：创建示例.bdf文件
+            with open(output_bdf, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#34;$ NASTRAN input file converted from Gmsh\n&#34;)
+                f.write(&#34;$ Generated by CAE-CLI GmshConnector\n&#34;)
+                f.write(&#34;SOL 101\n&#34;)
+                f.write(&#34;CEND\n&#34;)
+                f.write(&#34;BEGIN BULK\n&#34;)
+                f.write(&#34;$ Nodes and elements would be here\n&#34;)
+                f.write(&#34;ENDDATA\n&#34;)
+
+            print(f&#34;✓ 创建BDF文件: {output_bdf.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为BDF格式失败: {e}&#34;)
+            return False
+
+    def _convert_to_cas(self, input_mesh: Path, output_cas: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为Fluent .cas格式&#34;&#34;&#34;
+        try:
+            # 简化实现：创建示例.cas文件
+            with open(output_cas, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#39;(0 &#34;Fluent Case File converted from Gmsh&#34;)\n&#39;)
+                f.write(&#39;(0 &#34;Generated by CAE-CLI GmshConnector&#34;)\n&#39;)
+                f.write(&#34;(2 2)\n&#34;)  # 版本信息
+
+            print(f&#34;✓ 创建CAS文件: {output_cas.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为CAS格式失败: {e}&#34;)
+            return False
+
+    def _convert_to_vtk(self, input_mesh: Path, output_vtk: Path) -&gt; bool:
+        &#34;&#34;&#34;转换为VTK格式&#34;&#34;&#34;
+        try:
+            # Gmsh可以直接导出为VTK
+            self.gmsh_module.initialize()
+            self.gmsh_module.open(str(input_mesh))
+            self.gmsh_module.write(str(output_vtk))
+            self.gmsh_module.finalize()
+
+            print(f&#34;✓ 转换成功: {input_mesh.name} -&gt; {output_vtk.name}&#34;)
+            return True
+
+        except Exception as e:
+            print(f&#34;转换为VTK格式失败: {e}&#34;)
+            return False
+
+    def _parse_msh_file(self, msh_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.msh文件&#34;&#34;&#34;
+        results = {
+            &#34;format&#34;: &#34;msh&#34;,
+            &#34;version&#34;: &#34;unknown&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+        }
+
+        try:
+            with open(msh_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                lines = f.readlines()
+
+            for line in lines:
+                if line.startswith(&#34;$MeshFormat&#34;):
+                    # 格式信息
+                    parts = lines[1].strip().split()
+                    if len(parts) &gt;= 2:
+                        results[&#34;version&#34;] = parts[0]
+                elif line.startswith(&#34;$Nodes&#34;):
+                    # 节点数
+                    node_line = lines[lines.index(line) + 1].strip()
+                    results[&#34;nodes&#34;] = int(node_line.split()[0])
+                elif line.startswith(&#34;$Elements&#34;):
+                    # 单元数
+                    elem_line = lines[lines.index(line) + 1].strip()
+                    results[&#34;elements&#34;] = int(elem_line.split()[0])
+
+        except Exception as e:
+            print(f&#34;解析MSH文件失败: {e}&#34;)
+
+        return results
+
+    def _parse_inp_file(self, inp_file: Path) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析.inp文件&#34;&#34;&#34;
+        results = {
+            &#34;format&#34;: &#34;inp&#34;,
+            &#34;nodes&#34;: 0,
+            &#34;elements&#34;: 0,
+            &#34;materials&#34;: [],
+        }
+
+        try:
+            with open(inp_file, &#34;r&#34;, encoding=&#34;utf-8&#34;, errors=&#34;ignore&#34;) as f:
+                lines = f.readlines()
+
+            in_nodes = False
+            in_elements = False
+
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith(&#34;**&#34;):
+                    continue
+
+                if line.upper().startswith(&#34;*NODE&#34;):
+                    in_nodes = True
+                    in_elements = False
+                elif line.upper().startswith(&#34;*ELEMENT&#34;):
+                    in_nodes = False
+                    in_elements = True
+                elif line.upper().startswith(&#34;*MATERIAL&#34;):
+                    material_name = line.split(&#34;,&#34;)[1].strip().split(&#34;=&#34;)[1]
+                    results[&#34;materials&#34;].append(material_name)
+                elif in_nodes and &#34;,&#34; in line:
+                    results[&#34;nodes&#34;] += 1
+                elif in_elements and &#34;,&#34; in line:
+                    results[&#34;elements&#34;] += 1
+
+        except Exception as e:
+            print(f&#34;解析INP文件失败: {e}&#34;)
+
+        return results
+
+    def _calculate_quality_metrics(self) -&gt; Dict[str, float]:
+        &#34;&#34;&#34;计算网格质量指标&#34;&#34;&#34;
+        try:
+            # 获取质量统计
+            stats = self.gmsh_module.model.mesh.getQualityStatistics()
+
+            return {
+                &#34;min_quality&#34;: stats[0],
+                &#34;max_quality&#34;: stats[1],
+                &#34;avg_quality&#34;: stats[2],
+                &#34;std_quality&#34;: stats[3] if len(stats) &gt; 3 else 0.0,
+                &#34;jacobian_min&#34;: stats[4] if len(stats) &gt; 4 else 1.0,
+                &#34;jacobian_max&#34;: stats[5] if len(stats) &gt; 5 else 1.0,
+            }
+        except Exception as e:
+            print(f&#34;计算质量指标失败: {e}&#34;)
+            return {}
+
+    def _evaluate_overall_quality(self, metrics: Dict[str, float]) -&gt; str:
+        &#34;&#34;&#34;评估整体网格质量&#34;&#34;&#34;
+        min_quality = metrics.get(&#34;min_quality&#34;, 1.0)
+
+        if min_quality &gt;= 0.7:
+            return &#34;excellent&#34;
+        elif min_quality &gt;= 0.5:
+            return &#34;good&#34;
+        elif min_quality &gt;= 0.3:
+            return &#34;fair&#34;
+        elif min_quality &gt;= 0.1:
+            return &#34;poor&#34;
+        else:
+            return &#34;unacceptable&#34;
+
+    def _generate_quality_recommendations(self, metrics: Dict[str, float]) -&gt; List[str]:
+        &#34;&#34;&#34;生成质量改进建议&#34;&#34;&#34;
+        recommendations = []
+        min_quality = metrics.get(&#34;min_quality&#34;, 1.0)
+
+        if min_quality &lt; 0.3:
+            recommendations.append(&#34;网格质量过低，建议减小单元尺寸或调整几何&#34;)
+        elif min_quality &lt; 0.5:
+            recommendations.append(&#34;部分单元质量较差，建议进行网格优化&#34;)
+        elif min_quality &lt; 0.7:
+            recommendations.append(&#34;网格质量一般，可接受但建议优化&#34;)
+
+        avg_quality = metrics.get(&#34;avg_quality&#34;, 1.0)
+        if avg_quality &lt; 0.8:
+            recommendations.append(&#34;平均质量偏低，建议检查几何模型&#34;)
+
+        return recommendations
+
+    def cleanup(self):
+        &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+        if self.work_dir and self.work_dir.exists():
+            try:
+                shutil.rmtree(self.work_dir)
+                self.work_dir = None
+            except:
+                pass</code></pre>
+</details>
+<div class="desc"><p>Gmsh网格生成器连接器</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="integrations.mesher.gmsh.GmshConnectorMock" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnectorMock">GmshConnectorMock</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.GmshConnector.cleanup"><code class="name flex">
+<span>def <span class="ident">cleanup</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cleanup(self):
+    &#34;&#34;&#34;清理工作目录&#34;&#34;&#34;
+    if self.work_dir and self.work_dir.exists():
+        try:
+            shutil.rmtree(self.work_dir)
+            self.work_dir = None
+        except:
+            pass</code></pre>
+</details>
+<div class="desc"><p>清理工作目录</p></div>
+</dd>
+<dt id="integrations.GmshConnector.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到Gmsh实例（检查gmsh模块是否可用）&#34;&#34;&#34;
+    try:
+        import gmsh
+
+        self.gmsh_module = gmsh
+        self.is_connected = True
+        print(&#34;✓ 连接到Gmsh成功&#34;)
+        return True
+
+    except ImportError:
+        print(&#34;✗ 未找到Gmsh Python模块&#34;)
+        print(&#34;提示: 请安装Gmsh并确保Python绑定可用&#34;)
+        print(&#34;      pip install gmsh&#34;)
+        print(&#34;      或从 https://gmsh.info/ 下载&#34;)
+        return False
+
+    except Exception as e:
+        print(f&#34;连接Gmsh失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>连接到Gmsh实例（检查gmsh模块是否可用）</p></div>
+</dd>
+<dt id="integrations.GmshConnector.convert_mesh_format"><code class="name flex">
+<span>def <span class="ident">convert_mesh_format</span></span>(<span>self,<br>input_mesh: pathlib._local.Path,<br>output_mesh: pathlib._local.Path,<br>target_format: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_mesh_format(
+    self, input_mesh: Path, output_mesh: Path, target_format: str
+) -&gt; bool:
+    &#34;&#34;&#34;转换网格格式
+
+    Args:
+        input_mesh: 输入网格文件
+        output_mesh: 输出网格文件
+        target_format: 目标格式 (&#39;inp&#39;, &#39;bdf&#39;, &#39;cas&#39;, &#39;vtk&#39;)
+
+    Returns:
+        bool: 转换是否成功
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    try:
+        format_map = {
+            &#34;inp&#34;: self._convert_to_inp,
+            &#34;bdf&#34;: self._convert_to_bdf,
+            &#34;cas&#34;: self._convert_to_cas,
+            &#34;vtk&#34;: self._convert_to_vtk,
+        }
+
+        if target_format not in format_map:
+            raise ValueError(f&#34;不支持的格式: {target_format}&#34;)
+
+        converter = format_map[target_format]
+        return converter(input_mesh, output_mesh)
+
+    except Exception as e:
+        print(f&#34;转换网格格式失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>转换网格格式</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_mesh</code></strong></dt>
+<dd>输入网格文件</dd>
+<dt><strong><code>output_mesh</code></strong></dt>
+<dd>输出网格文件</dd>
+<dt><strong><code>target_format</code></strong></dt>
+<dd>目标格式 ('inp', 'bdf', 'cas', 'vtk')</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>转换是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.GmshConnector.convert_to_calculix_inp"><code class="name flex">
+<span>def <span class="ident">convert_to_calculix_inp</span></span>(<span>self, msh_path: pathlib._local.Path) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_to_calculix_inp(self, msh_path: Path) -&gt; Path:
+    &#34;&#34;&#34;将 .msh 文件转换为 CalculiX 兼容的 .inp 文件
+
+    Args:
+        msh_path: 输入 .msh 文件路径
+
+    Returns:
+        Path: 生成的 .inp 文件路径
+
+    Raises:
+        FileNotFoundError: 输入文件不存在时
+        RuntimeError: 转换失败时
+    &#34;&#34;&#34;
+    if not msh_path.exists():
+        raise FileNotFoundError(f&#34;MSH 文件不存在: {msh_path}&#34;)
+
+    # 创建输出文件路径
+    inp_path = msh_path.with_suffix(&#34;.inp&#34;)
+
+    # 使用内部转换方法
+    if not self._convert_to_inp(msh_path, inp_path):
+        raise RuntimeError(f&#34;转换为 CalculiX INP 格式失败: {msh_path}&#34;)
+
+    return inp_path</code></pre>
+</details>
+<div class="desc"><p>将 .msh 文件转换为 CalculiX 兼容的 .inp 文件</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>msh_path</code></strong></dt>
+<dd>输入 .msh 文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Path</code></dt>
+<dd>生成的 .inp 文件路径</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>输入文件不存在时</dd>
+<dt><code>RuntimeError</code></dt>
+<dd>转换失败时</dd>
+</dl></div>
+</dd>
+<dt id="integrations.GmshConnector.generate_mesh"><code class="name flex">
+<span>def <span class="ident">generate_mesh</span></span>(<span>self,<br>geometry_file: pathlib._local.Path,<br>mesh_file: pathlib._local.Path,<br>element_size: float = 1.0) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_mesh(
+    self, geometry_file: Path, mesh_file: Path, element_size: float = 1.0
+) -&gt; bool:
+    &#34;&#34;&#34;从几何文件生成网格
+
+    支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
+    输出格式: .msh (Gmsh格式)，可转换为其他格式
+
+    Args:
+        geometry_file: 输入几何文件路径
+        mesh_file: 输出网格文件路径
+        element_size: 单元尺寸 (mm，默认1.0)
+
+    Returns:
+        bool: 网格生成是否成功
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            return False
+
+    # 确保gmsh_module已连接
+    assert self.gmsh_module is not None, &#34;Gmsh模块未初始化&#34;
+
+    try:
+        # 确保输出目录存在
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # 检查输入文件是否存在
+        if not geometry_file.exists():
+            raise FileNotFoundError(f&#34;几何文件不存在: {geometry_file}&#34;)
+
+        # 获取文件格式
+        file_format = self._detect_file_format(geometry_file)
+
+        # 初始化Gmsh
+        self._gmsh().initialize()
+        self._gmsh().option.setNumber(&#34;General.Terminal&#34;, 1)
+
+        # 设置网格选项 (element_size 单位: mm → 转换为 m 供 Gmsh 使用)
+        element_size_m = (
+            self.ureg.Quantity(element_size, self.ureg.mm).to(self.ureg.m).magnitude
+        )
+        self._set_mesh_options(element_size_m)
+
+        # 导入几何
+        print(f&#34;⏳ 导入几何: {geometry_file.name}&#34;)
+        if file_format == &#34;step&#34;:
+            self.gmsh_module.merge(str(geometry_file))
+        elif file_format == &#34;stl&#34;:
+            self.gmsh_module.merge(str(geometry_file))
+        elif file_format == &#34;brep&#34;:
+            self.gmsh_module.open(str(geometry_file))
+        else:
+            # 通用导入
+            self.gmsh_module.merge(str(geometry_file))
+
+        # 同步几何模型
+        self.gmsh_module.model.geo.synchronize()
+
+        # 生成2D表面网格
+        print(&#34;⏳ 生成表面网格...&#34;)
+        self.gmsh_module.model.mesh.generate(2)
+
+        # 生成3D体积网格
+        print(&#34;⏳ 生成体积网格...&#34;)
+        self.gmsh_module.model.mesh.generate(3)
+
+        # 网格优化
+        if self.mesh_options[&#34;optimize&#34;]:
+            print(&#34;⏳ 优化网格质量...&#34;)
+            self.gmsh_module.model.mesh.optimize(&#34;Netgen&#34;)
+
+        # 检查网格质量
+        quality_ok = self._check_mesh_quality()
+        if not quality_ok:
+            print(&#34;⚠️ 网格质量警告: 部分单元质量较低&#34;)
+
+        # 保存网格文件
+        print(f&#34;⏳ 保存网格文件: {mesh_file}&#34;)
+        self.gmsh_module.write(str(mesh_file))
+
+        # 清理Gmsh
+        self.gmsh_module.finalize()
+
+        # 验证输出文件
+        if mesh_file.exists() and mesh_file.stat().st_size &gt; 0:
+            print(f&#34;✓ 网格生成成功: {mesh_file}&#34;)
+            print(f&#34;  文件大小: {mesh_file.stat().st_size / 1024:.1f} KB&#34;)
+
+            # 显示网格统计信息
+            self._print_mesh_stats(mesh_file)
+            return True
+        else:
+            print(&#34;✗ 网格文件生成失败&#34;)
+            return False
+
+    except Exception as e:
+        print(f&#34;生成网格失败: {e}&#34;)
+        # 确保清理Gmsh
+        try:
+            self.gmsh_module.finalize()
+        except:
+            pass
+        return False</code></pre>
+</details>
+<div class="desc"><p>从几何文件生成网格</p>
+<p>支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
+输出格式: .msh (Gmsh格式)，可转换为其他格式</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_file</code></strong></dt>
+<dd>输入几何文件路径</dd>
+<dt><strong><code>mesh_file</code></strong></dt>
+<dd>输出网格文件路径</dd>
+<dt><strong><code>element_size</code></strong></dt>
+<dd>单元尺寸 (mm，默认1.0)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>网格生成是否成功</dd>
+</dl></div>
+</dd>
+<dt id="integrations.GmshConnector.get_mesh_quality_report"><code class="name flex">
+<span>def <span class="ident">get_mesh_quality_report</span></span>(<span>self, mesh_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mesh_quality_report(self, mesh_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;获取网格质量报告&#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+    try:
+        # 初始化Gmsh并加载网格
+        self.gmsh_module.initialize()
+        self.gmsh_module.open(str(mesh_file))
+
+        # 计算网格质量指标
+        quality_metrics = self._calculate_quality_metrics()
+
+        # 清理
+        self.gmsh_module.finalize()
+
+        return {
+            &#34;mesh_file&#34;: str(mesh_file),
+            &#34;quality_metrics&#34;: quality_metrics,
+            &#34;overall_quality&#34;: self._evaluate_overall_quality(quality_metrics),
+            &#34;recommendations&#34;: self._generate_quality_recommendations(
+                quality_metrics
+            ),
+        }
+
+    except Exception as e:
+        print(f&#34;获取网格质量报告失败: {e}&#34;)
+        return {&#34;error&#34;: str(e)}</code></pre>
+</details>
+<div class="desc"><p>获取网格质量报告</p></div>
+</dd>
+<dt id="integrations.GmshConnector.get_supported_analysis_types"><code class="name flex">
+<span>def <span class="ident">get_supported_analysis_types</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_supported_analysis_types(self) -&gt; List[str]:
+    &#34;&#34;&#34;获取支持的分析类型（对于网格生成器，返回空列表）&#34;&#34;&#34;
+    return []  # Gmsh不是求解器，不直接支持分析类型</code></pre>
+</details>
+<div class="desc"><p>获取支持的分析类型（对于网格生成器，返回空列表）</p></div>
+</dd>
+<dt id="integrations.GmshConnector.read_results"><code class="name flex">
+<span>def <span class="ident">read_results</span></span>(<span>self, result_file: pathlib._local.Path) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_results(self, result_file: Path) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;读取仿真结果（对于网格生成器，此方法读取网格质量信息）&#34;&#34;&#34;
+    try:
+        if not result_file.exists():
+            raise FileNotFoundError(f&#34;结果文件不存在: {result_file}&#34;)
+
+        results = {
+            &#34;file_path&#34;: str(result_file),
+            &#34;file_size&#34;: result_file.stat().st_size,
+            &#34;mesh_quality&#34;: {},
+            &#34;elements&#34;: 0,
+            &#34;nodes&#34;: 0,
+            &#34;element_types&#34;: {},
+        }
+
+        # 如果是.msh文件，解析网格信息
+        if result_file.suffix.lower() == &#34;.msh&#34;:
+            results.update(self._parse_msh_file(result_file))
+
+        # 如果是.inp文件，解析CalculiX网格信息
+        elif result_file.suffix.lower() == &#34;.inp&#34;:
+            results.update(self._parse_inp_file(result_file))
+
+        return results
+
+    except Exception as e:
+        print(f&#34;读取结果失败: {e}&#34;)
+        return {
+            &#34;file_path&#34;: str(result_file),
+            &#34;error&#34;: str(e),
+            &#34;success&#34;: False,
+        }</code></pre>
+</details>
+<div class="desc"><p>读取仿真结果（对于网格生成器，此方法读取网格质量信息）</p></div>
+</dd>
+<dt id="integrations.GmshConnector.run_simulation"><code class="name flex">
+<span>def <span class="ident">run_simulation</span></span>(<span>self,<br>input_file: pathlib._local.Path,<br>output_dir: pathlib._local.Path | None = None) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_simulation(
+    self, input_file: Path, output_dir: Optional[Path] = None
+) -&gt; bool:
+    &#34;&#34;&#34;运行仿真分析（对于网格生成器，此方法无实际意义）
+
+    注意：Gmsh不是求解器，此方法仅用于兼容性
+    实际仿真应使用CalculiX、Abaqus等求解器
+    &#34;&#34;&#34;
+    print(f&#34;⚠️  Gmsh不是求解器，跳过仿真步骤&#34;)
+    print(f&#34;    输入文件: {input_file}&#34;)
+    print(f&#34;    请使用CAE求解器运行此文件&#34;)
+
+    # 为兼容性返回成功
+    return True</code></pre>
+</details>
+<div class="desc"><p>运行仿真分析（对于网格生成器，此方法无实际意义）</p>
+<p>注意：Gmsh不是求解器，此方法仅用于兼容性
+实际仿真应使用CalculiX、Abaqus等求解器</p></div>
+</dd>
+<dt id="integrations.GmshConnector.setup_simulation"><code class="name flex">
+<span>def <span class="ident">setup_simulation</span></span>(<span>self, mesh_file: pathlib._local.Path, config: Dict[str, Any]) ‑> pathlib._local.Path</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_simulation(self, mesh_file: Path, config: Dict[str, Any]) -&gt; Path:
+    &#34;&#34;&#34;设置仿真分析（对于网格生成器，此方法返回输入文件路径）
+
+    注意：Gmsh本身不是求解器，此方法用于创建转换后的输入文件
+    例如：将.msh转换为CalculiX .inp格式
+    &#34;&#34;&#34;
+    if not self.is_connected:
+        if not self.connect():
+            raise RuntimeError(&#34;Gmsh未连接&#34;)
+
+    try:
+        # 创建临时工作目录
+        if not self.work_dir:
+            self.work_dir = Path(tempfile.mkdtemp(prefix=&#34;gmsh_&#34;))
+
+        # 确定目标格式
+        target_format = config.get(&#34;target_format&#34;, &#34;inp&#34;)
+        input_file = self.work_dir / f&#34;{mesh_file.stem}.{target_format}&#34;
+
+        # 转换网格格式
+        if target_format == &#34;inp&#34;:
+            self._convert_to_inp(mesh_file, input_file)
+        elif target_format == &#34;bdf&#34;:
+            self._convert_to_bdf(mesh_file, input_file)
+        elif target_format == &#34;cas&#34;:
+            self._convert_to_cas(mesh_file, input_file)
+        else:
+            # 默认复制原始.msh文件
+            shutil.copy2(mesh_file, input_file)
+
+        print(f&#34;✓ 创建输入文件: {input_file}&#34;)
+        return input_file
+
+    except Exception as e:
+        print(f&#34;设置仿真失败: {e}&#34;)
+        raise</code></pre>
+</details>
+<div class="desc"><p>设置仿真分析（对于网格生成器，此方法返回输入文件路径）</p>
+<p>注意：Gmsh本身不是求解器，此方法用于创建转换后的输入文件
+例如：将.msh转换为CalculiX .inp格式</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="integrations.GmshConnectorMock"><code class="flex name class">
+<span>class <span class="ident">GmshConnectorMock</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GmshConnectorMock(GmshConnector):
+    &#34;&#34;&#34;Gmsh连接器模拟器（用于测试）&#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__()
+        self.mock_mode = True
+
+    def connect(self) -&gt; bool:
+        print(&#34;[模拟模式] 连接Gmsh&#34;)
+        self.is_connected = True
+        return True
+
+    def generate_mesh(
+        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 生成网格: {geometry_file} -&gt; {mesh_file}&#34;)
+        mesh_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # 创建模拟网格文件
+        with open(mesh_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            f.write(&#34;** Mock Gmsh mesh file\n&#34;)
+            f.write(&#34;$MeshFormat\n&#34;)
+            f.write(&#34;4.1 0 8\n&#34;)
+            f.write(&#34;$EndMeshFormat\n&#34;)
+            f.write(&#34;$Nodes\n&#34;)
+            f.write(&#34;8\n&#34;)
+            f.write(&#34;1 0.0 0.0 0.0\n&#34;)
+            f.write(&#34;2 10.0 0.0 0.0\n&#34;)
+            f.write(&#34;3 10.0 5.0 0.0\n&#34;)
+            f.write(&#34;4 0.0 5.0 0.0\n&#34;)
+            f.write(&#34;5 0.0 0.0 3.0\n&#34;)
+            f.write(&#34;6 10.0 0.0 3.0\n&#34;)
+            f.write(&#34;7 10.0 5.0 3.0\n&#34;)
+            f.write(&#34;8 0.0 5.0 3.0\n&#34;)
+            f.write(&#34;$EndNodes\n&#34;)
+            f.write(&#34;$Elements\n&#34;)
+            f.write(&#34;1\n&#34;)
+            f.write(&#34;1 5 2 0 1 1 2 3 4 5 6 7 8\n&#34;)
+            f.write(&#34;$EndElements\n&#34;)
+
+        return True
+
+    def convert_mesh_format(
+        self, input_mesh: Path, output_mesh: Path, target_format: str
+    ) -&gt; bool:
+        print(f&#34;[模拟模式] 转换格式: {input_mesh} -&gt; {output_mesh} ({target_format})&#34;)
+        output_mesh.parent.mkdir(parents=True, exist_ok=True)
+        output_mesh.write_text(f&#34;** Mock {target_format.upper()} file\n&#34;)
+        return True</code></pre>
+</details>
+<div class="desc"><p>Gmsh连接器模拟器（用于测试）</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="integrations.mesher.gmsh.GmshConnector" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector">GmshConnector</a></li>
+<li>integrations._base.connectors.CAEConnector</li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="integrations.mesher.gmsh.GmshConnector" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector">GmshConnector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.cleanup" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.connect" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.convert_mesh_format" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.convert_mesh_format">convert_mesh_format</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.convert_to_calculix_inp" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.convert_to_calculix_inp">convert_to_calculix_inp</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.generate_mesh" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.get_mesh_quality_report" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.get_mesh_quality_report">get_mesh_quality_report</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.get_supported_analysis_types" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.read_results" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.run_simulation" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.mesher.gmsh.GmshConnector.setup_simulation" href="mesher/gmsh.html#integrations.mesher.gmsh.GmshConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="integrations.WorkflowEngine"><code class="flex name class">
+<span>class <span class="ident">WorkflowEngine</span></span>
+<span>(</span><span>cad_connector: integrations._base.connectors.CADConnector,<br>cae_connector: integrations._base.connectors.CAEConnector,<br>mesher_connector: integrations._base.connectors.CAEConnector | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WorkflowEngine:
+    &#34;&#34;&#34;工作流引擎 - 管理CAD到CAE的完整分析流程
+
+    提供标准化的仿真流程，支持灵活的工作流定义。
+    可以执行预定义工作流（如stress_analysis, modal_analysis）或自定义工作流。
+
+    标准工作流步骤类型：
+    - cad.load: 加载CAD模型
+    - cad.set_param: 设置CAD参数
+    - cad.rebuild: 重建模型
+    - cad.export: 导出几何
+    - mesher.generate: 生成网格
+    - cae.setup: 设置仿真
+    - cae.solve: 求解仿真
+    - postprocess.extract: 提取结果
+    &#34;&#34;&#34;
+
+    # 预定义工作流
+    PREDEFINED_WORKFLOWS = {
+        &#34;stress_analysis&#34;: [
+            (&#34;cad&#34;, &#34;load_model&#34;),
+            (&#34;cad&#34;, &#34;set_parameters&#34;),
+            (&#34;cad&#34;, &#34;rebuild&#34;),
+            (&#34;cad&#34;, &#34;export_step&#34;),
+            (&#34;mesher&#34;, &#34;generate_mesh&#34;),
+            (&#34;cae&#34;, &#34;setup_static_analysis&#34;),
+            (&#34;cae&#34;, &#34;solve&#34;),
+            (&#34;postprocess&#34;, &#34;extract_stress&#34;),
+        ],
+        &#34;modal_analysis&#34;: [
+            (&#34;cad&#34;, &#34;load_model&#34;),
+            (&#34;cad&#34;, &#34;export_step&#34;),
+            (&#34;mesher&#34;, &#34;generate_mesh&#34;),
+            (&#34;cae&#34;, &#34;setup_modal_analysis&#34;),
+            (&#34;cae&#34;, &#34;solve&#34;),
+            (&#34;postprocess&#34;, &#34;extract_frequencies&#34;),
+        ],
+        &#34;topology_optimization&#34;: [
+            (&#34;cad&#34;, &#34;load_model&#34;),
+            (&#34;cad&#34;, &#34;export_step&#34;),
+            (&#34;mesher&#34;, &#34;generate_mesh&#34;),
+            (&#34;cae&#34;, &#34;setup_topology_optimization&#34;),
+            (&#34;cae&#34;, &#34;solve&#34;),
+            (&#34;postprocess&#34;, &#34;extract_optimized_shape&#34;),
+        ],
+    }
+
+    def __init__(
+        self,
+        cad_connector: CADConnector,
+        cae_connector: CAEConnector,
+        mesher_connector: Optional[CAEConnector] = None,
+    ):
+        &#34;&#34;&#34;初始化工作流引擎
+
+        Args:
+            cad_connector: CAD连接器实例
+            cae_connector: CAE连接器实例
+            mesher_connector: 网格生成器连接器实例（可选，默认为None）
+        &#34;&#34;&#34;
+        self.cad_connector = cad_connector
+        self.cae_connector = cae_connector
+        self.mesher_connector = mesher_connector
+        self.steps: List[WorkflowStep] = []
+        self.current_step: Optional[WorkflowStep] = None
+        self.status: WorkflowStatus = WorkflowStatus.PENDING
+        self.results: Dict[str, Any] = {}
+        self.progress_callback: Optional[Callable[[str, float], None]] = None
+
+    def set_progress_callback(self, callback: Callable[[str, float], None]) -&gt; None:
+        &#34;&#34;&#34;设置进度回调函数
+
+        Args:
+            callback: 回调函数，接收(step_name, progress)参数
+        &#34;&#34;&#34;
+        self.progress_callback = callback
+
+    def _update_progress(self, message: str, progress: float = 0.0) -&gt; None:
+        &#34;&#34;&#34;更新进度信息
+
+        Args:
+            message: 进度消息
+            progress: 进度百分比（0.0-1.0）
+        &#34;&#34;&#34;
+        if self.progress_callback:
+            self.progress_callback(message, progress)
+
+    def _create_step(self, name: str, description: str) -&gt; WorkflowStep:
+        &#34;&#34;&#34;创建工作流步骤
+
+        Args:
+            name: 步骤名称
+            description: 步骤描述
+
+        Returns:
+            WorkflowStep: 创建的步骤对象
+        &#34;&#34;&#34;
+        step = WorkflowStep(name=name, description=description)
+        self.steps.append(step)
+        return step
+
+    def _start_step(self, step: WorkflowStep) -&gt; None:
+        &#34;&#34;&#34;开始执行步骤
+
+        Args:
+            step: 要开始的步骤
+        &#34;&#34;&#34;
+        step.status = WorkflowStatus.RUNNING
+        step.start_time = time.time()
+        self.current_step = step
+        self._update_progress(f&#34;开始: {step.description}&#34;, 0.0)
+
+    def _complete_step(self, step: WorkflowStep, result: Optional[Any] = None) -&gt; None:
+        &#34;&#34;&#34;完成步骤
+
+        Args:
+            step: 要完成的步骤
+            result: 步骤结果（可选）
+        &#34;&#34;&#34;
+        step.status = WorkflowStatus.COMPLETED
+        step.end_time = time.time()
+        step.result = result
+        self.current_step = None
+        self._update_progress(f&#34;完成: {step.description}&#34;, 1.0)
+
+    def _fail_step(self, step: WorkflowStep, error: str) -&gt; None:
+        &#34;&#34;&#34;标记步骤失败
+
+        Args:
+            step: 失败的步骤
+            error: 错误信息
+        &#34;&#34;&#34;
+        step.status = WorkflowStatus.FAILED
+        step.end_time = time.time()
+        step.error = error
+        self.current_step = None
+        self._update_progress(f&#34;失败: {step.description} - {error}&#34;, 0.0)
+
+    def run_static_analysis(
+        self,
+        cad_file: Path,
+        parameters: Dict[str, float],
+        mesh_element_size: float = 2.0,
+        output_dir: Optional[Path] = None,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;运行静力分析工作流（兼容性方法）
+
+        Args:
+            cad_file: CAD文件路径
+            parameters: 参数字典 {参数名: 值}
+            mesh_element_size: 网格单元尺寸
+            output_dir: 输出目录（可选）
+
+        Returns:
+            Dict[str, Any]: 包含工作流结果的字典
+
+        Raises:
+            RuntimeError: 工作流执行失败时
+        &#34;&#34;&#34;
+        config = {
+            &#34;cad_file&#34;: str(cad_file),
+            &#34;parameters&#34;: parameters,
+            &#34;mesh_element_size&#34;: mesh_element_size,
+            &#34;output_dir&#34;: str(output_dir) if output_dir else None,
+            &#34;material&#34;: &#34;steel&#34;,
+            &#34;loads&#34;: [{&#34;type&#34;: &#34;force&#34;, &#34;value&#34;: 1000, &#34;direction&#34;: &#34;z&#34;}],
+            &#34;constraints&#34;: [{&#34;type&#34;: &#34;fixed&#34;, &#34;location&#34;: &#34;bottom&#34;}],
+        }
+
+        return self.run_workflow(&#34;stress_analysis&#34;, config)
+
+    def get_step_summary(self) -&gt; List[Dict[str, Any]]:
+        &#34;&#34;&#34;获取步骤执行摘要
+
+        Returns:
+            List[Dict[str, Any]]: 步骤摘要列表
+        &#34;&#34;&#34;
+        summary = []
+        for step in self.steps:
+            duration = None
+            if step.start_time and step.end_time:
+                duration = step.end_time - step.start_time
+
+            summary.append(
+                {
+                    &#34;name&#34;: step.name,
+                    &#34;description&#34;: step.description,
+                    &#34;status&#34;: step.status.value,
+                    &#34;duration&#34;: duration,
+                    &#34;error&#34;: step.error,
+                    &#34;has_result&#34;: step.result is not None,
+                }
+            )
+        return summary
+
+    def run_workflow(
+        self,
+        workflow_name: str,
+        config: Any,
+        custom_steps: Optional[List[Tuple[str, str]]] = None,
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;运行工作流（预定义或自定义）
+
+        Args:
+            workflow_name: 工作流名称或自定义工作流标识
+            config: 工作流配置字典或 SimulationConfig 对象
+            custom_steps: 自定义步骤列表，格式为[(模块, 操作), ...]
+
+        Returns:
+            Dict[str, Any]: 包含工作流结果的字典
+
+        Raises:
+            ValueError: 工作流名称无效时
+            RuntimeError: 工作流执行失败时
+        &#34;&#34;&#34;
+        # 获取工作流步骤定义
+        if custom_steps:
+            workflow_steps = custom_steps
+        elif workflow_name in self.PREDEFINED_WORKFLOWS:
+            workflow_steps = self.PREDEFINED_WORKFLOWS[workflow_name]
+        else:
+            raise ValueError(f&#34;未知的工作流: {workflow_name}&#34;)
+
+        try:
+            self.status = WorkflowStatus.RUNNING
+
+            # 处理配置对象，支持字典或 SimulationConfig
+            if hasattr(config, &#34;get&#34;):
+                # 字典类型
+                output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+            elif hasattr(config, &#34;output_dir&#34;):
+                # SimulationConfig 类型
+                output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+            else:
+                # 默认值
+                output_dir = Path.cwd() / &#34;workflow_output&#34;
+
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            # 存储中间文件路径
+            intermediate_files: Dict[str, Path] = {}
+
+            for step_idx, (module, action) in enumerate(workflow_steps):
+                step_name = f&#34;{module}.{action}&#34;
+                step_desc = (
+                    f&#34;步骤 {step_idx + 1}/{len(workflow_steps)}: {module} -&gt; {action}&#34;
+                )
+
+                step = self._create_step(step_name, step_desc)
+                self._start_step(step)
+
+                try:
+                    # 根据模块和操作执行相应的方法
+                    if module == &#34;cad&#34;:
+                        result = self._execute_cad_step(
+                            action, config, intermediate_files
+                        )
+                    elif module == &#34;mesher&#34;:
+                        result = self._execute_mesher_step(
+                            action, config, intermediate_files
+                        )
+                    elif module == &#34;cae&#34;:
+                        result = self._execute_cae_step(
+                            action, config, intermediate_files
+                        )
+                    elif module == &#34;postprocess&#34;:
+                        result = self._execute_postprocess_step(
+                            action, config, intermediate_files
+                        )
+                    else:
+                        raise ValueError(f&#34;未知的模块: {module}&#34;)
+
+                    self._complete_step(step, result)
+                    if result and isinstance(result, dict) and &#34;file&#34; in result:
+                        intermediate_files[step_name] = result[&#34;file&#34;]
+
+                except Exception as e:
+                    self._fail_step(step, str(e))
+                    raise
+
+            # 工作流完成
+            self.status = WorkflowStatus.COMPLETED
+            return {
+                &#34;status&#34;: &#34;completed&#34;,
+                &#34;workflow&#34;: workflow_name,
+                &#34;steps&#34;: self.steps,
+                &#34;results&#34;: self.results,
+                &#34;intermediate_files&#34;: intermediate_files,
+                &#34;output_dir&#34;: str(output_dir),
+            }
+
+        except Exception as e:
+            self.status = WorkflowStatus.FAILED
+            raise RuntimeError(f&#34;工作流执行失败: {e}&#34;)
+
+    def _execute_cad_step(
+        self, action: str, config: Any, files: Dict[str, Path]
+    ) -&gt; Optional[Dict[str, Any]]:
+        &#34;&#34;&#34;执行CAD相关步骤&#34;&#34;&#34;
+        if hasattr(config, &#34;get&#34;):
+            cad_file = Path(config.get(&#34;cad_file&#34;, &#34;&#34;))
+        elif hasattr(config, &#34;cad_file&#34;):
+            cad_file = Path(config.cad_file) if config.cad_file else Path(&#34;&#34;)
+        else:
+            cad_file = Path(&#34;&#34;)
+
+        if action == &#34;load_model&#34;:
+            if not self.cad_connector.connect():
+                raise RuntimeError(&#34;CAD连接失败&#34;)
+            if not self.cad_connector.load_model(cad_file):
+                raise RuntimeError(f&#34;模型加载失败: {cad_file}&#34;)
+            return {&#34;file&#34;: cad_file}
+
+        elif action == &#34;set_parameters&#34;:
+            if hasattr(config, &#34;get&#34;):
+                parameters = config.get(&#34;parameters&#34;, {})
+            elif hasattr(config, &#34;parameters&#34;):
+                parameters = config.parameters if config.parameters else {}
+            else:
+                parameters = {}
+
+            for param_name, param_value in parameters.items():
+                if not self.cad_connector.set_parameter(param_name, param_value):
+                    print(f&#34;警告: 参数 {param_name} 设置失败&#34;)
+            return {&#34;parameters&#34;: parameters}
+
+        elif action == &#34;rebuild&#34;:
+            if not self.cad_connector.rebuild():
+                raise RuntimeError(&#34;模型重建失败&#34;)
+            return {&#34;status&#34;: &#34;rebuilt&#34;}
+
+        elif action == &#34;export_step&#34;:
+            if hasattr(config, &#34;get&#34;):
+                output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+            elif hasattr(config, &#34;output_dir&#34;):
+                output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+            else:
+                output_dir = Path.cwd() / &#34;workflow_output&#34;
+
+            step_file = output_dir / &#34;model.step&#34;
+            if not self.cad_connector.export_step(step_file):
+                raise RuntimeError(&#34;STEP导出失败&#34;)
+            return {&#34;file&#34;: step_file}
+
+        else:
+            raise ValueError(f&#34;未知的CAD操作: {action}&#34;)
+
+    def _execute_mesher_step(
+        self, action: str, config: Any, files: Dict[str, Path]
+    ) -&gt; Optional[Dict[str, Any]]:
+        &#34;&#34;&#34;执行网格生成步骤&#34;&#34;&#34;
+        if action == &#34;generate_mesh&#34;:
+            # 查找上一步的STEP文件
+            step_file = None
+            for step_name, file_path in files.items():
+                if step_name.endswith(&#34;export_step&#34;) or file_path.suffix.lower() in [
+                    &#34;.step&#34;,
+                    &#34;.stp&#34;,
+                ]:
+                    step_file = file_path
+                    break
+
+            if not step_file or not step_file.exists():
+                raise RuntimeError(&#34;未找到STEP文件用于网格生成&#34;)
+
+            # 使用网格生成器连接器（如果提供），否则使用CAE连接器
+            connector = (
+                self.mesher_connector
+                if self.mesher_connector is not None
+                else self.cae_connector
+            )
+
+            if not connector.connect():
+                raise RuntimeError(&#34;网格生成器连接失败&#34;)
+
+            # 处理输出目录配置
+            if hasattr(config, &#34;get&#34;):
+                output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+                element_size = config.get(&#34;mesh_element_size&#34;, 2.0)
+            elif hasattr(config, &#34;output_dir&#34;):
+                output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+                element_size = config.element_size if hasattr(config, &#34;element_size&#34;) else 2.0
+            else:
+                output_dir = Path.cwd() / &#34;workflow_output&#34;
+                element_size = 2.0
+
+            mesh_file = output_dir / &#34;mesh.msh&#34;
+
+            if not connector.generate_mesh(step_file, mesh_file, element_size):
+                raise RuntimeError(&#34;网格生成失败&#34;)
+
+            return {&#34;file&#34;: mesh_file, &#34;element_size&#34;: element_size}
+
+        else:
+            raise ValueError(f&#34;未知的网格生成操作: {action}&#34;)
+
+    def _execute_cae_step(
+        self, action: str, config: Any, files: Dict[str, Path]
+    ) -&gt; Optional[Dict[str, Any]]:
+        &#34;&#34;&#34;执行CAE相关步骤&#34;&#34;&#34;
+        if action.startswith(&#34;setup_&#34;):
+            analysis_type = action.replace(&#34;setup_&#34;, &#34;&#34;)
+
+            # 查找网格文件
+            mesh_file = None
+            for step_name, file_path in files.items():
+                if step_name.endswith(&#34;generate_mesh&#34;) or file_path.suffix.lower() in [
+                    &#34;.msh&#34;,
+                    &#34;.inp&#34;,
+                ]:
+                    mesh_file = file_path
+                    break
+
+            if not mesh_file or not mesh_file.exists():
+                raise RuntimeError(&#34;未找到网格文件用于仿真设置&#34;)
+
+            # 连接到CAE软件（如果尚未连接）
+            if not self.cae_connector.connect():
+                raise RuntimeError(&#34;CAE连接失败&#34;)
+
+            # 准备仿真配置，支持字典或对象
+            sim_config = {
+                &#34;analysis_type&#34;: analysis_type,
+                &#34;material&#34;: &#34;steel&#34;,
+                &#34;loads&#34;: [],
+                &#34;constraints&#34;: [],
+                &#34;solver_settings&#34;: {},
+            }
+
+            if hasattr(config, &#34;get&#34;):
+                sim_config[&#34;material&#34;] = config.get(&#34;material&#34;, &#34;steel&#34;)
+                sim_config[&#34;loads&#34;] = config.get(&#34;loads&#34;, [])
+                sim_config[&#34;constraints&#34;] = config.get(&#34;constraints&#34;, [])
+                sim_config[&#34;solver_settings&#34;] = config.get(&#34;solver_settings&#34;, {})
+            else:
+                # 处理 SimulationConfig 对象
+                if hasattr(config, &#34;material&#34;):
+                    sim_config[&#34;material&#34;] = config.material if config.material else &#34;steel&#34;
+                if hasattr(config, &#34;loads&#34;):
+                    sim_config[&#34;loads&#34;] = config.loads if config.loads else []
+                if hasattr(config, &#34;constraints&#34;):
+                    sim_config[&#34;constraints&#34;] = config.constraints if config.constraints else []
+                if hasattr(config, &#34;solver_settings&#34;):
+                    sim_config[&#34;solver_settings&#34;] = config.solver_settings if config.solver_settings else {}
+
+            input_file = self.cae_connector.setup_simulation(mesh_file, sim_config)
+            return {&#34;file&#34;: input_file, &#34;analysis_type&#34;: analysis_type}
+
+        elif action == &#34;solve&#34;:
+            # 查找输入文件
+            input_file = None
+            for step_name, file_path in files.items():
+                if step_name.startswith(&#34;cae.setup_&#34;) or file_path.suffix.lower() in [
+                    &#34;.inp&#34;,
+                    &#34;.dat&#34;,
+                ]:
+                    input_file = file_path
+                    break
+
+            if not input_file or not input_file.exists():
+                raise RuntimeError(&#34;未找到输入文件用于仿真求解&#34;)
+
+            # 处理输出目录配置
+            if hasattr(config, &#34;get&#34;):
+                output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+            elif hasattr(config, &#34;output_dir&#34;):
+                output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+            else:
+                output_dir = Path.cwd() / &#34;workflow_output&#34;
+            if not self.cae_connector.run_simulation(input_file, output_dir):
+                raise RuntimeError(&#34;仿真求解失败&#34;)
+
+            return {&#34;status&#34;: &#34;solved&#34;, &#34;input_file&#34;: input_file}
+
+        else:
+            raise ValueError(f&#34;未知的CAE操作: {action}&#34;)
+
+    def _execute_postprocess_step(
+        self, action: str, config: Any, files: Dict[str, Path]
+    ) -&gt; Optional[Dict[str, Any]]:
+        &#34;&#34;&#34;执行后处理步骤&#34;&#34;&#34;
+        if action == &#34;extract_stress&#34;:
+            # 查找结果文件（假设为VTK格式）
+            result_file = None
+
+            # 处理输出目录配置
+            if hasattr(config, &#34;get&#34;):
+                output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+            elif hasattr(config, &#34;output_dir&#34;):
+                output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+            else:
+                output_dir = Path.cwd() / &#34;workflow_output&#34;
+
+            # 尝试查找结果文件
+            for ext in [&#34;.vtk&#34;, &#34;.frd&#34;, &#34;.rst&#34;, &#34;.odb&#34;]:
+                potential_file = output_dir / f&#34;results{ext}&#34;
+                if potential_file.exists():
+                    result_file = potential_file
+                    break
+
+            if not result_file:
+                # 查找最近创建的仿真相关文件
+                for step_name, file_path in files.items():
+                    if file_path.suffix.lower() in [&#34;.vtk&#34;, &#34;.frd&#34;, &#34;.rst&#34;, &#34;.odb&#34;]:
+                        result_file = file_path
+                        break
+
+            if not result_file or not result_file.exists():
+                raise RuntimeError(&#34;未找到结果文件用于后处理&#34;)
+
+            results = self.cae_connector.read_results(result_file)
+            self.results.update(results)
+            return results
+
+        elif action == &#34;extract_frequencies&#34;:
+            # 模态分析结果提取
+            # 处理输出目录配置
+            if hasattr(config, &#34;get&#34;):
+                output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+            elif hasattr(config, &#34;output_dir&#34;):
+                output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+            else:
+                output_dir = Path.cwd() / &#34;workflow_output&#34;
+            result_file = output_dir / &#34;modal_results.json&#34;
+            if result_file and result_file.exists():
+                results = self.cae_connector.read_results(result_file)
+                self.results.update(results)
+                return results
+            else:
+                # 返回模拟结果
+                return {&#34;natural_frequencies&#34;: [10.5, 25.3, 42.8, 67.1]}
+
+        else:
+            raise ValueError(f&#34;未知的后处理操作: {action}&#34;)
+
+    def cancel(self) -&gt; None:
+        &#34;&#34;&#34;取消工作流执行&#34;&#34;&#34;
+        self.status = WorkflowStatus.CANCELLED
+        if self.current_step:
+            self.current_step.status = WorkflowStatus.CANCELLED
+            self.current_step = None</code></pre>
+</details>
+<div class="desc"><p>工作流引擎 - 管理CAD到CAE的完整分析流程</p>
+<p>提供标准化的仿真流程，支持灵活的工作流定义。
+可以执行预定义工作流（如stress_analysis, modal_analysis）或自定义工作流。</p>
+<p>标准工作流步骤类型：
+- cad.load: 加载CAD模型
+- cad.set_param: 设置CAD参数
+- cad.rebuild: 重建模型
+- cad.export: 导出几何
+- mesher.generate: 生成网格
+- cae.setup: 设置仿真
+- cae.solve: 求解仿真
+- postprocess.extract: 提取结果</p>
+<p>初始化工作流引擎</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cad_connector</code></strong></dt>
+<dd>CAD连接器实例</dd>
+<dt><strong><code>cae_connector</code></strong></dt>
+<dd>CAE连接器实例</dd>
+<dt><strong><code>mesher_connector</code></strong></dt>
+<dd>网格生成器连接器实例（可选，默认为None）</dd>
+</dl></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="integrations.WorkflowEngine.PREDEFINED_WORKFLOWS"><code class="name">var <span class="ident">PREDEFINED_WORKFLOWS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="integrations.WorkflowEngine.cancel"><code class="name flex">
+<span>def <span class="ident">cancel</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cancel(self) -&gt; None:
+    &#34;&#34;&#34;取消工作流执行&#34;&#34;&#34;
+    self.status = WorkflowStatus.CANCELLED
+    if self.current_step:
+        self.current_step.status = WorkflowStatus.CANCELLED
+        self.current_step = None</code></pre>
+</details>
+<div class="desc"><p>取消工作流执行</p></div>
+</dd>
+<dt id="integrations.WorkflowEngine.get_step_summary"><code class="name flex">
+<span>def <span class="ident">get_step_summary</span></span>(<span>self) ‑> List[Dict[str, Any]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_step_summary(self) -&gt; List[Dict[str, Any]]:
+    &#34;&#34;&#34;获取步骤执行摘要
+
+    Returns:
+        List[Dict[str, Any]]: 步骤摘要列表
+    &#34;&#34;&#34;
+    summary = []
+    for step in self.steps:
+        duration = None
+        if step.start_time and step.end_time:
+            duration = step.end_time - step.start_time
+
+        summary.append(
+            {
+                &#34;name&#34;: step.name,
+                &#34;description&#34;: step.description,
+                &#34;status&#34;: step.status.value,
+                &#34;duration&#34;: duration,
+                &#34;error&#34;: step.error,
+                &#34;has_result&#34;: step.result is not None,
+            }
+        )
+    return summary</code></pre>
+</details>
+<div class="desc"><p>获取步骤执行摘要</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[Dict[str, Any]]</code></dt>
+<dd>步骤摘要列表</dd>
+</dl></div>
+</dd>
+<dt id="integrations.WorkflowEngine.run_static_analysis"><code class="name flex">
+<span>def <span class="ident">run_static_analysis</span></span>(<span>self,<br>cad_file: pathlib._local.Path,<br>parameters: Dict[str, float],<br>mesh_element_size: float = 2.0,<br>output_dir: pathlib._local.Path | None = None) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_static_analysis(
+    self,
+    cad_file: Path,
+    parameters: Dict[str, float],
+    mesh_element_size: float = 2.0,
+    output_dir: Optional[Path] = None,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;运行静力分析工作流（兼容性方法）
+
+    Args:
+        cad_file: CAD文件路径
+        parameters: 参数字典 {参数名: 值}
+        mesh_element_size: 网格单元尺寸
+        output_dir: 输出目录（可选）
+
+    Returns:
+        Dict[str, Any]: 包含工作流结果的字典
+
+    Raises:
+        RuntimeError: 工作流执行失败时
+    &#34;&#34;&#34;
+    config = {
+        &#34;cad_file&#34;: str(cad_file),
+        &#34;parameters&#34;: parameters,
+        &#34;mesh_element_size&#34;: mesh_element_size,
+        &#34;output_dir&#34;: str(output_dir) if output_dir else None,
+        &#34;material&#34;: &#34;steel&#34;,
+        &#34;loads&#34;: [{&#34;type&#34;: &#34;force&#34;, &#34;value&#34;: 1000, &#34;direction&#34;: &#34;z&#34;}],
+        &#34;constraints&#34;: [{&#34;type&#34;: &#34;fixed&#34;, &#34;location&#34;: &#34;bottom&#34;}],
+    }
+
+    return self.run_workflow(&#34;stress_analysis&#34;, config)</code></pre>
+</details>
+<div class="desc"><p>运行静力分析工作流（兼容性方法）</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cad_file</code></strong></dt>
+<dd>CAD文件路径</dd>
+<dt><strong><code>parameters</code></strong></dt>
+<dd>参数字典 {参数名: 值}</dd>
+<dt><strong><code>mesh_element_size</code></strong></dt>
+<dd>网格单元尺寸</dd>
+<dt><strong><code>output_dir</code></strong></dt>
+<dd>输出目录（可选）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>包含工作流结果的字典</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>工作流执行失败时</dd>
+</dl></div>
+</dd>
+<dt id="integrations.WorkflowEngine.run_workflow"><code class="name flex">
+<span>def <span class="ident">run_workflow</span></span>(<span>self,<br>workflow_name: str,<br>config: Any,<br>custom_steps: List[Tuple[str, str]] | None = None) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_workflow(
+    self,
+    workflow_name: str,
+    config: Any,
+    custom_steps: Optional[List[Tuple[str, str]]] = None,
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;运行工作流（预定义或自定义）
+
+    Args:
+        workflow_name: 工作流名称或自定义工作流标识
+        config: 工作流配置字典或 SimulationConfig 对象
+        custom_steps: 自定义步骤列表，格式为[(模块, 操作), ...]
+
+    Returns:
+        Dict[str, Any]: 包含工作流结果的字典
+
+    Raises:
+        ValueError: 工作流名称无效时
+        RuntimeError: 工作流执行失败时
+    &#34;&#34;&#34;
+    # 获取工作流步骤定义
+    if custom_steps:
+        workflow_steps = custom_steps
+    elif workflow_name in self.PREDEFINED_WORKFLOWS:
+        workflow_steps = self.PREDEFINED_WORKFLOWS[workflow_name]
+    else:
+        raise ValueError(f&#34;未知的工作流: {workflow_name}&#34;)
+
+    try:
+        self.status = WorkflowStatus.RUNNING
+
+        # 处理配置对象，支持字典或 SimulationConfig
+        if hasattr(config, &#34;get&#34;):
+            # 字典类型
+            output_dir = Path(config.get(&#34;output_dir&#34;, Path.cwd() / &#34;workflow_output&#34;))
+        elif hasattr(config, &#34;output_dir&#34;):
+            # SimulationConfig 类型
+            output_dir = Path(config.output_dir) if config.output_dir else Path.cwd() / &#34;workflow_output&#34;
+        else:
+            # 默认值
+            output_dir = Path.cwd() / &#34;workflow_output&#34;
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # 存储中间文件路径
+        intermediate_files: Dict[str, Path] = {}
+
+        for step_idx, (module, action) in enumerate(workflow_steps):
+            step_name = f&#34;{module}.{action}&#34;
+            step_desc = (
+                f&#34;步骤 {step_idx + 1}/{len(workflow_steps)}: {module} -&gt; {action}&#34;
+            )
+
+            step = self._create_step(step_name, step_desc)
+            self._start_step(step)
+
+            try:
+                # 根据模块和操作执行相应的方法
+                if module == &#34;cad&#34;:
+                    result = self._execute_cad_step(
+                        action, config, intermediate_files
+                    )
+                elif module == &#34;mesher&#34;:
+                    result = self._execute_mesher_step(
+                        action, config, intermediate_files
+                    )
+                elif module == &#34;cae&#34;:
+                    result = self._execute_cae_step(
+                        action, config, intermediate_files
+                    )
+                elif module == &#34;postprocess&#34;:
+                    result = self._execute_postprocess_step(
+                        action, config, intermediate_files
+                    )
+                else:
+                    raise ValueError(f&#34;未知的模块: {module}&#34;)
+
+                self._complete_step(step, result)
+                if result and isinstance(result, dict) and &#34;file&#34; in result:
+                    intermediate_files[step_name] = result[&#34;file&#34;]
+
+            except Exception as e:
+                self._fail_step(step, str(e))
+                raise
+
+        # 工作流完成
+        self.status = WorkflowStatus.COMPLETED
+        return {
+            &#34;status&#34;: &#34;completed&#34;,
+            &#34;workflow&#34;: workflow_name,
+            &#34;steps&#34;: self.steps,
+            &#34;results&#34;: self.results,
+            &#34;intermediate_files&#34;: intermediate_files,
+            &#34;output_dir&#34;: str(output_dir),
+        }
+
+    except Exception as e:
+        self.status = WorkflowStatus.FAILED
+        raise RuntimeError(f&#34;工作流执行失败: {e}&#34;)</code></pre>
+</details>
+<div class="desc"><p>运行工作流（预定义或自定义）</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>workflow_name</code></strong></dt>
+<dd>工作流名称或自定义工作流标识</dd>
+<dt><strong><code>config</code></strong></dt>
+<dd>工作流配置字典或 SimulationConfig 对象</dd>
+<dt><strong><code>custom_steps</code></strong></dt>
+<dd>自定义步骤列表，格式为[(模块, 操作), &hellip;]</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>包含工作流结果的字典</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>工作流名称无效时</dd>
+<dt><code>RuntimeError</code></dt>
+<dd>工作流执行失败时</dd>
+</dl></div>
+</dd>
+<dt id="integrations.WorkflowEngine.set_progress_callback"><code class="name flex">
+<span>def <span class="ident">set_progress_callback</span></span>(<span>self, callback: Callable[[str, float], None]) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_progress_callback(self, callback: Callable[[str, float], None]) -&gt; None:
+    &#34;&#34;&#34;设置进度回调函数
+
+    Args:
+        callback: 回调函数，接收(step_name, progress)参数
+    &#34;&#34;&#34;
+    self.progress_callback = callback</code></pre>
+</details>
+<div class="desc"><p>设置进度回调函数</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>callback</code></strong></dt>
+<dd>回调函数，接收(step_name, progress)参数</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="integrations.cad" href="cad/index.html">integrations.cad</a></code></li>
+<li><code><a title="integrations.cae" href="cae/index.html">integrations.cae</a></code></li>
+<li><code><a title="integrations.mesher" href="mesher/index.html">integrations.mesher</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="integrations.CADConnector" href="#integrations.CADConnector">CADConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.CADConnector.connect" href="#integrations.CADConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.CADConnector.export" href="#integrations.CADConnector.export">export</a></code></li>
+<li><code><a title="integrations.CADConnector.export_step" href="#integrations.CADConnector.export_step">export_step</a></code></li>
+<li><code><a title="integrations.CADConnector.get_parameter" href="#integrations.CADConnector.get_parameter">get_parameter</a></code></li>
+<li><code><a title="integrations.CADConnector.get_software_info" href="#integrations.CADConnector.get_software_info">get_software_info</a></code></li>
+<li><code><a title="integrations.CADConnector.get_supported_formats" href="#integrations.CADConnector.get_supported_formats">get_supported_formats</a></code></li>
+<li><code><a title="integrations.CADConnector.load_model" href="#integrations.CADConnector.load_model">load_model</a></code></li>
+<li><code><a title="integrations.CADConnector.rebuild" href="#integrations.CADConnector.rebuild">rebuild</a></code></li>
+<li><code><a title="integrations.CADConnector.set_parameter" href="#integrations.CADConnector.set_parameter">set_parameter</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.CAEConnector" href="#integrations.CAEConnector">CAEConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.CAEConnector.connect" href="#integrations.CAEConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.CAEConnector.generate_mesh" href="#integrations.CAEConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.CAEConnector.get_software_info" href="#integrations.CAEConnector.get_software_info">get_software_info</a></code></li>
+<li><code><a title="integrations.CAEConnector.get_supported_analysis_types" href="#integrations.CAEConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.CAEConnector.read_results" href="#integrations.CAEConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.CAEConnector.run_simulation" href="#integrations.CAEConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.CAEConnector.setup_simulation" href="#integrations.CAEConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.CalculiXConnector" href="#integrations.CalculiXConnector">CalculiXConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.CalculiXConnector.cleanup" href="#integrations.CalculiXConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.CalculiXConnector.connect" href="#integrations.CalculiXConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.CalculiXConnector.generate_mesh" href="#integrations.CalculiXConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.CalculiXConnector.get_supported_analysis_types" href="#integrations.CalculiXConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.CalculiXConnector.read_results" href="#integrations.CalculiXConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.CalculiXConnector.run_simulation" href="#integrations.CalculiXConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.CalculiXConnector.setup_simulation" href="#integrations.CalculiXConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.CalculiXConnectorMock" href="#integrations.CalculiXConnectorMock">CalculiXConnectorMock</a></code></h4>
+</li>
+<li>
+<h4><code><a title="integrations.FileFormat" href="#integrations.FileFormat">FileFormat</a></code></h4>
+<ul class="two-column">
+<li><code><a title="integrations.FileFormat.BDF" href="#integrations.FileFormat.BDF">BDF</a></code></li>
+<li><code><a title="integrations.FileFormat.BREP" href="#integrations.FileFormat.BREP">BREP</a></code></li>
+<li><code><a title="integrations.FileFormat.CAS" href="#integrations.FileFormat.CAS">CAS</a></code></li>
+<li><code><a title="integrations.FileFormat.FCSTD" href="#integrations.FileFormat.FCSTD">FCSTD</a></code></li>
+<li><code><a title="integrations.FileFormat.FRD" href="#integrations.FileFormat.FRD">FRD</a></code></li>
+<li><code><a title="integrations.FileFormat.HTML" href="#integrations.FileFormat.HTML">HTML</a></code></li>
+<li><code><a title="integrations.FileFormat.IGES" href="#integrations.FileFormat.IGES">IGES</a></code></li>
+<li><code><a title="integrations.FileFormat.INP" href="#integrations.FileFormat.INP">INP</a></code></li>
+<li><code><a title="integrations.FileFormat.JSON" href="#integrations.FileFormat.JSON">JSON</a></code></li>
+<li><code><a title="integrations.FileFormat.MARKDOWN" href="#integrations.FileFormat.MARKDOWN">MARKDOWN</a></code></li>
+<li><code><a title="integrations.FileFormat.MSH" href="#integrations.FileFormat.MSH">MSH</a></code></li>
+<li><code><a title="integrations.FileFormat.ODB" href="#integrations.FileFormat.ODB">ODB</a></code></li>
+<li><code><a title="integrations.FileFormat.PDF" href="#integrations.FileFormat.PDF">PDF</a></code></li>
+<li><code><a title="integrations.FileFormat.RST" href="#integrations.FileFormat.RST">RST</a></code></li>
+<li><code><a title="integrations.FileFormat.SLDASM" href="#integrations.FileFormat.SLDASM">SLDASM</a></code></li>
+<li><code><a title="integrations.FileFormat.SLDPRT" href="#integrations.FileFormat.SLDPRT">SLDPRT</a></code></li>
+<li><code><a title="integrations.FileFormat.STEP" href="#integrations.FileFormat.STEP">STEP</a></code></li>
+<li><code><a title="integrations.FileFormat.STL" href="#integrations.FileFormat.STL">STL</a></code></li>
+<li><code><a title="integrations.FileFormat.VTK" href="#integrations.FileFormat.VTK">VTK</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.FreeCADConnector" href="#integrations.FreeCADConnector">FreeCADConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.FreeCADConnector.close_document" href="#integrations.FreeCADConnector.close_document">close_document</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.connect" href="#integrations.FreeCADConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.disconnect" href="#integrations.FreeCADConnector.disconnect">disconnect</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.export_file" href="#integrations.FreeCADConnector.export_file">export_file</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.export_step" href="#integrations.FreeCADConnector.export_step">export_step</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.find_parameter" href="#integrations.FreeCADConnector.find_parameter">find_parameter</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.get_parameter" href="#integrations.FreeCADConnector.get_parameter">get_parameter</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.get_parameters" href="#integrations.FreeCADConnector.get_parameters">get_parameters</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.get_supported_formats" href="#integrations.FreeCADConnector.get_supported_formats">get_supported_formats</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.load_model" href="#integrations.FreeCADConnector.load_model">load_model</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.open_document" href="#integrations.FreeCADConnector.open_document">open_document</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.rebuild" href="#integrations.FreeCADConnector.rebuild">rebuild</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.save_document" href="#integrations.FreeCADConnector.save_document">save_document</a></code></li>
+<li><code><a title="integrations.FreeCADConnector.set_parameter" href="#integrations.FreeCADConnector.set_parameter">set_parameter</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.GmshConnector" href="#integrations.GmshConnector">GmshConnector</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.GmshConnector.cleanup" href="#integrations.GmshConnector.cleanup">cleanup</a></code></li>
+<li><code><a title="integrations.GmshConnector.connect" href="#integrations.GmshConnector.connect">connect</a></code></li>
+<li><code><a title="integrations.GmshConnector.convert_mesh_format" href="#integrations.GmshConnector.convert_mesh_format">convert_mesh_format</a></code></li>
+<li><code><a title="integrations.GmshConnector.convert_to_calculix_inp" href="#integrations.GmshConnector.convert_to_calculix_inp">convert_to_calculix_inp</a></code></li>
+<li><code><a title="integrations.GmshConnector.generate_mesh" href="#integrations.GmshConnector.generate_mesh">generate_mesh</a></code></li>
+<li><code><a title="integrations.GmshConnector.get_mesh_quality_report" href="#integrations.GmshConnector.get_mesh_quality_report">get_mesh_quality_report</a></code></li>
+<li><code><a title="integrations.GmshConnector.get_supported_analysis_types" href="#integrations.GmshConnector.get_supported_analysis_types">get_supported_analysis_types</a></code></li>
+<li><code><a title="integrations.GmshConnector.read_results" href="#integrations.GmshConnector.read_results">read_results</a></code></li>
+<li><code><a title="integrations.GmshConnector.run_simulation" href="#integrations.GmshConnector.run_simulation">run_simulation</a></code></li>
+<li><code><a title="integrations.GmshConnector.setup_simulation" href="#integrations.GmshConnector.setup_simulation">setup_simulation</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="integrations.GmshConnectorMock" href="#integrations.GmshConnectorMock">GmshConnectorMock</a></code></h4>
+</li>
+<li>
+<h4><code><a title="integrations.WorkflowEngine" href="#integrations.WorkflowEngine">WorkflowEngine</a></code></h4>
+<ul class="">
+<li><code><a title="integrations.WorkflowEngine.PREDEFINED_WORKFLOWS" href="#integrations.WorkflowEngine.PREDEFINED_WORKFLOWS">PREDEFINED_WORKFLOWS</a></code></li>
+<li><code><a title="integrations.WorkflowEngine.cancel" href="#integrations.WorkflowEngine.cancel">cancel</a></code></li>
+<li><code><a title="integrations.WorkflowEngine.get_step_summary" href="#integrations.WorkflowEngine.get_step_summary">get_step_summary</a></code></li>
+<li><code><a title="integrations.WorkflowEngine.run_static_analysis" href="#integrations.WorkflowEngine.run_static_analysis">run_static_analysis</a></code></li>
+<li><code><a title="integrations.WorkflowEngine.run_workflow" href="#integrations.WorkflowEngine.run_workflow">run_workflow</a></code></li>
+<li><code><a title="integrations.WorkflowEngine.set_progress_callback" href="#integrations.WorkflowEngine.set_progress_callback">set_progress_callback</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

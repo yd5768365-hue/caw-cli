@@ -1,0 +1,1393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.mcp API documentation</title>
+<meta name="description" content="MCP (Model Context Protocol) 模块">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.mcp</code></h1>
+</header>
+<section id="section-intro">
+<p>MCP (Model Context Protocol) 模块</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.mcp.core" href="core.html">sw_helper.mcp.core</a></code></dt>
+<dd>
+<div class="desc"><p>MCP (Model Context Protocol) 核心架构
+用于CAE-CLI与FreeCAD、AI模型之间的通信</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.mcp.freecad_server" href="freecad_server.html">sw_helper.mcp.freecad_server</a></code></dt>
+<dd>
+<div class="desc"><p>FreeCAD MCP Server - 将FreeCAD功能暴露为MCP工具</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="sw_helper.mcp.get_freecad_mcp_server"><code class="name flex">
+<span>def <span class="ident">get_freecad_mcp_server</span></span>(<span>) ‑> <a title="sw_helper.mcp.freecad_server.FreeCADMCPServer" href="freecad_server.html#sw_helper.mcp.freecad_server.FreeCADMCPServer">FreeCADMCPServer</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_freecad_mcp_server() -&gt; FreeCADMCPServer:
+    &#34;&#34;&#34;获取全局FreeCAD MCP服务器&#34;&#34;&#34;
+    global _fc_mcp_server
+    if _fc_mcp_server is None:
+        _fc_mcp_server = FreeCADMCPServer()
+    return _fc_mcp_server</code></pre>
+</details>
+<div class="desc"><p>获取全局FreeCAD MCP服务器</p></div>
+</dd>
+<dt id="sw_helper.mcp.get_mcp_server"><code class="name flex">
+<span>def <span class="ident">get_mcp_server</span></span>(<span>) ‑> <a title="sw_helper.mcp.core.MCPServer" href="core.html#sw_helper.mcp.core.MCPServer">MCPServer</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mcp_server() -&gt; MCPServer:
+    &#34;&#34;&#34;获取或创建全局MCP服务器&#34;&#34;&#34;
+    global _mcp_server
+    if _mcp_server is None:
+        _mcp_server = MCPServer(name=&#34;cae-cli-mcp&#34;, version=&#34;1.0.0&#34;)
+    return _mcp_server</code></pre>
+</details>
+<div class="desc"><p>获取或创建全局MCP服务器</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.mcp.FreeCADMCPServer"><code class="flex name class">
+<span>class <span class="ident">FreeCADMCPServer</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FreeCADMCPServer:
+    &#34;&#34;&#34;
+    FreeCAD MCP服务器
+    将FreeCAD的所有功能封装为MCP工具
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self.server = get_mcp_server()
+        self.fc_connector = None
+        self._register_tools()
+
+    def _register_tools(self):
+        &#34;&#34;&#34;注册所有FreeCAD工具&#34;&#34;&#34;
+
+        # 1. 连接FreeCAD
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_connect&#34;,
+                description=&#34;连接到FreeCAD&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;use_mock&#34;: {
+                            &#34;type&#34;: &#34;boolean&#34;,
+                            &#34;description&#34;: &#34;是否使用模拟模式&#34;,
+                            &#34;default&#34;: False,
+                        }
+                    },
+                },
+                handler=self._handle_connect,
+            )
+        )
+
+        # 2. 打开文档
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_open&#34;,
+                description=&#34;打开FreeCAD文档&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;file_path&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;文件路径&#34;}
+                    },
+                    &#34;required&#34;: [&#34;file_path&#34;],
+                },
+                handler=self._handle_open,
+            )
+        )
+
+        # 3. 获取参数列表
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_get_parameters&#34;,
+                description=&#34;获取模型中的所有参数&#34;,
+                input_schema={&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: {}},
+                handler=self._handle_get_parameters,
+            )
+        )
+
+        # 4. 设置参数
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_set_parameter&#34;,
+                description=&#34;设置模型参数&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;param_name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;参数名称&#34;},
+                        &#34;value&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;参数值&#34;},
+                    },
+                    &#34;required&#34;: [&#34;param_name&#34;, &#34;value&#34;],
+                },
+                handler=self._handle_set_parameter,
+            )
+        )
+
+        # 5. 重建模型
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_rebuild&#34;,
+                description=&#34;重建模型&#34;,
+                input_schema={&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: {}},
+                handler=self._handle_rebuild,
+            )
+        )
+
+        # 6. 导出文件
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_export&#34;,
+                description=&#34;导出模型为STEP/STL&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;output_path&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;输出路径&#34;},
+                        &#34;format&#34;: {
+                            &#34;type&#34;: &#34;string&#34;,
+                            &#34;description&#34;: &#34;导出格式&#34;,
+                            &#34;enum&#34;: [&#34;STEP&#34;, &#34;STL&#34;, &#34;IGES&#34;],
+                            &#34;default&#34;: &#34;STEP&#34;,
+                        },
+                    },
+                    &#34;required&#34;: [&#34;output_path&#34;],
+                },
+                handler=self._handle_export,
+            )
+        )
+
+        # 7. 创建几何体
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_create_box&#34;,
+                description=&#34;创建立方体&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;length&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 100},
+                        &#34;width&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 50},
+                        &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 30},
+                    },
+                },
+                handler=self._handle_create_box,
+            )
+        )
+
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_create_cylinder&#34;,
+                description=&#34;创建圆柱体&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;radius&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 25},
+                        &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;default&#34;: 50},
+                    },
+                },
+                handler=self._handle_create_cylinder,
+            )
+        )
+
+        # 8. 应用圆角
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_apply_fillet&#34;,
+                description=&#34;应用圆角&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;radius&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;圆角半径&#34;}
+                    },
+                    &#34;required&#34;: [&#34;radius&#34;],
+                },
+                handler=self._handle_apply_fillet,
+            )
+        )
+
+        # 9. 优化参数
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_optimize&#34;,
+                description=&#34;优化参数&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;param_name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                        &#34;min_value&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;max_value&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;steps&#34;: {&#34;type&#34;: &#34;integer&#34;, &#34;default&#34;: 5},
+                    },
+                    &#34;required&#34;: [&#34;param_name&#34;, &#34;min_value&#34;, &#34;max_value&#34;],
+                },
+                handler=self._handle_optimize,
+            )
+        )
+
+        # 10. 分析质量
+        self.server.register_tool(
+            Tool(
+                name=&#34;freecad_analyze&#34;,
+                description=&#34;分析模型质量&#34;,
+                input_schema={
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {&#34;file_path&#34;: {&#34;type&#34;: &#34;string&#34;}},
+                },
+                handler=self._handle_analyze,
+            )
+        )
+
+        print(f&#34;[FreeCAD MCP] 已注册 {len(self.server.tools)} 个工具&#34;)
+
+    def _get_connector(self):
+        &#34;&#34;&#34;获取或创建连接器&#34;&#34;&#34;
+        if self.fc_connector is None:
+            from sw_helper.integrations.freecad_connector import (
+                FreeCADConnectorMock,
+            )
+
+            # 这里可以选择使用真实或模拟连接器
+            self.fc_connector = FreeCADConnectorMock()
+        return self.fc_connector
+
+    # ===== 工具处理器 =====
+
+    def _handle_connect(self, use_mock: bool = False) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理连接请求&#34;&#34;&#34;
+        try:
+            if use_mock:
+                from sw_helper.integrations.freecad_connector import (
+                    FreeCADConnectorMock,
+                )
+
+                self.fc_connector = FreeCADConnectorMock()
+            else:
+                from sw_helper.integrations.freecad_connector import FreeCADConnector
+
+                self.fc_connector = FreeCADConnector()
+
+            success = self.fc_connector.connect()
+            return {
+                &#34;success&#34;: success,
+                &#34;mode&#34;: &#34;mock&#34; if use_mock else &#34;real&#34;,
+                &#34;message&#34;: &#34;连接成功&#34; if success else &#34;连接失败&#34;,
+            }
+        except Exception as e:
+            return {&#34;success&#34;: False, &#34;error&#34;: str(e)}
+
+    def _handle_open(self, file_path: str) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理打开文件请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.open_document(file_path)
+        return {&#34;success&#34;: success, &#34;file_path&#34;: file_path}
+
+    def _handle_get_parameters(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理获取参数请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        params = connector.get_parameters()
+        return {
+            &#34;count&#34;: len(params),
+            &#34;parameters&#34;: [
+                {&#34;name&#34;: p.name, &#34;value&#34;: p.value, &#34;unit&#34;: p.unit} for p in params
+            ],
+        }
+
+    def _handle_set_parameter(self, param_name: str, value: float) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理设置参数请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.set_parameter(param_name, value)
+        return {&#34;success&#34;: success, &#34;param_name&#34;: param_name, &#34;new_value&#34;: value}
+
+    def _handle_rebuild(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理重建请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.rebuild()
+        return {&#34;success&#34;: success}
+
+    def _handle_export(self, output_path: str, format: str = &#34;STEP&#34;) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理导出请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        success = connector.export_file(output_path, format)
+        return {&#34;success&#34;: success, &#34;output_path&#34;: output_path, &#34;format&#34;: format}
+
+    def _handle_create_box(
+        self, length: float = 100, width: float = 50, height: float = 30
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理创建立方体请求&#34;&#34;&#34;
+        # 这里简化实现，实际应该调用FreeCAD API
+        return {
+            &#34;success&#34;: True,
+            &#34;shape&#34;: &#34;box&#34;,
+            &#34;dimensions&#34;: {&#34;length&#34;: length, &#34;width&#34;: width, &#34;height&#34;: height},
+            &#34;message&#34;: f&#34;创建立方体: {length}x{width}x{height}mm&#34;,
+        }
+
+    def _handle_create_cylinder(
+        self, radius: float = 25, height: float = 50
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理创建圆柱体请求&#34;&#34;&#34;
+        return {
+            &#34;success&#34;: True,
+            &#34;shape&#34;: &#34;cylinder&#34;,
+            &#34;dimensions&#34;: {&#34;radius&#34;: radius, &#34;height&#34;: height},
+            &#34;message&#34;: f&#34;创建圆柱体: 半径{radius}mm, 高度{height}mm&#34;,
+        }
+
+    def _handle_apply_fillet(self, radius: float) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理应用圆角请求&#34;&#34;&#34;
+        connector = self._get_connector()
+        # 这里简化实现
+        return {
+            &#34;success&#34;: True,
+            &#34;fillet_radius&#34;: radius,
+            &#34;message&#34;: f&#34;应用圆角: R{radius}mm&#34;,
+        }
+
+    def _handle_optimize(
+        self, param_name: str, min_value: float, max_value: float, steps: int = 5
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理优化请求&#34;&#34;&#34;
+        # 这里调用优化器
+        from sw_helper.optimization.optimizer import FreeCADOptimizer
+
+        optimizer = FreeCADOptimizer(use_mock=True)
+        # 简化实现，实际应该执行完整优化流程
+
+        return {
+            &#34;success&#34;: True,
+            &#34;param_name&#34;: param_name,
+            &#34;range&#34;: [min_value, max_value],
+            &#34;steps&#34;: steps,
+            &#34;message&#34;: f&#34;优化完成: {param_name} 范围 {min_value}~{max_value}mm, {steps}步&#34;,
+            &#34;best_value&#34;: (min_value + max_value) / 2,
+            &#34;quality_score&#34;: 85.0,
+        }
+
+    def _handle_analyze(self, file_path: Optional[str] = None) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;处理分析请求&#34;&#34;&#34;
+        if file_path and Path(file_path).exists():
+            from sw_helper.geometry.parser import GeometryParser
+
+            parser = GeometryParser()
+            try:
+                geo_data = parser.parse(file_path)
+                return {
+                    &#34;success&#34;: True,
+                    &#34;volume&#34;: geo_data.get(&#34;volume&#34;, 0),
+                    &#34;vertices&#34;: geo_data.get(&#34;vertices&#34;, 0),
+                    &#34;faces&#34;: geo_data.get(&#34;faces&#34;, 0),
+                    &#34;quality_score&#34;: 80.0,
+                }
+            except Exception as e:
+                return {&#34;success&#34;: False, &#34;error&#34;: str(e)}
+
+        return {&#34;success&#34;: True, &#34;message&#34;: &#34;模型质量良好&#34;, &#34;quality_score&#34;: 85.0}</code></pre>
+</details>
+<div class="desc"><p>FreeCAD MCP服务器
+将FreeCAD的所有功能封装为MCP工具</p></div>
+</dd>
+<dt id="sw_helper.mcp.InMemoryMCPClient"><code class="flex name class">
+<span>class <span class="ident">InMemoryMCPClient</span></span>
+<span>(</span><span>transport: <a title="sw_helper.mcp.core.InMemoryMCPTransport" href="core.html#sw_helper.mcp.core.InMemoryMCPTransport">InMemoryMCPTransport</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InMemoryMCPClient(MCPClient):
+    &#34;&#34;&#34;内存中MCP客户端&#34;&#34;&#34;
+
+    def __init__(self, transport: InMemoryMCPTransport):
+        super().__init__()
+        self.transport = transport
+
+    async def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到服务器（内存中直接返回True）&#34;&#34;&#34;
+        return await self.initialize()
+
+    async def send_message(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;通过传输层发送消息&#34;&#34;&#34;
+        return await self.transport.handle_client_message(message)</code></pre>
+</details>
+<div class="desc"><p>内存中MCP客户端</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="sw_helper.mcp.core.MCPClient" href="core.html#sw_helper.mcp.core.MCPClient">MCPClient</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.InMemoryMCPClient.connect"><code class="name flex">
+<span>async def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到服务器（内存中直接返回True）&#34;&#34;&#34;
+    return await self.initialize()</code></pre>
+</details>
+<div class="desc"><p>连接到服务器（内存中直接返回True）</p></div>
+</dd>
+<dt id="sw_helper.mcp.InMemoryMCPClient.send_message"><code class="name flex">
+<span>async def <span class="ident">send_message</span></span>(<span>self,<br>message: <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a>) ‑> <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def send_message(self, message: MCPMessage) -&gt; MCPMessage:
+    &#34;&#34;&#34;通过传输层发送消息&#34;&#34;&#34;
+    return await self.transport.handle_client_message(message)</code></pre>
+</details>
+<div class="desc"><p>通过传输层发送消息</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="sw_helper.mcp.core.MCPClient" href="core.html#sw_helper.mcp.core.MCPClient">MCPClient</a></b></code>:
+<ul class="hlist">
+<li><code><a title="sw_helper.mcp.core.MCPClient.call_tool" href="core.html#sw_helper.mcp.core.MCPClient.call_tool">call_tool</a></code></li>
+<li><code><a title="sw_helper.mcp.core.MCPClient.disconnect" href="core.html#sw_helper.mcp.core.MCPClient.disconnect">disconnect</a></code></li>
+<li><code><a title="sw_helper.mcp.core.MCPClient.initialize" href="core.html#sw_helper.mcp.core.MCPClient.initialize">initialize</a></code></li>
+<li><code><a title="sw_helper.mcp.core.MCPClient.list_tools" href="core.html#sw_helper.mcp.core.MCPClient.list_tools">list_tools</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="sw_helper.mcp.InMemoryMCPTransport"><code class="flex name class">
+<span>class <span class="ident">InMemoryMCPTransport</span></span>
+<span>(</span><span>server: <a title="sw_helper.mcp.core.MCPServer" href="core.html#sw_helper.mcp.core.MCPServer">MCPServer</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InMemoryMCPTransport:
+    &#34;&#34;&#34;
+    内存中MCP传输层
+    用于同一进程内的Server-Client通信
+    &#34;&#34;&#34;
+
+    def __init__(self, server: MCPServer):
+        self.server = server
+        self.client_handler: Optional[Callable] = None
+
+    async def handle_client_message(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;处理客户端消息&#34;&#34;&#34;
+        return await self.server.handle_message(message)
+
+    def create_client(self) -&gt; &#34;InMemoryMCPClient&#34;:
+        &#34;&#34;&#34;创建关联的客户端&#34;&#34;&#34;
+        return InMemoryMCPClient(self)</code></pre>
+</details>
+<div class="desc"><p>内存中MCP传输层
+用于同一进程内的Server-Client通信</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.InMemoryMCPTransport.create_client"><code class="name flex">
+<span>def <span class="ident">create_client</span></span>(<span>self) ‑> <a title="sw_helper.mcp.core.InMemoryMCPClient" href="core.html#sw_helper.mcp.core.InMemoryMCPClient">InMemoryMCPClient</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_client(self) -&gt; &#34;InMemoryMCPClient&#34;:
+    &#34;&#34;&#34;创建关联的客户端&#34;&#34;&#34;
+    return InMemoryMCPClient(self)</code></pre>
+</details>
+<div class="desc"><p>创建关联的客户端</p></div>
+</dd>
+<dt id="sw_helper.mcp.InMemoryMCPTransport.handle_client_message"><code class="name flex">
+<span>async def <span class="ident">handle_client_message</span></span>(<span>self,<br>message: <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a>) ‑> <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def handle_client_message(self, message: MCPMessage) -&gt; MCPMessage:
+    &#34;&#34;&#34;处理客户端消息&#34;&#34;&#34;
+    return await self.server.handle_message(message)</code></pre>
+</details>
+<div class="desc"><p>处理客户端消息</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.mcp.MCPClient"><code class="flex name class">
+<span>class <span class="ident">MCPClient</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MCPClient:
+    &#34;&#34;&#34;
+    MCP客户端基类
+    用于连接MCP服务器并调用工具
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self.server_capabilities: Optional[Dict[str, Any]] = None
+        self.available_tools: List[Tool] = []
+        self.message_handlers: List[Callable] = []
+
+    async def connect(self) -&gt; bool:
+        &#34;&#34;&#34;连接到服务器&#34;&#34;&#34;
+        raise NotImplementedError
+
+    async def initialize(self) -&gt; bool:
+        &#34;&#34;&#34;初始化连接&#34;&#34;&#34;
+        message = MCPMessage(method=&#34;initialize&#34;, params={})
+        response = await self.send_message(message)
+        if response.result:
+            self.server_capabilities = response.result
+            return True
+        return False
+
+    async def list_tools(self) -&gt; List[Tool]:
+        &#34;&#34;&#34;获取可用工具列表&#34;&#34;&#34;
+        message = MCPMessage(method=&#34;tools/list&#34;)
+        response = await self.send_message(message)
+        if response.result and &#34;tools&#34; in response.result:
+            tools_data = response.result[&#34;tools&#34;]
+            self.available_tools = [
+                Tool(
+                    name=t[&#34;name&#34;],
+                    description=t[&#34;description&#34;],
+                    input_schema=t.get(&#34;inputSchema&#34;, {}),
+                )
+                for t in tools_data
+            ]
+        return self.available_tools
+
+    async def call_tool(self, name: str, arguments: Dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;调用工具&#34;&#34;&#34;
+        message = MCPMessage(
+            method=&#34;tools/call&#34;, params={&#34;name&#34;: name, &#34;arguments&#34;: arguments}
+        )
+        response = await self.send_message(message)
+        if response.result:
+            content = response.result.get(&#34;content&#34;, [])
+            if content:
+                text = content[0].get(&#34;text&#34;, &#34;&#34;)
+                try:
+                    return json.loads(text)
+                except:
+                    return text
+        elif response.error:
+            raise Exception(response.error.get(&#34;message&#34;, &#34;未知错误&#34;))
+        return None
+
+    async def send_message(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;发送消息（子类实现）&#34;&#34;&#34;
+        raise NotImplementedError
+
+    async def disconnect(self):
+        &#34;&#34;&#34;断开连接&#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<div class="desc"><p>MCP客户端基类
+用于连接MCP服务器并调用工具</p></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="sw_helper.mcp.core.InMemoryMCPClient" href="core.html#sw_helper.mcp.core.InMemoryMCPClient">InMemoryMCPClient</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.MCPClient.call_tool"><code class="name flex">
+<span>async def <span class="ident">call_tool</span></span>(<span>self, name: str, arguments: Dict[str, Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def call_tool(self, name: str, arguments: Dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;调用工具&#34;&#34;&#34;
+    message = MCPMessage(
+        method=&#34;tools/call&#34;, params={&#34;name&#34;: name, &#34;arguments&#34;: arguments}
+    )
+    response = await self.send_message(message)
+    if response.result:
+        content = response.result.get(&#34;content&#34;, [])
+        if content:
+            text = content[0].get(&#34;text&#34;, &#34;&#34;)
+            try:
+                return json.loads(text)
+            except:
+                return text
+    elif response.error:
+        raise Exception(response.error.get(&#34;message&#34;, &#34;未知错误&#34;))
+    return None</code></pre>
+</details>
+<div class="desc"><p>调用工具</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPClient.connect"><code class="name flex">
+<span>async def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def connect(self) -&gt; bool:
+    &#34;&#34;&#34;连接到服务器&#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+<div class="desc"><p>连接到服务器</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPClient.disconnect"><code class="name flex">
+<span>async def <span class="ident">disconnect</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def disconnect(self):
+    &#34;&#34;&#34;断开连接&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>断开连接</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPClient.initialize"><code class="name flex">
+<span>async def <span class="ident">initialize</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def initialize(self) -&gt; bool:
+    &#34;&#34;&#34;初始化连接&#34;&#34;&#34;
+    message = MCPMessage(method=&#34;initialize&#34;, params={})
+    response = await self.send_message(message)
+    if response.result:
+        self.server_capabilities = response.result
+        return True
+    return False</code></pre>
+</details>
+<div class="desc"><p>初始化连接</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPClient.list_tools"><code class="name flex">
+<span>async def <span class="ident">list_tools</span></span>(<span>self) ‑> List[<a title="sw_helper.mcp.core.Tool" href="core.html#sw_helper.mcp.core.Tool">Tool</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def list_tools(self) -&gt; List[Tool]:
+    &#34;&#34;&#34;获取可用工具列表&#34;&#34;&#34;
+    message = MCPMessage(method=&#34;tools/list&#34;)
+    response = await self.send_message(message)
+    if response.result and &#34;tools&#34; in response.result:
+        tools_data = response.result[&#34;tools&#34;]
+        self.available_tools = [
+            Tool(
+                name=t[&#34;name&#34;],
+                description=t[&#34;description&#34;],
+                input_schema=t.get(&#34;inputSchema&#34;, {}),
+            )
+            for t in tools_data
+        ]
+    return self.available_tools</code></pre>
+</details>
+<div class="desc"><p>获取可用工具列表</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPClient.send_message"><code class="name flex">
+<span>async def <span class="ident">send_message</span></span>(<span>self,<br>message: <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a>) ‑> <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def send_message(self, message: MCPMessage) -&gt; MCPMessage:
+    &#34;&#34;&#34;发送消息（子类实现）&#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+<div class="desc"><p>发送消息（子类实现）</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage"><code class="flex name class">
+<span>class <span class="ident">MCPMessage</span></span>
+<span>(</span><span>jsonrpc: str = '2.0',<br>id: str | None = None,<br>method: str | None = None,<br>params: Dict[str, Any] | None = None,<br>result: Dict[str, Any] | None = None,<br>error: Dict[str, Any] | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class MCPMessage:
+    &#34;&#34;&#34;MCP标准消息格式&#34;&#34;&#34;
+
+    jsonrpc: str = &#34;2.0&#34;
+    id: Optional[str] = None
+    method: Optional[str] = None
+    params: Optional[Dict[str, Any]] = None
+    result: Optional[Dict[str, Any]] = None
+    error: Optional[Dict[str, Any]] = None
+
+    def __post_init__(self):
+        if self.id is None and self.method:
+            self.id = str(uuid.uuid4())
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;转换为字典&#34;&#34;&#34;
+        data = {&#34;jsonrpc&#34;: self.jsonrpc}
+        if self.id:
+            data[&#34;id&#34;] = self.id
+        if self.method:
+            data[&#34;method&#34;] = self.method
+        if self.params:
+            data[&#34;params&#34;] = self.params
+        if self.result:
+            data[&#34;result&#34;] = self.result
+        if self.error:
+            data[&#34;error&#34;] = self.error
+        return data
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -&gt; &#34;MCPMessage&#34;:
+        &#34;&#34;&#34;从字典创建&#34;&#34;&#34;
+        return cls(
+            jsonrpc=data.get(&#34;jsonrpc&#34;, &#34;2.0&#34;),
+            id=data.get(&#34;id&#34;),
+            method=data.get(&#34;method&#34;),
+            params=data.get(&#34;params&#34;),
+            result=data.get(&#34;result&#34;),
+            error=data.get(&#34;error&#34;),
+        )
+
+    def to_json(self) -&gt; str:
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def from_json(cls, json_str: str) -&gt; &#34;MCPMessage&#34;:
+        return cls.from_dict(json.loads(json_str))</code></pre>
+</details>
+<div class="desc"><p>MCP标准消息格式</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="sw_helper.mcp.MCPMessage.from_dict"><code class="name flex">
+<span>def <span class="ident">from_dict</span></span>(<span>data: Dict[str, Any]) ‑> <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从字典创建</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.from_json"><code class="name flex">
+<span>def <span class="ident">from_json</span></span>(<span>json_str: str) ‑> <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.mcp.MCPMessage.error"><code class="name">var <span class="ident">error</span> : Dict[str, Any] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.jsonrpc"><code class="name">var <span class="ident">jsonrpc</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.method"><code class="name">var <span class="ident">method</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.params"><code class="name">var <span class="ident">params</span> : Dict[str, Any] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.result"><code class="name">var <span class="ident">result</span> : Dict[str, Any] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.MCPMessage.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;转换为字典&#34;&#34;&#34;
+    data = {&#34;jsonrpc&#34;: self.jsonrpc}
+    if self.id:
+        data[&#34;id&#34;] = self.id
+    if self.method:
+        data[&#34;method&#34;] = self.method
+    if self.params:
+        data[&#34;params&#34;] = self.params
+    if self.result:
+        data[&#34;result&#34;] = self.result
+    if self.error:
+        data[&#34;error&#34;] = self.error
+    return data</code></pre>
+</details>
+<div class="desc"><p>转换为字典</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPMessage.to_json"><code class="name flex">
+<span>def <span class="ident">to_json</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_json(self) -&gt; str:
+    return json.dumps(self.to_dict())</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.mcp.MCPServer"><code class="flex name class">
+<span>class <span class="ident">MCPServer</span></span>
+<span>(</span><span>name: str, version: str = '1.0.0')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MCPServer:
+    &#34;&#34;&#34;
+    MCP服务器基类
+    提供工具注册、资源管理、消息处理
+    &#34;&#34;&#34;
+
+    def __init__(self, name: str, version: str = &#34;1.0.0&#34;):
+        self.name = name
+        self.version = version
+        self.tools: Dict[str, Tool] = {}
+        self.resources: Dict[str, Resource] = {}
+        self.handlers: Dict[str, Callable] = {}
+        self.initialized = False
+
+    def register_tool(self, tool: Tool):
+        &#34;&#34;&#34;注册工具&#34;&#34;&#34;
+        self.tools[tool.name] = tool
+        if tool.handler:
+            self.handlers[tool.name] = tool.handler
+        print(f&#34;[MCP Server] 注册工具: {tool.name}&#34;)
+
+    def register_resource(self, resource: Resource):
+        &#34;&#34;&#34;注册资源&#34;&#34;&#34;
+        self.resources[resource.uri] = resource
+        print(f&#34;[MCP Server] 注册资源: {resource.uri}&#34;)
+
+    def tool(self, name: str, description: str, schema: Dict[str, Any]):
+        &#34;&#34;&#34;装饰器：注册工具&#34;&#34;&#34;
+
+        def decorator(func: Callable):
+            tool = Tool(
+                name=name, description=description, input_schema=schema, handler=func
+            )
+            self.register_tool(tool)
+            return func
+
+        return decorator
+
+    async def handle_message(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;处理MCP消息&#34;&#34;&#34;
+        try:
+            if message.method == &#34;initialize&#34;:
+                return await self._handle_initialize(message)
+            elif message.method == &#34;tools/list&#34;:
+                return await self._handle_tools_list(message)
+            elif message.method == &#34;tools/call&#34;:
+                return await self._handle_tools_call(message)
+            elif message.method == &#34;resources/list&#34;:
+                return await self._handle_resources_list(message)
+            elif message.method == &#34;ping&#34;:
+                return MCPMessage(id=message.id, result={})
+            else:
+                return MCPMessage(
+                    id=message.id,
+                    error={&#34;code&#34;: -32601, &#34;message&#34;: f&#34;未知方法: {message.method}&#34;},
+                )
+        except Exception as e:
+            return MCPMessage(id=message.id, error={&#34;code&#34;: -32603, &#34;message&#34;: str(e)})
+
+    async def _handle_initialize(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;处理初始化请求&#34;&#34;&#34;
+        self.initialized = True
+        return MCPMessage(
+            id=message.id,
+            result={
+                &#34;protocolVersion&#34;: &#34;2024-11-05&#34;,
+                &#34;capabilities&#34;: {&#34;tools&#34;: {}, &#34;resources&#34;: {}},
+                &#34;serverInfo&#34;: {&#34;name&#34;: self.name, &#34;version&#34;: self.version},
+            },
+        )
+
+    async def _handle_tools_list(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;处理工具列表请求&#34;&#34;&#34;
+        tools_list = [tool.to_dict() for tool in self.tools.values()]
+        return MCPMessage(id=message.id, result={&#34;tools&#34;: tools_list})
+
+    async def _handle_tools_call(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;处理工具调用&#34;&#34;&#34;
+        params = message.params or {}
+        tool_name = params.get(&#34;name&#34;)
+        arguments = params.get(&#34;arguments&#34;, {})
+
+        if tool_name not in self.tools:
+            return MCPMessage(
+                id=message.id,
+                error={&#34;code&#34;: -32602, &#34;message&#34;: f&#34;工具不存在: {tool_name}&#34;},
+            )
+
+        tool = self.tools[tool_name]
+        if not tool.handler:
+            return MCPMessage(
+                id=message.id,
+                error={&#34;code&#34;: -32602, &#34;message&#34;: f&#34;工具未实现: {tool_name}&#34;},
+            )
+
+        try:
+            # 调用工具处理器
+            if asyncio.iscoroutinefunction(tool.handler):
+                result = await tool.handler(**arguments)
+            else:
+                result = tool.handler(**arguments)
+
+            return MCPMessage(
+                id=message.id,
+                result={
+                    &#34;content&#34;: [
+                        {
+                            &#34;type&#34;: &#34;text&#34;,
+                            &#34;text&#34;: json.dumps(result, ensure_ascii=False)
+                            if isinstance(result, dict)
+                            else str(result),
+                        }
+                    ]
+                },
+            )
+        except Exception as e:
+            return MCPMessage(
+                id=message.id,
+                error={&#34;code&#34;: -32603, &#34;message&#34;: f&#34;工具执行错误: {str(e)}&#34;},
+            )
+
+    async def _handle_resources_list(self, message: MCPMessage) -&gt; MCPMessage:
+        &#34;&#34;&#34;处理资源列表请求&#34;&#34;&#34;
+        resources_list = [res.to_dict() for res in self.resources.values()]
+        return MCPMessage(id=message.id, result={&#34;resources&#34;: resources_list})</code></pre>
+</details>
+<div class="desc"><p>MCP服务器基类
+提供工具注册、资源管理、消息处理</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.MCPServer.handle_message"><code class="name flex">
+<span>async def <span class="ident">handle_message</span></span>(<span>self,<br>message: <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a>) ‑> <a title="sw_helper.mcp.core.MCPMessage" href="core.html#sw_helper.mcp.core.MCPMessage">MCPMessage</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def handle_message(self, message: MCPMessage) -&gt; MCPMessage:
+    &#34;&#34;&#34;处理MCP消息&#34;&#34;&#34;
+    try:
+        if message.method == &#34;initialize&#34;:
+            return await self._handle_initialize(message)
+        elif message.method == &#34;tools/list&#34;:
+            return await self._handle_tools_list(message)
+        elif message.method == &#34;tools/call&#34;:
+            return await self._handle_tools_call(message)
+        elif message.method == &#34;resources/list&#34;:
+            return await self._handle_resources_list(message)
+        elif message.method == &#34;ping&#34;:
+            return MCPMessage(id=message.id, result={})
+        else:
+            return MCPMessage(
+                id=message.id,
+                error={&#34;code&#34;: -32601, &#34;message&#34;: f&#34;未知方法: {message.method}&#34;},
+            )
+    except Exception as e:
+        return MCPMessage(id=message.id, error={&#34;code&#34;: -32603, &#34;message&#34;: str(e)})</code></pre>
+</details>
+<div class="desc"><p>处理MCP消息</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPServer.register_resource"><code class="name flex">
+<span>def <span class="ident">register_resource</span></span>(<span>self,<br>resource: <a title="sw_helper.mcp.core.Resource" href="core.html#sw_helper.mcp.core.Resource">Resource</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register_resource(self, resource: Resource):
+    &#34;&#34;&#34;注册资源&#34;&#34;&#34;
+    self.resources[resource.uri] = resource
+    print(f&#34;[MCP Server] 注册资源: {resource.uri}&#34;)</code></pre>
+</details>
+<div class="desc"><p>注册资源</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPServer.register_tool"><code class="name flex">
+<span>def <span class="ident">register_tool</span></span>(<span>self,<br>tool: <a title="sw_helper.mcp.core.Tool" href="core.html#sw_helper.mcp.core.Tool">Tool</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register_tool(self, tool: Tool):
+    &#34;&#34;&#34;注册工具&#34;&#34;&#34;
+    self.tools[tool.name] = tool
+    if tool.handler:
+        self.handlers[tool.name] = tool.handler
+    print(f&#34;[MCP Server] 注册工具: {tool.name}&#34;)</code></pre>
+</details>
+<div class="desc"><p>注册工具</p></div>
+</dd>
+<dt id="sw_helper.mcp.MCPServer.tool"><code class="name flex">
+<span>def <span class="ident">tool</span></span>(<span>self, name: str, description: str, schema: Dict[str, Any])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tool(self, name: str, description: str, schema: Dict[str, Any]):
+    &#34;&#34;&#34;装饰器：注册工具&#34;&#34;&#34;
+
+    def decorator(func: Callable):
+        tool = Tool(
+            name=name, description=description, input_schema=schema, handler=func
+        )
+        self.register_tool(tool)
+        return func
+
+    return decorator</code></pre>
+</details>
+<div class="desc"><p>装饰器：注册工具</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.mcp.Resource"><code class="flex name class">
+<span>class <span class="ident">Resource</span></span>
+<span>(</span><span>uri: str,<br>name: str,<br>mime_type: str,<br>description: str,<br>handler: Callable | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Resource:
+    &#34;&#34;&#34;MCP资源定义&#34;&#34;&#34;
+
+    uri: str
+    name: str
+    mime_type: str
+    description: str
+    handler: Optional[Callable] = None
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        return {
+            &#34;uri&#34;: self.uri,
+            &#34;name&#34;: self.name,
+            &#34;mimeType&#34;: self.mime_type,
+            &#34;description&#34;: self.description,
+        }</code></pre>
+</details>
+<div class="desc"><p>MCP资源定义</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.mcp.Resource.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Resource.handler"><code class="name">var <span class="ident">handler</span> : Callable | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Resource.mime_type"><code class="name">var <span class="ident">mime_type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Resource.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Resource.uri"><code class="name">var <span class="ident">uri</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.Resource.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; Dict[str, Any]:
+    return {
+        &#34;uri&#34;: self.uri,
+        &#34;name&#34;: self.name,
+        &#34;mimeType&#34;: self.mime_type,
+        &#34;description&#34;: self.description,
+    }</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.mcp.Tool"><code class="flex name class">
+<span>class <span class="ident">Tool</span></span>
+<span>(</span><span>name: str,<br>description: str,<br>input_schema: Dict[str, Any],<br>handler: Callable | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Tool:
+    &#34;&#34;&#34;MCP工具定义&#34;&#34;&#34;
+
+    name: str
+    description: str
+    input_schema: Dict[str, Any]
+    handler: Optional[Callable] = None
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        return {
+            &#34;name&#34;: self.name,
+            &#34;description&#34;: self.description,
+            &#34;inputSchema&#34;: self.input_schema,
+        }</code></pre>
+</details>
+<div class="desc"><p>MCP工具定义</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="sw_helper.mcp.Tool.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Tool.handler"><code class="name">var <span class="ident">handler</span> : Callable | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Tool.input_schema"><code class="name">var <span class="ident">input_schema</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="sw_helper.mcp.Tool.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.mcp.Tool.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; Dict[str, Any]:
+    return {
+        &#34;name&#34;: self.name,
+        &#34;description&#34;: self.description,
+        &#34;inputSchema&#34;: self.input_schema,
+    }</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.mcp.core" href="core.html">sw_helper.mcp.core</a></code></li>
+<li><code><a title="sw_helper.mcp.freecad_server" href="freecad_server.html">sw_helper.mcp.freecad_server</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="sw_helper.mcp.get_freecad_mcp_server" href="#sw_helper.mcp.get_freecad_mcp_server">get_freecad_mcp_server</a></code></li>
+<li><code><a title="sw_helper.mcp.get_mcp_server" href="#sw_helper.mcp.get_mcp_server">get_mcp_server</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.mcp.FreeCADMCPServer" href="#sw_helper.mcp.FreeCADMCPServer">FreeCADMCPServer</a></code></h4>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.InMemoryMCPClient" href="#sw_helper.mcp.InMemoryMCPClient">InMemoryMCPClient</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.mcp.InMemoryMCPClient.connect" href="#sw_helper.mcp.InMemoryMCPClient.connect">connect</a></code></li>
+<li><code><a title="sw_helper.mcp.InMemoryMCPClient.send_message" href="#sw_helper.mcp.InMemoryMCPClient.send_message">send_message</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.InMemoryMCPTransport" href="#sw_helper.mcp.InMemoryMCPTransport">InMemoryMCPTransport</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.mcp.InMemoryMCPTransport.create_client" href="#sw_helper.mcp.InMemoryMCPTransport.create_client">create_client</a></code></li>
+<li><code><a title="sw_helper.mcp.InMemoryMCPTransport.handle_client_message" href="#sw_helper.mcp.InMemoryMCPTransport.handle_client_message">handle_client_message</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.MCPClient" href="#sw_helper.mcp.MCPClient">MCPClient</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.mcp.MCPClient.call_tool" href="#sw_helper.mcp.MCPClient.call_tool">call_tool</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPClient.connect" href="#sw_helper.mcp.MCPClient.connect">connect</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPClient.disconnect" href="#sw_helper.mcp.MCPClient.disconnect">disconnect</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPClient.initialize" href="#sw_helper.mcp.MCPClient.initialize">initialize</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPClient.list_tools" href="#sw_helper.mcp.MCPClient.list_tools">list_tools</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPClient.send_message" href="#sw_helper.mcp.MCPClient.send_message">send_message</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.MCPMessage" href="#sw_helper.mcp.MCPMessage">MCPMessage</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.mcp.MCPMessage.error" href="#sw_helper.mcp.MCPMessage.error">error</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.from_dict" href="#sw_helper.mcp.MCPMessage.from_dict">from_dict</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.from_json" href="#sw_helper.mcp.MCPMessage.from_json">from_json</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.id" href="#sw_helper.mcp.MCPMessage.id">id</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.jsonrpc" href="#sw_helper.mcp.MCPMessage.jsonrpc">jsonrpc</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.method" href="#sw_helper.mcp.MCPMessage.method">method</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.params" href="#sw_helper.mcp.MCPMessage.params">params</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.result" href="#sw_helper.mcp.MCPMessage.result">result</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.to_dict" href="#sw_helper.mcp.MCPMessage.to_dict">to_dict</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPMessage.to_json" href="#sw_helper.mcp.MCPMessage.to_json">to_json</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.MCPServer" href="#sw_helper.mcp.MCPServer">MCPServer</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.mcp.MCPServer.handle_message" href="#sw_helper.mcp.MCPServer.handle_message">handle_message</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPServer.register_resource" href="#sw_helper.mcp.MCPServer.register_resource">register_resource</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPServer.register_tool" href="#sw_helper.mcp.MCPServer.register_tool">register_tool</a></code></li>
+<li><code><a title="sw_helper.mcp.MCPServer.tool" href="#sw_helper.mcp.MCPServer.tool">tool</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.Resource" href="#sw_helper.mcp.Resource">Resource</a></code></h4>
+<ul class="two-column">
+<li><code><a title="sw_helper.mcp.Resource.description" href="#sw_helper.mcp.Resource.description">description</a></code></li>
+<li><code><a title="sw_helper.mcp.Resource.handler" href="#sw_helper.mcp.Resource.handler">handler</a></code></li>
+<li><code><a title="sw_helper.mcp.Resource.mime_type" href="#sw_helper.mcp.Resource.mime_type">mime_type</a></code></li>
+<li><code><a title="sw_helper.mcp.Resource.name" href="#sw_helper.mcp.Resource.name">name</a></code></li>
+<li><code><a title="sw_helper.mcp.Resource.to_dict" href="#sw_helper.mcp.Resource.to_dict">to_dict</a></code></li>
+<li><code><a title="sw_helper.mcp.Resource.uri" href="#sw_helper.mcp.Resource.uri">uri</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.mcp.Tool" href="#sw_helper.mcp.Tool">Tool</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.mcp.Tool.description" href="#sw_helper.mcp.Tool.description">description</a></code></li>
+<li><code><a title="sw_helper.mcp.Tool.handler" href="#sw_helper.mcp.Tool.handler">handler</a></code></li>
+<li><code><a title="sw_helper.mcp.Tool.input_schema" href="#sw_helper.mcp.Tool.input_schema">input_schema</a></code></li>
+<li><code><a title="sw_helper.mcp.Tool.name" href="#sw_helper.mcp.Tool.name">name</a></code></li>
+<li><code><a title="sw_helper.mcp.Tool.to_dict" href="#sw_helper.mcp.Tool.to_dict">to_dict</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

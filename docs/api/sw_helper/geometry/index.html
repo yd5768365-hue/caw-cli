@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>sw_helper.geometry API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>sw_helper.geometry</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sw_helper.geometry.analyzer" href="analyzer.html">sw_helper.geometry.analyzer</a></code></dt>
+<dd>
+<div class="desc"><p>几何特征提取模块</p></div>
+</dd>
+<dt><code class="name"><a title="sw_helper.geometry.parser" href="parser.html">sw_helper.geometry.parser</a></code></dt>
+<dd>
+<div class="desc"><p>几何解析模块 - 支持STEP/STL/IGES等格式</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="sw_helper.geometry.GeometryAnalyzer"><code class="flex name class">
+<span>class <span class="ident">GeometryAnalyzer</span></span>
+<span>(</span><span>geometry_data: Dict[str, Any])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GeometryAnalyzer:
+    &#34;&#34;&#34;几何特征分析器&#34;&#34;&#34;
+
+    def __init__(self, geometry_data: Dict[str, Any]):
+        self.data = geometry_data
+        self.features = {}
+
+    def extract_features(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;提取几何特征&#34;&#34;&#34;
+        self.features = {
+            &#34;volume&#34;: self.calculate_volume(),
+            &#34;surface_area&#34;: self.calculate_surface_area(),
+            &#34;centroid&#34;: self.calculate_centroid(),
+            &#34;bounding_box&#34;: self.calculate_bounding_box(),
+            &#34;symmetry&#34;: self.detect_symmetry(),
+            &#34;holes&#34;: self.detect_holes(),
+            &#34;thin_walls&#34;: self.detect_thin_walls(),
+        }
+        return self.features
+
+    def calculate_volume(self) -&gt; float:
+        &#34;&#34;&#34;计算体积&#34;&#34;&#34;
+        # TODO: 实现体积计算
+        return 0.0
+
+    def calculate_surface_area(self) -&gt; float:
+        &#34;&#34;&#34;计算表面积&#34;&#34;&#34;
+        # TODO: 实现表面积计算
+        return 0.0
+
+    def calculate_centroid(self) -&gt; Tuple[float, float, float]:
+        &#34;&#34;&#34;计算质心&#34;&#34;&#34;
+        # TODO: 实现质心计算
+        return (0.0, 0.0, 0.0)
+
+    def calculate_bounding_box(self) -&gt; Dict[str, Tuple[float, float]]:
+        &#34;&#34;&#34;计算包围盒&#34;&#34;&#34;
+        return {&#34;x&#34;: (0.0, 0.0), &#34;y&#34;: (0.0, 0.0), &#34;z&#34;: (0.0, 0.0)}
+
+    def detect_symmetry(self) -&gt; Dict[str, bool]:
+        &#34;&#34;&#34;检测对称性&#34;&#34;&#34;
+        return {
+            &#34;x_plane&#34;: False,
+            &#34;y_plane&#34;: False,
+            &#34;z_plane&#34;: False,
+            &#34;axisymmetric&#34;: False,
+        }
+
+    def detect_holes(self) -&gt; List[Dict[str, Any]]:
+        &#34;&#34;&#34;检测孔特征&#34;&#34;&#34;
+        return []
+
+    def detect_thin_walls(self) -&gt; List[Dict[str, Any]]:
+        &#34;&#34;&#34;检测薄壁特征&#34;&#34;&#34;
+        return []
+
+    def check_manufacturability(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;检查可制造性&#34;&#34;&#34;
+        return {
+            &#34;cnc_machinable&#34;: True,
+            &#34;3d_printable&#34;: True,
+            &#34;draft_angles_ok&#34;: True,
+            &#34;undercuts&#34;: [],
+        }</code></pre>
+</details>
+<div class="desc"><p>几何特征分析器</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.geometry.GeometryAnalyzer.calculate_bounding_box"><code class="name flex">
+<span>def <span class="ident">calculate_bounding_box</span></span>(<span>self) ‑> Dict[str, Tuple[float, float]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_bounding_box(self) -&gt; Dict[str, Tuple[float, float]]:
+    &#34;&#34;&#34;计算包围盒&#34;&#34;&#34;
+    return {&#34;x&#34;: (0.0, 0.0), &#34;y&#34;: (0.0, 0.0), &#34;z&#34;: (0.0, 0.0)}</code></pre>
+</details>
+<div class="desc"><p>计算包围盒</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.calculate_centroid"><code class="name flex">
+<span>def <span class="ident">calculate_centroid</span></span>(<span>self) ‑> Tuple[float, float, float]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_centroid(self) -&gt; Tuple[float, float, float]:
+    &#34;&#34;&#34;计算质心&#34;&#34;&#34;
+    # TODO: 实现质心计算
+    return (0.0, 0.0, 0.0)</code></pre>
+</details>
+<div class="desc"><p>计算质心</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.calculate_surface_area"><code class="name flex">
+<span>def <span class="ident">calculate_surface_area</span></span>(<span>self) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_surface_area(self) -&gt; float:
+    &#34;&#34;&#34;计算表面积&#34;&#34;&#34;
+    # TODO: 实现表面积计算
+    return 0.0</code></pre>
+</details>
+<div class="desc"><p>计算表面积</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.calculate_volume"><code class="name flex">
+<span>def <span class="ident">calculate_volume</span></span>(<span>self) ‑> float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_volume(self) -&gt; float:
+    &#34;&#34;&#34;计算体积&#34;&#34;&#34;
+    # TODO: 实现体积计算
+    return 0.0</code></pre>
+</details>
+<div class="desc"><p>计算体积</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.check_manufacturability"><code class="name flex">
+<span>def <span class="ident">check_manufacturability</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_manufacturability(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;检查可制造性&#34;&#34;&#34;
+    return {
+        &#34;cnc_machinable&#34;: True,
+        &#34;3d_printable&#34;: True,
+        &#34;draft_angles_ok&#34;: True,
+        &#34;undercuts&#34;: [],
+    }</code></pre>
+</details>
+<div class="desc"><p>检查可制造性</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.detect_holes"><code class="name flex">
+<span>def <span class="ident">detect_holes</span></span>(<span>self) ‑> List[Dict[str, Any]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_holes(self) -&gt; List[Dict[str, Any]]:
+    &#34;&#34;&#34;检测孔特征&#34;&#34;&#34;
+    return []</code></pre>
+</details>
+<div class="desc"><p>检测孔特征</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.detect_symmetry"><code class="name flex">
+<span>def <span class="ident">detect_symmetry</span></span>(<span>self) ‑> Dict[str, bool]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_symmetry(self) -&gt; Dict[str, bool]:
+    &#34;&#34;&#34;检测对称性&#34;&#34;&#34;
+    return {
+        &#34;x_plane&#34;: False,
+        &#34;y_plane&#34;: False,
+        &#34;z_plane&#34;: False,
+        &#34;axisymmetric&#34;: False,
+    }</code></pre>
+</details>
+<div class="desc"><p>检测对称性</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.detect_thin_walls"><code class="name flex">
+<span>def <span class="ident">detect_thin_walls</span></span>(<span>self) ‑> List[Dict[str, Any]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detect_thin_walls(self) -&gt; List[Dict[str, Any]]:
+    &#34;&#34;&#34;检测薄壁特征&#34;&#34;&#34;
+    return []</code></pre>
+</details>
+<div class="desc"><p>检测薄壁特征</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryAnalyzer.extract_features"><code class="name flex">
+<span>def <span class="ident">extract_features</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extract_features(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;提取几何特征&#34;&#34;&#34;
+    self.features = {
+        &#34;volume&#34;: self.calculate_volume(),
+        &#34;surface_area&#34;: self.calculate_surface_area(),
+        &#34;centroid&#34;: self.calculate_centroid(),
+        &#34;bounding_box&#34;: self.calculate_bounding_box(),
+        &#34;symmetry&#34;: self.detect_symmetry(),
+        &#34;holes&#34;: self.detect_holes(),
+        &#34;thin_walls&#34;: self.detect_thin_walls(),
+    }
+    return self.features</code></pre>
+</details>
+<div class="desc"><p>提取几何特征</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.geometry.GeometryParser"><code class="flex name class">
+<span>class <span class="ident">GeometryParser</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GeometryParser:
+    &#34;&#34;&#34;几何文件解析器&#34;&#34;&#34;
+
+    SUPPORTED_FORMATS = [&#34;.step&#34;, &#34;.stp&#34;, &#34;.stl&#34;, &#34;.iges&#34;, &#34;.igs&#34;]
+
+    def __init__(self):
+        self.data = None
+
+    def parse(
+        self, file_path: str, file_format: Optional[str] = None
+    ) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析几何文件
+
+        Args:
+            file_path: 文件路径
+            file_format: 文件格式（可选，自动检测）
+
+        Returns:
+            解析后的几何数据字典
+        &#34;&#34;&#34;
+        path = Path(file_path)
+
+        if not path.exists():
+            raise FileNotFoundError(f&#34;文件不存在: {file_path}&#34;)
+
+        # 自动检测格式
+        ext = path.suffix.lower()
+        if file_format:
+            ext = f&#34;.{file_format.lower()}&#34;
+
+        if ext not in self.SUPPORTED_FORMATS:
+            raise ValueError(f&#34;不支持的文件格式: {ext}&#34;)
+
+        # TODO: 集成FreeCAD或OCC进行实际解析
+        # 这里返回模拟数据
+        return {
+            &#34;file&#34;: str(path),
+            &#34;format&#34;: ext,
+            &#34;vertices&#34;: 0,
+            &#34;faces&#34;: 0,
+            &#34;volume&#34;: 0.0,
+            &#34;bounds&#34;: {&#34;x&#34;: [0, 0], &#34;y&#34;: [0, 0], &#34;z&#34;: [0, 0]},
+        }
+
+    def save(self, data: Dict[str, Any], output_path: str):
+        &#34;&#34;&#34;保存解析结果&#34;&#34;&#34;
+        with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)</code></pre>
+</details>
+<div class="desc"><p>几何文件解析器</p></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="sw_helper.geometry.parser.STEPParser" href="parser.html#sw_helper.geometry.parser.STEPParser">STEPParser</a></li>
+<li><a title="sw_helper.geometry.parser.STLParser" href="parser.html#sw_helper.geometry.parser.STLParser">STLParser</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="sw_helper.geometry.GeometryParser.SUPPORTED_FORMATS"><code class="name">var <span class="ident">SUPPORTED_FORMATS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.geometry.GeometryParser.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>self, file_path: str, file_format: str | None = None) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse(
+    self, file_path: str, file_format: Optional[str] = None
+) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;解析几何文件
+
+    Args:
+        file_path: 文件路径
+        file_format: 文件格式（可选，自动检测）
+
+    Returns:
+        解析后的几何数据字典
+    &#34;&#34;&#34;
+    path = Path(file_path)
+
+    if not path.exists():
+        raise FileNotFoundError(f&#34;文件不存在: {file_path}&#34;)
+
+    # 自动检测格式
+    ext = path.suffix.lower()
+    if file_format:
+        ext = f&#34;.{file_format.lower()}&#34;
+
+    if ext not in self.SUPPORTED_FORMATS:
+        raise ValueError(f&#34;不支持的文件格式: {ext}&#34;)
+
+    # TODO: 集成FreeCAD或OCC进行实际解析
+    # 这里返回模拟数据
+    return {
+        &#34;file&#34;: str(path),
+        &#34;format&#34;: ext,
+        &#34;vertices&#34;: 0,
+        &#34;faces&#34;: 0,
+        &#34;volume&#34;: 0.0,
+        &#34;bounds&#34;: {&#34;x&#34;: [0, 0], &#34;y&#34;: [0, 0], &#34;z&#34;: [0, 0]},
+    }</code></pre>
+</details>
+<div class="desc"><p>解析几何文件</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong></dt>
+<dd>文件路径</dd>
+<dt><strong><code>file_format</code></strong></dt>
+<dd>文件格式（可选，自动检测）</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>解析后的几何数据字典</p></div>
+</dd>
+<dt id="sw_helper.geometry.GeometryParser.save"><code class="name flex">
+<span>def <span class="ident">save</span></span>(<span>self, data: Dict[str, Any], output_path: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save(self, data: Dict[str, Any], output_path: str):
+    &#34;&#34;&#34;保存解析结果&#34;&#34;&#34;
+    with open(output_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)</code></pre>
+</details>
+<div class="desc"><p>保存解析结果</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="sw_helper.geometry.STEPParser"><code class="flex name class">
+<span>class <span class="ident">STEPParser</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class STEPParser(GeometryParser):
+    &#34;&#34;&#34;STEP文件专用解析器&#34;&#34;&#34;
+
+    def parse(self, file_path: str, **kwargs) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析STEP文件&#34;&#34;&#34;
+        # TODO: 集成OCC或FreeCAD
+        result = super().parse(file_path, file_format=&#34;step&#34;)
+        result[&#34;type&#34;] = &#34;brep&#34;
+        return result</code></pre>
+</details>
+<div class="desc"><p>STEP文件专用解析器</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="sw_helper.geometry.parser.GeometryParser" href="parser.html#sw_helper.geometry.parser.GeometryParser">GeometryParser</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.geometry.STEPParser.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>self, file_path: str, **kwargs) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse(self, file_path: str, **kwargs) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;解析STEP文件&#34;&#34;&#34;
+    # TODO: 集成OCC或FreeCAD
+    result = super().parse(file_path, file_format=&#34;step&#34;)
+    result[&#34;type&#34;] = &#34;brep&#34;
+    return result</code></pre>
+</details>
+<div class="desc"><p>解析STEP文件</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="sw_helper.geometry.parser.GeometryParser" href="parser.html#sw_helper.geometry.parser.GeometryParser">GeometryParser</a></b></code>:
+<ul class="hlist">
+<li><code><a title="sw_helper.geometry.parser.GeometryParser.SUPPORTED_FORMATS" href="parser.html#sw_helper.geometry.parser.GeometryParser.SUPPORTED_FORMATS">SUPPORTED_FORMATS</a></code></li>
+<li><code><a title="sw_helper.geometry.parser.GeometryParser.save" href="parser.html#sw_helper.geometry.parser.GeometryParser.save">save</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="sw_helper.geometry.STLParser"><code class="flex name class">
+<span>class <span class="ident">STLParser</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class STLParser(GeometryParser):
+    &#34;&#34;&#34;STL文件专用解析器&#34;&#34;&#34;
+
+    def parse(self, file_path: str, **kwargs) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;解析STL文件&#34;&#34;&#34;
+        # TODO: 实现STL解析
+        result = super().parse(file_path, file_format=&#34;stl&#34;)
+        result[&#34;type&#34;] = &#34;triangular_mesh&#34;
+        return result</code></pre>
+</details>
+<div class="desc"><p>STL文件专用解析器</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="sw_helper.geometry.parser.GeometryParser" href="parser.html#sw_helper.geometry.parser.GeometryParser">GeometryParser</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="sw_helper.geometry.STLParser.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>self, file_path: str, **kwargs) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse(self, file_path: str, **kwargs) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;解析STL文件&#34;&#34;&#34;
+    # TODO: 实现STL解析
+    result = super().parse(file_path, file_format=&#34;stl&#34;)
+    result[&#34;type&#34;] = &#34;triangular_mesh&#34;
+    return result</code></pre>
+</details>
+<div class="desc"><p>解析STL文件</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="sw_helper.geometry.parser.GeometryParser" href="parser.html#sw_helper.geometry.parser.GeometryParser">GeometryParser</a></b></code>:
+<ul class="hlist">
+<li><code><a title="sw_helper.geometry.parser.GeometryParser.SUPPORTED_FORMATS" href="parser.html#sw_helper.geometry.parser.GeometryParser.SUPPORTED_FORMATS">SUPPORTED_FORMATS</a></code></li>
+<li><code><a title="sw_helper.geometry.parser.GeometryParser.save" href="parser.html#sw_helper.geometry.parser.GeometryParser.save">save</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="sw_helper" href="../index.html">sw_helper</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sw_helper.geometry.analyzer" href="analyzer.html">sw_helper.geometry.analyzer</a></code></li>
+<li><code><a title="sw_helper.geometry.parser" href="parser.html">sw_helper.geometry.parser</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="sw_helper.geometry.GeometryAnalyzer" href="#sw_helper.geometry.GeometryAnalyzer">GeometryAnalyzer</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.calculate_bounding_box" href="#sw_helper.geometry.GeometryAnalyzer.calculate_bounding_box">calculate_bounding_box</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.calculate_centroid" href="#sw_helper.geometry.GeometryAnalyzer.calculate_centroid">calculate_centroid</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.calculate_surface_area" href="#sw_helper.geometry.GeometryAnalyzer.calculate_surface_area">calculate_surface_area</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.calculate_volume" href="#sw_helper.geometry.GeometryAnalyzer.calculate_volume">calculate_volume</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.check_manufacturability" href="#sw_helper.geometry.GeometryAnalyzer.check_manufacturability">check_manufacturability</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.detect_holes" href="#sw_helper.geometry.GeometryAnalyzer.detect_holes">detect_holes</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.detect_symmetry" href="#sw_helper.geometry.GeometryAnalyzer.detect_symmetry">detect_symmetry</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.detect_thin_walls" href="#sw_helper.geometry.GeometryAnalyzer.detect_thin_walls">detect_thin_walls</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryAnalyzer.extract_features" href="#sw_helper.geometry.GeometryAnalyzer.extract_features">extract_features</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.geometry.GeometryParser" href="#sw_helper.geometry.GeometryParser">GeometryParser</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.geometry.GeometryParser.SUPPORTED_FORMATS" href="#sw_helper.geometry.GeometryParser.SUPPORTED_FORMATS">SUPPORTED_FORMATS</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryParser.parse" href="#sw_helper.geometry.GeometryParser.parse">parse</a></code></li>
+<li><code><a title="sw_helper.geometry.GeometryParser.save" href="#sw_helper.geometry.GeometryParser.save">save</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.geometry.STEPParser" href="#sw_helper.geometry.STEPParser">STEPParser</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.geometry.STEPParser.parse" href="#sw_helper.geometry.STEPParser.parse">parse</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="sw_helper.geometry.STLParser" href="#sw_helper.geometry.STLParser">STLParser</a></code></h4>
+<ul class="">
+<li><code><a title="sw_helper.geometry.STLParser.parse" href="#sw_helper.geometry.STLParser.parse">parse</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

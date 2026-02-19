@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>core.types API documentation</title>
+<meta name="description" content="核心数据类型定义 - 标准化CAD/CAE集成中的数据结构和配置 …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>core.types</code></h1>
+</header>
+<section id="section-intro">
+<p>核心数据类型定义 - 标准化CAD/CAE集成中的数据结构和配置</p>
+<p>此模块定义统一的数据流格式、配置模型和枚举类型，
+确保不同软件组件之间的数据交换一致性。</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="core.types.create_default_config"><code class="name flex">
+<span>def <span class="ident">create_default_config</span></span>(<span>project_name: str = '默认项目') ‑> <a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_default_config(project_name: str = &#34;默认项目&#34;) -&gt; SimulationConfig:
+    &#34;&#34;&#34;创建默认仿真配置
+
+    Args:
+        project_name: 项目名称
+
+    Returns:
+        SimulationConfig: 默认配置对象
+    &#34;&#34;&#34;
+    config = SimulationConfig(
+        project_name=project_name,
+        description=f&#34;{project_name}的仿真分析配置&#34;,
+        # 默认材料属性
+        material_properties=[
+            MaterialProperty(&#34;弹性模量&#34;, 210e9, &#34;Pa&#34;, &#34;杨氏模量&#34;),
+            MaterialProperty(&#34;泊松比&#34;, 0.3, &#34;&#34;, &#34;横向变形系数&#34;),
+            MaterialProperty(&#34;密度&#34;, 7850, &#34;kg/m³&#34;, &#34;材料密度&#34;),
+            MaterialProperty(&#34;屈服强度&#34;, 235e6, &#34;Pa&#34;, &#34;屈服极限&#34;),
+        ],
+        # 默认载荷
+        loads=[
+            LoadCondition(
+                type=&#34;force&#34;,
+                value=1000.0,
+                location=&#34;top_face&#34;,
+                direction=[0, 0, -1],
+                distribution=&#34;uniform&#34;,
+            )
+        ],
+        # 默认约束
+        constraints=[
+            BoundaryCondition(
+                type=&#34;fixed&#34;,
+                location=&#34;bottom_face&#34;,
+                degrees_of_freedom=[True, True, True, False, False, False],
+            )
+        ],
+        # 默认求解器设置
+        solver_settings={
+            &#34;max_iterations&#34;: 100,
+            &#34;tolerance&#34;: 1e-6,
+            &#34;solver_type&#34;: &#34;direct&#34;,
+            &#34;num_processors&#34;: 1,
+        },
+    )
+
+    return config</code></pre>
+</details>
+<div class="desc"><p>创建默认仿真配置</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>project_name</code></strong></dt>
+<dd>项目名称</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></code></dt>
+<dd>默认配置对象</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="core.types.BoundaryCondition"><code class="flex name class">
+<span>class <span class="ident">BoundaryCondition</span></span>
+<span>(</span><span>type: str,<br>location: str,<br>value: float | List[float] | None = None,<br>degrees_of_freedom: List[bool] | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class BoundaryCondition:
+    &#34;&#34;&#34;边界条件定义&#34;&#34;&#34;
+
+    type: str  # &#34;fixed&#34;, &#34;displacement&#34;, &#34;symmetry&#34;, &#34;contact&#34;
+    location: str
+    value: Optional[Union[float, List[float]]] = None
+    degrees_of_freedom: Optional[List[bool]] = None  # [x, y, z, rx, ry, rz]</code></pre>
+</details>
+<div class="desc"><p>边界条件定义</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="core.types.BoundaryCondition.degrees_of_freedom"><code class="name">var <span class="ident">degrees_of_freedom</span> : List[bool] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.BoundaryCondition.location"><code class="name">var <span class="ident">location</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.BoundaryCondition.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.BoundaryCondition.value"><code class="name">var <span class="ident">value</span> : float | List[float] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="core.types.FileFormat"><code class="flex name class">
+<span>class <span class="ident">FileFormat</span></span>
+<span>(</span><span>*args, **kwds)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileFormat(Enum):
+    &#34;&#34;&#34;文件格式枚举 - 定义标准化的数据流格式
+
+    遵循 CAD → STEP → MSH → INP → VTK 的数据流路径
+    &#34;&#34;&#34;
+
+    # CAD格式
+    FCSTD = &#34;FCStd&#34;  # FreeCAD原生格式
+    SLDPRT = &#34;sldprt&#34;  # SolidWorks零件
+    SLDASM = &#34;sldasm&#34;  # SolidWorks装配体
+
+    # 几何交换格式
+    STEP = &#34;step&#34;  # ISO 10303标准
+    STL = &#34;stl&#34;  # 三角网格
+    IGES = &#34;iges&#34;  # 旧版交换格式
+    BREP = &#34;brep&#34;  # OpenCASCADE边界表示
+
+    # 网格格式
+    MSH = &#34;msh&#34;  # Gmsh网格格式
+    INP = &#34;inp&#34;  # Abaqus/CalculiX输入格式
+    BDF = &#34;bdf&#34;  # NASTRAN格式
+    CAS = &#34;cas&#34;  # Fluent格式
+
+    # 结果格式
+    VTK = &#34;vtk&#34;  # VTK可视化格式
+    FRD = &#34;frd&#34;  # CalculiX结果格式
+    ODB = &#34;odb&#34;  # Abaqus结果格式
+    RST = &#34;rst&#34;  # ANSYS结果格式
+
+    # 报告格式
+    JSON = &#34;json&#34;  # 结构化数据
+    HTML = &#34;html&#34;  # 网页报告
+    PDF = &#34;pdf&#34;  # 可打印报告
+    MARKDOWN = &#34;md&#34;  # Markdown文档</code></pre>
+</details>
+<div class="desc"><p>文件格式枚举 - 定义标准化的数据流格式</p>
+<p>遵循 CAD → STEP → MSH → INP → VTK 的数据流路径</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="core.types.FileFormat.BDF"><code class="name">var <span class="ident">BDF</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.BREP"><code class="name">var <span class="ident">BREP</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.CAS"><code class="name">var <span class="ident">CAS</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.FCSTD"><code class="name">var <span class="ident">FCSTD</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.FRD"><code class="name">var <span class="ident">FRD</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.HTML"><code class="name">var <span class="ident">HTML</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.IGES"><code class="name">var <span class="ident">IGES</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.INP"><code class="name">var <span class="ident">INP</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.JSON"><code class="name">var <span class="ident">JSON</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.MARKDOWN"><code class="name">var <span class="ident">MARKDOWN</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.MSH"><code class="name">var <span class="ident">MSH</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.ODB"><code class="name">var <span class="ident">ODB</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.PDF"><code class="name">var <span class="ident">PDF</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.RST"><code class="name">var <span class="ident">RST</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.SLDASM"><code class="name">var <span class="ident">SLDASM</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.SLDPRT"><code class="name">var <span class="ident">SLDPRT</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.STEP"><code class="name">var <span class="ident">STEP</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.STL"><code class="name">var <span class="ident">STL</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.FileFormat.VTK"><code class="name">var <span class="ident">VTK</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="core.types.LoadCondition"><code class="flex name class">
+<span>class <span class="ident">LoadCondition</span></span>
+<span>(</span><span>type: str,<br>value: float | List[float],<br>location: str | None = None,<br>direction: List[float] | None = None,<br>distribution: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class LoadCondition:
+    &#34;&#34;&#34;载荷条件定义&#34;&#34;&#34;
+
+    type: str  # &#34;force&#34;, &#34;pressure&#34;, &#34;moment&#34;, &#34;temperature&#34;
+    value: Union[float, List[float]]
+    location: Optional[str] = None
+    direction: Optional[List[float]] = None
+    distribution: Optional[str] = None  # &#34;uniform&#34;, &#34;linear&#34;, &#34;parabolic&#34;</code></pre>
+</details>
+<div class="desc"><p>载荷条件定义</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="core.types.LoadCondition.direction"><code class="name">var <span class="ident">direction</span> : List[float] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.LoadCondition.distribution"><code class="name">var <span class="ident">distribution</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.LoadCondition.location"><code class="name">var <span class="ident">location</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.LoadCondition.type"><code class="name">var <span class="ident">type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.LoadCondition.value"><code class="name">var <span class="ident">value</span> : float | List[float]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="core.types.MaterialProperty"><code class="flex name class">
+<span>class <span class="ident">MaterialProperty</span></span>
+<span>(</span><span>name: str, value: float, unit: str, description: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class MaterialProperty:
+    &#34;&#34;&#34;材料属性定义&#34;&#34;&#34;
+
+    name: str
+    value: float
+    unit: str
+    description: Optional[str] = None</code></pre>
+</details>
+<div class="desc"><p>材料属性定义</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="core.types.MaterialProperty.description"><code class="name">var <span class="ident">description</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.MaterialProperty.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.MaterialProperty.unit"><code class="name">var <span class="ident">unit</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.MaterialProperty.value"><code class="name">var <span class="ident">value</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="core.types.SimulationConfig"><code class="flex name class">
+<span>class <span class="ident">SimulationConfig</span></span>
+<span>(</span><span>project_name: str = '未命名项目',<br>description: str | None = None,<br>cad_software: str = 'freecad',<br>cad_file: pathlib._local.Path | None = None,<br>parameters: Dict[str, float] = &lt;factory&gt;,<br>mesh_generator: str = 'gmsh',<br>element_type: str = 'tetrahedron',<br>element_size: float = 2.0,<br>mesh_quality: Dict[str, float] = &lt;factory&gt;,<br>material_name: str = 'Q235',<br>material_properties: List[<a title="core.types.MaterialProperty" href="#core.types.MaterialProperty">MaterialProperty</a>] = &lt;factory&gt;,<br>analysis_type: str = 'static',<br>solver: str = 'calculix',<br>loads: List[<a title="core.types.LoadCondition" href="#core.types.LoadCondition">LoadCondition</a>] = &lt;factory&gt;,<br>constraints: List[<a title="core.types.BoundaryCondition" href="#core.types.BoundaryCondition">BoundaryCondition</a>] = &lt;factory&gt;,<br>solver_settings: Dict[str, Any] = &lt;factory&gt;,<br>output_dir: pathlib._local.Path = WindowsPath('simulation_output'),<br>output_formats: List[<a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a>] = &lt;factory&gt;,<br>report_format: <a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a> = FileFormat.HTML)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class SimulationConfig:
+    &#34;&#34;&#34;仿真配置模型 - 标准化仿真参数
+
+    用于存储从project.yaml解析的仿真配置信息。
+    &#34;&#34;&#34;
+
+    # 基本信息
+    project_name: str = &#34;未命名项目&#34;
+    description: Optional[str] = None
+
+    # CAD配置
+    cad_software: str = &#34;freecad&#34;
+    cad_file: Optional[Path] = None
+    parameters: Dict[str, float] = field(default_factory=dict)
+
+    # 网格配置
+    mesh_generator: str = &#34;gmsh&#34;
+    element_type: str = &#34;tetrahedron&#34;  # &#34;tetrahedron&#34;, &#34;hexahedron&#34;, &#34;mixed&#34;
+    element_size: float = 2.0
+    mesh_quality: Dict[str, float] = field(default_factory=dict)
+
+    # 材料配置
+    material_name: str = &#34;Q235&#34;
+    material_properties: List[MaterialProperty] = field(default_factory=list)
+
+    # 分析配置
+    analysis_type: str = &#34;static&#34;  # &#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;, &#34;buckling&#34;
+    solver: str = &#34;calculix&#34;
+
+    # 载荷和边界条件
+    loads: List[LoadCondition] = field(default_factory=list)
+    constraints: List[BoundaryCondition] = field(default_factory=list)
+
+    # 求解器设置
+    solver_settings: Dict[str, Any] = field(default_factory=dict)
+
+    # 输出配置
+    output_dir: Path = Path(&#34;./simulation_output&#34;)
+    output_formats: List[FileFormat] = field(
+        default_factory=lambda: [FileFormat.VTK, FileFormat.JSON]
+    )
+    report_format: FileFormat = FileFormat.HTML
+
+    @classmethod
+    def from_yaml(cls, yaml_path: Path) -&gt; &#34;SimulationConfig&#34;:
+        &#34;&#34;&#34;从YAML文件加载配置
+
+        Args:
+            yaml_path: YAML配置文件路径
+
+        Returns:
+            SimulationConfig: 配置对象
+
+        Raises:
+            FileNotFoundError: YAML文件不存在时
+            yaml.YAMLError: YAML解析错误时
+        &#34;&#34;&#34;
+        if not yaml_path.exists():
+            raise FileNotFoundError(f&#34;配置文件不存在: {yaml_path}&#34;)
+
+        with open(yaml_path, &#34;r&#34;, encoding=&#34;utf-8&#34;) as f:
+            data = yaml.safe_load(f)
+
+        return cls.from_dict(data)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -&gt; &#34;SimulationConfig&#34;:
+        &#34;&#34;&#34;从字典创建配置对象
+
+        Args:
+            data: 配置字典
+
+        Returns:
+            SimulationConfig: 配置对象
+        &#34;&#34;&#34;
+        # 转换文件路径
+        if &#34;cad_file&#34; in data and data[&#34;cad_file&#34;]:
+            data[&#34;cad_file&#34;] = Path(data[&#34;cad_file&#34;])
+
+        if &#34;output_dir&#34; in data and data[&#34;output_dir&#34;]:
+            data[&#34;output_dir&#34;] = Path(data[&#34;output_dir&#34;])
+
+        # 转换文件格式枚举
+        if &#34;output_formats&#34; in data:
+            data[&#34;output_formats&#34;] = [FileFormat(fmt) for fmt in data[&#34;output_formats&#34;]]
+
+        if &#34;report_format&#34; in data:
+            data[&#34;report_format&#34;] = FileFormat(data[&#34;report_format&#34;])
+
+        # 创建配置对象
+        return cls(**data)
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;转换为字典（用于序列化）
+
+        Returns:
+            Dict[str, Any]: 字典表示
+        &#34;&#34;&#34;
+        data = self.__dict__.copy()
+
+        # 转换Path对象为字符串
+        if data[&#34;cad_file&#34;]:
+            data[&#34;cad_file&#34;] = str(data[&#34;cad_file&#34;])
+
+        data[&#34;output_dir&#34;] = str(data[&#34;output_dir&#34;])
+
+        # 转换枚举为字符串
+        data[&#34;output_formats&#34;] = [fmt.value for fmt in data[&#34;output_formats&#34;]]
+        data[&#34;report_format&#34;] = data[&#34;report_format&#34;].value
+
+        return data
+
+    def to_yaml(self, yaml_path: Path) -&gt; bool:
+        &#34;&#34;&#34;保存配置到YAML文件
+
+        Args:
+            yaml_path: 输出YAML文件路径
+
+        Returns:
+            bool: 保存是否成功
+        &#34;&#34;&#34;
+        try:
+            data = self.to_dict()
+            yaml_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(yaml_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+
+            return True
+        except Exception as e:
+            print(f&#34;保存配置失败: {e}&#34;)
+            return False
+
+    def validate(self) -&gt; List[str]:
+        &#34;&#34;&#34;验证配置有效性
+
+        Returns:
+            List[str]: 错误消息列表，为空表示配置有效
+        &#34;&#34;&#34;
+        errors = []
+
+        # 检查必要字段
+        if not self.project_name:
+            errors.append(&#34;项目名称不能为空&#34;)
+
+        if not self.cad_file:
+            errors.append(&#34;CAD文件路径不能为空&#34;)
+        elif not self.cad_file.exists():
+            errors.append(f&#34;CAD文件不存在: {self.cad_file}&#34;)
+
+        # 检查网格配置
+        if self.element_size &lt;= 0:
+            errors.append(&#34;单元尺寸必须大于0&#34;)
+
+        # 检查分析类型
+        valid_analysis_types = [&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;, &#34;buckling&#34;, &#34;cfd&#34;]
+        if self.analysis_type not in valid_analysis_types:
+            errors.append(f&#34;不支持的分析类型: {self.analysis_type}&#34;)
+
+        return errors</code></pre>
+</details>
+<div class="desc"><p>仿真配置模型 - 标准化仿真参数</p>
+<p>用于存储从project.yaml解析的仿真配置信息。</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="core.types.SimulationConfig.from_dict"><code class="name flex">
+<span>def <span class="ident">from_dict</span></span>(<span>data: Dict[str, Any]) ‑> <a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从字典创建配置对象</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data</code></strong></dt>
+<dd>配置字典</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></code></dt>
+<dd>配置对象</dd>
+</dl></div>
+</dd>
+<dt id="core.types.SimulationConfig.from_yaml"><code class="name flex">
+<span>def <span class="ident">from_yaml</span></span>(<span>yaml_path: pathlib._local.Path) ‑> <a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>从YAML文件加载配置</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>yaml_path</code></strong></dt>
+<dd>YAML配置文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></code></dt>
+<dd>配置对象</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>YAML文件不存在时</dd>
+<dt><code>yaml.YAMLError</code></dt>
+<dd>YAML解析错误时</dd>
+</dl></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="core.types.SimulationConfig.analysis_type"><code class="name">var <span class="ident">analysis_type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.cad_file"><code class="name">var <span class="ident">cad_file</span> : pathlib._local.Path | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.cad_software"><code class="name">var <span class="ident">cad_software</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.constraints"><code class="name">var <span class="ident">constraints</span> : List[<a title="core.types.BoundaryCondition" href="#core.types.BoundaryCondition">BoundaryCondition</a>]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.description"><code class="name">var <span class="ident">description</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.element_size"><code class="name">var <span class="ident">element_size</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.element_type"><code class="name">var <span class="ident">element_type</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.loads"><code class="name">var <span class="ident">loads</span> : List[<a title="core.types.LoadCondition" href="#core.types.LoadCondition">LoadCondition</a>]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.material_name"><code class="name">var <span class="ident">material_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.material_properties"><code class="name">var <span class="ident">material_properties</span> : List[<a title="core.types.MaterialProperty" href="#core.types.MaterialProperty">MaterialProperty</a>]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.mesh_generator"><code class="name">var <span class="ident">mesh_generator</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.mesh_quality"><code class="name">var <span class="ident">mesh_quality</span> : Dict[str, float]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.output_dir"><code class="name">var <span class="ident">output_dir</span> : pathlib._local.Path</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.output_formats"><code class="name">var <span class="ident">output_formats</span> : List[<a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a>]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.parameters"><code class="name">var <span class="ident">parameters</span> : Dict[str, float]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.project_name"><code class="name">var <span class="ident">project_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.report_format"><code class="name">var <span class="ident">report_format</span> : <a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.solver"><code class="name">var <span class="ident">solver</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationConfig.solver_settings"><code class="name">var <span class="ident">solver_settings</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="core.types.SimulationConfig.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;转换为字典（用于序列化）
+
+    Returns:
+        Dict[str, Any]: 字典表示
+    &#34;&#34;&#34;
+    data = self.__dict__.copy()
+
+    # 转换Path对象为字符串
+    if data[&#34;cad_file&#34;]:
+        data[&#34;cad_file&#34;] = str(data[&#34;cad_file&#34;])
+
+    data[&#34;output_dir&#34;] = str(data[&#34;output_dir&#34;])
+
+    # 转换枚举为字符串
+    data[&#34;output_formats&#34;] = [fmt.value for fmt in data[&#34;output_formats&#34;]]
+    data[&#34;report_format&#34;] = data[&#34;report_format&#34;].value
+
+    return data</code></pre>
+</details>
+<div class="desc"><p>转换为字典（用于序列化）</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Any]</code></dt>
+<dd>字典表示</dd>
+</dl></div>
+</dd>
+<dt id="core.types.SimulationConfig.to_yaml"><code class="name flex">
+<span>def <span class="ident">to_yaml</span></span>(<span>self, yaml_path: pathlib._local.Path) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_yaml(self, yaml_path: Path) -&gt; bool:
+    &#34;&#34;&#34;保存配置到YAML文件
+
+    Args:
+        yaml_path: 输出YAML文件路径
+
+    Returns:
+        bool: 保存是否成功
+    &#34;&#34;&#34;
+    try:
+        data = self.to_dict()
+        yaml_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(yaml_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+            yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+
+        return True
+    except Exception as e:
+        print(f&#34;保存配置失败: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>保存配置到YAML文件</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>yaml_path</code></strong></dt>
+<dd>输出YAML文件路径</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>保存是否成功</dd>
+</dl></div>
+</dd>
+<dt id="core.types.SimulationConfig.validate"><code class="name flex">
+<span>def <span class="ident">validate</span></span>(<span>self) ‑> List[str]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate(self) -&gt; List[str]:
+    &#34;&#34;&#34;验证配置有效性
+
+    Returns:
+        List[str]: 错误消息列表，为空表示配置有效
+    &#34;&#34;&#34;
+    errors = []
+
+    # 检查必要字段
+    if not self.project_name:
+        errors.append(&#34;项目名称不能为空&#34;)
+
+    if not self.cad_file:
+        errors.append(&#34;CAD文件路径不能为空&#34;)
+    elif not self.cad_file.exists():
+        errors.append(f&#34;CAD文件不存在: {self.cad_file}&#34;)
+
+    # 检查网格配置
+    if self.element_size &lt;= 0:
+        errors.append(&#34;单元尺寸必须大于0&#34;)
+
+    # 检查分析类型
+    valid_analysis_types = [&#34;static&#34;, &#34;modal&#34;, &#34;thermal&#34;, &#34;buckling&#34;, &#34;cfd&#34;]
+    if self.analysis_type not in valid_analysis_types:
+        errors.append(f&#34;不支持的分析类型: {self.analysis_type}&#34;)
+
+    return errors</code></pre>
+</details>
+<div class="desc"><p>验证配置有效性</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[str]</code></dt>
+<dd>错误消息列表，为空表示配置有效</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="core.types.SimulationResult"><code class="flex name class">
+<span>class <span class="ident">SimulationResult</span></span>
+<span>(</span><span>config: <a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a>,<br>status: str,<br>start_time: float | None = None,<br>end_time: float | None = None,<br>error_message: str | None = None,<br>max_stress: float | None = None,<br>max_displacement: float | None = None,<br>safety_factor: float | None = None,<br>natural_frequencies: List[float] | None = None,<br>result_files: Dict[<a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a>, pathlib._local.Path] = &lt;factory&gt;,<br>report_file: pathlib._local.Path | None = None,<br>raw_data: Dict[str, Any] = &lt;factory&gt;)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class SimulationResult:
+    &#34;&#34;&#34;仿真结果数据结构&#34;&#34;&#34;
+
+    config: SimulationConfig
+    status: str  # &#34;completed&#34;, &#34;failed&#34;, &#34;running&#34;
+    start_time: Optional[float] = None
+    end_time: Optional[float] = None
+    error_message: Optional[str] = None
+
+    # 数值结果
+    max_stress: Optional[float] = None
+    max_displacement: Optional[float] = None
+    safety_factor: Optional[float] = None
+    natural_frequencies: Optional[List[float]] = None
+
+    # 文件结果
+    result_files: Dict[FileFormat, Path] = field(default_factory=dict)
+    report_file: Optional[Path] = None
+
+    # 原始数据
+    raw_data: Dict[str, Any] = field(default_factory=dict)</code></pre>
+</details>
+<div class="desc"><p>仿真结果数据结构</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="core.types.SimulationResult.config"><code class="name">var <span class="ident">config</span> : <a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.end_time"><code class="name">var <span class="ident">end_time</span> : float | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.error_message"><code class="name">var <span class="ident">error_message</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.max_displacement"><code class="name">var <span class="ident">max_displacement</span> : float | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.max_stress"><code class="name">var <span class="ident">max_stress</span> : float | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.natural_frequencies"><code class="name">var <span class="ident">natural_frequencies</span> : List[float] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.raw_data"><code class="name">var <span class="ident">raw_data</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.report_file"><code class="name">var <span class="ident">report_file</span> : pathlib._local.Path | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.result_files"><code class="name">var <span class="ident">result_files</span> : Dict[<a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a>, pathlib._local.Path]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.safety_factor"><code class="name">var <span class="ident">safety_factor</span> : float | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.start_time"><code class="name">var <span class="ident">start_time</span> : float | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="core.types.SimulationResult.status"><code class="name">var <span class="ident">status</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="core" href="index.html">core</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="core.types.create_default_config" href="#core.types.create_default_config">create_default_config</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="core.types.BoundaryCondition" href="#core.types.BoundaryCondition">BoundaryCondition</a></code></h4>
+<ul class="">
+<li><code><a title="core.types.BoundaryCondition.degrees_of_freedom" href="#core.types.BoundaryCondition.degrees_of_freedom">degrees_of_freedom</a></code></li>
+<li><code><a title="core.types.BoundaryCondition.location" href="#core.types.BoundaryCondition.location">location</a></code></li>
+<li><code><a title="core.types.BoundaryCondition.type" href="#core.types.BoundaryCondition.type">type</a></code></li>
+<li><code><a title="core.types.BoundaryCondition.value" href="#core.types.BoundaryCondition.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="core.types.FileFormat" href="#core.types.FileFormat">FileFormat</a></code></h4>
+<ul class="two-column">
+<li><code><a title="core.types.FileFormat.BDF" href="#core.types.FileFormat.BDF">BDF</a></code></li>
+<li><code><a title="core.types.FileFormat.BREP" href="#core.types.FileFormat.BREP">BREP</a></code></li>
+<li><code><a title="core.types.FileFormat.CAS" href="#core.types.FileFormat.CAS">CAS</a></code></li>
+<li><code><a title="core.types.FileFormat.FCSTD" href="#core.types.FileFormat.FCSTD">FCSTD</a></code></li>
+<li><code><a title="core.types.FileFormat.FRD" href="#core.types.FileFormat.FRD">FRD</a></code></li>
+<li><code><a title="core.types.FileFormat.HTML" href="#core.types.FileFormat.HTML">HTML</a></code></li>
+<li><code><a title="core.types.FileFormat.IGES" href="#core.types.FileFormat.IGES">IGES</a></code></li>
+<li><code><a title="core.types.FileFormat.INP" href="#core.types.FileFormat.INP">INP</a></code></li>
+<li><code><a title="core.types.FileFormat.JSON" href="#core.types.FileFormat.JSON">JSON</a></code></li>
+<li><code><a title="core.types.FileFormat.MARKDOWN" href="#core.types.FileFormat.MARKDOWN">MARKDOWN</a></code></li>
+<li><code><a title="core.types.FileFormat.MSH" href="#core.types.FileFormat.MSH">MSH</a></code></li>
+<li><code><a title="core.types.FileFormat.ODB" href="#core.types.FileFormat.ODB">ODB</a></code></li>
+<li><code><a title="core.types.FileFormat.PDF" href="#core.types.FileFormat.PDF">PDF</a></code></li>
+<li><code><a title="core.types.FileFormat.RST" href="#core.types.FileFormat.RST">RST</a></code></li>
+<li><code><a title="core.types.FileFormat.SLDASM" href="#core.types.FileFormat.SLDASM">SLDASM</a></code></li>
+<li><code><a title="core.types.FileFormat.SLDPRT" href="#core.types.FileFormat.SLDPRT">SLDPRT</a></code></li>
+<li><code><a title="core.types.FileFormat.STEP" href="#core.types.FileFormat.STEP">STEP</a></code></li>
+<li><code><a title="core.types.FileFormat.STL" href="#core.types.FileFormat.STL">STL</a></code></li>
+<li><code><a title="core.types.FileFormat.VTK" href="#core.types.FileFormat.VTK">VTK</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="core.types.LoadCondition" href="#core.types.LoadCondition">LoadCondition</a></code></h4>
+<ul class="">
+<li><code><a title="core.types.LoadCondition.direction" href="#core.types.LoadCondition.direction">direction</a></code></li>
+<li><code><a title="core.types.LoadCondition.distribution" href="#core.types.LoadCondition.distribution">distribution</a></code></li>
+<li><code><a title="core.types.LoadCondition.location" href="#core.types.LoadCondition.location">location</a></code></li>
+<li><code><a title="core.types.LoadCondition.type" href="#core.types.LoadCondition.type">type</a></code></li>
+<li><code><a title="core.types.LoadCondition.value" href="#core.types.LoadCondition.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="core.types.MaterialProperty" href="#core.types.MaterialProperty">MaterialProperty</a></code></h4>
+<ul class="">
+<li><code><a title="core.types.MaterialProperty.description" href="#core.types.MaterialProperty.description">description</a></code></li>
+<li><code><a title="core.types.MaterialProperty.name" href="#core.types.MaterialProperty.name">name</a></code></li>
+<li><code><a title="core.types.MaterialProperty.unit" href="#core.types.MaterialProperty.unit">unit</a></code></li>
+<li><code><a title="core.types.MaterialProperty.value" href="#core.types.MaterialProperty.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="core.types.SimulationConfig" href="#core.types.SimulationConfig">SimulationConfig</a></code></h4>
+<ul class="two-column">
+<li><code><a title="core.types.SimulationConfig.analysis_type" href="#core.types.SimulationConfig.analysis_type">analysis_type</a></code></li>
+<li><code><a title="core.types.SimulationConfig.cad_file" href="#core.types.SimulationConfig.cad_file">cad_file</a></code></li>
+<li><code><a title="core.types.SimulationConfig.cad_software" href="#core.types.SimulationConfig.cad_software">cad_software</a></code></li>
+<li><code><a title="core.types.SimulationConfig.constraints" href="#core.types.SimulationConfig.constraints">constraints</a></code></li>
+<li><code><a title="core.types.SimulationConfig.description" href="#core.types.SimulationConfig.description">description</a></code></li>
+<li><code><a title="core.types.SimulationConfig.element_size" href="#core.types.SimulationConfig.element_size">element_size</a></code></li>
+<li><code><a title="core.types.SimulationConfig.element_type" href="#core.types.SimulationConfig.element_type">element_type</a></code></li>
+<li><code><a title="core.types.SimulationConfig.from_dict" href="#core.types.SimulationConfig.from_dict">from_dict</a></code></li>
+<li><code><a title="core.types.SimulationConfig.from_yaml" href="#core.types.SimulationConfig.from_yaml">from_yaml</a></code></li>
+<li><code><a title="core.types.SimulationConfig.loads" href="#core.types.SimulationConfig.loads">loads</a></code></li>
+<li><code><a title="core.types.SimulationConfig.material_name" href="#core.types.SimulationConfig.material_name">material_name</a></code></li>
+<li><code><a title="core.types.SimulationConfig.material_properties" href="#core.types.SimulationConfig.material_properties">material_properties</a></code></li>
+<li><code><a title="core.types.SimulationConfig.mesh_generator" href="#core.types.SimulationConfig.mesh_generator">mesh_generator</a></code></li>
+<li><code><a title="core.types.SimulationConfig.mesh_quality" href="#core.types.SimulationConfig.mesh_quality">mesh_quality</a></code></li>
+<li><code><a title="core.types.SimulationConfig.output_dir" href="#core.types.SimulationConfig.output_dir">output_dir</a></code></li>
+<li><code><a title="core.types.SimulationConfig.output_formats" href="#core.types.SimulationConfig.output_formats">output_formats</a></code></li>
+<li><code><a title="core.types.SimulationConfig.parameters" href="#core.types.SimulationConfig.parameters">parameters</a></code></li>
+<li><code><a title="core.types.SimulationConfig.project_name" href="#core.types.SimulationConfig.project_name">project_name</a></code></li>
+<li><code><a title="core.types.SimulationConfig.report_format" href="#core.types.SimulationConfig.report_format">report_format</a></code></li>
+<li><code><a title="core.types.SimulationConfig.solver" href="#core.types.SimulationConfig.solver">solver</a></code></li>
+<li><code><a title="core.types.SimulationConfig.solver_settings" href="#core.types.SimulationConfig.solver_settings">solver_settings</a></code></li>
+<li><code><a title="core.types.SimulationConfig.to_dict" href="#core.types.SimulationConfig.to_dict">to_dict</a></code></li>
+<li><code><a title="core.types.SimulationConfig.to_yaml" href="#core.types.SimulationConfig.to_yaml">to_yaml</a></code></li>
+<li><code><a title="core.types.SimulationConfig.validate" href="#core.types.SimulationConfig.validate">validate</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="core.types.SimulationResult" href="#core.types.SimulationResult">SimulationResult</a></code></h4>
+<ul class="two-column">
+<li><code><a title="core.types.SimulationResult.config" href="#core.types.SimulationResult.config">config</a></code></li>
+<li><code><a title="core.types.SimulationResult.end_time" href="#core.types.SimulationResult.end_time">end_time</a></code></li>
+<li><code><a title="core.types.SimulationResult.error_message" href="#core.types.SimulationResult.error_message">error_message</a></code></li>
+<li><code><a title="core.types.SimulationResult.max_displacement" href="#core.types.SimulationResult.max_displacement">max_displacement</a></code></li>
+<li><code><a title="core.types.SimulationResult.max_stress" href="#core.types.SimulationResult.max_stress">max_stress</a></code></li>
+<li><code><a title="core.types.SimulationResult.natural_frequencies" href="#core.types.SimulationResult.natural_frequencies">natural_frequencies</a></code></li>
+<li><code><a title="core.types.SimulationResult.raw_data" href="#core.types.SimulationResult.raw_data">raw_data</a></code></li>
+<li><code><a title="core.types.SimulationResult.report_file" href="#core.types.SimulationResult.report_file">report_file</a></code></li>
+<li><code><a title="core.types.SimulationResult.result_files" href="#core.types.SimulationResult.result_files">result_files</a></code></li>
+<li><code><a title="core.types.SimulationResult.safety_factor" href="#core.types.SimulationResult.safety_factor">safety_factor</a></code></li>
+<li><code><a title="core.types.SimulationResult.start_time" href="#core.types.SimulationResult.start_time">start_time</a></code></li>
+<li><code><a title="core.types.SimulationResult.status" href="#core.types.SimulationResult.status">status</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

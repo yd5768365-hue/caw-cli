@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAE-CLI</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0d1117, #161b22); color: #c9d1d9; min-height: 100vh; }
+        .header { background: rgba(22,27,34,0.95); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; }
+        .logo { font-size: 32px; font-weight: bold; background: linear-gradient(90deg, #58a6ff, #a371f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav { display: flex; gap: 15px; }
+        .nav-item { padding: 10px 20px; border-radius: 8px; cursor: pointer; color: #8b949e; }
+        .nav-item:hover { background: rgba(88,166,255,0.1); }
+        .nav-item.active { background: rgba(88,166,255,0.2); color: #58a6ff; }
+        .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
+        .hero { text-align: center; padding: 40px 0; }
+        .hero h1 { font-size: 56px; background: linear-gradient(90deg, #58a6ff, #a371f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 40px; }
+        .module-card { background: linear-gradient(145deg, rgba(33,38,45,0.8), rgba(22,27,34,0.9)); border-radius: 16px; padding: 28px; border: 1px solid #30363d; cursor: pointer; transition: all 0.3s; }
+        .module-card:hover { transform: translateY(-8px); border-color: #58a6ff; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .module-icon { font-size: 48px; margin-bottom: 16px; }
+        .module-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #c9d1d9; }
+        .module-desc { font-size: 14px; color: #8b949e; }
+        .module-cmd { margin-top: 15px; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-family: Consolas, monospace; font-size: 12px; color: #58a6ff; }
+        .action-btns { display: flex; gap: 15px; justify-content: center; }
+        .action-btn { padding: 12px 28px; background: linear-gradient(90deg, #238636, #2ea043); border: none; border-radius: 8px; color: white; font-size: 14px; cursor: pointer; }
+        .action-btn:hover { transform: scale(1.05); }
+        .click-hint { background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.3); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; color: #58a6ff; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">⚡ CAE-CLI</div>
+        <div class="nav">
+            <div class="nav-item active" onclick="showPage('home')">🏠 首页</div>
+            <div class="nav-item" onclick="showPage('tools')">🛠️ 工具</div>
+            <div class="nav-item" onclick="showPage('ai')">🤖 AI</div>
+        </div>
+    </div>
+    <div class="container" id="home-page">
+        <div class="click-hint">💡 点击任意模块卡片直接执行命令</div>
+        <div class="hero">
+            <h1>CAE-CLI</h1>
+            <p>专业的机械设计辅助工具</p>
+            <div class="action-btns">
+                <button class="action-btn" onclick="runCmd('cae-cli --help')">查看帮助</button>
+                <button class="action-btn" onclick="runCmd('cae-cli info')">系统信息</button>
+                <button class="action-btn" onclick="runCmd('cae-cli material --list')">材料列表</button>
+            </div>
+        </div>
+        <div class="modules">
+            <div class="module-card" onclick="runCmd('cae-cli parse --help')">
+                <div class="module-icon">📐</div>
+                <div class="module-title">几何解析</div>
+                <div class="module-desc">解析STEP、STL、IGES</div>
+                <div class="module-cmd">cae-cli parse model.step</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli analyze --help')">
+                <div class="module-icon">🔲</div>
+                <div class="module-title">网格分析</div>
+                <div class="module-desc">分析有限元网格质量</div>
+                <div class="module-cmd">cae-cli analyze mesh.msh</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli material --help')">
+                <div class="module-icon">🔧</div>
+                <div class="module-title">材料查询</div>
+                <div class="module-desc">查询材料数据库</div>
+                <div class="module-cmd">cae-cli material Q235</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli optimize --help')">
+                <div class="module-icon">⚡</div>
+                <div class="module-title">参数优化</div>
+                <div class="module-desc">自动调整设计参数</div>
+                <div class="module-cmd">cae-cli optimize</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli workflow --help')">
+                <div class="module-icon">🔄</div>
+                <div class="module-title">CAE工作流</div>
+                <div class="module-desc">完整CAD→CAE流程</div>
+                <div class="module-cmd">cae-cli workflow</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli ai --help')">
+                <div class="module-icon">🤖</div>
+                <div class="module-title">AI助手</div>
+                <div class="module-desc">自然语言生成模型</div>
+                <div class="module-cmd">cae-cli ai</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli handbook --help')">
+                <div class="module-icon">📚</div>
+                <div class="module-title">知识库</div>
+                <div class="module-desc">机械设计知识</div>
+                <div class="module-cmd">cae-cli handbook</div>
+            </div>
+            <div class="module-card" onclick="runCmd('cae-cli interactive --help')">
+                <div class="module-icon">💬</div>
+                <div class="module-title">交互模式</div>
+                <div class="module-desc">菜单式交互</div>
+                <div class="module-cmd">cae-cli interactive</div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="tools-page" style="display:none;">
+        <h2 style="font-size:28px;margin-bottom:30px;">🛠️ 工具模块</h2>
+        <div class="modules">
+            <div class="module-card" onclick="runCmd('cae-cli parse --help')"><div class="module-icon">📐</div><div class="module-title">几何解析</div></div>
+            <div class="module-card" onclick="runCmd('cae-cli analyze --help')"><div class="module-icon">🔲</div><div class="module-title">网格分析</div></div>
+            <div class="module-card" onclick="runCmd('cae-cli material --help')"><div class="module-icon">🔧</div><div class="module-title">材料查询</div></div>
+            <div class="module-card" onclick="runCmd('cae-cli report --help')"><div class="module-icon">📊</div><div class="module-title">报告生成</div></div>
+        </div>
+    </div>
+    <div class="container" id="ai-page" style="display:none;">
+        <h2 style="font-size:28px;margin-bottom:30px;">🤖 AI模块</h2>
+        <div class="modules">
+            <div class="module-card" onclick="runCmd('cae-cli ai generate --help')"><div class="module-icon">🎲</div><div class="module-title">AI生成</div></div>
+            <div class="module-card" onclick="runCmd('cae-cli ai suggest --help')"><div class="module-icon">💡</div><div class="module-title">AI建议</div></div>
+            <div class="module-card" onclick="runCmd('cae-cli chat --help')"><div class="module-icon">💬</div><div class="module-title">智能对话</div></div>
+        </div>
+    </div>
+    <script>
+        var bridge = null;
+        
+        // QWebChannel 初始化 - 使用 qt.webChannelTransport
+        if (typeof QWebChannel !== 'undefined') {
+            new QWebChannel(qt.webChannelTransport, function(channel) {
+                bridge = channel.objects.bridge;
+                console.log('Bridge initialized:', bridge);
+                // 隐藏加载提示
+                document.querySelector('.click-hint').textContent = '✅ QWebChannel 已连接 - 点击卡片执行命令';
+                document.querySelector('.click-hint').style.background = 'rgba(35, 134, 54, 0.2)';
+                document.querySelector('.click-hint').style.borderColor = 'rgba(35, 134, 54, 0.5)';
+            });
+        } else {
+            console.error('QWebChannel not available');
+        }
+        
+        // 执行命令
+        function runCmd(cmd) {
+            if (bridge) {
+                console.log('Executing:', cmd);
+                bridge.runCommand(cmd);
+            } else {
+                alert('Bridge not initialized, please wait...');
+            }
+        }
+        
+        function showPage(pageId) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('tools-page').style.display = 'none';
+            document.getElementById('ai-page').style.display = 'none';
+            document.getElementById(pageId + '-page').style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(function(item) { item.classList.remove('active'); });
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
