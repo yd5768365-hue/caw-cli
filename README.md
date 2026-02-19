@@ -416,6 +416,18 @@ pip install "cae-cli[ai]"
 pip install "cae-cli[full,ai]"
 ```
 
+### 方式五：GUI 桌面版本（Web 美化界面）
+
+```bash
+# 打包 GUI 版本
+python build_exe.py --web --onefile
+
+# 可执行文件位置：dist/cae-cli.exe
+
+# 运行 GUI 前需要安装依赖
+pip install PySide6 PySide6-WebEngine
+```
+
 ### 系统要求
 
 - **Python**：>= 3.8
@@ -1235,5 +1247,3 @@ python -c "from sw_helper.ai.rag import RAGManager; rag=RAGManager('knowledge/')
 - **Ollama** - 本地LLM运行环境
 - **ChromaDB** - 向量数据库
 - **Sentence Transformers** - 文本嵌入模型一个专为机械专业学生设计的终端工具，帮助快速分析 SolidWorks/FreeCAD 模型的网格质量、材料力学性能、参数优化，并集成 AI 建议和个人机械手册知识库。新增插件化架构，支持标准化CAD/CAE软件集成。
-
-
