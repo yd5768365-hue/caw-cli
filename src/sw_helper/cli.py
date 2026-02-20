@@ -39,7 +39,24 @@ def get_resource_path(relative_path: str) -> Path:
         base_path = Path(__file__).parent.parent.parent
     return base_path / relative_path
 
-console = Console()
+# 处理Windows终端编码问题
+import io
+import sys
+
+def _get_console_file():
+    """获取适合的终端文件对象"""
+    if sys.platform == "win32":
+        try:
+            # 尝试设置UTF-8输出
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+        except:
+            pass
+    return None
+
+_get_console_file()
+
+console = Console(force_terminal=True)
 
 # 项目核心颜色定义
 MAIN_RED = "#8B0000"       # 深红/酒红 - 主色调
@@ -1711,9 +1728,13 @@ def search(keyword, case_sensitive):
     KEYWORD: 搜索关键词
     """
     from sw_helper.knowledge import get_knowledge_base
-    from rich.console import Console
 
-    console = Console()
+    # 创建Console时处理编码问题
+    try:
+        console = Console(force_terminal=True)
+    except:
+        console = Console()
+
     kb = get_knowledge_base()
 
     console.print(f"[cyan]正在搜索知识库:[/cyan] '{keyword}'")
