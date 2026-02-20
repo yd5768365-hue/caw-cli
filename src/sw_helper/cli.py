@@ -2158,6 +2158,24 @@ def interactive(lang):
         else:
             console.print("[yellow]Ollama服务未就绪，将仅使用本地知识库[/yellow]")
 
+        # 预热模型（如果选择了模型）
+        if selected_model and requests_available:
+            console.print(f"[cyan]正在预热模型 {selected_model}，首次加载较慢，请稍候...[/cyan]", style="cyan")
+            try:
+                warmup_url = "http://localhost:11434/api/chat"
+                warmup_payload = {
+                    "model": selected_model,
+                    "messages": [{"role": "user", "content": "你好"}],
+                    "stream": False
+                }
+                warmup_response = requests.post(warmup_url, json=warmup_payload, timeout=180)
+                if warmup_response.status_code == 200:
+                    console.print(f"[green]✓ 模型 {selected_model} 已预热完成[/green]", style="green")
+                else:
+                    console.print(f"[yellow]模型预热失败，状态码: {warmup_response.status_code}[/yellow]", style="yellow")
+            except Exception as e:
+                console.print(f"[yellow]模型预热跳过: {str(e)}[/yellow]", style="yellow")
+
         console.print(Panel.fit(
             "[bold green]📚 CAE-CLI 学习模式[/bold green]\n\n"
             "欢迎使用聊天式学习助手！\n"
@@ -2254,43 +2272,52 @@ def interactive(lang):
 
             try:
                 # 确保使用UTF-8编码
-                console.print(f"[dim]发送请求到 Ollama...[/dim]")
+                console.print(f"[dim]发送请求到 Ollama...[/dim]", style="cyan")
+                import time
+                start = time.time()
                 response = requests.post(
                     url, 
-                    data=json.dumps(payload, ensure_ascii=False).encode('utf-8'),
-                    timeout=30,
+                    json=payload,
+                    timeout=180,
                     headers={"Content-Type": "application/json; charset=utf-8"}
                 )
-                console.print(f"[dim]响应状态: {response.status_code}[/dim]")
+                elapsed = time.time() - start
+                console.print(f"[dim]响应状态: {response.status_code}, 耗时: {elapsed:.1f}秒[/dim]", style="cyan")
                 response.raise_for_status()
-                result = response.json()
-                console.print(f"[dim]原始响应: {result}[/dim]")
-                if "message" in result and "content" in result["message"]:
-                    return result["message"]["content"]
-                else:
-                    return f"API返回格式异常: {result}"
+                # 手动用UTF-8解码，避免Windows编码问题
+                text = response.content.decode('utf-8')
+                result = json.loads(text)
+                content = result.get("message", {}).get("content", "")
+                if content:
+                    return content
+                return f"API返回格式异常: {result}"
             except requests.exceptions.ConnectionError:
+                console.print("[red]连接失败[/red]", style="red")
                 return None  # 连接失败
             except requests.exceptions.Timeout:
-                return f"Ollama服务响应超时（30秒）。请确保：\n1. ollama serve 正在运行\n2. 模型 {model_to_use} 已安装\n3. 网络连接正常"
+                console.print("[red]请求超时[/red]", style="red")
+                return f"Ollama服务响应超时（180秒）。请确保：\n1. ollama serve 正在运行\n2. 模型 {model_to_use} 已安装\n3. 网络连接正常"
             except Exception as e:
                 error_msg = str(e)
-                console.print(f"[red]错误详情: {error_msg}[/red]")
+                console.print(f"[red]错误详情: {error_msg}[/red]", style="red")
                 # 如果是500错误，提示用户更换模型
                 if "500" in error_msg:
-                    console.print(f"[yellow]模型 {model_to_use} 调用失败，尝试更换模型...[/yellow]")
+                    console.print(f"[yellow]模型 {model_to_use} 调用失败，尝试更换模型...[/yellow]", style="yellow")
                     # 尝试其他模型
                     failed_model = model_to_use
                     for alt_model in available_models:
                         if alt_model != failed_model:
-                            console.print(f"[yellow]尝试模型: {alt_model}[/yellow]")
+                            console.print(f"[yellow]尝试模型: {alt_model}[/yellow]", style="yellow")
                             payload["model"] = alt_model
                             try:
-                                response = requests.post(url, json=payload, timeout=30)
+                                response = requests.post(url, json=payload, timeout=60)
                                 response.raise_for_status()
-                                result = response.json()
+                                # 修复：使用正确的解码方式
+                                text = response.content.decode('utf-8')
+                                result = json.loads(text)
+                                content = result.get("message", {}).get("content", "")
                                 selected_model = alt_model  # 更新选中的模型
-                                return result["message"]["content"]
+                                return content
                             except:
                                 continue
                     return f"所有模型调用失败。请检查Ollama服务状态，或尝试重新安装模型。"
