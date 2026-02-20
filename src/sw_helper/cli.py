@@ -2257,12 +2257,14 @@ def interactive(lang):
                 console.print(f"[dim]发送请求到 Ollama...[/dim]")
                 response = requests.post(
                     url, 
-                    data=json.dumps(payload).encode('utf-8'),
+                    data=json.dumps(payload, ensure_ascii=False).encode('utf-8'),
                     timeout=30,
                     headers={"Content-Type": "application/json; charset=utf-8"}
                 )
+                console.print(f"[dim]响应状态: {response.status_code}[/dim]")
                 response.raise_for_status()
                 result = response.json()
+                console.print(f"[dim]原始响应: {result}[/dim]")
                 if "message" in result and "content" in result["message"]:
                     return result["message"]["content"]
                 else:
@@ -2273,6 +2275,7 @@ def interactive(lang):
                 return f"Ollama服务响应超时（30秒）。请确保：\n1. ollama serve 正在运行\n2. 模型 {model_to_use} 已安装\n3. 网络连接正常"
             except Exception as e:
                 error_msg = str(e)
+                console.print(f"[red]错误详情: {error_msg}[/red]")
                 # 如果是500错误，提示用户更换模型
                 if "500" in error_msg:
                     console.print(f"[yellow]模型 {model_to_use} 调用失败，尝试更换模型...[/yellow]")
