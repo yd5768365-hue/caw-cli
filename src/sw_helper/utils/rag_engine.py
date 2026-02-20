@@ -18,6 +18,15 @@ import time
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 
+
+def get_resource_path(relative_path: str) -> Path:
+    """获取资源文件路径，支持打包后的exe和开发模式"""
+    if getattr(sys, 'frozen', False):
+        base_path = Path(sys._MEIPASS)
+    else:
+        base_path = Path(__file__).parent.parent.parent
+    return base_path / relative_path
+
 class RAGCacheManager:
     """RAG查询缓存管理器 - 基于SQLite的本地缓存"""
 
@@ -260,7 +269,7 @@ class RAGCacheManager:
 
 
 class RAGEngine:
-    def __init__(self, knowledge_dir="knowledge", model_path=None):
+    def __init__(self, knowledge_dir=None, model_path=None):
         """
         初始化RAG引擎
 
@@ -268,6 +277,8 @@ class RAGEngine:
             knowledge_dir: 知识库目录，默认在项目根目录的 knowledge 文件夹
             model_path: 可选的自定义模型路径，如果提供则使用本地模型文件
         """
+        if knowledge_dir is None:
+            knowledge_dir = get_resource_path("knowledge")
         self.knowledge_dir = Path(knowledge_dir)
 
         # 确保knowledge目录存在

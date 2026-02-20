@@ -7,6 +7,7 @@ CAE-CLI 主菜单模块
 
 import asyncio
 import json
+import sys
 from typing import Optional, List, Dict, Any
 from pathlib import Path
 from rich.console import Console
@@ -20,6 +21,16 @@ from sw_helper.ai.llm_client import LLMClient, LLMConfig, LLMProvider, Message, 
 from sw_helper.learning.progress_tracker import get_progress_tracker
 from sw_helper.learning.quiz_manager import get_quiz_manager
 from sw_helper.utils.first_run import is_first_run, perform_first_run_check
+
+
+def get_resource_path(relative_path: str) -> Path:
+    """获取资源文件路径，支持打包后的exe和开发模式"""
+    if getattr(sys, 'frozen', False):
+        base_path = Path(sys._MEIPASS)
+    else:
+        base_path = Path(__file__).parent.parent
+    return base_path / relative_path
+
 
 # 项目核心颜色定义
 MAIN_RED = "#8B0000"       # 深红/酒红 - 主色调
@@ -290,7 +301,7 @@ class MainMenu:
     def _simple_keyword_search(self, keyword: str) -> List[Dict[str, Any]]:
         """简单关键词搜索（降级方案）- 读取knowledge目录的markdown文件"""
         results = []
-        knowledge_dir = Path("knowledge")
+        knowledge_dir = get_resource_path("knowledge")
 
         if not knowledge_dir.exists():
             return results

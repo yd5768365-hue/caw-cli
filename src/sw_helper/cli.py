@@ -29,6 +29,16 @@ from rich.panel import Panel
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
+def get_resource_path(relative_path: str) -> Path:
+    """获取资源文件路径，支持打包后的exe和开发模式"""
+    if getattr(sys, 'frozen', False):
+        # 打包后：资源在 _internal 目录下
+        base_path = Path(sys._MEIPASS)
+    else:
+        # 开发模式
+        base_path = Path(__file__).parent.parent.parent
+    return base_path / relative_path
+
 console = Console()
 
 # 项目核心颜色定义
@@ -1855,7 +1865,7 @@ def interactive(lang):
     console = Console()
 
     # 加载语言包
-    lang_file = Path(__file__).parent.parent.parent / "data" / "languages.json"
+    lang_file = get_resource_path("data/languages.json")
     try:
         with open(lang_file, "r", encoding="utf-8") as f:
             lang_data = json.load(f)

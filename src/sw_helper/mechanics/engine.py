@@ -5,9 +5,19 @@
 
 import json
 import math
+import sys
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple, List
 import numpy as np
+
+
+def get_resource_path(relative_path: str) -> Path:
+    """获取资源文件路径，支持打包后的exe和开发模式"""
+    if getattr(sys, 'frozen', False):
+        base_path = Path(sys._MEIPASS)
+    else:
+        base_path = Path(__file__).parent.parent.parent.parent
+    return base_path / relative_path
 
 try:
     from rich.console import Console
@@ -48,9 +58,7 @@ class MechanicsEngine:
         """
         # 加载材料数据库
         if materials_db_path is None:
-            # 默认路径：项目根目录下的data/materials.json
-            project_root = Path(__file__).parent.parent.parent.parent
-            self.db_path = project_root / "data" / "materials.json"
+            self.db_path = get_resource_path("data/materials.json")
         else:
             self.db_path = Path(materials_db_path)
 
