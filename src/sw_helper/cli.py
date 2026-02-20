@@ -2211,26 +2211,29 @@ def interactive(lang):
             
             # 如果没有可用模型，提示用户
             if not available_models:
+                console.print("[yellow]正在检查Ollama模型...[/yellow]")
                 available_models = get_available_models()
-                if available_models:
-                    console.print(Panel.fit(
-                        f"[bold green]检测到 {len(available_models)} 个Ollama模型:[/bold green]\n\n" +
-                        "\n".join([f"  {i+1}. {m}" for i, m in enumerate(available_models)]),
-                        title="模型选择",
-                        border_style="cyan",
-                        padding=(1, 2)
-                    ))
-                    console.print("\n[bold]请选择模型编号:[/bold]")
-                    choice = Prompt.ask("", default="1", show_default=True)
-                    try:
-                        idx = int(choice) - 1
-                        if 0 <= idx < len(available_models):
-                            selected_model = available_models[idx]
-                    except:
-                        selected_model = available_models[0]
+                
+            # 如果仍然没有模型，要求用户输入
+            if not available_models:
+                console.print(Panel.fit(
+                    "[bold red]未检测到Ollama模型[/bold red]\n\n"
+                    "请选择操作：\n"
+                    "1. 手动输入模型名称\n"
+                    "2. 仅使用本地知识库",
+                    title="模型选择",
+                    border_style="red",
+                    padding=(1, 2)
+                ))
+                choice = Prompt.ask("", default="2", show_default=True)
+                if choice == "1":
+                    model_input = Prompt.ask("[bold]请输入模型名称（如 qwen2.5:1.5b）[/bold]")
+                    if model_input:
+                        selected_model = model_input
+                        available_models = [model_input]
                 else:
-                    return "未检测到Ollama模型，请先下载: ollama pull <model>"
-
+                    return "已切换到本地知识库模式"
+            
             # 构建消息历史
             messages = []
             for h in history:
@@ -2239,7 +2242,9 @@ def interactive(lang):
             messages.append({"role": "user", "content": question})
 
             # 使用用户选择的模型
-            model_to_use = selected_model if selected_model else available_models[0] if available_models else "llama2"
+            model_to_use = selected_model if selected_model else available_models[0]
+            
+            console.print(f"[cyan]使用模型: {model_to_use}[/cyan]")
             
             payload = {
                 "model": model_to_use,
@@ -2255,15 +2260,16 @@ def interactive(lang):
             except requests.exceptions.ConnectionError:
                 return None  # 连接失败
             except requests.exceptions.Timeout:
-                return f"Ollama服务响应超时（30秒）。请确保：\n1. ollama serve 正在运行\n2. 模型已安装: ollama pull {model_to_use}\n3. 网络连接正常"
+                return f"Ollama服务响应超时（30秒）。请确保：\n1. ollama serve 正在运行\n2. 模型 {model_to_use} 已安装\n3. 网络连接正常"
             except Exception as e:
                 error_msg = str(e)
                 # 如果是500错误，提示用户更换模型
                 if "500" in error_msg:
                     console.print(f"[yellow]模型 {model_to_use} 调用失败，尝试更换模型...[/yellow]")
                     # 尝试其他模型
+                    failed_model = model_to_use
                     for alt_model in available_models:
-                        if alt_model != model_to_use:
+                        if alt_model != failed_model:
                             console.print(f"[yellow]尝试模型: {alt_model}[/yellow]")
                             payload["model"] = alt_model
                             try:
