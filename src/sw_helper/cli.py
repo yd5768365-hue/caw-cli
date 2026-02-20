@@ -2091,6 +2091,9 @@ def interactive(lang):
         if requests_available:
             ollama_ready = start_ollama_service()
 
+        # 导入所需模块
+        from rich.prompt import Prompt
+
         # 获取可用模型并让用户选择
         available_models = []
         selected_model = None
@@ -2125,7 +2128,6 @@ def interactive(lang):
                     console.print(f"[green]自动选择唯一模型: {selected_model}[/green]")
                 else:
                     console.print("\n[bold]请选择模型编号（或直接回车使用第一个）:[/bold]")
-                    from rich.prompt import Prompt
                     choice = Prompt.ask("", default="1", show_default=True)
                     try:
                         idx = int(choice) - 1
