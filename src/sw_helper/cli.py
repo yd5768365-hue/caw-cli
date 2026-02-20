@@ -2101,17 +2101,23 @@ def interactive(lang):
         def get_available_models():
             """获取可用的Ollama模型列表"""
             if not requests_available or not ollama_ready:
+                console.print("[yellow]requests不可用或Ollama未就绪[/yellow]")
                 return []
             try:
                 response = requests.get("http://localhost:11434/api/tags", timeout=5)
                 if response.status_code != 200:
+                    console.print(f"[yellow]Ollama返回状态码: {response.status_code}[/yellow]")
                     return []
                 models = response.json().get("models", [])
-                return [model.get("name", "") for model in models]
-            except:
+                model_list = [model.get("name", "") for model in models]
+                console.print(f"[green]成功获取模型列表: {model_list}[/green]")
+                return model_list
+            except Exception as e:
+                console.print(f"[red]获取模型列表失败: {str(e)}[/red]")
                 return []
 
         if ollama_ready:
+            console.print("[cyan]正在检测Ollama服务...[/cyan]")
             available_models = get_available_models()
             if available_models:
                 console.print(Panel.fit(
@@ -2138,7 +2144,19 @@ def interactive(lang):
                     except:
                         selected_model = available_models[0]
             else:
-                console.print("[yellow]未检测到Ollama模型，请先下载模型: ollama pull <model>[/yellow]")
+                console.print("[yellow]未检测到Ollama模型[/yellow]")
+                console.print("\n[bold]请选择操作:[/bold]")
+                console.print("  1. 手动输入模型名称")
+                console.print("  2. 仅使用本地知识库")
+                choice = Prompt.ask("", default="1", show_default=True)
+                if choice == "1":
+                    selected_model = Prompt.ask("[bold]请输入模型名称（如 qwen2.5:1.5b）[/bold]")
+                    if selected_model:
+                        console.print(f"[green]将使用模型: {selected_model}[/green]")
+                else:
+                    console.print("[yellow]将仅使用本地知识库[/yellow]")
+        else:
+            console.print("[yellow]Ollama服务未就绪，将仅使用本地知识库[/yellow]")
 
         console.print(Panel.fit(
             "[bold green]📚 CAE-CLI 学习模式[/bold green]\n\n"
