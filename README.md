@@ -419,13 +419,21 @@ pip install "cae-cli[full,ai]"
 ### 方式五：GUI 桌面版本（Web 美化界面）
 
 ```bash
+# 安装 GUI 依赖
+pip install PySide6 PySide6-WebEngine
+
 # 打包 GUI 版本
-python build_exe.py --web --onefile
+pyinstaller cae-cli.spec
 
 # 可执行文件位置：dist/cae-cli.exe
+# 注意：GUI打包需要较长时间（5-10分钟）
+```
 
-# 运行 GUI 前需要安装依赖
-pip install PySide6 PySide6-WebEngine
+#### CLI 版本快速打包（更快）
+```bash
+# 如果不需要 GUI，只打包命令行版本
+pyinstaller --name=cae-cli --console --add-data "src;src" --add-data "data;data" --add-data "knowledge;knowledge" --hidden-import=click --hidden-import=rich --hidden-import=yaml --hidden-import=numpy --hidden-import=jinja2 --hidden-import=pint --collect-all=rich --exclude-module=PyQt5 --exclude-module=PySide6 src/sw_helper/cli.py
+# 输出：dist/cae-cli/cae-cli.exe
 ```
 
 ### 系统要求
@@ -721,6 +729,7 @@ CAE-CLI 提供了完整的文档体系，帮助不同角色的用户快速上手
 | API_REFERENCE.md | 完整的Python API参考，所有模块详细说明 | `docs/API_REFERENCE.md` |
 | CONTRIBUTING.md | 贡献指南，包含PR模板和开发规范 | `docs/CONTRIBUTING.md` |
 | CLAUDE.md | Claude Code助手配置，项目架构说明 | `CLAUDE.md` |
+| AGENTS.md | AI代理开发指南，构建/测试命令、代码风格 | `AGENTS.md` |
 
 ### 🛠️ 工具与脚本
 
@@ -1225,6 +1234,11 @@ python -c "from sw_helper.ai.rag import RAGManager; rag=RAGManager('knowledge/')
 **当前版本**：v0.2.0+ (插件化架构 + 完整文档体系 + AI学习助手)
 
 **主要用户**：机械专业学生、FreeCAD用户、CAE学习者、插件开发者、开源贡献者
+
+**快速下载**：
+- 💾 从 GitHub Releases 下载预编译 exe：[ Releases 页面](https://github.com/yd5768365-hue/caw-cli/releases)
+- 📦 CLI 版本：即开即用，无需 Python 环境
+- 🖥️ GUI 版本：需要 GUI 运行环境的桌面应用
 
 **开发进度**：
 
