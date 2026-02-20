@@ -2254,11 +2254,12 @@ def interactive(lang):
 
             try:
                 # 确保使用UTF-8编码
+                console.print(f"[dim]发送请求到 Ollama...[/dim]")
                 response = requests.post(
                     url, 
-                    json=payload, 
+                    data=json.dumps(payload).encode('utf-8'),
                     timeout=30,
-                    headers={"Content-Type": "application/json"}
+                    headers={"Content-Type": "application/json; charset=utf-8"}
                 )
                 response.raise_for_status()
                 result = response.json()
