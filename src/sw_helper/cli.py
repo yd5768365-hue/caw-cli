@@ -2144,22 +2144,107 @@ def interactive(lang):
                     except:
                         selected_model = available_models[0]
             else:
+                # 没有检测到Ollama模型，显示三种选择
                 console.print("[yellow]未检测到Ollama模型[/yellow]")
-                console.print("\n[bold]请选择操作:[/bold]")
-                console.print("  1. 手动输入模型名称")
-                console.print("  2. 仅使用本地知识库")
-                choice = Prompt.ask("", default="1", show_default=True)
+                console.print("\n[bold]请选择AI模式:[/bold]")
+                console.print("  1. 使用Ollama服务（需要先安装Ollama并下载模型）")
+                console.print("  2. 使用本地GGUF模型（离线可用，加载本地模型文件）")
+                console.print("  3. 仅使用本地知识库")
+                choice = Prompt.ask("", default="2", show_default=True)
+                
                 if choice == "1":
-                    selected_model = Prompt.ask("[bold]请输入模型名称（如 qwen2.5:1.5b）[/bold]")
+                    # Ollama模式
+                    selected_model = Prompt.ask("[bold]请输入Ollama模型名称（如 qwen2.5:3b）[/bold]")
                     if selected_model:
-                        console.print(f"[green]将使用模型: {selected_model}[/green]")
+                        console.print(f"[green]将使用Ollama模型: {selected_model}[/green]")
+                elif choice == "2":
+                    # 本地GGUF模型模式
+                    try:
+                        from sw_helper.ai.local_gguf import get_local_gguf_model, find_gguf_models
+                        
+                        # 查找可用的GGUF模型
+                        gguf_models = find_gguf_models()
+                        if gguf_models:
+                            console.print(Panel.fit(
+                                "[bold]检测到以下本地GGUF模型:[/bold]\n\n" +
+                                "\n".join([f"  {i+1}. {m}" for i, m in enumerate(gguf_models)]),
+                                title="本地模型",
+                                border_style="green",
+                                padding=(1, 2)
+                            ))
+                            gguf_choice = Prompt.ask("选择模型编号", default="1")
+                            try:
+                                idx = int(gguf_choice) - 1
+                                if 0 <= idx < len(gguf_models):
+                                    gguf_model_path = gguf_models[idx]
+                                else:
+                                    gguf_model_path = gguf_models[0]
+                            except:
+                                gguf_model_path = gguf_models[0]
+                        else:
+                            # 让用户输入模型路径
+                            gguf_model_path = Prompt.ask(
+                                "[bold]请输入GGUF模型文件路径[/bold]",
+                                default="qwen2.5-1.5b-instruct-q4_k_m.gguf"
+                            )
+                        
+                        # 加载模型
+                        local_model = get_local_gguf_model(gguf_model_path)
+                        success = local_model.load_model()
+                        if success:
+                            selected_model = f"local_gguf:{gguf_model_path}"
+                            console.print(f"[green]✓ 本地模型加载成功: {gguf_model_path}[/green]")
+                        else:
+                            console.print("[red]本地模型加载失败，将使用知识库[/red]")
+                    except ImportError:
+                        console.print("[red]llama-cpp-python未安装，请运行: pip install llama-cpp-python[/red]")
+                        console.print("[yellow]将使用本地知识库[/yellow]")
                 else:
                     console.print("[yellow]将仅使用本地知识库[/yellow]")
         else:
-            console.print("[yellow]Ollama服务未就绪，将仅使用本地知识库[/yellow]")
+            console.print("[yellow]Ollama服务未就绪[/yellow]")
+            console.print("\n[bold]请选择:[/bold]")
+            console.print("  1. 使用本地GGUF模型")
+            console.print("  2. 仅使用本地知识库")
+            choice = Prompt.ask("", default="1", show_default=True)
+            if choice == "1":
+                try:
+                    from sw_helper.ai.local_gguf import get_local_gguf_model, find_gguf_models
+                    gguf_models = find_gguf_models()
+                    if gguf_models:
+                        console.print(Panel.fit(
+                            "[bold]检测到以下本地GGUF模型:[/bold]\n\n" +
+                            "\n".join([f"  {i+1}. {m}" for i, m in enumerate(gguf_models)]),
+                            title="本地模型",
+                            border_style="green",
+                            padding=(1, 2)
+                        ))
+                        gguf_choice = Prompt.ask("选择模型编号", default="1")
+                        try:
+                            idx = int(gguf_choice) - 1
+                            if 0 <= idx < len(gguf_models):
+                                gguf_model_path = gguf_models[idx]
+                            else:
+                                gguf_model_path = gguf_models[0]
+                        except:
+                            gguf_model_path = gguf_models[0]
+                    else:
+                        gguf_model_path = Prompt.ask(
+                            "[bold]请输入GGUF模型文件路径[/bold]",
+                            default="qwen2.5-1.5b-instruct-q4_k_m.gguf"
+                        )
+                    local_model = get_local_gguf_model(gguf_model_path)
+                    success = local_model.load_model()
+                    if success:
+                        selected_model = f"local_gguf:{gguf_model_path}"
+                        console.print(f"[green]✓ 本地模型加载成功: {gguf_model_path}[/green]")
+                except ImportError:
+                    console.print("[red]llama-cpp-python未安装[/red]")
+            else:
+                console.print("[yellow]将仅使用本地知识库[/yellow]")
 
-        # 预热模型（如果选择了模型）
-        if selected_model and requests_available:
+        # 预热模型（仅Ollama模式需要）
+        if selected_model and requests_available and selected_model and not selected_model.startswith("local_gguf:"):
             console.print(f"[cyan]正在预热模型 {selected_model}，首次加载较慢，请稍候...[/cyan]", style="cyan")
             try:
                 warmup_url = "http://localhost:11434/api/chat"
@@ -2232,26 +2317,6 @@ def interactive(lang):
                 console.print("[yellow]正在检查Ollama模型...[/yellow]")
                 available_models = get_available_models()
                 
-            # 如果仍然没有模型，要求用户输入
-            if not available_models:
-                console.print(Panel.fit(
-                    "[bold red]未检测到Ollama模型[/bold red]\n\n"
-                    "请选择操作：\n"
-                    "1. 手动输入模型名称\n"
-                    "2. 仅使用本地知识库",
-                    title="模型选择",
-                    border_style="red",
-                    padding=(1, 2)
-                ))
-                choice = Prompt.ask("", default="2", show_default=True)
-                if choice == "1":
-                    model_input = Prompt.ask("[bold]请输入模型名称（如 qwen2.5:1.5b）[/bold]")
-                    if model_input:
-                        selected_model = model_input
-                        available_models = [model_input]
-                else:
-                    return "已切换到本地知识库模式"
-            
             # 构建消息历史
             messages = []
             for h in history:
@@ -2261,6 +2326,21 @@ def interactive(lang):
 
             # 使用用户选择的模型
             model_to_use = selected_model if selected_model else available_models[0]
+            
+            # 检查是否是本地GGUF模型
+            if model_to_use and model_to_use.startswith("local_gguf:"):
+                # 使用本地GGUF模型
+                try:
+                    from sw_helper.ai.local_gguf import get_local_gguf_model
+                    local_model_path = model_to_use.replace("local_gguf:", "")
+                    local_model = get_local_gguf_model(local_model_path)
+                    if local_model.llm is None:
+                        local_model.load_model()
+                    # 转换history格式
+                    history_for_local = [{"role": h["role"] if h.get("role") else "user", "content": h.get("content", "")} for h in history]
+                    return local_model.chat(question, history_for_local)
+                except Exception as e:
+                    return f"本地模型调用失败: {str(e)}"
             
             console.print(f"[cyan]使用模型: {model_to_use}[/cyan]")
             
