@@ -22,15 +22,13 @@ hiddenimports = [
     'pint',
     'markdown',
     'requests',
-    'chromadb',
-    'sentence_transformers',
 ]
 
 # 收集rich
 tmp_ret = collect_all('rich')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
-# 收集markdown
+# 收集markdown  
 tmp_ret = collect_all('markdown')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
@@ -38,9 +36,7 @@ datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('requests')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
-# 收集Pyside6
-tmp_ret = collect_all('PySide6')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+# PySide6设为可选，不强制打包
 
 
 a = Analysis(
@@ -69,7 +65,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,  # GUI版本，无控制台
+    console=True,  # 显示控制台输出安装提示
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
