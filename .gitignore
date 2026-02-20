@@ -11,6 +11,11 @@ __pycache__/
 *.pyc
 *.pyo
 
+# 大文件
+*.gguf
+*.bin
+*.model
+
 # 测试和临时文件
 *.tmp
 *.temp
