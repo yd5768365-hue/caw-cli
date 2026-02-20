@@ -2184,10 +2184,35 @@ def interactive(lang):
 
         # 调用Ollama API
         def ask_ollama(question, history):
+            nonlocal selected_model, available_models
+            
             if not requests_available:
                 return "requests模块不可用，无法调用Ollama API。请安装requests: pip install requests"
 
             url = "http://localhost:11434/api/chat"
+            
+            # 如果没有可用模型，提示用户
+            if not available_models:
+                available_models = get_available_models()
+                if available_models:
+                    console.print(Panel.fit(
+                        f"[bold green]检测到 {len(available_models)} 个Ollama模型:[/bold green]\n\n" +
+                        "\n".join([f"  {i+1}. {m}" for i, m in enumerate(available_models)]),
+                        title="模型选择",
+                        border_style="cyan",
+                        padding=(1, 2)
+                    ))
+                    console.print("\n[bold]请选择模型编号:[/bold]")
+                    choice = Prompt.ask("", default="1", show_default=True)
+                    try:
+                        idx = int(choice) - 1
+                        if 0 <= idx < len(available_models):
+                            selected_model = available_models[idx]
+                    except:
+                        selected_model = available_models[0]
+                else:
+                    return "未检测到Ollama模型，请先下载: ollama pull <model>"
+
             # 构建消息历史
             messages = []
             for h in history:
@@ -2205,16 +2230,34 @@ def interactive(lang):
             }
 
             try:
-                response = requests.post(url, json=payload, timeout=15)  # 缩短超时时间
+                response = requests.post(url, json=payload, timeout=30)
                 response.raise_for_status()
                 result = response.json()
                 return result["message"]["content"]
             except requests.exceptions.ConnectionError:
                 return None  # 连接失败
             except requests.exceptions.Timeout:
-                return f"Ollama服务响应超时（15秒）。请确保：\n1. ollama serve 正在运行\n2. 模型已安装: ollama pull {model_to_use}\n3. 网络连接正常"
+                return f"Ollama服务响应超时（30秒）。请确保：\n1. ollama serve 正在运行\n2. 模型已安装: ollama pull {model_to_use}\n3. 网络连接正常"
             except Exception as e:
-                return f"API调用错误: {str(e)}"
+                error_msg = str(e)
+                # 如果是500错误，提示用户更换模型
+                if "500" in error_msg:
+                    console.print(f"[yellow]模型 {model_to_use} 调用失败，尝试更换模型...[/yellow]")
+                    # 尝试其他模型
+                    for alt_model in available_models:
+                        if alt_model != model_to_use:
+                            console.print(f"[yellow]尝试模型: {alt_model}[/yellow]")
+                            payload["model"] = alt_model
+                            try:
+                                response = requests.post(url, json=payload, timeout=30)
+                                response.raise_for_status()
+                                result = response.json()
+                                selected_model = alt_model  # 更新选中的模型
+                                return result["message"]["content"]
+                            except:
+                                continue
+                    return f"所有模型调用失败。请检查Ollama服务状态，或尝试重新安装模型。"
+                return f"API调用错误: {error_msg}"
 
         # 主循环
         while True:
