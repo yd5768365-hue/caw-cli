@@ -2253,10 +2253,19 @@ def interactive(lang):
             }
 
             try:
-                response = requests.post(url, json=payload, timeout=30)
+                # 确保使用UTF-8编码
+                response = requests.post(
+                    url, 
+                    json=payload, 
+                    timeout=30,
+                    headers={"Content-Type": "application/json"}
+                )
                 response.raise_for_status()
                 result = response.json()
-                return result["message"]["content"]
+                if "message" in result and "content" in result["message"]:
+                    return result["message"]["content"]
+                else:
+                    return f"API返回格式异常: {result}"
             except requests.exceptions.ConnectionError:
                 return None  # 连接失败
             except requests.exceptions.Timeout:
