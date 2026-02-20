@@ -211,8 +211,12 @@ class RAGCacheManager:
         finally:
             conn.close()
 
-    def cleanup_expired(self):
-        """清理过期的缓存条目（基于expire_at字段）"""
+    def cleanup_expired(self, ttl_hours: int = 24):
+        """清理过期的缓存条目（基于expire_at字段）
+
+        Args:
+            ttl_hours: 缓存有效期（小时），仅用于兼容性，清理时使用数据库中的expire_at字段
+        """
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
 

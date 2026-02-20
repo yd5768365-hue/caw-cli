@@ -1988,7 +1988,7 @@ def interactive(lang):
                 elif key == 'q':
                     return "exit"
 
-    # 学习模式函数（集成Ollama phi3:mini）
+    # 学习模式函数（集成Ollama）
     def learning_mode():
         console.clear()
 
@@ -2091,10 +2091,57 @@ def interactive(lang):
         if requests_available:
             ollama_ready = start_ollama_service()
 
+        # 获取可用模型并让用户选择
+        available_models = []
+        selected_model = None
+        
+        def get_available_models():
+            """获取可用的Ollama模型列表"""
+            if not requests_available or not ollama_ready:
+                return []
+            try:
+                response = requests.get("http://localhost:11434/api/tags", timeout=5)
+                if response.status_code != 200:
+                    return []
+                models = response.json().get("models", [])
+                return [model.get("name", "") for model in models]
+            except:
+                return []
+
+        if ollama_ready:
+            available_models = get_available_models()
+            if available_models:
+                console.print(Panel.fit(
+                    f"[bold green]检测到 {len(available_models)} 个Ollama模型:[/bold green]\n\n" +
+                    "\n".join([f"  {i+1}. {m}" for i, m in enumerate(available_models)]),
+                    title="模型选择",
+                    border_style="cyan",
+                    padding=(1, 2)
+                ))
+                
+                # 让用户选择模型
+                if len(available_models) == 1:
+                    selected_model = available_models[0]
+                    console.print(f"[green]自动选择唯一模型: {selected_model}[/green]")
+                else:
+                    console.print("\n[bold]请选择模型编号（或直接回车使用第一个）:[/bold]")
+                    from rich.prompt import Prompt
+                    choice = Prompt.ask("", default="1", show_default=True)
+                    try:
+                        idx = int(choice) - 1
+                        if 0 <= idx < len(available_models):
+                            selected_model = available_models[idx]
+                        else:
+                            selected_model = available_models[0]
+                    except:
+                        selected_model = available_models[0]
+            else:
+                console.print("[yellow]未检测到Ollama模型，请先下载模型: ollama pull <model>[/yellow]")
+
         console.print(Panel.fit(
             "[bold green]📚 CAE-CLI 学习模式[/bold green]\n\n"
             "欢迎使用聊天式学习助手！\n"
-            f"{'内置本地 Ollama 模型 (phi3:mini)' if ollama_ready else '本地知识库'} 为您解答CAE相关问题。\n"
+            f"{'已选择模型: ' + selected_model if selected_model else '本地知识库'} 为您解答CAE相关问题。\n"
             "支持多轮对话，上下文自动保留。\n\n"
             "[dim]输入 'back' 或 '退出' 返回主菜单[/dim]",
             title="学习助手",
@@ -2120,7 +2167,6 @@ def interactive(lang):
             except Exception as e:
                 console.print(f"[yellow]警告: RAG引擎初始化失败: {str(e)}[/yellow]")
 
-        # 检查Ollama服务是否可用（包括模型检查）
         def check_ollama():
             if not requests_available or not ollama_ready:
                 return False
@@ -2128,18 +2174,6 @@ def interactive(lang):
                 response = requests.get("http://localhost:11434/api/tags", timeout=5)
                 if response.status_code != 200:
                     return False
-
-                # 检查phi3:mini模型是否可用
-                try:
-                    models = response.json().get("models", [])
-                    model_names = [model.get("name", "") for model in models]
-                    # 检查phi3:mini或类似模型
-                    if not any("phi3" in name.lower() for name in model_names):
-                        console.print("[yellow]警告: 未找到phi3:mini模型，请运行: ollama run phi3:mini[/yellow]")
-                        # 仍然返回True，因为服务在运行，模型可能通过自动下载加载
-                except:
-                    pass  # 如果解析失败，仍认为服务在运行
-
                 return True
             except requests.exceptions.Timeout:
                 return False
@@ -2159,8 +2193,11 @@ def interactive(lang):
                 messages.append({"role": "assistant", "content": h["answer"]})
             messages.append({"role": "user", "content": question})
 
+            # 使用用户选择的模型
+            model_to_use = selected_model if selected_model else available_models[0] if available_models else "llama2"
+            
             payload = {
-                "model": "phi3:mini",
+                "model": model_to_use,
                 "messages": messages,
                 "stream": False
             }
@@ -2173,7 +2210,7 @@ def interactive(lang):
             except requests.exceptions.ConnectionError:
                 return None  # 连接失败
             except requests.exceptions.Timeout:
-                return "Ollama服务响应超时（15秒）。请确保：\n1. ollama serve 正在运行\n2. phi3:mini模型已安装: ollama run phi3:mini\n3. 网络连接正常"
+                return f"Ollama服务响应超时（15秒）。请确保：\n1. ollama serve 正在运行\n2. 模型已安装: ollama pull {model_to_use}\n3. 网络连接正常"
             except Exception as e:
                 return f"API调用错误: {str(e)}"
 
@@ -2207,7 +2244,7 @@ def interactive(lang):
                             "已尝试自动启动Ollama服务但失败。\n"
                             "请手动启动服务：\n"
                             "1. 打开终端，运行: ollama serve\n"
-                            "2. 确保已安装phi3:mini模型: ollama run phi3:mini\n\n"
+                            "2. 确保已安装模型: ollama pull <model_name>\n\n"
                             "将暂时使用本地知识库回答。",
                             border_style="yellow",
                             padding=(1, 2)
