@@ -4,7 +4,7 @@ AI 代理开发指南,包含构建/测试命令和代码风格。
 
 ## 项目信息
 
-- **Python**: >= 3.8 | **测试**: pytest | **格式**: Black (100字符) | **类型**: mypy
+- **Python**: >= 3.8 | **测试**: pytest | **格式**: Black (100字符) | **类型**: mypy | **Linting**: ruff
 
 ## 安装命令
 
@@ -14,18 +14,17 @@ pip install -e ".[full]"   # 完整功能(含几何处理)
 pip install -e ".[dev]"    # 开发依赖
 pip install -e ".[ssh]"    # SSH增强功能
 pip install -e ".[tools]"  # 网格分析工具
+pip install -e ".[optimize]" # 优化功能
+pip install -e ".[ai]"     # AI功能(ChromaDB+sentence-transformers)
 ```
 
 ## 运行 CLI
 
 ```bash
-cae-cli --help             # 查看帮助
-cae-cli version            # 版本号
-cae-cli info               # 系统信息
+cae-cli --help; cae-cli version; cae-cli info
 cae-cli parse model.step   # 解析几何
-cae-cli analyze mesh.msh   # 分析网格
-cae-cli material Q235      # 查询材料
-python -m sw_helper --help  # 模块方式运行
+cae-cli analyze mesh.msh  # 分析网格
+cae-cli material Q235     # 查询材料
 ```
 
 ## 测试命令
@@ -36,23 +35,36 @@ pytest -v --tb=short           # 详细输出
 pytest tests/test_cli.py       # 单文件
 pytest tests/test_cli.py::test_func -v  # 单函数
 pytest tests/test_cli.py::TestClass -v  # 单类
+pytest -k "test_name"          # 按名称过滤
 pytest --cov=src/sw_helper     # 覆盖率
-pytest --lf                    # 上次失败
-pytest -x                      # 快速失败
+pytest --lf -x                 # 上次失败+快速失败
 ```
 
 ## 代码质量
 
 ```bash
 black src/; black --check src/           # 格式化
-mypy src/sw_helper; mypy --strict src/  # 类型检查
-ruff check src/; ruff format --check src/  # Linting
+mypy src/sw_helper                       # 类型检查
+ruff check src/; ruff format src/        # Linting+格式化
 ```
 
 ## 代码风格
 
 ### 导入顺序
 标准库 → 第三方 → 本地模块 (空行分隔,按字母排序)
+
+```python
+import json
+import sys
+from pathlib import Path
+from typing import Any, Dict, Optional
+
+import click
+import numpy as np
+from rich.console import Console
+
+from sw_helper.database import MaterialDatabase
+```
 
 ### 命名
 - 类: `PascalCase` - 函数/变量: `snake_case`
@@ -117,10 +129,18 @@ src/sw_helper/
 └── utils/          # 工具
 ```
 
+## 代码审查 (重要!)
+
+```bash
+cae-cli review --local           # 本地代码审查
+cae-cli review --pr 123         # PR审查
+cae-cli review --local --json   # JSON格式输出
+```
+
 ## 提交前检查
 
 ```bash
-pytest && black src/ && mypy src/sw_helper
+pytest && black src/ && ruff check src/ && mypy src/sw_helper && cae-cli review --local
 ```
 
 ## 故障排除
@@ -130,6 +150,18 @@ pytest && black src/ && mypy src/sw_helper
 - 类型错误: 确保所有函数有类型提示
 - Black 格式化: 运行 `black src/` 自动修复
 - 创建虚拟环境: `python -m venv venv && venv\Scripts\activate`
+
+## GUI 开发
+
+```bash
+pip install -e ".[gui]"        # 安装GUI依赖
+python src/main_gui.py          # 启动GUI
+```
+
+GUI相关文件:
+- `src/gui/web_gui.py` - Web GUI实现 (PySide6 + QtWebEngine)
+- `src/gui/cae_ui.html` - HTML/CSS/JS界面
+- `src/main_gui.py` - GUI入口 + 依赖检查
 
 ## 关键配置 (pyproject.toml)
 
@@ -149,4 +181,12 @@ addopts = "-v --tb=short"
 ```
 
 ---
-*更新: 2026-02-20*
+*更新: 2026-02-24*
+
+## 重要开发提示
+
+1. **函数长度限制**: 最大50行，超过需添加 `# noqa: PLR0912`
+2. **cli.py 是核心文件**: 3300+行，包含所有CLI命令
+3. **新功能开发**: 必须添加对应的单元测试
+4. **MCP服务器**: 使用 `InMemoryMCPTransport` 进行测试
+5. **知识库**: 支持两种方式 - Markdown搜索 和 RAG向量检索

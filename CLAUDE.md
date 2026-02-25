@@ -115,6 +115,10 @@ black src/
 
 # 检查格式问题
 black --check src/
+
+# 使用ruff检查和格式化
+ruff check src/
+ruff format src/
 ```
 
 ### 类型检查
@@ -332,6 +336,16 @@ analysis:
 
 ## 常用命令示例
 
+### 快速参考
+
+```bash
+cae-cli --help; cae-cli version; cae-cli info
+cae-cli parse model.step    # 解析几何
+cae-cli analyze mesh.msh   # 分析网格
+cae-cli material Q235      # 查询材料
+cae-cli interactive --lang zh  # 交互式聊天
+```
+
 ### 基础命令
 
 ```bash
@@ -505,3 +519,82 @@ connection = await client.call_tool("ssh_test_connection", {
 8. 双集成架构：新代码应使用 `src/integrations/`，旧接口 `src/sw_helper/integrations/` 保持兼容性
 9. MCP 服务器使用统一的 `InMemoryMCPTransport` 进行测试
 10. 知识库支持两种方式：Markdown 关键词搜索和 RAG 向量检索
+
+## 代码风格规范
+
+### 导入顺序
+标准库 → 第三方 → 本地模块（空行分隔，按字母排序）：
+
+```python
+import json
+import sys
+from pathlib import Path
+from typing import Any, Dict, Optional
+
+import click
+import numpy as np
+from rich.console import Console
+
+from sw_helper.database import MaterialDatabase
+```
+
+### 命名规范
+- 类: `PascalCase`
+- 函数/变量: `snake_case`
+- 常量: `UPPER_SNAKE_CASE`
+- 私有成员: `_prefix`
+
+### 类型提示（必须）
+```python
+def get_material(self, name: str) -> Optional[Dict[str, Any]]: ...
+def calculate_stress(force: float, area: float) -> Dict[str, float]: ...
+```
+
+### 文档字符串（Google风格）
+```python
+def func(arg: str) -> bool:
+    """简短描述。
+
+    Args:
+        arg: 参数说明
+
+    Returns:
+        返回值说明
+
+    Raises:
+        ValueError: 条件说明
+    """
+```
+
+### 错误处理
+使用具体异常，提供有用信息：
+```python
+if not path.exists():
+    raise FileNotFoundError(f"文件不存在: {path}")
+try:
+    data = json.load(f)
+except json.JSONDecodeError as e:
+    raise ValueError(f"JSON无效: {e}")
+```
+
+### 文件操作
+始终使用 UTF-8 编码和 pathlib：
+```python
+with open(path, "r", encoding="utf-8") as f: ...
+path = Path.home() / ".cae-cli"
+path.mkdir(exist_ok=True)
+```
+
+## 提交前检查
+
+```bash
+pytest && black src/ && ruff check src/ && mypy src/sw_helper
+```
+
+## 故障排除
+
+- 导入错误：使用 `pip install -e .` 开发安装
+- 测试失败：检查 `test_data/` 目录是否存在
+- 类型错误：确保所有函数有类型提示
+- Black 格式化：运行 `black src/` 自动修复
+- 创建虚拟环境：`python -m venv venv && venv\Scripts\activate`

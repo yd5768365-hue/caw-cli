@@ -1,9 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
+"""
+CLI版本打包配置
+使用: pyinstaller cae-cli.spec
+"""
 from PyInstaller.utils.hooks import collect_all
 
-datas = [('src', 'src'), ('data', 'data'), ('knowledge', 'knowledge')]
+datas = [('src', 'src'), ('data', 'data'), ('knowledge', 'knowledge'), ('prompts', 'prompts')]
 binaries = []
 hiddenimports = ['click', 'rich', 'yaml', 'numpy', 'jinja2', 'pint', 'markdown', 'requests']
+
 tmp_ret = collect_all('rich')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('markdown')
@@ -21,7 +26,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['PyQt5', 'PySide6'],
+    excludes=['PyQt5', 'PySide6', 'PySide', 'chromadb', 'sentence_transformers', 'torch', 'transformers', 'tcl', 'tk'],
     noarchive=False,
     optimize=0,
 )
