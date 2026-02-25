@@ -1,0 +1,37 @@
+# Stale Issues Management
+# Close stale issues and PRs
+
+name: Stale Management
+
+on:
+  schedule:
+    - cron: '0 0 * * 3'  # 每周三运行
+
+jobs:
+  stale:
+    name: Mark Stale
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # 标记为过时的时间（天）
+          days-before-stale: 60
+          # 标记过时后多少天关闭
+          days-before-close: 30
+          # 检查的标签
+          exempt-issue-labels: 'pinned,security,bug'
+          exempt-pr-labels: 'pinned,security'
+          # 消息
+          stale-issue-message: |
+            此问题已标记为过时，因为60天内没有活动。
+            如果仍需要帮助，请重新打开并添加评论。
+          stale-pr-message: |
+            此PR已标记为过时，因为60天内没有活动。
+            如果仍需要继续，请添加评论。
+          close-issue-message: |
+            此问题因长期无活动已关闭。
+          close-pr-message: |
+            此PR因长期无活动已关闭。
+          # 操作
+          operations-per-run: 100
