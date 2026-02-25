@@ -41,7 +41,6 @@ def get_resource_path(relative_path: str) -> Path:
 
 # 处理Windows终端编码问题
 import io
-import sys
 
 def _get_console_file():
     """获取适合的终端文件对象"""

@@ -116,11 +116,11 @@ class MaterialDatabase:
     def search_materials(self, keyword: str) -> List[Dict[str, Any]]:
         """搜索材料"""
         results = []
+        keyword_lower = keyword.lower()
         for name, data in self.materials.items():
-            if (
-                keyword.lower() in name.lower()
-                or keyword.lower() in data.get("description", "").lower()
-            ):
+            name_lower = name.lower()
+            desc_lower = data.get("description", "").lower()
+            if keyword_lower in name_lower or keyword_lower in desc_lower:
                 results.append(data)
         return results
 

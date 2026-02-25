@@ -102,6 +102,19 @@ class ParsedGeometry:
 class NaturalLanguageParser:
     """自然语言解析器"""
 
+    # 预编译正则表达式（性能优化）
+    _PARAM_PATTERNS_COMPILED = None  # 延迟初始化
+    # 特征检测预编译模式
+    _FILET_PATTERN = re.compile(r"圆角[半径]?[\s为是:]+(\d+\.?\d*)", re.IGNORECASE)
+    _HOLE_PATTERN = re.compile(r"(\d+\.?\d*)\s*mm?[\s]*孔", re.IGNORECASE)
+    _POS_X_PATTERN = re.compile(r"x\s*[:=]\s*(\d+\.?\d*)")
+    _POS_Y_PATTERN = re.compile(r"y\s*[:=]\s*(\d+\.?\d*)")
+    _POS_Z_PATTERN = re.compile(r"z\s*[:=]\s*(\d+\.?\d*)")
+    _ROT_X_PATTERN = re.compile(r"rx\s*[:=]\s*(\d+\.?\d*)")
+    _ROT_Y_PATTERN = re.compile(r"ry\s*[:=]\s*(\d+\.?\d*)")
+    _ROT_Z_PATTERN = re.compile(r"rz\s*[:=]\s*(\d+\.?\d*)")
+    _CHAMFER_PATTERN = re.compile(r"倒角[大小]?[\s为是:]+(\d+\.?\d*)", re.IGNORECASE)
+
     # 形状关键词映射（扩展版）
     SHAPE_KEYWORDS = {
         # 中文
@@ -396,13 +409,25 @@ class NaturalLanguageParser:
                 return shape
         return "box"  # 默认为立方体
 
+    @classmethod
+    def _get_compiled_patterns(cls):
+        """获取预编译的正则表达式模式（延迟初始化）"""
+        if cls._PARAM_PATTERNS_COMPILED is None:
+            cls._PARAM_PATTERNS_COMPILED = {}
+            for param_name, patterns in cls.PARAM_PATTERNS.items():
+                cls._PARAM_PATTERNS_COMPILED[param_name] = [
+                    re.compile(p, re.IGNORECASE) for p in patterns
+                ]
+        return cls._PARAM_PATTERNS_COMPILED
+
     def _extract_parameters(self, desc: str) -> Dict[str, float]:
         """提取尺寸参数"""
         params = {}
+        compiled = self._get_compiled_patterns()
 
-        for param_name, patterns in self.PARAM_PATTERNS.items():
-            for pattern in patterns:
-                match = re.search(pattern, desc, re.IGNORECASE)
+        for param_name, compiled_patterns in compiled.items():
+            for pattern in compiled_patterns:
+                match = pattern.search(desc)
                 if match:
                     try:
                         value = float(match.group(1))
@@ -418,9 +443,7 @@ class NaturalLanguageParser:
         features = []
 
         # 检测圆角
-        fillet_match = re.search(
-            r"圆角[半径]?[\s为是:]+(\d+\.?\d*)", desc, re.IGNORECASE
-        )
+        fillet_match = self._FILET_PATTERN.search(desc)
         if fillet_match:
             features.append(
                 {
@@ -431,7 +454,7 @@ class NaturalLanguageParser:
             )
 
         # 检测孔
-        hole_match = re.search(r"(\d+\.?\d*)\s*mm?[\s]*孔", desc, re.IGNORECASE)
+        hole_match = self._HOLE_PATTERN.search(desc)
         if hole_match:
             features.append({"type": "hole", "diameter": float(hole_match.group(1))})
 
@@ -449,18 +472,15 @@ class NaturalLanguageParser:
         """检测位置参数"""
         pos = {}
 
-        # X位置
-        x_match = re.search(r"x\s*[:=]\s*(\d+\.?\d*)", desc)
+        x_match = self._POS_X_PATTERN.search(desc)
         if x_match:
             pos["x"] = float(x_match.group(1))
 
-        # Y位置
-        y_match = re.search(r"y\s*[:=]\s*(\d+\.?\d*)", desc)
+        y_match = self._POS_Y_PATTERN.search(desc)
         if y_match:
             pos["y"] = float(y_match.group(1))
 
-        # Z位置
-        z_match = re.search(r"z\s*[:=]\s*(\d+\.?\d*)", desc)
+        z_match = self._POS_Z_PATTERN.search(desc)
         if z_match:
             pos["z"] = float(z_match.group(1))
 
@@ -470,18 +490,15 @@ class NaturalLanguageParser:
         """检测旋转参数"""
         rot = {}
 
-        # X轴旋转
-        rx_match = re.search(r"rx\s*[:=]\s*(\d+\.?\d*)", desc)
+        rx_match = self._ROT_X_PATTERN.search(desc)
         if rx_match:
             rot["x"] = float(rx_match.group(1))
 
-        # Y轴旋转
-        ry_match = re.search(r"ry\s*[:=]\s*(\d+\.?\d*)", desc)
+        ry_match = self._ROT_Y_PATTERN.search(desc)
         if ry_match:
             rot["y"] = float(ry_match.group(1))
 
-        # Z轴旋转（常用）
-        rz_match = re.search(r"rz\s*[:=]\s*(\d+\.?\d*)", desc)
+        rz_match = self._ROT_Z_PATTERN.search(desc)
         if rz_match:
             rot["z"] = float(rz_match.group(1))
 

@@ -29,6 +29,37 @@ DEFAULT_MODEL_DIR = Path(__file__).parent.parent.parent
 DEFAULT_GGUF_MODEL = "qwen2.5-1.5b-instruct-q4_k_m.gguf"
 
 
+def parse_quantization_type(filename: str) -> str:
+    """解析GGUF模型文件的量化类型
+
+    Args:
+        filename: 模型文件名
+
+    Returns:
+        量化类型字符串 (如 Q2_K, Q4_0, F16 等)
+    """
+    filename_lower = filename.lower()
+    quant_map = [
+        ("q2_k", "Q2_K"),
+        ("q3_k", "Q3_K"),
+        ("q4_k", "Q4_K_M"),
+        ("q4_0", "Q4_0"),
+        ("q4_1", "Q4_1"),
+        ("q5_k", "Q5_K_M"),
+        ("q5_0", "Q5_0"),
+        ("q5_1", "Q5_1"),
+        ("q6_k", "Q6_K"),
+        ("q8_0", "Q8_0"),
+        ("q8", "Q8"),
+        ("f16", "F16"),
+        ("f32", "F32"),
+    ]
+    for suffix, quant_type in quant_map:
+        if suffix in filename_lower:
+            return quant_type
+    return "unknown"
+
+
 class LocalGGUFModel:
     """本地GGUF模型管理器
 
@@ -90,32 +121,7 @@ class LocalGGUFModel:
         size_gb = size_mb / 1024
 
         # 从文件名推断量化类型
-        filename = model_file.name.lower()
-        quant_type = "unknown"
-        if "q2_k" in filename:
-            quant_type = "Q2_K"
-        elif "q3_k" in filename:
-            quant_type = "Q3_K"
-        elif "q4_0" in filename:
-            quant_type = "Q4_0"
-        elif "q4_1" in filename:
-            quant_type = "Q4_1"
-        elif "q4_k" in filename:
-            quant_type = "Q4_K_M"
-        elif "q5_0" in filename:
-            quant_type = "Q5_0"
-        elif "q5_1" in filename:
-            quant_type = "Q5_1"
-        elif "q5_k" in filename:
-            quant_type = "Q5_K_M"
-        elif "q6_k" in filename:
-            quant_type = "Q6_K"
-        elif "q8_0" in filename:
-            quant_type = "Q8_0"
-        elif "f16" in filename:
-            quant_type = "F16"
-        elif "f32" in filename:
-            quant_type = "F32"
+        quant_type = parse_quantization_type(model_file.name)
 
         self._model_info = {
             "path": str(model_file),
@@ -476,24 +482,7 @@ def find_gguf_models(search_dirs: Optional[List[str]] = None) -> List[Dict[str, 
                 size_mb = size / (1024 * 1024)
 
                 # 解析量化类型
-                filename = file.name.lower()
-                quant = "unknown"
-                if "q2_k" in filename:
-                    quant = "Q2_K"
-                elif "q3_k" in filename:
-                    quant = "Q3_K"
-                elif "q4" in filename:
-                    quant = "Q4"
-                elif "q5" in filename:
-                    quant = "Q5"
-                elif "q6_k" in filename:
-                    quant = "Q6_K"
-                elif "q8" in filename:
-                    quant = "Q8"
-                elif "f16" in filename:
-                    quant = "F16"
-                elif "f32" in filename:
-                    quant = "F32"
+                quant = parse_quantization_type(file.name)
 
                 model_files.append(
                     {
