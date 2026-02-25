@@ -102,36 +102,116 @@ class MaterialPage(QWidget):
             self.detail_text.setText("请输入材料名称")
             return
 
-        # TODO: 调用 sw_helper.material 进行查询
-        self.detail_text.setText(f"正在查询材料: {material_name}\n\n[功能开发中...]")
+        try:
+            from sw_helper.material.database import MaterialDatabase
+
+            db = MaterialDatabase()
+            # 尝试直接获取
+            material = db.get_material(material_name)
+
+            if material:
+                self._display_material_detail(material)
+            else:
+                # 尝试搜索
+                results = db.search_materials(material_name)
+                if results:
+                    self._display_search_results(results)
+                else:
+                    self.detail_text.setText(f"未找到材料: {material_name}")
+        except Exception as e:
+            self.detail_text.setText(f"查询失败: {e}")
 
     def _on_list_all(self):
         """列出全部材料"""
-        # TODO: 调用 sw_helper.material 获取材料列表
-        # 暂时显示示例数据
-        sample_materials = [
-            ("Q235", "碳素结构钢", "GB/T 700"),
-            ("Q345", "低合金高强度钢", "GB/T 1591"),
-            ("45钢", "优质碳素结构钢", "GB/T 699"),
-            ("铝合金6061", "铝合金", "GB/T 3190"),
-            ("不锈钢304", "奥氏体不锈钢", "GB/T 20878"),
-        ]
+        try:
+            from sw_helper.material.database import MaterialDatabase
 
-        self.materials_table.setRowCount(len(sample_materials))
-        for i, (name, mtype, standard) in enumerate(sample_materials):
-            self.materials_table.setItem(i, 0, QTableWidgetItem(name))
-            self.materials_table.setItem(i, 1, QTableWidgetItem(mtype))
-            self.materials_table.setItem(i, 2, QTableWidgetItem(standard))
+            db = MaterialDatabase()
+            materials = db.list_materials()
 
-        self.detail_text.setText("已加载全部材料（共 5 种）")
+            self.materials_table.setRowCount(len(materials))
+            for i, name in enumerate(materials):
+                mat = db.get_material(name)
+                if mat:
+                    self.materials_table.setItem(
+                        i, 0, QTableWidgetItem(mat.get("name", name))
+                    )
+                    self.materials_table.setItem(
+                        i, 1, QTableWidgetItem(mat.get("type", ""))
+                    )
+                    self.materials_table.setItem(
+                        i, 2, QTableWidgetItem(mat.get("standard", ""))
+                    )
+
+            self.detail_text.setText(f"已加载全部材料（共 {len(materials)} 种）")
+        except Exception as e:
+            self.detail_text.setText(f"加载失败: {e}")
 
     def _on_select_material(self, item):
         """选择材料"""
         row = item.row()
         material_name = self.materials_table.item(row, 0).text()
 
-        # TODO: 调用 sw_helper.material 获取材料详情
-        self.detail_text.setText(f"材料: {material_name}\n\n[材料详情开发中...]")
+        try:
+            from sw_helper.material.database import MaterialDatabase
+
+            db = MaterialDatabase()
+            material = db.get_material(material_name)
+
+            if material:
+                self._display_material_detail(material)
+            else:
+                self.detail_text.setText(f"未找到材料详情: {material_name}")
+        except Exception as e:
+            self.detail_text.setText(f"加载失败: {e}")
+
+    def _display_material_detail(self, material: dict):
+        """显示材料详情"""
+        lines = [
+            f"【{material.get('name', 'N/A')}】",
+            f"类型: {material.get('type', 'N/A')}",
+            f"标准: {material.get('standard', 'N/A')}",
+            "",
+            "--- 力学性能 ---",
+        ]
+
+        # 力学性能
+        props = [
+            ("密度", "density", "kg/m³"),
+            ("弹性模量", "elastic_modulus", "GPa"),
+            ("泊松比", "poisson_ratio", ""),
+            ("屈服强度", "yield_strength", "MPa"),
+            ("抗拉强度", "tensile_strength", "MPa"),
+            ("伸长率", "elongation", "%"),
+        ]
+
+        for label, key, unit in props:
+            if key in material:
+                value = material[key]
+                if key in ("elastic_modulus", "yield_strength", "tensile_strength"):
+                    value = value / 1e6  # 转换为MPa
+                if unit:
+                    lines.append(f"{label}: {value} {unit}")
+                else:
+                    lines.append(f"{label}: {value}")
+
+        self.detail_text.setText("\n".join(lines))
+
+    def _display_search_results(self, results: list):
+        """显示搜索结果"""
+        self.materials_table.setRowCount(len(results))
+        for i, mat in enumerate(results):
+            self.materials_table.setItem(
+                i, 0, QTableWidgetItem(mat.get("name", ""))
+            )
+            self.materials_table.setItem(
+                i, 1, QTableWidgetItem(mat.get("type", ""))
+            )
+            self.materials_table.setItem(
+                i, 2, QTableWidgetItem(mat.get("standard", ""))
+            )
+
+        self.detail_text.setText(f"找到 {len(results)} 个结果")
 
 
 # 页面工厂函数

@@ -109,14 +109,66 @@ class AIPage(QWidget):
             self.result_text.setText("请输入模型描述")
             return
 
-        # TODO: 调用 sw_helper.ai 进行生成
-        self.result_text.setText(
-            f"正在生成模型...\n\n"
-            f"描述: {description}\n"
-            f"模型: {self.model_combo.currentText()}\n"
-            f"模式: {self.mode_combo.currentText()}\n\n"
-            f"[功能开发中...]"
-        )
+        self.generate_btn.setEnabled(False)
+        self.result_text.setText("正在生成模型...\n请稍候...")
+
+        try:
+            from sw_helper.ai.model_generator import AIModelGenerator
+
+            # 判断是否使用模拟模式
+            use_mock = self.model_combo.currentIndex() == 0
+
+            # 创建生成器
+            generator = AIModelGenerator(use_mock=use_mock)
+
+            # 获取输出目录
+            import os
+            output_dir = os.path.expanduser("~/CAE-CLI/models")
+
+            # 生成模型
+            result = generator.generate(description, output_dir=output_dir)
+
+            # 显示结果
+            if result.get("success"):
+                lines = [
+                    "【生成成功】",
+                    "",
+                    f"描述: {description}",
+                    "",
+                    "--- 解析结果 ---",
+                ]
+
+                parsed = result.get("parsed", {})
+                lines.append(f"形状: {parsed.get('shape_type', 'N/A')}")
+
+                params = parsed.get("parameters", {})
+                if params:
+                    lines.append("参数:")
+                    for k, v in params.items():
+                        lines.append(f"  {k}: {v}")
+
+                features = parsed.get("features", [])
+                if features:
+                    lines.append("特征:")
+                    for f in features:
+                        lines.append(f"  - {f.get('type')}: {f}")
+
+                lines.append("")
+                lines.append("--- 输出文件 ---")
+                outputs = result.get("outputs", {})
+                for key, path in outputs.items():
+                    lines.append(f"{key}: {path}")
+
+                self.result_text.setText("\n".join(lines))
+            else:
+                self.result_text.setText(f"生成失败: {result.get('error', '未知错误')}")
+
+        except ImportError as e:
+            self.result_text.setText(f"缺少依赖: {e}\n\n请安装: pip install -e \".[full]\"")
+        except Exception as e:
+            self.result_text.setText(f"生成失败: {e}")
+        finally:
+            self.generate_btn.setEnabled(True)
 
     def _on_mock(self):
         """模拟模式生成"""
@@ -126,15 +178,45 @@ class AIPage(QWidget):
             self.result_text.setText("请输入模型描述")
             return
 
-        # 模拟模式
-        self.result_text.setText(
-            f"[模拟模式]\n\n"
-            f"描述: {description}\n\n"
-            f"生成成功！\n"
-            f"FCStd文件: mock_model.FCStd\n"
-            f"STEP文件: mock_model.step\n\n"
-            f"[这是模拟模式的输出，不实际生成文件]"
-        )
+        try:
+            from sw_helper.ai.model_generator import AIModelGenerator
+
+            # 强制使用模拟模式
+            generator = AIModelGenerator(use_mock=True)
+
+            import os
+            output_dir = os.path.expanduser("~/CAE-CLI/models")
+
+            result = generator.generate(description, output_dir=output_dir)
+
+            if result.get("success"):
+                lines = [
+                    "【模拟模式 - 生成成功】",
+                    "",
+                    f"描述: {description}",
+                    "",
+                    "--- 解析结果 ---",
+                ]
+
+                parsed = result.get("parsed", {})
+                lines.append(f"形状: {parsed.get('shape_type', 'N/A')}")
+
+                params = parsed.get("parameters", {})
+                if params:
+                    lines.append("参数:")
+                    for k, v in params.items():
+                        lines.append(f"  {k}: {v}")
+
+                lines.append("")
+                lines.append("--- 输出文件 ---")
+                lines.append("(模拟模式，不实际生成文件)")
+
+                self.result_text.setText("\n".join(lines))
+            else:
+                self.result_text.setText(f"解析失败: {result.get('error', '未知错误')}")
+
+        except Exception as e:
+            self.result_text.setText(f"错误: {e}")
 
 
 # 页面工厂函数

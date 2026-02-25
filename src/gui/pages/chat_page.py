@@ -148,22 +148,37 @@ class ChatPage(QWidget):
 
     def _on_connect(self):
         """连接Ollama服务"""
-        # TODO: 实现完整的Ollama服务连接 - 检测服务状态和可用模型
         self.ollama_status.setText("连接中...")
+        self.model_status.setText("检测中...")
+
         try:
             import requests
-            r = requests.get("http://localhost:11434/api/tags", timeout=3)
+            r = requests.get("http://localhost:11434/api/tags", timeout=5)
             if r.status_code == 200:
                 models = r.json().get("models", [])
                 if models:
+                    # 显示所有可用模型
+                    model_names = [m.get("name", "未知") for m in models]
                     self.ollama_status.setText("已连接")
-                    self.model_status.setText(models[0].get("name", "未知"))
+                    self.model_status.setText(", ".join(model_names[:3]))  # 最多显示3个
+                    # 保存模型列表供后续使用
+                    self.available_models = model_names
                 else:
                     self.ollama_status.setText("无可用模型")
+                    self.model_status.setText("请先下载模型")
+                    self.available_models = []
             else:
                 self.ollama_status.setText("连接失败")
-        except Exception:
+                self.model_status.setText(f"HTTP {r.status_code}")
+                self.available_models = []
+        except ImportError:
+            self.ollama_status.setText("缺少requests库")
+            self.model_status.setText("pip install requests")
+            self.available_models = []
+        except Exception as e:
             self.ollama_status.setText("连接失败")
+            self.model_status.setText(str(e)[:30])
+            self.available_models = []
 
     def _on_ask(self):
         """提问"""
@@ -175,9 +190,55 @@ class ChatPage(QWidget):
         self.chat_history.append(f"<b>您:</b> {question}")
         self.question_input.clear()
 
-        # TODO: 调用 sw_helper.chat 进行回答，使用 self.system_prompt 作为系统提示词
-        # 临时显示功能开发中
-        self.chat_history.append(f"<b>AI:</b> [功能开发中...]")
+        # 显示思考中
+        self.chat_history.append(f"<b>AI:</b> 思考中...")
+
+        # 检查是否已连接
+        if not hasattr(self, "available_models") or not self.available_models:
+            self.chat_history.append(f"<b>AI:</b> 请先点击「连接服务」按钮连接Ollama")
+            return
+
+        # 调用Ollama API
+        try:
+            import requests
+
+            model = self.available_models[0]  # 使用第一个模型
+
+            # 构建消息历史
+            if not hasattr(self, "messages"):
+                self.messages = [{"role": "system", "content": self.system_prompt}]
+
+            self.messages.append({"role": "user", "content": question})
+
+            # 调用API
+            resp = requests.post(
+                "http://localhost:11434/api/chat",
+                json={
+                    "model": model,
+                    "messages": self.messages[-10:],  # 保留最近10条
+                    "stream": False,
+                },
+                timeout=60,
+            )
+
+            if resp.status_code == 200:
+                answer = resp.json().get("message", {}).get("content", "")
+                self.messages.append({"role": "assistant", "content": answer})
+
+                # 移除"思考中"消息并显示回答
+                self.chat_history.append(f"<b>AI:</b> {answer}")
+            else:
+                self.chat_history.append(f"<b>AI:</b> API错误: {resp.status_code}")
+
+        except ImportError:
+            self.chat_history.append(f"<b>AI:</b> 缺少requests库")
+        except Exception as e:
+            self.chat_history.append(f"<b>AI:</b> 请求失败: {str(e)[:50]}")
+
+        # 滚动到底部
+        self.chat_history.verticalScrollBar().setValue(
+            self.chat_history.verticalScrollBar().maximum()
+        )
 
     def _on_view_prompt(self):
         """查看当前系统提示词"""

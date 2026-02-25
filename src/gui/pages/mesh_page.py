@@ -114,8 +114,78 @@ class MeshPage(QWidget):
             self.result_text.setText("请先选择文件")
             return
 
-        # TODO: 调用 sw_helper.mesh 进行分析
-        self.result_text.setText(f"正在分析: {file_path}\n\n[功能开发中...]")
+        self.analyze_btn.setEnabled(False)
+        self.result_text.setText(f"正在分析: {file_path}\n请稍候...")
+
+        try:
+            from sw_helper.mesh.quality import MeshQualityAnalyzer
+
+            # 获取分析指标
+            metric_idx = self.metric_combo.currentIndex()
+            metric_map = {
+                0: None,  # 全部
+                1: ["aspect_ratio"],
+                2: ["skewness"],
+                3: ["orthogonal_quality"],
+                4: ["jacobian"],
+            }
+            metrics = metric_map.get(metric_idx)
+
+            # 分析网格
+            analyzer = MeshQualityAnalyzer()
+            result = analyzer.analyze(file_path, metrics)
+
+            # 显示结果
+            lines = [
+                "【分析完成】",
+                "",
+                f"文件: {file_path}",
+                "",
+                "--- 质量指标 ---",
+            ]
+
+            # 添加指标结果
+            metric_names = {
+                "aspect_ratio": "纵横比",
+                "skewness": "偏斜度",
+                "orthogonal_quality": "正交质量",
+                "jacobian": "雅可比矩阵",
+            }
+
+            for metric, values in result.items():
+                if metric == "overall_quality":
+                    continue
+                name = metric_names.get(metric, metric)
+                if isinstance(values, dict):
+                    lines.append(f"{name}:")
+                    for k, v in values.items():
+                        lines.append(f"  {k}: {v}")
+                else:
+                    lines.append(f"{name}: {values}")
+
+            # 总体评价
+            if "overall_quality" in result:
+                quality = result["overall_quality"]
+                quality_desc = {
+                    "excellent": "优秀",
+                    "good": "良好",
+                    "fair": "一般",
+                    "poor": "较差",
+                }
+                lines.append("")
+                lines.append("--- 总体评价 ---")
+                lines.append(f"质量等级: {quality_desc.get(quality, quality)}")
+
+            self.result_text.setText("\n".join(lines))
+
+        except ImportError as e:
+            self.result_text.setText(f"缺少依赖: {e}\n\n请安装: pip install -e \".[full]\"")
+        except FileNotFoundError as e:
+            self.result_text.setText(f"文件不存在: {e}")
+        except Exception as e:
+            self.result_text.setText(f"分析失败: {e}")
+        finally:
+            self.analyze_btn.setEnabled(True)
 
 
 # 页面工厂函数

@@ -99,8 +99,59 @@ class GeometryPage(QWidget):
             self.result_text.setText("请先选择文件")
             return
 
-        # TODO: 调用 sw_helper.geometry 进行解析
-        self.result_text.setText(f"正在解析: {file_path}\n\n[功能开发中...]")
+        self.parse_btn.setEnabled(False)
+        self.result_text.setText(f"正在解析: {file_path}\n请稍候...")
+
+        try:
+            from sw_helper.geometry.parser import GeometryParser
+
+            # 获取格式
+            format_idx = self.format_combo.currentIndex()
+            format_map = {1: "step", 2: "stl", 3: "iges"}
+            file_format = format_map.get(format_idx)
+
+            # 解析文件
+            parser = GeometryParser()
+            result = parser.parse(file_path, file_format)
+
+            # 显示结果
+            lines = [
+                "【解析成功】",
+                "",
+                f"文件: {result.get('file', 'N/A')}",
+                f"格式: {result.get('format', 'N/A').upper()}",
+                "",
+                "--- 几何信息 ---",
+            ]
+
+            # 添加详细信息
+            info_keys = ["vertices", "faces", "edges"]
+            for key in info_keys:
+                if key in result:
+                    lines.append(f"{key}: {result[key]}")
+
+            # 边界信息
+            bounds = result.get("bounds", {})
+            if bounds:
+                lines.append("")
+                lines.append("--- 边界框 ---")
+                for axis, (min_val, max_val) in bounds.items():
+                    lines.append(f"{axis}轴: {min_val} ~ {max_val}")
+
+            # 体积
+            if result.get("volume", 0) > 0:
+                lines.append(f"体积: {result.get('volume'):.2e} m³")
+
+            self.result_text.setText("\n".join(lines))
+
+        except ImportError as e:
+            self.result_text.setText(f"缺少依赖: {e}\n\n请安装: pip install -e \".[full]\"")
+        except FileNotFoundError as e:
+            self.result_text.setText(f"文件不存在: {e}")
+        except Exception as e:
+            self.result_text.setText(f"解析失败: {e}")
+        finally:
+            self.parse_btn.setEnabled(True)
 
 
 # 页面工厂函数（用于动态创建页面）
