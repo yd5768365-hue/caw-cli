@@ -38,12 +38,15 @@ dependencies = [
     "jinja2>=3.0.0",
     "pint>=0.22",
     "requests>=2.25.0",
-    "chromadb>=0.4.0",
-    "sentence-transformers>=2.2.0",
     "markdown>=3.0.0",
 ]
 
 [project.optional-dependencies]
+# AI功能（本地向量库+模型）
+ai = [
+    "chromadb>=0.4.0",
+    "sentence-transformers>=2.2.0",
+]
 # 完整功能（包含几何处理）
 full = [
     "pythonocc-core>=7.7.0",
@@ -67,14 +70,22 @@ ssh = [
     "paramiko>=3.0.0",
 ]
 
+# GUI依赖
+gui = [
+    "PySide6>=6.5.0",
+    "PySide6-Addons>=6.5.0",
+    "PySide6-WebEngine>=6.5.0",
+]
+
 # 开发依赖
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "black>=23.0.0",
-    "flake8>=6.0.0",
+    "ruff>=0.1.0",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
+    "pyinstaller>=6.0.0",
 ]
 
 [project.urls]
@@ -140,7 +151,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --tb=short"
+addopts = "-v --tb=short --capture=no"
 
 [tool.coverage.run]
 source = ["src/sw_helper"]
@@ -159,3 +170,14 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]

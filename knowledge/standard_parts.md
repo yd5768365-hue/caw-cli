@@ -1,3 +1,10 @@
+---
+title: 标准零件
+description: 常用标准件和零件库
+order: 7
+keywords: 标准件,零件,轴承,齿轮,弹簧
+---
+
 # 标准零件库 (Standard Parts Warehouse)
 
 ## 概述

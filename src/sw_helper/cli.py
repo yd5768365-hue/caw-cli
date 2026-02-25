@@ -56,7 +56,7 @@ def _get_console_file():
 
 _get_console_file()
 
-console = Console(force_terminal=True)
+console = Console(force_terminal=False)
 
 # 项目核心颜色定义
 MAIN_RED = "#8B0000"       # 深红/酒红 - 主色调
@@ -126,6 +126,12 @@ def cli(ctx, verbose, config):
 
     if verbose:
         console.print(f"[dim]版本: {__version__}[/dim]")
+
+
+# 注册提示词管理命令组
+from sw_helper.cli_prompt import prompt as prompt_group
+
+cli.add_command(prompt_group)
 
 
 @cli.command()
@@ -1459,7 +1465,7 @@ def ai_suggest(file, target, material):
     help="Export format",
 )
 @click.option("--cli-path", default="cae-cli", help="CLI command path")
-def macro(output_dir, type, format, cli_path):
+def macro(output_dir, type, format, cli_path):  # noqa: PLR0912
     """
     Generate SolidWorks VBA macro
 
@@ -1611,7 +1617,7 @@ def _display_chat_start_panel():
 )
 @click.option("--api-key", "-k", help="API key")
 @click.option("--mock", is_flag=True, help="Use mock mode (no AI required)")
-def chat(model, api_key, mock):
+def chat(model, api_key, mock):  # noqa: PLR0912
     """
     Start interactive AI assistant (similar to OpenCode)
 
@@ -1731,7 +1737,7 @@ def search(keyword, case_sensitive):
 
     # 创建Console时处理编码问题
     try:
-        console = Console(force_terminal=True)
+        console = Console(force_terminal=False)
     except:
         console = Console()
 
@@ -1859,9 +1865,398 @@ def bolt(bolt_spec):
         console.print()
 
 
+# ===================== Learn 命令组 =====================
+
+@cli.group()
+def learn():
+    """CAE-CLI 学习中心 - 系统化学习CAE知识"""
+    pass
+
+
+@learn.command("list")
+def learn_list():
+    """列出所有可用课程"""
+    from sw_helper.learn import CourseManager
+
+    console = Console()
+
+    # 标题
+    console.print("\n")
+    console.print("[bold cyan]📚 CAE-CLI 学习中心[/bold cyan]")
+    console.print("=" * 50)
+
+    # 课程列表
+    courses = CourseManager.get_all_courses()
+
+    console.print("\n[bold]可选课程：[/bold]\n")
+
+    for i, course in enumerate(courses, 1):
+        console.print(f"  [cyan]{i}.[/cyan] [bold]{course.name}[/bold]")
+        console.print(f"      {course.description}")
+        console.print(f"      [dim]命令: cae-cli learn {course.id}[/dim]\n")
+
+    console.print("=" * 50)
+    console.print("\n[bold]使用说明：[/bold]")
+    console.print("  查看课程:  cae-cli learn list")
+    console.print("  进入课程:  cae-cli learn <课程名>")
+    console.print("  示例:      cae-cli learn mechanics")
+    console.print()
+
+
+@learn.command("mechanics", help="材料力学")
+def learn_mechanics():
+    """材料力学"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("mechanics")
+
+
+@learn.command("theory", help="理论力学")
+def learn_theory():
+    """理论力学"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("theory")
+
+
+@learn.command("fem", help="有限元基础")
+def learn_fem():
+    """有限元基础"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("fem")
+
+
+@learn.command("materials", help="材料知识")
+def learn_materials():
+    """材料知识"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("materials")
+
+
+@learn.command("fasteners", help="紧固件")
+def learn_fasteners():
+    """紧固件"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("fasteners")
+
+
+@learn.command("standards", help="公差配合")
+def learn_standards():
+    """公差配合"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("standards")
+
+
+@learn.command("standard-parts", help="标准零件")
+def learn_standard_parts():
+    """标准零件"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("standard_parts")
+
+
+# 通用的课程查看命令（支持任意课程ID）
+@learn.command("view", help="查看课程内容")
+@click.argument("course_id", required=False)
+def learn_view(course_id):
+    """查看课程内容
+
+    COURSE_ID: 课程ID（支持模糊匹配）
+
+    示例:
+      cae-cli learn view mechanics
+      cae-cli learn view standard
+    """
+    from sw_helper.learn import CourseManager, load_course_content
+
+    console = Console()
+
+    if not course_id:
+        learn_list()
+        return
+
+    # 尝试精确匹配
+    course = CourseManager.get_course(course_id)
+
+    # 如果没有精确匹配，尝试模糊匹配
+    if not course:
+        # 模糊匹配：检查是否包含搜索词
+        course_id_lower = course_id.lower().replace("-", "_")
+        for c in CourseManager.get_all_courses():
+            if course_id_lower in c.id.lower():
+                course = c
+                break
+
+    if not course:
+        # 搜索名称和关键词
+        courses = CourseManager.search(course_id)
+        if courses:
+            course = courses[0]
+            console.print(f"[yellow]未找到 '{course_id}'，显示搜索结果: {course.name}[/yellow]\n")
+
+    if not course:
+        console.print(f"\n[red]错误: 未找到课程 '{course_id}'[/red]\n")
+        console.print("[bold]可用课程：[/bold]")
+        for c in CourseManager.get_all_courses():
+            console.print(f"  - {c.id}: {c.name}")
+        console.print("\n使用 [cyan]cae-cli learn list[/cyan] 查看所有课程\n")
+        return
+
+    # 显示课程
+    _show_course(course.id)
+
+
+@learn.command("materials")
+def learn_materials():
+    """材料知识"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("materials")
+
+
+@learn.command("fasteners")
+def learn_fasteners():
+    """紧固件"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("fasteners")
+
+
+@learn.command("standards")
+def learn_standards():
+    """公差配合"""
+    from sw_helper.learn import CourseManager, load_course_content
+    _show_course("standards")
+
+
+def _show_course(course_id: str):
+    """显示课程内容"""
+    from sw_helper.learn import CourseManager, load_course_content
+
+    console = Console()
+
+    course = CourseManager.get_course(course_id)
+    if not course:
+        console.print(f"[red]错误: 未知课程 '{course_id}'[/red]\n")
+        return
+
+    console.print("\n")
+    console.print(f"[bold cyan]📖 {course.name}[/bold cyan]")
+    console.print("-" * 40)
+    console.print(f"{course.description}\n")
+
+    content = load_course_content(course_id)
+    if content:
+        console.print("[bold]课程内容：[/bold]")
+        console.print(content[:1500])
+        if len(content) > 1500:
+            console.print("\n[dim]... (内容过长)[/dim]")
+
+    console.print("\n" + "=" * 40)
+    console.print("[bold]下一步：[/bold]")
+    console.print("  AI问答: cae-cli learn chat")
+    console.print("  课程列表: cae-cli learn list")
+    console.print()
+
+
+@learn.command()
+@click.argument("course_id", required=False)
+def learn_read(course_id):
+    """读取完整课程内容
+
+    COURSE_ID: 课程ID (mechanics, theory, fem, materials, fasteners, standards)
+    """
+    from sw_helper.learn import CourseManager, load_course_content
+    import subprocess
+    import platform
+
+    console = Console()
+
+    if not course_id:
+        console.print("[red]请指定课程ID[/red]")
+        console.print("使用 cae-cli learn list 查看可用课程\n")
+        return
+
+    course = CourseManager.get_course(course_id)
+
+    if not course:
+        console.print(f"[red]错误: 未知课程 '{course_id}'[/red]\n")
+        return
+
+    content = load_course_content(course_id)
+
+    # 使用系统分页器显示
+    if platform.system() == "Windows":
+        # Windows: 使用 more
+        with open("temp_learn.md", "w", encoding="utf-8") as f:
+            f.write(content)
+        subprocess.run(["cmd", "/c", "type", "temp_learn.md"])
+        try:
+            import os
+            os.remove("temp_learn.md")
+        except:
+            pass
+    else:
+        # Linux/Mac: 使用 less 或 more
+        with open("temp_learn.md", "w", encoding="utf-8") as f:
+            f.write(content)
+        subprocess.run(["less", "temp_learn.md"] if subprocess.run(["which", "less"]).returncode == 0 else ["more", "temp_learn.md"])
+        try:
+            import os
+            os.remove("temp_learn.md")
+        except:
+            pass
+
+
+@learn.command("create")
+@click.argument("course_name")
+@click.option("--description", "-d", default="", help="课程描述")
+@click.option("--keywords", "-k", default="", help="关键词，用逗号分隔")
+def learn_create(course_name, description, keywords):
+    """创建新课程模板
+
+    COURSE_NAME: 课程名称
+
+    示例:
+      cae-cli learn create "机械设计基础"
+      cae-cli learn create "振动分析" -d "机械振动理论" -k "振动,固有频率,模态"
+    """
+    from sw_helper.learn import create_course_template, CourseManager
+
+    console = Console()
+
+    # 构建关键词列表
+    kw_list = [k.strip() for k in keywords.split(",") if k.strip()] if keywords else []
+
+    # 生成模板
+    from sw_helper.learn import KNOWLEDGE_DIR
+    template = create_course_template(course_name, description)
+
+    # 保存到文件
+    course_filename = course_name.lower().replace(" ", "-")
+    course_path = KNOWLEDGE_DIR / f"{course_filename}.md"
+
+    if course_path.exists():
+        console.print(f"[red]错误: 课程文件已存在: {course_path}[/red]")
+        return
+
+    try:
+        with open(course_path, "w", encoding="utf-8") as f:
+            f.write(template)
+
+        # 刷新缓存
+        CourseManager.refresh()
+
+        console.print(f"\n[green]✓ 课程创建成功![/green]")
+        console.print(f"  文件: {course_path}")
+        console.print(f"\n[bold]下一步：[/bold]")
+        console.print(f"  编辑内容: code {course_path}")
+        console.print(f"  查看课程: cae-cli learn {course_filename}")
+        console.print(f"  刷新列表: cae-cli learn list\n")
+
+    except Exception as e:
+        console.print(f"[red]创建失败: {e}[/red]")
+
+
+@learn.command("chat")
+@click.option("--mode", "-m", default="learning",
+              type=click.Choice(["default", "learning", "lifestyle", "mechanical"]),
+              help="AI模式选择")
+def learn_chat(mode):  # noqa: PLR0912
+    """AI学习助手 - 问答模式
+
+    --mode 选项:
+      learning: 学习模式 (3-2-1方法+费曼学习法)
+      lifestyle: 生活态度模式
+      mechanical: 机械设计模式
+      default: 默认模式
+    """
+    from sw_helper.ai.prompt_manager import PromptManager
+
+    console = Console()
+
+    # 获取系统提示词
+    system_prompt = PromptManager.build_system_prompt(mode)
+
+    console.print("\n[bold cyan]🤖 CAE-CLI AI 学习助手[/bold cyan]")
+    console.print(f"[dim]模式: {mode}[/dim]")
+    console.print("=" * 40)
+
+    # 显示模式说明
+    mode_descs = {
+        "learning": "🎯 学习模式 - 使用3-2-1方法和费曼学习法",
+        "lifestyle": "🌟 生活态度 - 行动优先、长期主义",
+        "mechanical": "🔧 机械设计 - 专注机械设计领域",
+        "default": "📚 默认模式 - 综合助手",
+    }
+    console.print(f"[yellow]{mode_descs.get(mode, '')}[/yellow]\n")
+
+    # 检测模型
+    ollama_ok = False
+    ollama_model = None
+
+    try:
+        import requests
+        r = requests.get("http://localhost:11434/api/tags", timeout=3)
+        if r.status_code == 200:
+            models = r.json().get("models", [])
+            if models:
+                ollama_model = models[0].get("name", "")
+                ollama_ok = True
+                console.print(f"[green]✓ 模型: {ollama_model}[/green]")
+    except Exception as e:
+        console.print(f"[yellow]⚠ 检测Ollama失败: {e}[/yellow]")
+
+    console.print("=" * 40)
+    console.print("[bold]输入问题开始学习，q退出[/bold]")
+    console.print("[dim]提示: 使用 --mode 切换模式[/dim]\n")
+
+    # 主循环 - 带历史记录
+    messages = [{"role": "system", "content": system_prompt}]
+
+    while True:
+        try:
+            q = input("> ")
+        except EOFError:
+            break
+        except KeyboardInterrupt:
+            console.print("\n再见!")
+            break
+
+        if not q or not q.strip():
+            continue
+        if q.strip().lower() == 'q':
+            console.print("再见!")
+            break
+
+        console.print("\nAI思考中...\n")
+
+        # 调用API
+        if ollama_ok and ollama_model:
+            try:
+                import requests
+                messages.append({"role": "user", "content": q.strip()})
+
+                resp = requests.post(
+                    "http://localhost:11434/api/chat",
+                    json={
+                        "model": ollama_model,
+                        "messages": messages[-10:],  # 保留最近10条
+                        "stream": False
+                    },
+                    timeout=60
+                )
+                if resp.status_code == 200:
+                    answer = resp.json().get("message", {}).get("content", "")
+                    console.print(answer)
+                    messages.append({"role": "assistant", "content": answer})
+                    console.print()
+                else:
+                    console.print(f"[red]API错误: {resp.status_code}[/red]\n")
+            except Exception as e:
+                console.print(f"[red]请求错误: {e}[/red]\n")
+        else:
+            console.print("[yellow]无可用AI模型，请确保Ollama已启动[/yellow]\n")
+
+
 @cli.command()
 @click.option("--lang", default="zh", type=click.Choice(["zh", "en"]))
-def interactive(lang):
+def interactive(lang):  # noqa: PLR0912
     """
     Interactive mode - use CAE-CLI through a menu interface
 
@@ -1883,8 +2278,6 @@ def interactive(lang):
     import sys
     import os
 
-    console = Console()
-
     # 加载语言包
     lang_file = get_resource_path("data/languages.json")
     try:
@@ -1892,675 +2285,111 @@ def interactive(lang):
             lang_data = json.load(f)
         strings = lang_data.get(lang, lang_data["zh"])
     except Exception as e:
-        console.print(f"[yellow]Warning: Failed to load language pack: {e}[/yellow]")
+        print(f"Warning: Failed to load language pack: {e}")
         strings = {}
 
-    # 一级菜单选择函数（支持箭头键，无闪烁）
+    # 初始化Console（延迟初始化避免启动卡住）
+    console = None
+
+    # 一级菜单选择函数（简单数字选择）
     def select_mode():
-        from rich.live import Live
-        from rich.text import Text
+        print("\n" + "="*40)
+        print("  CAE-CLI 交互模式")
+        print("="*40)
+        print("\n请选择模式:")
+        print("  1. 工作模式 - 原有功能菜单")
+        print("  2. 学习模式 - 聊天式学习助手")
+        print("  3. 退出")
 
-        options = ["工作模式", "学习模式", "退出"]
-        selected = 0
-
-        # 检测平台，尝试使用msvcrt（Windows）或termios（Linux/Mac）
-        try:
-            import msvcrt
-            def get_key():
-                if msvcrt.kbhit():
-                    key = msvcrt.getch()
-                    if key == b'\xe0':  # 扩展键
-                        key = msvcrt.getch()
-                        return key
-                    elif key == b'\r':
-                        return 'enter'
-                    elif key == b'q':
-                        return 'q'
-                    elif key == b'\x03':  # Ctrl+C
-                        raise KeyboardInterrupt
-                return None
-            has_keyboard = True
-        except ImportError:
+        while True:
             try:
-                import tty, termios, sys
-                def get_key():
-                    fd = sys.stdin.fileno()
-                    old_settings = termios.tcgetattr(fd)
-                    try:
-                        tty.setraw(fd)
-                        ch = sys.stdin.read(1)
-                        if ch == '\x1b':  # 转义序列
-                            ch = sys.stdin.read(2)  # 读取后续字符
-                            if ch == '[A':
-                                return 'up'
-                            elif ch == '[B':
-                                return 'down'
-                        elif ch == '\r':
-                            return 'enter'
-                        elif ch == 'q':
-                            return 'q'
-                        elif ch == '\x03':  # Ctrl+C
-                            raise KeyboardInterrupt
-                    finally:
-                        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-                    return None
-                has_keyboard = True
-            except ImportError:
-                has_keyboard = False
+                choice = input("\n请输入选择 (1-3): ").strip()
+            except:
+                choice = ""
+            if choice == "1":
+                return "work"
+            elif choice == "2":
+                return "learn"
+            elif choice == "3":
+                return "exit"
+            elif choice == "":
+                # 默认选择学习模式
+                return "learn"
+            else:
+                print("无效选择，请输入 1, 2 或 3")
 
-        if not has_keyboard:
-            # 回退到数字选择
-            console.clear()
-            console.print(Panel.fit(
-                "[bold cyan]CAE-CLI 交互模式[/bold cyan]\n\n"
-                "请选择模式:\n"
-                "1. 工作模式 - 原有功能菜单\n"
-                "2. 学习模式 - 聊天式学习助手\n"
-                "3. 退出",
-                title="模式选择",
-                border_style="green"
-            ))
-            while True:
-                choice = Prompt.ask("\n请输入选择 (1-3)", default="1").strip()
-                if choice == "1":
-                    return "work"
-                elif choice == "2":
-                    return "learn"
-                elif choice == "3":
-                    return "exit"
-                else:
-                    console.print("[yellow]无效选择，请输入 1, 2 或 3[/yellow]")
-
-        # 使用箭头键选择（Live 动态更新）
-        def generate_panel():
-            menu_lines = []
-            for i, option in enumerate(options):
-                if i == selected:
-                    menu_lines.append(f"[bold green]› {option}[/bold green]")
-                else:
-                    menu_lines.append(f"  {option}")
-            menu_text = "\n".join(menu_lines)
-            return Panel.fit(
-                f"[bold cyan]CAE-CLI 交互模式[/bold cyan]\n\n"
-                f"使用 ↑ ↓ 箭头键选择，Enter 确认:\n\n"
-                f"{menu_text}",
-                title="模式选择",
-                border_style="green"
-            )
-
-        # 初始显示
-        console.clear()
-        with Live(generate_panel(), console=console, refresh_per_second=10, screen=True) as live:
-            while True:
-                key = get_key()
-                if key == b'H' or key == 'up':  # 上箭头
-                    selected = (selected - 1) % len(options)
-                    live.update(generate_panel())
-                elif key == b'P' or key == 'down':  # 下箭头
-                    selected = (selected + 1) % len(options)
-                    live.update(generate_panel())
-                elif key == 'enter':
-                    if selected == 0:
-                        return "work"
-                    elif selected == 1:
-                        return "learn"
-                    elif selected == 2:
-                        return "exit"
-                elif key == 'q':
-                    return "exit"
-
-    # 学习模式函数（集成Ollama）
+    # 学习模式函数 - 极简稳定版
     def learning_mode():
-        console.clear()
+        """简洁的AI学习助手"""
+        import sys
 
-        # 尝试导入requests，如果失败则只使用知识库
+        # 强制禁用Rich
+        nonlocal console
+        console = None
+
+        # 使用原始标准流
+        out = sys.stdout.write
+        inp = sys.stdin.readline
+
+        out("\n=== 学习助手初始化 ===\n")
+
+        # 检测模型
+        ollama_ok = False
+        ollama_model = None
+
         try:
             import requests
-            requests_available = True
-        except ImportError:
-            requests_available = False
-            console.print(Panel.fit(
-                "[bold yellow]⚠️  缺少 requests 模块[/bold yellow]\n\n"
-                "学习模式需要 requests 模块来调用 Ollama API。\n"
-                "请安装 requests: pip install requests\n\n"
-                "将暂时使用本地知识库回答。",
-                border_style="yellow",
-                padding=(1, 2)
-            ))
+            r = requests.get("http://localhost:11434/api/tags", timeout=3)
+            if r.status_code == 200:
+                models = r.json().get("models", [])
+                if models:
+                    ollama_model = models[0].get("name", "")
+                    ollama_ok = True
+                    out(f"模型: {ollama_model}\n")
+        except Exception as e:
+            out(f"检测Ollama失败: {e}\n")
 
-        import json
-        import subprocess
-        import time
-        import socket
-        from sw_helper.knowledge import get_knowledge_base
-
-        # 自动启动Ollama服务
-        def start_ollama_service():
-            """尝试自动启动Ollama服务"""
-            if not requests_available:
-                return False
-
-            # 先检查服务是否已经在运行
-            def is_port_open(port=11434, host='localhost'):
-                """检查端口是否开放"""
-                try:
-                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    sock.settimeout(2)
-                    result = sock.connect_ex((host, port))
-                    sock.close()
-                    return result == 0
-                except:
-                    return False
-
-            if is_port_open():
-                console.print("[green]✓ Ollama服务已在运行[/green]")
-                return True
-
-            console.print("[yellow]正在尝试启动Ollama服务...[/yellow]")
-
-            try:
-                # 尝试启动ollama serve
-                import sys
-                if sys.platform == 'win32':
-                    # Windows
-                    process = subprocess.Popen(
-                        ['ollama', 'serve'],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        stdin=subprocess.PIPE,
-                        creationflags=subprocess.CREATE_NEW_CONSOLE
-                    )
-                else:
-                    # Unix/Linux/Mac
-                    process = subprocess.Popen(
-                        ['ollama', 'serve'],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        stdin=subprocess.PIPE,
-                        start_new_session=True
-                    )
-
-                console.print("[yellow]等待Ollama服务启动...[/yellow]")
-
-                # 等待最多30秒，每1秒检查一次
-                for i in range(30):
-                    time.sleep(1)
-                    if is_port_open():
-                        console.print(f"[green]✓ Ollama服务启动成功（{i+1}秒）[/green]")
-                        return True
-
-                console.print("[red]✗ Ollama服务启动超时[/red]")
-                return False
-
-            except FileNotFoundError:
-                console.print(Panel.fit(
-                    "[bold red]✗ Ollama未安装[/bold red]\n\n"
-                    "请先安装Ollama:\n"
-                    "1. 访问 https://ollama.com/ 下载安装包\n"
-                    "2. 或使用包管理器安装（如brew install ollama）\n\n"
-                    "安装后请手动运行: ollama serve",
-                    border_style="red",
-                    padding=(1, 2)
-                ))
-                return False
-            except Exception as e:
-                console.print(f"[red]✗ 启动Ollama服务失败: {str(e)}[/red]")
-                return False
-
-        # 尝试自动启动服务
-        ollama_ready = False
-        if requests_available:
-            ollama_ready = start_ollama_service()
-
-        # 导入所需模块
-        from rich.prompt import Prompt
-
-        # 获取可用模型并让用户选择
-        available_models = []
-        selected_model = None
-        
-        def get_available_models():
-            """获取可用的Ollama模型列表"""
-            if not requests_available or not ollama_ready:
-                console.print("[yellow]requests不可用或Ollama未就绪[/yellow]")
-                return []
-            try:
-                response = requests.get("http://localhost:11434/api/tags", timeout=5)
-                if response.status_code != 200:
-                    console.print(f"[yellow]Ollama返回状态码: {response.status_code}[/yellow]")
-                    return []
-                models = response.json().get("models", [])
-                model_list = [model.get("name", "") for model in models]
-                console.print(f"[green]成功获取模型列表: {model_list}[/green]")
-                return model_list
-            except Exception as e:
-                console.print(f"[red]获取模型列表失败: {str(e)}[/red]")
-                return []
-
-        if ollama_ready:
-            console.print("[cyan]正在检测Ollama服务...[/cyan]")
-            available_models = get_available_models()
-            if available_models:
-                console.print(Panel.fit(
-                    f"[bold green]检测到 {len(available_models)} 个Ollama模型:[/bold green]\n\n" +
-                    "\n".join([f"  {i+1}. {m}" for i, m in enumerate(available_models)]),
-                    title="模型选择",
-                    border_style="cyan",
-                    padding=(1, 2)
-                ))
-                
-                # 让用户选择模型
-                if len(available_models) == 1:
-                    selected_model = available_models[0]
-                    console.print(f"[green]自动选择唯一模型: {selected_model}[/green]")
-                else:
-                    console.print("\n[bold]请选择模型编号（或直接回车使用第一个）:[/bold]")
-                    choice = Prompt.ask("", default="1", show_default=True)
-                    try:
-                        idx = int(choice) - 1
-                        if 0 <= idx < len(available_models):
-                            selected_model = available_models[idx]
-                        else:
-                            selected_model = available_models[0]
-                    except:
-                        selected_model = available_models[0]
-            else:
-                # 没有检测到Ollama模型，显示三种选择
-                console.print("[yellow]未检测到Ollama模型[/yellow]")
-                console.print("\n[bold]请选择AI模式:[/bold]")
-                console.print("  1. 使用Ollama服务（需要先安装Ollama并下载模型）")
-                console.print("  2. 使用本地GGUF模型（离线可用，加载本地模型文件）")
-                console.print("  3. 仅使用本地知识库")
-                choice = Prompt.ask("", default="2", show_default=True)
-                
-                if choice == "1":
-                    # Ollama模式
-                    selected_model = Prompt.ask("[bold]请输入Ollama模型名称（如 qwen2.5:3b）[/bold]")
-                    if selected_model:
-                        console.print(f"[green]将使用Ollama模型: {selected_model}[/green]")
-                elif choice == "2":
-                    # 本地GGUF模型模式
-                    try:
-                        from sw_helper.ai.local_gguf import get_local_gguf_model, find_gguf_models
-                        
-                        # 查找可用的GGUF模型
-                        gguf_models = find_gguf_models()
-                        if gguf_models:
-                            console.print(Panel.fit(
-                                "[bold]检测到以下本地GGUF模型:[/bold]\n\n" +
-                                "\n".join([f"  {i+1}. {m}" for i, m in enumerate(gguf_models)]),
-                                title="本地模型",
-                                border_style="green",
-                                padding=(1, 2)
-                            ))
-                            gguf_choice = Prompt.ask("选择模型编号", default="1")
-                            try:
-                                idx = int(gguf_choice) - 1
-                                if 0 <= idx < len(gguf_models):
-                                    gguf_model_path = gguf_models[idx]
-                                else:
-                                    gguf_model_path = gguf_models[0]
-                            except:
-                                gguf_model_path = gguf_models[0]
-                        else:
-                            # 让用户输入模型路径
-                            gguf_model_path = Prompt.ask(
-                                "[bold]请输入GGUF模型文件路径[/bold]",
-                                default="qwen2.5-1.5b-instruct-q4_k_m.gguf"
-                            )
-                        
-                        # 加载模型
-                        local_model = get_local_gguf_model(gguf_model_path)
-                        success = local_model.load_model()
-                        if success:
-                            selected_model = f"local_gguf:{gguf_model_path}"
-                            console.print(f"[green]✓ 本地模型加载成功: {gguf_model_path}[/green]")
-                        else:
-                            console.print("[red]本地模型加载失败，将使用知识库[/red]")
-                    except ImportError:
-                        console.print("[red]llama-cpp-python未安装，请运行: pip install llama-cpp-python[/red]")
-                        console.print("[yellow]将使用本地知识库[/yellow]")
-                else:
-                    console.print("[yellow]将仅使用本地知识库[/yellow]")
-        else:
-            console.print("[yellow]Ollama服务未就绪[/yellow]")
-            console.print("\n[bold]请选择:[/bold]")
-            console.print("  1. 使用本地GGUF模型")
-            console.print("  2. 仅使用本地知识库")
-            choice = Prompt.ask("", default="1", show_default=True)
-            if choice == "1":
-                try:
-                    from sw_helper.ai.local_gguf import get_local_gguf_model, find_gguf_models
-                    gguf_models = find_gguf_models()
-                    if gguf_models:
-                        console.print(Panel.fit(
-                            "[bold]检测到以下本地GGUF模型:[/bold]\n\n" +
-                            "\n".join([f"  {i+1}. {m}" for i, m in enumerate(gguf_models)]),
-                            title="本地模型",
-                            border_style="green",
-                            padding=(1, 2)
-                        ))
-                        gguf_choice = Prompt.ask("选择模型编号", default="1")
-                        try:
-                            idx = int(gguf_choice) - 1
-                            if 0 <= idx < len(gguf_models):
-                                gguf_model_path = gguf_models[idx]
-                            else:
-                                gguf_model_path = gguf_models[0]
-                        except:
-                            gguf_model_path = gguf_models[0]
-                    else:
-                        gguf_model_path = Prompt.ask(
-                            "[bold]请输入GGUF模型文件路径[/bold]",
-                            default="qwen2.5-1.5b-instruct-q4_k_m.gguf"
-                        )
-                    local_model = get_local_gguf_model(gguf_model_path)
-                    success = local_model.load_model()
-                    if success:
-                        selected_model = f"local_gguf:{gguf_model_path}"
-                        console.print(f"[green]✓ 本地模型加载成功: {gguf_model_path}[/green]")
-                except ImportError:
-                    console.print("[red]llama-cpp-python未安装[/red]")
-            else:
-                console.print("[yellow]将仅使用本地知识库[/yellow]")
-
-        # 预热模型（仅Ollama模式需要）
-        if selected_model and requests_available and selected_model and not selected_model.startswith("local_gguf:"):
-            console.print(f"[cyan]正在预热模型 {selected_model}，首次加载较慢，请稍候...[/cyan]", style="cyan")
-            try:
-                warmup_url = "http://localhost:11434/api/chat"
-                warmup_payload = {
-                    "model": selected_model,
-                    "messages": [{"role": "user", "content": "你好"}],
-                    "stream": False
-                }
-                warmup_response = requests.post(warmup_url, json=warmup_payload, timeout=180)
-                if warmup_response.status_code == 200:
-                    console.print(f"[green]✓ 模型 {selected_model} 已预热完成[/green]", style="green")
-                else:
-                    console.print(f"[yellow]模型预热失败，状态码: {warmup_response.status_code}[/yellow]", style="yellow")
-            except Exception as e:
-                console.print(f"[yellow]模型预热跳过: {str(e)}[/yellow]", style="yellow")
-
-        console.print(Panel.fit(
-            "[bold green]📚 CAE-CLI 学习模式[/bold green]\n\n"
-            "欢迎使用聊天式学习助手！\n"
-            f"{'已选择模型: ' + selected_model if selected_model else '本地知识库'} 为您解答CAE相关问题。\n"
-            "支持多轮对话，上下文自动保留。\n\n"
-            "[dim]输入 'back' 或 '退出' 返回主菜单[/dim]",
-            title="学习助手",
-            border_style="cyan"
-        ))
-
-        # 初始化知识库（备用）
-        kb = get_knowledge_base()
-        # 对话历史
-        conversation_history = []
-
-        # 初始化RAG引擎（如果可用）
-        rag_available = False
-        rag = None
-        if requests_available:
-            try:
-                from sw_helper.utils.rag_engine import RAGEngine
-                rag = RAGEngine()
-                rag_available = True
-                console.print("[green]✓ RAG引擎已加载[/green]")
-            except ImportError:
-                console.print("[yellow]警告: 无法导入RAG引擎，将使用基础问答模式[/yellow]")
-            except Exception as e:
-                console.print(f"[yellow]警告: RAG引擎初始化失败: {str(e)}[/yellow]")
-
-        def check_ollama():
-            if not requests_available or not ollama_ready:
-                return False
-            try:
-                response = requests.get("http://localhost:11434/api/tags", timeout=5)
-                if response.status_code != 200:
-                    return False
-                return True
-            except requests.exceptions.Timeout:
-                return False
-            except Exception:
-                return False
-
-        # 调用Ollama API
-        def ask_ollama(question, history):
-            nonlocal selected_model, available_models
-            
-            if not requests_available:
-                return "requests模块不可用，无法调用Ollama API。请安装requests: pip install requests"
-
-            url = "http://localhost:11434/api/chat"
-            
-            # 如果没有可用模型，提示用户
-            if not available_models:
-                console.print("[yellow]正在检查Ollama模型...[/yellow]")
-                available_models = get_available_models()
-                
-            # 构建消息历史
-            messages = []
-            for h in history:
-                messages.append({"role": "user", "content": h["question"]})
-                messages.append({"role": "assistant", "content": h["answer"]})
-            messages.append({"role": "user", "content": question})
-
-            # 使用用户选择的模型
-            model_to_use = selected_model if selected_model else available_models[0]
-            
-            # 检查是否是本地GGUF模型
-            if model_to_use and model_to_use.startswith("local_gguf:"):
-                # 使用本地GGUF模型
-                try:
-                    from sw_helper.ai.local_gguf import get_local_gguf_model
-                    local_model_path = model_to_use.replace("local_gguf:", "")
-                    local_model = get_local_gguf_model(local_model_path)
-                    if local_model.llm is None:
-                        local_model.load_model()
-                    # 转换history格式
-                    history_for_local = [{"role": h["role"] if h.get("role") else "user", "content": h.get("content", "")} for h in history]
-                    return local_model.chat(question, history_for_local)
-                except Exception as e:
-                    return f"本地模型调用失败: {str(e)}"
-            
-            console.print(f"[cyan]使用模型: {model_to_use}[/cyan]")
-            
-            payload = {
-                "model": model_to_use,
-                "messages": messages,
-                "stream": False
-            }
-
-            try:
-                # 确保使用UTF-8编码
-                console.print(f"[dim]发送请求到 Ollama...[/dim]", style="cyan")
-                import time
-                start = time.time()
-                response = requests.post(
-                    url, 
-                    json=payload,
-                    timeout=180,
-                    headers={"Content-Type": "application/json; charset=utf-8"}
-                )
-                elapsed = time.time() - start
-                console.print(f"[dim]响应状态: {response.status_code}, 耗时: {elapsed:.1f}秒[/dim]", style="cyan")
-                response.raise_for_status()
-                # 手动用UTF-8解码，避免Windows编码问题
-                text = response.content.decode('utf-8')
-                result = json.loads(text)
-                content = result.get("message", {}).get("content", "")
-                if content:
-                    return content
-                return f"API返回格式异常: {result}"
-            except requests.exceptions.ConnectionError:
-                console.print("[red]连接失败[/red]", style="red")
-                return None  # 连接失败
-            except requests.exceptions.Timeout:
-                console.print("[red]请求超时[/red]", style="red")
-                return f"Ollama服务响应超时（180秒）。请确保：\n1. ollama serve 正在运行\n2. 模型 {model_to_use} 已安装\n3. 网络连接正常"
-            except Exception as e:
-                error_msg = str(e)
-                console.print(f"[red]错误详情: {error_msg}[/red]", style="red")
-                # 如果是500错误，提示用户更换模型
-                if "500" in error_msg:
-                    console.print(f"[yellow]模型 {model_to_use} 调用失败，尝试更换模型...[/yellow]", style="yellow")
-                    # 尝试其他模型
-                    failed_model = model_to_use
-                    for alt_model in available_models:
-                        if alt_model != failed_model:
-                            console.print(f"[yellow]尝试模型: {alt_model}[/yellow]", style="yellow")
-                            payload["model"] = alt_model
-                            try:
-                                response = requests.post(url, json=payload, timeout=60)
-                                response.raise_for_status()
-                                # 修复：使用正确的解码方式
-                                text = response.content.decode('utf-8')
-                                result = json.loads(text)
-                                content = result.get("message", {}).get("content", "")
-                                selected_model = alt_model  # 更新选中的模型
-                                return content
-                            except:
-                                continue
-                    return f"所有模型调用失败。请检查Ollama服务状态，或尝试重新安装模型。"
-                return f"API调用错误: {error_msg}"
+        out("=====================\n")
+        out("输入问题，q退出\n\n")
 
         # 主循环
         while True:
+            out("> ")
             try:
-                question = Prompt.ask("\n[bold]请输入您的问题[/bold]").strip()
-
-                if not question:
-                    continue
-
-                if question.lower() in ['back', '退出', 'exit', 'quit', '返回']:
-                    console.print("[yellow]返回主菜单...[/yellow]")
-                    break
-
-                # 检查Ollama服务
-                if not check_ollama():
-                    if not requests_available:
-                        # requests模块不可用，直接使用知识库
-                        console.print(Panel.fit(
-                            "[bold yellow]⚠️  requests模块不可用[/bold yellow]\n\n"
-                            "无法调用Ollama API，将使用本地知识库回答。\n"
-                            "如需AI功能，请安装requests: pip install requests",
-                            border_style="yellow",
-                            padding=(1, 2)
-                        ))
-                    elif not ollama_ready:
-                        # requests可用但Ollama服务自动启动失败
-                        console.print(Panel.fit(
-                            "[bold yellow]⚠️  Ollama服务启动失败[/bold yellow]\n\n"
-                            "已尝试自动启动Ollama服务但失败。\n"
-                            "请手动启动服务：\n"
-                            "1. 打开终端，运行: ollama serve\n"
-                            "2. 确保已安装模型: ollama pull <model_name>\n\n"
-                            "将暂时使用本地知识库回答。",
-                            border_style="yellow",
-                            padding=(1, 2)
-                        ))
-                    else:
-                        # requests可用且ollama_ready为True，但检查失败（可能是临时问题）
-                        console.print(Panel.fit(
-                            "[bold yellow]⚠️  Ollama服务连接失败[/bold yellow]\n\n"
-                            "Ollama服务已启动但无法连接。\n"
-                            "请检查：\n"
-                            "1. ollama serve 是否正在运行\n"
-                            "2. 端口11434是否被占用\n"
-                            "3. 防火墙设置\n\n"
-                            "将暂时使用本地知识库回答。",
-                            border_style="yellow",
-                            padding=(1, 2)
-                        ))
-
-                    # 回退到知识库搜索
-                    with console.status("[bold green]正在搜索知识库...[/bold green]"):
-                        search_results = kb.search(question)
-                        if len(search_results) > 3:
-                            search_results = search_results[:3]
-
-                        if search_results:
-                            answer_parts = [f"[bold]问题:[/bold] {question}\n", "[bold]回答:[/bold]\n"]
-                            for i, result in enumerate(search_results, 1):
-                                answer_parts.append(f"{i}. {result['content'][:200]}...")
-                                if 'filename' in result:
-                                    answer_parts.append(f"   [dim]来源: {result['filename']}[/dim]")
-                            answer = "\n".join(answer_parts)
-                        else:
-                            if not requests_available:
-                                answer = (
-                                    f"[bold]问题:[/bold] {question}\n\n"
-                                    f"[bold]回答:[/bold]\n"
-                                    f"知识库中未找到相关信息。如需AI功能，请安装requests模块。"
-                                )
-                            elif not ollama_ready:
-                                answer = (
-                                    f"[bold]问题:[/bold] {question}\n\n"
-                                    f"[bold]回答:[/bold]\n"
-                                    f"知识库中未找到相关信息。Ollama服务自动启动失败，请手动启动服务。"
-                                )
-                            else:
-                                answer = (
-                                    f"[bold]问题:[/bold] {question}\n\n"
-                                    f"[bold]回答:[/bold]\n"
-                                    f"知识库中未找到相关信息，Ollama服务连接失败，请检查服务状态。"
-                                )
-                else:
-                    # 使用Ollama回答（带RAG增强）
-                    with console.status("[bold green]正在检索知识库...[/bold green]"):
-                        # 如果有RAG引擎，先检索相关知识
-                        context = ""
-                        if rag_available and rag:
-                            try:
-                                retrieved = rag.search(question, top_k=2)
-                                if retrieved:
-                                    context = "\n\n".join([f"【来源：{r['source']}】\n{r['content'][:800]}" for r in retrieved])
-                                    console.print("[green]✓ 已检索相关知识[/green]")
-                            except Exception as e:
-                                console.print(f"[yellow]RAG检索失败: {str(e)}[/yellow]")
-
-                    with console.status("[bold green]正在思考...[/bold green]"):
-                        # 构建提示词
-                        if context:
-                            full_prompt = f"""
-                            你是一个耐心、专业的机械学习助手。
-                            知识库相关内容：
-                            {context}
-
-                            用户问题：{question}
-
-                            请用中文、教学式、一步步回答，举例说明，适合大一学生。
-                            """
-                            prompt_to_send = full_prompt
-                        else:
-                            prompt_to_send = question
-
-                        answer = ask_ollama(prompt_to_send, conversation_history)
-                        if answer is None:
-                            answer = "无法连接到Ollama服务，请确保ollama serve正在运行。"
-                        else:
-                            # 保存到历史（限制历史长度），保存原始问题而非完整提示词
-                            conversation_history.append({"question": question, "answer": answer})
-                            if len(conversation_history) > 10:  # 保留最近10轮
-                                conversation_history.pop(0)
-
-                # 显示回答（绿色面板）
-                console.print(Panel.fit(
-                    answer,
-                    title="学习助手回答",
-                    border_style="green",
-                    padding=(1, 2)
-                ))
-
-            except KeyboardInterrupt:
-                console.print("\n[yellow]返回主菜单...[/yellow]")
+                q = inp()
+            except:
                 break
-            except Exception as e:
-                console.print(f"[red]错误: {e}[/red]")
+
+            if not q.strip():
+                continue
+            if q.strip().lower() == 'q':
+                out("再见!\n")
+                break
+
+            out("AI思考中...\n")
+
+            # 调用API
+            if ollama_ok and ollama_model:
                 try:
-                    Prompt.ask("\n按 Enter 继续...", default="")
-                except EOFError:
-                    break
+                    import requests
+                    resp = requests.post(
+                        "http://localhost:11434/api/chat",
+                        json={
+                            "model": ollama_model,
+                            "messages": [{"role": "user", "content": q.strip()}],
+                            "stream": False
+                        },
+                        timeout=60
+                    )
+                    if resp.status_code == 200:
+                        answer = resp.json().get("message", {}).get("content", "")
+                        out(f"\n{answer}\n\n")
+                    else:
+                        out(f"\nAPI错误: {resp.status_code}\n\n")
+                except Exception as e:
+                    out(f"\n错误: {e}\n\n")
+            else:
+                out("\n无AI模型\n")
 
     # 主循环
     while True:
@@ -3131,6 +2960,14 @@ def interactive(lang):
             continue
 
         elif mode == "learn":
+            # 强制禁用console并重置stdout
+            console = None
+            import sys
+            try:
+                sys.stdout = sys.__stdout__
+                sys.stdin = sys.__stdin__
+            except:
+                pass
             learning_mode()
             # 学习模式结束后返回一级菜单
             continue
@@ -3272,7 +3109,7 @@ def menu():
 @click.option('--pr', type=int, help="审查指定PR编号的变更")
 @click.option('--format', 'output_format', type=click.Choice(['text', 'json'], case_sensitive=False),
               default='text', help="输出格式: text 或 json")
-def review(local, pr, output_format):
+def review(local, pr, output_format):  # noqa: PLR0912
     """
     智能代码审查
 

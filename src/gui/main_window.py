@@ -73,17 +73,21 @@ class MainWindow(QMainWindow):
     def _create_menu_bar(self):
         """创建菜单栏"""
         menubar = self.menuBar()
+        self._create_file_menu(menubar)
+        self._create_edit_menu(menubar)
+        menubar.addMenu("视图(&V)")
+        self._create_tools_menu(menubar)
+        self._create_help_menu(menubar)
 
-        # 文件菜单
+    def _create_file_menu(self, menubar):
+        """创建文件菜单"""
         file_menu = menubar.addMenu("文件(&F)")
 
-        # 新建项目
         new_action = QAction("新建项目(&N)", self)
         new_action.setShortcut(QKeySequence.StandardKey.New)
         new_action.triggered.connect(self._on_new_project)
         file_menu.addAction(new_action)
 
-        # 打开文件
         open_action = QAction("打开文件(&O)...", self)
         open_action.setShortcut(QKeySequence.StandardKey.Open)
         open_action.triggered.connect(self._on_open_file)
@@ -91,13 +95,11 @@ class MainWindow(QMainWindow):
 
         file_menu.addSeparator()
 
-        # 保存
         save_action = QAction("保存(&S)", self)
         save_action.setShortcut(QKeySequence.StandardKey.Save)
         save_action.triggered.connect(self._on_save)
         file_menu.addAction(save_action)
 
-        # 另存为
         save_as_action = QAction("另存为(&A)...", self)
         save_as_action.setShortcut(QKeySequence.StandardKey.SaveAs)
         save_as_action.triggered.connect(self._on_save_as)
@@ -105,13 +107,13 @@ class MainWindow(QMainWindow):
 
         file_menu.addSeparator()
 
-        # 退出
         exit_action = QAction("退出(&X)", self)
         exit_action.setShortcut(QKeySequence.StandardKey.Quit)
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
-        # 编辑菜单
+    def _create_edit_menu(self, menubar):
+        """创建编辑菜单"""
         edit_menu = menubar.addMenu("编辑(&E)")
 
         undo_action = QAction("撤销(&U)", self)
@@ -132,53 +134,40 @@ class MainWindow(QMainWindow):
         paste_action.setShortcut(QKeySequence.StandardKey.Paste)
         edit_menu.addAction(paste_action)
 
-        # 视图菜单
-        view_menu = menubar.addMenu("视图(&V)")
-
-        # 工具菜单
+    def _create_tools_menu(self, menubar):
+        """创建工具菜单"""
         tools_menu = menubar.addMenu("工具(&T)")
 
-        # 几何解析
-        geometry_action = QAction("几何解析", self)
-        geometry_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(0))
-        tools_menu.addAction(geometry_action)
-
-        # 网格分析
-        mesh_action = QAction("网格分析", self)
-        mesh_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(1))
-        tools_menu.addAction(mesh_action)
-
-        # 材料查询
-        material_action = QAction("材料查询", self)
-        material_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(2))
-        tools_menu.addAction(material_action)
-
-        # 参数优化
-        optimize_action = QAction("参数优化", self)
-        optimize_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(3))
-        tools_menu.addAction(optimize_action)
+        home_action = QAction("首页", self)
+        home_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(0))
+        tools_menu.addAction(home_action)
 
         tools_menu.addSeparator()
 
-        # AI助手
-        ai_action = QAction("AI助手", self)
-        ai_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(4))
-        tools_menu.addAction(ai_action)
+        # 功能页面
+        page_actions = [
+            ("几何解析", 1),
+            ("网格分析", 2),
+            ("材料查询", 3),
+            ("学习中心", 4),
+            ("AI助手", 5),
+            ("参数优化", 6),
+            ("交互聊天", 7),
+        ]
 
-        # 学习模式
-        chat_action = QAction("学习模式", self)
-        chat_action.triggered.connect(lambda: self.tab_widget.setCurrentIndex(5))
-        tools_menu.addAction(chat_action)
+        for label, idx in page_actions:
+            action = QAction(label, self)
+            action.triggered.connect(lambda checked, i=idx: self.tab_widget.setCurrentIndex(i))
+            tools_menu.addAction(action)
 
-        # 帮助菜单
+    def _create_help_menu(self, menubar):
+        """创建帮助菜单"""
         help_menu = menubar.addMenu("帮助(&H)")
 
-        # 文档
         doc_action = QAction("使用文档(&D)", self)
         doc_action.triggered.connect(self._on_show_docs)
         help_menu.addAction(doc_action)
 
-        # 关于
         about_action = QAction("关于(&A)", self)
         about_action.triggered.connect(self._on_about)
         help_menu.addAction(about_action)
@@ -224,8 +213,7 @@ class MainWindow(QMainWindow):
         self.statusbar.addPermanentWidget(self.progress_label)
 
     def _create_pages(self):
-        """创建页面（占位符）"""
-        # TODO: 后续创建具体页面
+        """创建页面"""
         from .pages import (
             GeometryPage,
             MeshPage,
@@ -234,30 +222,80 @@ class MainWindow(QMainWindow):
             AIPage,
             ChatPage,
         )
+        from .pages.dashboard_page import DashboardPage
+        from .pages.learn_page import LearnPage
+        from .pages.command_panel import CommandPanel
+
+        # 首页/仪表盘
+        self.dashboard_page = DashboardPage()
+        self.dashboard_page.navigate.connect(self._on_navigate)
+        self.tab_widget.addTab(self.dashboard_page, "🏠 首页")
+
+        # 命令面板
+        self.command_panel = CommandPanel()
+        self.tab_widget.addTab(self.command_panel, "⚡ 命令")
 
         # 几何解析页面
         self.geometry_page = GeometryPage()
-        self.tab_widget.addTab(self.geometry_page, "几何解析")
+        self.tab_widget.addTab(self.geometry_page, "📐 几何")
 
         # 网格分析页面
         self.mesh_page = MeshPage()
-        self.tab_widget.addTab(self.mesh_page, "网格分析")
+        self.tab_widget.addTab(self.mesh_page, "🔲 网格")
 
         # 材料查询页面
         self.material_page = MaterialPage()
-        self.tab_widget.addTab(self.material_page, "材料查询")
+        self.tab_widget.addTab(self.material_page, "🔧 材料")
 
-        # 参数优化页面
-        self.optimization_page = OptimizationPage()
-        self.tab_widget.addTab(self.optimization_page, "参数优化")
+        # 学习中心页面
+        self.learn_page = LearnPage()
+        self.learn_page.course_selected.connect(self._on_navigate_to_chat)
+        self.learn_page.chat_requested.connect(self._on_chat_requested)
+        self.tab_widget.addTab(self.learn_page, "📚 学习")
 
         # AI助手页面
         self.ai_page = AIPage()
-        self.tab_widget.addTab(self.ai_page, "AI助手")
+        self.tab_widget.addTab(self.ai_page, "🤖 AI")
 
-        # 学习模式页面
-        self.chat_page = ChatPage()
-        self.tab_widget.addTab(self.chat_page, "学习模式")
+        # 参数优化页面
+        self.optimization_page = OptimizationPage()
+        self.tab_widget.addTab(self.optimization_page, "⚙️ 优化")
+
+        # 交互聊天页面
+        self.chat_page = ChatPage("learning")
+        self.tab_widget.addTab(self.chat_page, "💬 聊天")
+
+    def _on_navigate(self, page_name: str):
+        """导航到指定页面"""
+        page_map = {
+            "parse": 1,   # 几何
+            "mesh": 2,   # 网格
+            "material": 3,  # 材料
+            "learn": 4,   # 学习
+            "ai": 5,      # AI
+            "optimize": 6,  # 优化
+        }
+        if page_name in page_map:
+            self.tab_widget.setCurrentIndex(page_map[page_name])
+
+    def _on_navigate_to_chat(self, target: str):
+        """导航到聊天页面"""
+        if target == "chat":
+            self.tab_widget.setCurrentIndex(7)  # 聊天页
+
+    def _on_chat_requested(self, mode: str):
+        """处理AI问答请求
+
+        Args:
+            mode: AI模式 (learning/lifestyle/mechanical/default)
+        """
+        # 更新聊天页面的模式
+        self.chat_page = ChatPage(mode)
+        # 替换tab_widget中的聊天页面
+        self.tab_widget.removeTab(7)
+        self.tab_widget.insertTab(7, self.chat_page, "💬 聊天")
+        # 切换到聊天页面
+        self.tab_widget.setCurrentIndex(7)
 
     def _apply_theme(self):
         """应用主题样式"""
@@ -265,34 +303,48 @@ class MainWindow(QMainWindow):
 
     def _update_status(self):
         """更新状态信息"""
-        # TODO: 实现状态更新逻辑
+        # 状态更新逻辑 - 可扩展为显示系统资源使用情况
         pass
 
     # ==================== 菜单槽函数 ====================
 
     def _on_new_project(self):
         """新建项目"""
+        from PySide6.QtWidgets import QFileDialog
         self.status_label.setText("新建项目...")
-        # TODO: 实现新建项目逻辑
+        # TODO: 实现新建项目逻辑 - 创建新项目目录结构
 
     def _on_open_file(self):
         """打开文件"""
+        from PySide6.QtWidgets import QFileDialog
         self.status_label.setText("打开文件...")
-        # TODO: 实现打开文件逻辑
+        # TODO: 实现打开文件逻辑 - 支持CAD/CAE文件打开
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "打开文件", "", "所有文件 (*.*)"
+        )
+        if file_path:
+            self.status_label.setText(f"已打开: {file_path}")
 
     def _on_save(self):
         """保存"""
         self.status_label.setText("保存...")
-        # TODO: 实现保存逻辑
+        # TODO: 实现保存逻辑 - 保存当前项目状态
+        self.status_label.setText("已保存")
 
     def _on_save_as(self):
         """另存为"""
+        from PySide6.QtWidgets import QFileDialog
         self.status_label.setText("另存为...")
-        # TODO: 实现另存为逻辑
+        # TODO: 实现另存为逻辑 - 另存为新文件
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "另存为", "", "所有文件 (*.*)"
+        )
+        if file_path:
+            self.status_label.setText(f"已另存为: {file_path}")
 
     def _on_show_docs(self):
         """显示文档"""
-        # TODO: 实现文档显示
+        # TODO: 实现文档显示 - 链接到在线文档或本地文档
         QMessageBox.information(self, "使用文档", "文档功能开发中...")
 
     def _on_about(self):

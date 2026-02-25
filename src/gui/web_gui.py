@@ -344,117 +344,766 @@ class WebGUIWindow(QMainWindow):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAE-CLI</title>
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: rgba(22, 27, 34, 0.8);
+            --bg-glass: rgba(22, 27, 34, 0.7);
+            --border-color: #30363d;
+            --border-hover: #58a6ff;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-green: #238636;
+            --accent-green-hover: #2ea043;
+            --gradient-primary: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 8px 40px rgba(88, 166, 255, 0.15);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.2s ease;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== Base Styles ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0d1117, #161b22); color: #c9d1d9; min-height: 100vh; }
-        .header { background: rgba(22,27,34,0.95); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; }
-        .logo { font-size: 32px; font-weight: bold; background: linear-gradient(90deg, #58a6ff, #a371f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav { display: flex; gap: 15px; }
-        .nav-item { padding: 10px 20px; border-radius: 8px; cursor: pointer; color: #8b949e; }
-        .nav-item:hover { background: rgba(88,166,255,0.1); }
-        .nav-item.active { background: rgba(88,166,255,0.2); color: #58a6ff; }
-        .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
-        .hero { text-align: center; padding: 40px 0; }
-        .hero h1 { font-size: 56px; background: linear-gradient(90deg, #58a6ff, #a371f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 40px; }
-        .module-card { background: linear-gradient(145deg, rgba(33,38,45,0.8), rgba(22,27,34,0.9)); border-radius: 16px; padding: 28px; border: 1px solid #30363d; cursor: pointer; transition: all 0.3s; }
-        .module-card:hover { transform: translateY(-8px); border-color: #58a6ff; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
-        .module-icon { font-size: 48px; margin-bottom: 16px; }
-        .module-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #c9d1d9; }
-        .module-desc { font-size: 14px; color: #8b949e; }
-        .module-cmd { margin-top: 15px; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-family: Consolas, monospace; font-size: 12px; color: #58a6ff; }
-        .action-btns { display: flex; gap: 15px; justify-content: center; }
-        .action-btn { padding: 12px 28px; background: linear-gradient(90deg, #238636, #2ea043); border: none; border-radius: 8px; color: white; font-size: 14px; cursor: pointer; }
-        .action-btn:hover { transform: scale(1.05); }
-        .click-hint { background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.3); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; color: #58a6ff; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== Background Effects ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(88, 166, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(163, 113, 247, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ===== Glassmorphism Header ===== */
+        .header {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            -webkit-text-fill-color: white;
+        }
+
+        /* ===== Navigation ===== */
+        .nav {
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-item {
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(88, 166, 255, 0.3);
+        }
+
+        /* ===== Main Container ===== */
+        .main-content {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ===== Quick Actions Bar ===== */
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(88, 166, 255, 0.1);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .quick-action-btn i { color: var(--accent-blue); }
+
+        /* ===== Page Title ===== */
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== Cards Grid ===== */
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .module-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: var(--transition-smooth);
+        }
+
+        .module-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .module-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(88, 166, 255, 0.1);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: var(--transition-smooth);
+        }
+
+        .module-card:hover .module-icon {
+            background: var(--gradient-primary);
+            transform: scale(1.1);
+        }
+
+        .module-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .module-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .module-cmd {
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            color: var(--accent-blue);
+            display: inline-block;
+        }
+
+        /* ===== Buttons ===== */
+        .action-btn {
+            padding: 12px 28px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.3);
+        }
+
+        /* ===== Status Badge ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(35, 134, 54, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            color: #3fb950;
+        }
+
+        /* ===== Chat Page ===== */
+        #chat-page { display: none; }
+        .chat-container {
+            display: flex;
+            height: calc(100vh - 70px);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-sidebar h3 {
+            color: var(--accent-blue);
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-sidebar-item {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-sidebar-item:hover {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .chat-sidebar-item.active {
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--accent-blue);
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-message {
+            padding: 14px 18px;
+            border-radius: var(--radius-lg);
+            max-width: 75%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            background: var(--gradient-primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.ai {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition-fast);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        .chat-send-btn {
+            padding: 14px 28px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(88, 166, 255, 0.3);
+        }
+
+        /* ===== Loading Animation ===== */
+        .loading-dots::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 12px; }
+            .nav { flex-wrap: wrap; justify-content: center; }
+            .modules { grid-template-columns: 1fr; }
+            .chat-sidebar { display: none; }
+        }
+
+        /* ===== Animations ===== */
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
-        <div class="logo">⚡ CAE-CLI</div>
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            <span>CAE-CLI</span>
+            <span class="status-badge"><i class="fas fa-circle" style="font-size: 8px;"></i> v0.2.0</span>
+        </div>
         <div class="nav">
-            <div class="nav-item active" onclick="showPage('home')">🏠 首页</div>
-            <div class="nav-item" onclick="showPage('tools')">🛠️ 工具</div>
-            <div class="nav-item" onclick="showPage('ai')">🤖 AI</div>
+            <div class="nav-item active" data-page="home" onclick="showPage('home')">
+                <i class="fas fa-home"></i> 首页
+            </div>
+            <div class="nav-item" data-page="tools" onclick="showPage('tools')">
+                <i class="fas fa-tools"></i> 工具
+            </div>
+            <div class="nav-item" data-page="workflow" onclick="showPage('workflow')">
+                <i class="fas fa-project-diagram"></i> 工作流
+            </div>
+            <div class="nav-item" data-page="chat" onclick="showPage('chat')">
+                <i class="fas fa-comments"></i> 聊天
+            </div>
+            <div class="nav-item" data-page="ai" onclick="showPage('ai')">
+                <i class="fas fa-robot"></i> AI
+            </div>
         </div>
     </div>
-    <div class="container" id="home-page">
-        <div class="click-hint">💡 点击任意模块卡片直接执行命令</div>
-        <div class="hero">
-            <h1>CAE-CLI</h1>
-            <p>专业的机械设计辅助工具</p>
-            <div class="action-btns">
-                <button class="action-btn" onclick="bridge.runCommand('cae-cli --help')">查看帮助</button>
-                <button class="action-btn" onclick="bridge.runCommand('cae-cli info')">系统信息</button>
-                <button class="action-btn" onclick="bridge.runCommand('cae-cli material --list')">材料列表</button>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="quick-action-btn" onclick="bridge.runCommand('cae-cli --help')">
+                <i class="fas fa-question-circle"></i> 帮助
+            </button>
+            <button class="quick-action-btn" onclick="bridge.runCommand('cae-cli info')">
+                <i class="fas fa-info-circle"></i> 系统信息
+            </button>
+            <button class="quick-action-btn" onclick="bridge.runCommand('cae-cli material --list')">
+                <i class="fas fa-list"></i> 材料列表
+            </button>
+            <button class="quick-action-btn" onclick="bridge.runCommand('cae-cli handbook search 螺栓')">
+                <i class="fas fa-book"></i> 知识库
+            </button>
+        </div>
+
+        <!-- Home Page Content -->
+        <div id="home-page">
+            <div class="page-title">
+                <i class="fas fa-rocket"></i> 欢迎使用 CAE-CLI
             </div>
+            <div class="modules">
+                <div class="module-card fade-in stagger-1" onclick="bridge.runCommand('cae-cli parse --help')">
+                    <div class="module-header">
+                        <div class="module-icon">📐</div>
+                        <div class="module-title">几何解析</div>
+                    </div>
+                    <div class="module-desc">解析 STEP、STL、IGES 等 CAD 格式，提取几何特征</div>
+                    <div class="module-cmd">cae-cli parse model.step</div>
+                </div>
+
+                <div class="module-card fade-in stagger-2" onclick="bridge.runCommand('cae-cli analyze --help')">
+                    <div class="module-header">
+                        <div class="module-icon">🔲</div>
+                        <div class="module-title">网格分析</div>
+                    </div>
+                    <div class="module-desc">分析有限元网格质量指标：纵横比、偏斜度、正交性</div>
+                    <div class="module-cmd">cae-cli analyze mesh.msh</div>
+                </div>
+
+                <div class="module-card fade-in stagger-3" onclick="bridge.runCommand('cae-cli material --help')">
+                    <div class="module-header">
+                        <div class="module-icon">🔧</div>
+                        <div class="module-title">材料查询</div>
+                    </div>
+                    <div class="module-desc">查询 GB/T 标准材料库，获取材料力学性能参数</div>
+                    <div class="module-cmd">cae-cli material Q235</div>
+                </div>
+
+                <div class="module-card fade-in stagger-1" onclick="bridge.runCommand('cae-cli optimize --help')">
+                    <div class="module-header">
+                        <div class="module-icon">⚡</div>
+                        <div class="module-title">参数优化</div>
+                    </div>
+                    <div class="module-desc">自动调整 CAD 参数，优化设计性能</div>
+                    <div class="module-cmd">cae-cli optimize model.fcstd</div>
+                </div>
+
+                <div class="module-card fade-in stagger-2" onclick="bridge.runCommand('cae-cli report --help')">
+                    <div class="module-header">
+                        <div class="module-icon">📊</div>
+                        <div class="module-title">报告生成</div>
+                    </div>
+                    <div class="module-desc">生成 HTML、PDF、Markdown 格式分析报告</div>
+                    <div class="module-cmd">cae-cli report static</div>
+                </div>
+
+                <div class="module-card fade-in stagger-3" onclick="showPage('chat')">
+                    <div class="module-header">
+                        <div class="module-icon">🤖</div>
+                        <div class="module-title">AI 助手</div>
+                    </div>
+                    <div class="module-desc">智能对话助手，基于本地知识库和 AI 模型</div>
+                    <div class="module-cmd">点击进入聊天</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools Page -->
+    <div id="tools-page" style="display:none;">
+        <div class="page-title">
+            <i class="fas fa-tools"></i> 工具模块
         </div>
         <div class="modules">
             <div class="module-card" onclick="bridge.runCommand('cae-cli parse --help')">
-                <div class="module-icon">📐</div>
-                <div class="module-title">几何解析</div>
-                <div class="module-desc">解析STEP、STL、IGES</div>
+                <div class="module-header">
+                    <div class="module-icon">📐</div>
+                    <div class="module-title">几何解析</div>
+                </div>
+                <div class="module-desc">解析 STEP/STL/IGES，提取体积、表面积、顶点数</div>
                 <div class="module-cmd">cae-cli parse model.step</div>
             </div>
             <div class="module-card" onclick="bridge.runCommand('cae-cli analyze --help')">
-                <div class="module-icon">🔲</div>
-                <div class="module-title">网格分析</div>
-                <div class="module-desc">分析有限元网格质量</div>
+                <div class="module-header">
+                    <div class="module-icon">🔲</div>
+                    <div class="module-title">网格分析</div>
+                </div>
+                <div class="module-desc">分析网格质量：纵横比、偏斜度、Jacobian 行列式</div>
                 <div class="module-cmd">cae-cli analyze mesh.msh</div>
             </div>
             <div class="module-card" onclick="bridge.runCommand('cae-cli material --help')">
-                <div class="module-icon">🔧</div>
-                <div class="module-title">材料查询</div>
-                <div class="module-desc">查询材料数据库</div>
+                <div class="module-header">
+                    <div class="module-icon">🔧</div>
+                    <div class="module-title">材料查询</div>
+                </div>
+                <div class="module-desc">GB/T 标准材料：Q235、Q345、45钢、铝合金等</div>
                 <div class="module-cmd">cae-cli material Q235</div>
             </div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli optimize --help')">
-                <div class="module-icon">⚡</div>
-                <div class="module-title">参数优化</div>
-                <div class="module-desc">自动调整设计参数</div>
-                <div class="module-cmd">cae-cli optimize</div>
-            </div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli workflow --help')">
-                <div class="module-icon">🔄</div>
-                <div class="module-title">CAE工作流</div>
-                <div class="module-desc">完整CAD→CAE流程</div>
-                <div class="module-cmd">cae-cli workflow</div>
-            </div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli ai --help')">
-                <div class="module-icon">🤖</div>
-                <div class="module-title">AI助手</div>
-                <div class="module-desc">自然语言生成模型</div>
-                <div class="module-cmd">cae-cli ai</div>
-            </div>
             <div class="module-card" onclick="bridge.runCommand('cae-cli handbook --help')">
-                <div class="module-icon">📚</div>
-                <div class="module-title">知识库</div>
-                <div class="module-desc">机械设计知识</div>
-                <div class="module-cmd">cae-cli handbook</div>
+                <div class="module-header">
+                    <div class="module-icon">📚</div>
+                    <div class="module-title">知识库</div>
+                </div>
+                <div class="module-desc">机械设计知识：螺栓规格，公差配合，材料选择</div>
+                <div class="module-cmd">cae-cli handbook search 螺栓</div>
             </div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli interactive --help')">
-                <div class="module-icon">💬</div>
-                <div class="module-title">交互模式</div>
-                <div class="module-desc">菜单式交互</div>
-                <div class="module-cmd">cae-cli interactive</div>
+            <div class="module-card" onclick="bridge.runCommand('cae-cli optimize --help')">
+                <div class="module-header">
+                    <div class="module-icon">⚡</div>
+                    <div class="module-title">参数优化</div>
+                </div>
+                <div class="module-desc">FreeCAD/SolidWorks 参数化优化</div>
+                <div class="module-cmd">cae-cli optimize model.fcstd</div>
+            </div>
+            <div class="module-card" onclick="bridge.runCommand('cae-cli report --help')">
+                <div class="module-header">
+                    <div class="module-icon">📊</div>
+                    <div class="module-title">报告生成</div>
+                </div>
+                <div class="module-desc">生成 HTML、PDF、Markdown 格式分析报告</div>
+                <div class="module-cmd">cae-cli report static</div>
             </div>
         </div>
     </div>
-    <div class="container" id="tools-page" style="display:none;">
-        <h2 style="font-size:28px;margin-bottom:30px;">🛠️ 工具模块</h2>
+
+    <!-- Workflow Page -->
+    <div id="workflow-page" style="display:none;">
+        <div class="page-title">
+            <i class="fas fa-project-diagram"></i> 工作流
+        </div>
         <div class="modules">
-            <div class="module-card" onclick="bridge.runCommand('cae-cli parse --help')"><div class="module-icon">📐</div><div class="module-title">几何解析</div></div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli analyze --help')"><div class="module-icon">🔲</div><div class="module-title">网格分析</div></div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli material --help')"><div class="module-icon">🔧</div><div class="module-title">材料查询</div></div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli report --help')"><div class="module-icon">📊</div><div class="module-title">报告生成</div></div>
+            <div class="module-card" onclick="bridge.runCommand('cae-cli workflow --help')">
+                <div class="module-header">
+                    <div class="module-icon">▶️</div>
+                    <div class="module-title">运行工作流</div>
+                </div>
+                <div class="module-desc">执行完整的 CAD → CAE 分析流程</div>
+                <div class="module-cmd">cae-cli workflow run</div>
+            </div>
+            <div class="module-card" onclick="bridge.runCommand('cae-cli cad --help')">
+                <div class="module-header">
+                    <div class="module-icon">🖥️</div>
+                    <div class="module-title">CAD 连接</div>
+                </div>
+                <div class="module-desc">连接 FreeCAD/SolidWorks 进行参数化建模</div>
+                <div class="module-cmd">cae-cli cad --connect freecad</div>
+            </div>
+            <div class="module-card" onclick="bridge.runCommand('cae-cli mcp tools')">
+                <div class="module-header">
+                    <div class="module-icon">🔌</div>
+                    <div class="module-title">MCP 工具</div>
+                </div>
+                <div class="module-desc">MCP 协议工具：FreeCAD、GitHub、SQLite</div>
+                <div class="module-cmd">cae-cli mcp tools</div>
+            </div>
         </div>
     </div>
-    <div class="container" id="ai-page" style="display:none;">
-        <h2 style="font-size:28px;margin-bottom:30px;">🤖 AI模块</h2>
+    <!-- Chat Page -->
+    <div id="chat-page">
+        <div class="chat-container">
+            <div class="chat-sidebar">
+                <h3><i class="fas fa-robot"></i> AI 助手</h3>
+                <div class="chat-sidebar-item active">
+                    <i class="fas fa-robot"></i> 智能助手
+                </div>
+                <div class="chat-sidebar-item">
+                    <i class="fas fa-cube"></i> CAD 问题
+                </div>
+                <div class="chat-sidebar-item">
+                    <i class="fas fa-cogs"></i> 材料咨询
+                </div>
+                <div class="chat-sidebar-item">
+                    <i class="fas fa-chart-line"></i> 优化建议
+                </div>
+
+                <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                        <i class="fas fa-bolt"></i> 快捷命令
+                    </div>
+                    <div class="chat-sidebar-item" onclick="bridge.runCommand('cae-cli ai generate')">
+                        <i class="fas fa-magic"></i> AI 生成
+                    </div>
+                    <div class="chat-sidebar-item" onclick="bridge.runCommand('cae-cli ai suggest')">
+                        <i class="fas fa-lightbulb"></i> AI 建议
+                    </div>
+                </div>
+            </div>
+            <div class="chat-main">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-message ai">
+                        <i class="fas fa-robot" style="margin-right: 8px;"></i>
+                        你好！我是 CAE-CLI AI 助手，可以帮助你：
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>解答 CAD/CAE 问题</li>
+                            <li>提供材料选型建议</li>
+                            <li>辅助网格划分</li>
+                            <li>优化设计参数</li>
+                        </ul>
+                        请在下方输入你的问题...
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chat-input"
+                           placeholder="输入你的问题..."
+                           onkeypress="if(event.key==='Enter')sendChat()">
+                    <button class="chat-send-btn" onclick="sendChat()">
+                        <i class="fas fa-paper-plane"></i> 发送
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Page -->
+    <div id="ai-page" style="display:none;">
+        <div class="page-title">
+            <i class="fas fa-robot"></i> AI 模块
+        </div>
         <div class="modules">
-            <div class="module-card" onclick="bridge.runCommand('cae-cli ai generate --help')"><div class="module-icon">🎲</div><div class="module-title">AI生成</div></div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli ai suggest --help')"><div class="module-icon">💡</div><div class="module-title">AI建议</div></div>
-            <div class="module-card" onclick="bridge.runCommand('cae-cli chat --help')"><div class="module-icon">💬</div><div class="module-title">智能对话</div></div>
+            <div class="module-card" onclick="showPage('chat')">
+                <div class="module-header">
+                    <div class="module-icon">💬</div>
+                    <div class="module-title">智能对话</div>
+                </div>
+                <div class="module-desc">基于 Ollama/本地模型的 AI 对话助手</div>
+                <div class="module-cmd">点击进入聊天</div>
+            </div>
+
+            <div class="module-card" onclick="bridge.runCommand('cae-cli ai generate --help')">
+                <div class="module-header">
+                    <div class="module-icon">🎲</div>
+                    <div class="module-title">AI 生成</div>
+                </div>
+                <div class="module-desc">自然语言描述生成 3D 模型 (FreeCAD)</div>
+                <div class="module-cmd">cae-cli ai generate "立方体"</div>
+            </div>
+
+            <div class="module-card" onclick="bridge.runCommand('cae-cli ai suggest --help')">
+                <div class="module-header">
+                    <div class="module-icon">💡</div>
+                    <div class="module-title">AI 建议</div>
+                </div>
+                <div class="module-desc">基于 AI 的设计优化建议</div>
+                <div class="module-cmd">cae-cli ai suggest</div>
+            </div>
+
+            <div class="module-card" onclick="bridge.runCommand('cae-cli chat --help')">
+                <div class="module-header">
+                    <div class="module-icon">🗣️</div>
+                    <div class="module-title">交互模式</div>
+                </div>
+                <div class="module-desc">终端交互式 AI 助手</div>
+                <div class="module-cmd">cae-cli chat --lang zh</div>
+            </div>
         </div>
     </div>
     <script>
@@ -466,17 +1115,79 @@ class WebGUIWindow(QMainWindow):
             console.log('Bridge initialized:', bridge);
         });
         
-        function qtwebchannelCallbacks(registry) {
-            // WebChannel初始化回调
-        }
+        function qtwebchannelCallbacks(registry) {}
         
         function showPage(pageId) {
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('tools-page').style.display = 'none';
-            document.getElementById('ai-page').style.display = 'none';
-            document.getElementById(pageId + '-page').style.display = 'block';
-            document.querySelectorAll('.nav-item').forEach(function(item) { item.classList.remove('active'); });
-            event.target.classList.add('active');
+            // Hide all pages
+            var pages = ['home', 'tools', 'workflow', 'chat', 'ai'];
+            pages.forEach(function(page) {
+                var el = document.getElementById(page + '-page');
+                if (el) el.style.display = 'none';
+            });
+
+            // Show selected page
+            var selectedPage = document.getElementById(pageId + '-page');
+            if (selectedPage) {
+                selectedPage.style.display = 'block';
+            }
+
+            // Update nav active state
+            document.querySelectorAll('.nav-item').forEach(function(item) {
+                item.classList.remove('active');
+                if (item.getAttribute('data-page') === pageId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 聊天页面时隐藏右侧面板
+            if (pageId === 'chat') {
+                document.body.classList.add('hide-console');
+            } else {
+                document.body.classList.remove('hide-console');
+            }
+        }
+        
+        function sendChat() {
+            var input = document.getElementById('chat-input');
+            var msg = input.value.trim();
+            if (!msg) return;
+
+            // 添加用户消息
+            var messages = document.getElementById('chat-messages');
+            messages.innerHTML += '<div class="chat-message user">' + msg + '</div>';
+
+            // 添加加载状态
+            var loadingDiv = document.createElement('div');
+            loadingDiv.className = 'chat-message ai';
+            loadingDiv.id = 'loading-msg';
+            loadingDiv.innerHTML = '<span class="loading-dots">正在思考</span>';
+            messages.appendChild(loadingDiv);
+
+            // 清空输入
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            // 调用CLI执行AI聊天
+            if (bridge) {
+                bridge.runCommand('cae-cli chat "' + msg + '"');
+            }
+        }
+
+        // 清除加载状态
+        function clearLoading() {
+            var loading = document.getElementById('loading-msg');
+            if (loading) {
+                loading.remove();
+            }
+        }
+        
+        // 命令执行结果回调
+        function onCommandResult(result) {
+            var messages = document.getElementById('chat-messages');
+            if (messages) {
+                messages.innerHTML += '<div class="chat-message ai">' + result.replace(/\\n/g, '<br>') + '</div>';
+                messages.scrollTop = messages.scrollHeight;
+            }
         }
     </script>
 </body>
@@ -488,11 +1199,21 @@ def main():
     app.setApplicationName("CAE-CLI")
     app.setApplicationVersion("0.2.0")
     app.setStyle("Fusion")
-    
+
+    # 设置应用图标和主题
+    app.setStyleSheet("""
+        QToolTip {
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            padding: 5px;
+        }
+    """)
+
     window = WebGUIWindow()
     window.show()
-    
-    sys.exit(app.exec())
+
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

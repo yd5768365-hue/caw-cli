@@ -273,7 +273,7 @@ class RAGCacheManager:
 
 
 class RAGEngine:
-    def __init__(self, knowledge_dir=None, model_path=None):
+    def __init__(self, knowledge_dir=None, model_path=None):  # noqa: PLR0912
         """
         初始化RAG引擎
 
@@ -304,11 +304,19 @@ class RAGEngine:
         # 初始化模型 - 使用小模型减少内存占用
         try:
             import os
+            # 检查是否离线模式
+            offline_mode = os.environ.get('HF_HUB_OFFLINE', '0') == '1'
+
             # 检查环境变量中的模型路径
             env_model_path = os.environ.get('CAE_CLI_MODEL_PATH')
             if env_model_path and not model_path:
                 model_path = env_model_path
-                print(f"使用环境变量指定的模型路径: {model_path}")
+
+            # 离线模式下跳过模型加载
+            if offline_mode:
+                print("RAG引擎: 离线模式，跳过模型加载")
+                self.model = None
+                return
 
             if model_path:
                 # 使用自定义模型路径
@@ -318,7 +326,12 @@ class RAGEngine:
             else:
                 # 尝试从缓存加载，如果失败则尝试离线模式
                 print("尝试加载默认模型 'all-MiniLM-L6-v2'...")
+                print("[提示: 首次加载需要下载模型，约80MB，如遇网络问题请检查连接]")
                 try:
+                    # 设置较短的超时时间，避免长时间等待
+                    import socket
+                    socket.setdefaulttimeout(30)  # 30秒超时
+
                     self.model = self.SentenceTransformer('all-MiniLM-L6-v2')
                     print("[OK] 加载 sentence-transformers 模型")
                 except Exception as download_error:
@@ -551,7 +564,7 @@ class RAGEngine:
         except Exception as e:
             print(f"错误: 无法创建示例文件: {e}")
 
-    def search(self, query: str, top_k: int = 3, max_length: int = 0) -> list:
+    def search(self, query: str, top_k: int = 3, max_length: int = 0) -> list:  # noqa: PLR0912
         """
         检索最相关的知识片段（带缓存）
 

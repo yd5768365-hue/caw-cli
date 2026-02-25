@@ -113,13 +113,18 @@ class DependencyChecker:
             module = __import__(dependency.module_name)
             status["is_installed"] = True
 
-            # 尝试获取版本
-            if hasattr(module, "__version__"):
-                status["version"] = module.__version__
-            elif hasattr(module, "__VERSION__"):
-                status["version"] = module.__VERSION__
-            else:
-                status["version"] = "Unknown"
+            # 尝试获取版本 - 使用 importlib.metadata 避免弃用警告
+            try:
+                from importlib.metadata import version
+                status["version"] = version(dependency.module_name)
+            except (ImportError, Exception):
+                # 回退到属性检查
+                if hasattr(module, "__version__"):
+                    status["version"] = module.__version__
+                elif hasattr(module, "__VERSION__"):
+                    status["version"] = module.__VERSION__
+                else:
+                    status["version"] = "Unknown"
 
         except ImportError as e:
             status["error"] = str(e)

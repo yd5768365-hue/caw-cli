@@ -1,12 +1,89 @@
 """
 AI模型生成器 - 自然语言到3D模型
 支持解析文本描述并自动生成FreeCAD模型
+包含改进的Prompt模板和增强的特征识别
 """
 
 import re
+import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+# ============ Prompt 模板 ============
+
+PROMPT_TEMPLATES = {
+    # 中文提示模板
+    "zh": {
+        "system": """你是一个专业的CAD建模助手，专门帮助用户使用FreeCAD创建3D模型。
+请根据用户的描述，生成精确的建模指令。
+
+支持的几何形状：
+- box/立方体/长方体：需要 length, width, height
+- cylinder/圆柱：需要 radius, height
+- sphere/球：需要 radius
+- cone/圆锥：需要 radius (底部), radius2 (顶部，可选), height
+- torus/圆环：需要 radius, radius2 (管半径)
+- wedge/楔形：需要 length, width, height, x1, x2
+- prism/棱柱：需要 polygon (边数), radius, height
+
+支持的特征：
+- fillet/圆角：需要 radius
+- chamfer/倒角：需要 radius
+- hole/孔：需要 diameter, depth (可选), position (可选)
+- pocket/凹槽：需要 length, width, depth
+- pad/凸台：需要 length, width, height
+- shell/抽壳：需要 thickness
+- revolve/旋转：需要 angle, axis
+
+材料选项：steel(钢), aluminum(铝), copper(铜), plastic(塑料), titanium(钛)
+
+请按以下JSON格式返回：
+```json
+{
+  "shape_type": "形状类型",
+  "parameters": {"参数名": 数值, ...},
+  "features": [{"type": "特征类型", ...}, ...],
+  "material": "材料或null"
+}
+```""",
+        "user": "请生成一个{shape_description}，参数为{parameters}。",
+    },
+    # 英文提示模板
+    "en": {
+        "system": """You are a professional CAD modeling assistant specializing in FreeCAD 3D model creation.
+Generate precise modeling instructions based on user descriptions.
+
+Supported shapes:
+- box: requires length, width, height
+- cylinder: requires radius, height
+- sphere: requires radius
+- cone: requires radius, radius2 (optional), height
+- torus: requires radius, radius2 (tube radius)
+- wedge: requires length, width, height, x1, x2
+- prism: requires polygon (edges), radius, height
+
+Supported features:
+- fillet: requires radius
+- chamfer: requires radius
+- hole: requires diameter, depth (optional)
+- pocket: requires length, width, depth
+- pad: requires length, width, height
+- shell: requires thickness
+
+Return JSON format:
+```json
+{
+  "shape_type": "shape_type",
+  "parameters": {"param": value},
+  "features": [{"type": "feature_type", ...}],
+  "material": "material or null"
+}
+```""",
+        "user": "Generate a {shape_description} with parameters: {parameters}.",
+    },
+}
 
 
 @dataclass
@@ -15,79 +92,208 @@ class ParsedGeometry:
 
     shape_type: str  # box, cylinder, sphere, etc.
     parameters: Dict[str, float]  # 尺寸参数
-    features: List[Dict[str, Any]]  # 特征（如圆角、孔等）
+    features: List[Dict[str, Any]] = field(default_factory=list)  # 特征
     material: Optional[str] = None
     description: str = ""
+    position: Optional[Dict[str, float]] = None  # 位置
+    rotation: Optional[Dict[str, float]] = None  # 旋转角度
 
 
 class NaturalLanguageParser:
     """自然语言解析器"""
 
-    # 形状关键词映射
+    # 形状关键词映射（扩展版）
     SHAPE_KEYWORDS = {
+        # 中文
         "立方体": "box",
         "长方体": "box",
         "方块": "box",
-        "box": "box",
+        "矩形": "box",
+        "板": "plate",
         "圆柱": "cylinder",
         "圆柱体": "cylinder",
-        "cylinder": "cylinder",
+        "圆筒": "cylinder",
         "球": "sphere",
         "球体": "sphere",
-        "sphere": "sphere",
         "圆锥": "cone",
         "圆锥体": "cone",
-        "cone": "cone",
+        "圆台": "frustum",
         "圆环": "torus",
-        "torus": "torus",
+        "圆环体": "torus",
+        "楔形": "wedge",
+        "棱柱": "prism",
+        "六棱柱": "hexagon_prism",
         "支架": "bracket",
-        "bracket": "bracket",
-        "板": "plate",
+        "L型": "l_shape",
+        "U型": "u_shape",
+        "T型": "t_shape",
+        # 英文
+        "box": "box",
+        "rectangle": "box",
         "plate": "plate",
+        "cylinder": "cylinder",
+        "sphere": "sphere",
+        "cone": "cone",
+        "frustum": "frustum",
+        "torus": "torus",
+        "wedge": "wedge",
+        "prism": "prism",
+        "bracket": "bracket",
+        "l-shape": "l_shape",
+        "u-shape": "u_shape",
+        "t-shape": "t_shape",
+        "pipe": "pipe",
+        "管": "pipe",
+        "管子": "pipe",
     }
 
-    # 参数关键词映射
+    # 布尔运算关键词
+    BOOLEAN_KEYWORDS = {
+        "union": ["合并", "并集", "相加", "加", "unite", "union", "add", "fuse"],
+        "subtract": ["减去", "差集", "切除", "减", "cut", "subtract", "remove"],
+        "intersect": ["相交", "交集", "common", "intersect"],
+    }
+
+    # 参数关键词映射（扩展版）
     PARAM_PATTERNS = {
         "length": [
             r"长[度]?[\s为是:]+(\d+\.?\d*)",
             r"(\d+\.?\d*)\s*mm?[\s]*长",
             r"length[\s:]+(\d+\.?\d*)",
+            r"L[\s:=]+(\d+\.?\d*)",
         ],
         "width": [
             r"宽[度]?[\s为是:]+(\d+\.?\d*)",
             r"(\d+\.?\d*)\s*mm?[\s]*宽",
             r"width[\s:]+(\d+\.?\d*)",
+            r"W[\s:=]+(\d+\.?\d*)",
         ],
         "height": [
             r"高[度]?[\s为是:]+(\d+\.?\d*)",
             r"(\d+\.?\d*)\s*mm?[\s]*高",
             r"height[\s:]+(\d+\.?\d*)",
+            r"H[\s:=]+(\d+\.?\d*)",
         ],
         "radius": [
             r"半径[\s为是:]+(\d+\.?\d*)",
             r"R[\s为是:]+(\d+\.?\d*)",
             r"radius[\s:]+(\d+\.?\d*)",
+            r"r[\s:=]+(\d+\.?\d*)",
+        ],
+        "radius2": [
+            r"顶部半径[\s为是:]+(\d+\.?\d*)",
+            r"上半径[\s为是:]+(\d+\.?\d*)",
+            r"radius2[\s:]+(\d+\.?\d*)",
+        ],
+        "tube_radius": [
+            r"管半径[\s为是:]+(\d+\.?\d*)",
+            r"管径[\s为是:]+(\d+\.?\d*)",
+            r"tube[\s:]+(\d+\.?\d*)",
         ],
         "diameter": [
             r"直径[\s为是:]+(\d+\.?\d*)",
             r"D[\s为是:]+(\d+\.?\d*)",
             r"diameter[\s:]+(\d+\.?\d*)",
+            r"Φ(\d+\.?\d*)",
         ],
         "fillet_radius": [
             r"圆角[半径]?[\s为是:]+(\d+\.?\d*)",
             r"倒角[\s为是:]+(\d+\.?\d*)",
             r"fillet[\s:]+(\d+\.?\d*)",
         ],
+        "chamfer_radius": [
+            r"倒角半径[\s为是:]+(\d+\.?\d*)",
+            r"chamfer[\s:]+(\d+\.?\d*)",
+        ],
         "thickness": [
             r"厚度[\s为是:]+(\d+\.?\d*)",
             r"厚[\s为是:]+(\d+\.?\d*)",
             r"thickness[\s:]+(\d+\.?\d*)",
+            r"t[\s:=]+(\d+\.?\d*)",
+        ],
+        "depth": [
+            r"深度[\s为是:]+(\d+\.?\d*)",
+            r"深[\s为是:]+(\d+\.?\d*)",
+            r"depth[\s:]+(\d+\.?\d*)",
+        ],
+        "angle": [
+            r"角度[\s为是:]+(\d+\.?\d*)",
+            r"度[\s:]+(\d+\.?\d*)",
+            r"angle[\s:]+(\d+\.?\d*)",
+        ],
+        "polygon": [
+            r"(\d+)\s*边",
+            r"(\d+)\s*棱",
+            r"(\d+)-边",
+            r"polygon[\s:]+(\d+)",
         ],
     }
 
+    # 特征关键词映射
+    FEATURE_KEYWORDS = {
+        "fillet": [
+            r"圆角",
+            r"倒圆角",
+            r"fillet",
+            r"round",
+        ],
+        "chamfer": [
+            r"倒角",
+            r"倒斜角",
+            r"chamfer",
+            r"bevel",
+        ],
+        "hole": [
+            r"孔",
+            r"钻孔",
+            r"hole",
+            r"bore",
+        ],
+        "pocket": [
+            r"凹槽",
+            r"腔",
+            r"pocket",
+            r"cavity",
+        ],
+        "pad": [
+            r"凸台",
+            r"突起",
+            r"pad",
+            r"boss",
+        ],
+        "shell": [
+            r"抽壳",
+            r"薄壁",
+            r"shell",
+            r"hollow",
+        ],
+        "thread": [
+            r"螺纹",
+            r"thread",
+        ],
+        "revolve": [
+            r"旋转",
+            r"revolve",
+        ],
+        "sweep": [
+            r"扫掠",
+            r"sweep",
+        ],
+    }
+
+    # 材料关键词映射
+    MATERIAL_KEYWORDS = {
+        "steel": ["钢", "钢材", "steel", "iron", "铁"],
+        "aluminum": ["铝", "铝合金", "aluminum", "aluminium"],
+        "copper": ["铜", "铜材", "copper"],
+        "brass": ["黄铜", "brass"],
+        "plastic": ["塑料", "plastic", "abs", "pp", "尼龙"],
+        "titanium": ["钛", "钛合金", "titanium", "ti"],
+        "stainless": ["不锈钢", "stainless", "304", "316"],
+    }
+
     def parse(self, description: str) -> ParsedGeometry:
-        """
-        解析自然语言描述
+        """解析自然语言描述
 
         Args:
             description: 如"带圆角的立方体，长100宽50高30圆角10"
@@ -95,6 +301,7 @@ class NaturalLanguageParser:
         Returns:
             ParsedGeometry对象
         """
+        original_desc = description
         description = description.lower().strip()
 
         # 1. 识别形状类型
@@ -109,7 +316,11 @@ class NaturalLanguageParser:
         # 4. 识别材料
         material = self._detect_material(description)
 
-        # 5. 设置默认值
+        # 5. 识别位置和旋转
+        position = self._detect_position(description)
+        rotation = self._detect_rotation(description)
+
+        # 6. 设置默认值
         parameters = self._set_defaults(shape_type, parameters)
 
         return ParsedGeometry(
@@ -117,8 +328,66 @@ class NaturalLanguageParser:
             parameters=parameters,
             features=features,
             material=material,
-            description=description,
+            description=original_desc,
+            position=position,
+            rotation=rotation,
         )
+
+    def parse_with_llm(
+        self, description: str, llm_model, language: str = "zh"
+    ) -> Optional[ParsedGeometry]:
+        """使用LLM模型解析复杂描述
+
+        Args:
+            description: 自然语言描述
+            llm_model: 已加载的LLM模型
+            language: 语言 "zh" 或 "en"
+
+        Returns:
+            ParsedGeometry对象，失败返回None
+        """
+        template = PROMPT_TEMPLATES.get(language, PROMPT_TEMPLATES["zh"])
+
+        # 构建完整prompt
+        full_prompt = f"{template['system']}\n\nUser: {description}\nAssistant:"
+
+        try:
+            # 调用LLM
+            response = llm_model.chat(
+                message=full_prompt,
+                temperature=0.1,
+                max_tokens=512,
+            )
+
+            # 解析JSON响应
+            return self._parse_llm_response(response)
+
+        except Exception as e:
+            print(f"LLM解析失败: {e}")
+            # 回退到正则解析
+            return self.parse(description)
+
+    def _parse_llm_response(self, response: str) -> Optional[ParsedGeometry]:
+        """解析LLM返回的JSON响应"""
+        try:
+            # 提取JSON部分
+            json_match = re.search(r"\{.*\}", response, re.DOTALL)
+            if not json_match:
+                return None
+
+            data = json.loads(json_match.group())
+
+            return ParsedGeometry(
+                shape_type=data.get("shape_type", "box"),
+                parameters=data.get("parameters", {}),
+                features=data.get("features", []),
+                material=data.get("material"),
+                description="",
+            )
+
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"JSON解析错误: {e}")
+            return None
 
     def _detect_shape(self, desc: str) -> str:
         """检测形状类型"""
@@ -170,30 +439,81 @@ class NaturalLanguageParser:
 
     def _detect_material(self, desc: str) -> Optional[str]:
         """检测材料"""
-        materials = {
-            "钢": "steel",
-            "steel": "steel",
-            "铝": "aluminum",
-            "铝合金": "aluminum",
-            "aluminum": "aluminum",
-            "铜": "copper",
-            "copper": "copper",
-            "塑料": "plastic",
-            "plastic": "plastic",
-        }
+        for material, keywords in self.MATERIAL_KEYWORDS.items():
+            for kw in keywords:
+                if kw in desc:
+                    return material
+        return None
 
-        for keyword, material in materials.items():
-            if keyword in desc:
-                return material
+    def _detect_position(self, desc: str) -> Optional[Dict[str, float]]:
+        """检测位置参数"""
+        pos = {}
+
+        # X位置
+        x_match = re.search(r"x\s*[:=]\s*(\d+\.?\d*)", desc)
+        if x_match:
+            pos["x"] = float(x_match.group(1))
+
+        # Y位置
+        y_match = re.search(r"y\s*[:=]\s*(\d+\.?\d*)", desc)
+        if y_match:
+            pos["y"] = float(y_match.group(1))
+
+        # Z位置
+        z_match = re.search(r"z\s*[:=]\s*(\d+\.?\d*)", desc)
+        if z_match:
+            pos["z"] = float(z_match.group(1))
+
+        return pos if pos else None
+
+    def _detect_rotation(self, desc: str) -> Optional[Dict[str, float]]:
+        """检测旋转参数"""
+        rot = {}
+
+        # X轴旋转
+        rx_match = re.search(r"rx\s*[:=]\s*(\d+\.?\d*)", desc)
+        if rx_match:
+            rot["x"] = float(rx_match.group(1))
+
+        # Y轴旋转
+        ry_match = re.search(r"ry\s*[:=]\s*(\d+\.?\d*)", desc)
+        if ry_match:
+            rot["y"] = float(ry_match.group(1))
+
+        # Z轴旋转（常用）
+        rz_match = re.search(r"rz\s*[:=]\s*(\d+\.?\d*)", desc)
+        if rz_match:
+            rot["z"] = float(rz_match.group(1))
+
+        return rot if rot else None
+
+    def _detect_boolean(self, desc: str) -> Optional[Dict[str, Any]]:
+        """检测布尔运算"""
+        for op_type, keywords in self.BOOLEAN_KEYWORDS.items():
+            for keyword in keywords:
+                if keyword in desc:
+                    # 尝试提取第二个形状的参数
+                    return {"type": op_type, "keyword": keyword}
         return None
 
     def _set_defaults(self, shape: str, params: Dict[str, float]) -> Dict[str, float]:
         """设置默认值"""
         defaults = {
             "box": {"length": 100, "width": 50, "height": 30},
+            "plate": {"length": 100, "width": 100, "thickness": 10},
             "cylinder": {"radius": 25, "height": 50},
+            "pipe": {"radius": 25, "thickness": 5, "height": 100},
             "sphere": {"radius": 30},
             "cone": {"radius": 25, "height": 50},
+            "frustum": {"radius": 25, "radius2": 15, "height": 50},
+            "torus": {"radius": 30, "tube_radius": 10},
+            "wedge": {"length": 100, "width": 50, "height": 30},
+            "prism": {"polygon": 6, "radius": 25, "height": 50},
+            "hexagon_prism": {"radius": 25, "height": 50},
+            "bracket": {"length": 100, "width": 50, "height": 30, "thickness": 10},
+            "l_shape": {"length": 100, "width": 50, "height": 30, "thickness": 10},
+            "u_shape": {"length": 100, "width": 50, "height": 30, "thickness": 10},
+            "t_shape": {"length": 100, "width": 50, "height": 30, "thickness": 10},
         }
 
         shape_defaults = defaults.get(shape, {})
@@ -323,6 +643,134 @@ class FreeCADModelGenerator:
                 sphere = Part.makeSphere(radius)
                 obj = self.doc.addObject("Part::Feature", "Sphere")
                 obj.Shape = sphere
+
+            elif shape_type == "cone":
+                radius = params.get("radius", 25)
+                height = params.get("height", 50)
+                # 圆锥（顶点朝上）
+                cone = Part.makeCone(radius, 0, height)
+                obj = self.doc.addObject("Part::Feature", "Cone")
+                obj.Shape = cone
+
+            elif shape_type == "frustum":
+                # 圆台
+                radius = params.get("radius", 25)
+                radius2 = params.get("radius2", 15)
+                height = params.get("height", 50)
+                frustum = Part.makeCone(radius, radius2, height)
+                obj = self.doc.addObject("Part::Feature", "Frustum")
+                obj.Shape = frustum
+
+            elif shape_type == "torus":
+                radius = params.get("radius", 30)
+                tube_radius = params.get("tube_radius", 10)
+                torus = Part.makeTorus(radius, tube_radius)
+                obj = self.doc.addObject("Part::Feature", "Torus")
+                obj.Shape = torus
+
+            elif shape_type == "cylinder":
+                radius = params.get("radius", 25)
+                height = params.get("height", 50)
+                cylinder = Part.makeCylinder(radius, height)
+                obj = self.doc.addObject("Part::Feature", "Cylinder")
+                obj.Shape = cylinder
+
+            elif shape_type == "pipe":
+                # 空心圆管
+                radius = params.get("radius", 25)
+                thickness = params.get("thickness", 5)
+                height = params.get("height", 100)
+                outer = Part.makeCylinder(radius, height)
+                inner = Part.makeCylinder(radius - thickness, height)
+                pipe = outer.cut(inner)
+                obj = self.doc.addObject("Part::Feature", "Pipe")
+                obj.Shape = pipe
+
+            elif shape_type == "plate":
+                # 薄板
+                length = params.get("length", 100)
+                width = params.get("width", 100)
+                thickness = params.get("thickness", 10)
+                plate = Part.makeBox(length, width, thickness)
+                obj = self.doc.addObject("Part::Feature", "Plate")
+                obj.Shape = plate
+
+            elif shape_type == "wedge":
+                # 楔形
+                length = params.get("length", 100)
+                width = params.get("width", 50)
+                height = params.get("height", 30)
+                # 创建楔形的顶点
+                points = [
+                    self.fc_app.Vector(0, 0, 0),
+                    self.fc_app.Vector(length, 0, 0),
+                    self.fc_app.Vector(length, width, 0),
+                    self.fc_app.Vector(0, width, 0),
+                    self.fc_app.Vector(0, 0, height),
+                    self.fc_app.Vector(0, width, height),
+                ]
+                # 简化：创建拉伸体
+                wedge = Part.makeBox(length, width, height)
+                obj = self.doc.addObject("Part::Feature", "Wedge")
+                obj.Shape = wedge
+
+            elif shape_type == "prism":
+                # 棱柱
+                polygon = int(params.get("polygon", 6))
+                radius = params.get("radius", 25)
+                height = params.get("height", 50)
+                prism = Part.makePrism(radius, height, polygon)
+                obj = self.doc.addObject("Part::Feature", "Prism")
+                obj.Shape = prism
+
+            elif shape_type == "hexagon_prism":
+                # 六棱柱
+                radius = params.get("radius", 25)
+                height = params.get("height", 50)
+                prism = Part.makePrism(radius, height, 6)
+                obj = self.doc.addObject("Part::Feature", "HexagonPrism")
+                obj.Shape = prism
+
+            elif shape_type in ("bracket", "l_shape", "u_shape", "t_shape"):
+                # 复杂形状：简化为组合Box
+                length = params.get("length", 100)
+                width = params.get("width", 50)
+                height = params.get("height", 30)
+                thickness = params.get("thickness", 10)
+
+                if shape_type == "l_shape":
+                    # L型支架
+                    box1 = Part.makeBox(length, thickness, height)
+                    box2 = Part.makeBox(thickness, width, height)
+                    shape = box1.fuse(box2)
+                elif shape_type == "u_shape":
+                    # U型支架
+                    box1 = Part.makeBox(length, thickness, height)
+                    box2 = Part.makeBox(thickness, width, height)
+                    box3 = Part.makeBox(length, thickness, height).translate(
+                        self.fc_app.Vector(0, width - thickness, 0)
+                    )
+                    shape = box1.fuse(box2).fuse(box3)
+                elif shape_type == "t_shape":
+                    # T型支架
+                    box1 = Part.makeBox(length, thickness, height)
+                    box2 = Part.makeBox(thickness, width, height)
+                    shape = box1.fuse(box2)
+                else:
+                    # 通用支架
+                    shape = Part.makeBox(length, width, height)
+
+                obj = self.doc.addObject("Part::Feature", shape_type.capitalize())
+                obj.Shape = shape
+
+            else:
+                # 默认：立方体
+                length = params.get("length", 100)
+                width = params.get("width", 50)
+                height = params.get("height", 30)
+                box = Part.makeBox(length, width, height)
+                obj = self.doc.addObject("Part::Feature", "Box")
+                obj.Shape = box
 
             # 添加圆角特征
             for feature in geometry.features:

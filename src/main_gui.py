@@ -29,17 +29,21 @@ def check_dependencies():
 
 def show_install_guide(missing):
     """显示安装指南"""
-    print("=" * 50)
-    print("CAE-CLI GUI 启动失败")
-    print("=" * 50)
+    print("=" * 60)
+    print("❌ CAE-CLI GUI 启动失败")
+    print("=" * 60)
     print("\n缺少以下依赖:")
     for dep in missing:
-        print(f"  - {dep}")
-    print("\n请运行以下命令安装:")
-    print("  pip install PySide6 PySide6-Addons PySide6-WebEngine")
-    print("\n或安装完整版:")
-    print("  pip install -e '.[full]'")
-    print("=" * 50)
+        print(f"   - {dep}")
+    print("\n📦 安装方案:")
+    print("   1. 安装GUI依赖:")
+    print("      pip install PySide6 PySide6-Addons PySide6-WebEngine")
+    print("\n   2. 或安装完整版(含GUI):")
+    print("      pip install -e '.[gui]'")
+    print("\n   3. 或安装所有功能:")
+    print("      pip install -e '.[full]'")
+    print("=" * 60)
+    print("\n💡 提示: PySide6-WebEngine 可能需要额外安装Visual C++运行时")
     input("\n按回车键退出...")
 
 def main():
