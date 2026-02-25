@@ -1,39 +1,600 @@
-# Caw CLI
+# cae-cli - 机械设计学习辅助 CLI 工具 🛠️
 
-Welcome to Caw CLI, your ultimate command-line interface for efficient and powerful operations! This tool is designed for users looking to streamline their workflow and enhance productivity.
+## 🎯 项目目的与背景
 
-## Project Overview
-Caw CLI enables you to manage your tasks and projects seamlessly from the command line. Whether you're a developer, project manager, or just someone who values efficiency, Caw CLI has tools to make your life easier.
+### 🤔 为什么创建这个工具？
 
-## Features
-- **Intuitive Commands**: Easy-to-use commands that allow you to perform complex tasks with simplicity.
-- **Task Management**: Manage your projects and tasks without leaving the terminal.
-- **Customization**: Tailor the CLI to fit your work style and preferences, ensuring a personalized experience.
-- **Real-time Collaboration**: Work together with team members efficiently, sharing tasks and updates on the go.
+CAE-CLI 是为机械专业学生（特别是从互联网专业转向机械领域的学习者）设计的专业命令行工具。作为一个大一学生，我在学习机械设计时遇到了几个痛点：
 
-## Installation
-To get started, you can easily install Caw CLI via npm:
+1. 🔒 **缺少商业软件许可证**：无法使用 SolidWorks，需要替代方案
+2. 📈 **学习曲线陡峭**：机械设计、有限元分析、材料力学概念复杂
+3. 🧩 **缺乏系统学习工具**：需要一个整合的工具来辅助学习全过程
+4. 🔌 **软件集成困难**：不同CAD/CAE软件接口不统一，难以建立标准化工作流
+
+### 🎓 用户背景
+
+- **身份**：大一学生，从互联网专业转向机械专业
+- **软件**：正在学习 FreeCAD（开源替代 SolidWorks）
+- **目标**：系统学习机械设计、有限元分析、材料力学等专业知识
+
+### 📚 核心学习目标
+
+| 目标 | 具体内容 | 实现状态 |
+|------|--------|---------|
+| ✅ 网格质量分析 | 快速评估模型网格质量，理解网格参数对分析结果的影响 | ✅ 已实现 |
+| ✅ 材料力学计算 | 查询材料性能参数，计算应力、应变、安全系数等 | ✅ 已实现 |
+| ✅ 参数优化 | 自动优化设计参数，寻找最佳设计方案 | ✅ 已实现 |
+| ✅ 知识库管理 | 建立个人机械设计知识库，随时查询 | ✅ 已实现 |
+| ✅ 报告生成 | 自动生成分析报告，整理学习笔记 | ✅ 已实现 |
+| 🌟 多语言支持 | 交互界面支持中文/英文切换，适应不同语言习惯 | ✅ 新功能 |
+| 🚀 插件化架构 | 标准化CAD/CAE软件接口，支持自由扩展软件集成 | ✅ 新增功能 |
+| 🤖 AI学习助手 | 集成本地Ollama模型 + RAG知识检索，提供智能问答 | ✅ 最新功能 |
+
+---
+
+## 🆚 版本演进与功能对比
+
+### 📊 当前版本 (v0.10.0) 新增功能
+
+| 功能模块 | 新增内容 | 说明 |
+|----------|----------|------|
+| **📚 完整文档体系** | 5个专业文档 | 新增QUICKSTART.md快速开始、INSTALLATION_GUIDE.md安装指南、FAQ.md常见问题、API_REFERENCE.md API参考、CONTRIBUTING.md贡献指南 |
+| **🔧 API文档生成** | 自动生成脚本 | 支持一键生成HTML/Markdown格式的完整API参考文档 |
+| **🧩 网格生成器集成** | Gmsh连接器 | 新增`src/integrations/mesher/gmsh.py`，支持Gmsh网格生成器标准化集成 |
+| **⚙️ 工具模块增强** | 4个新工具模块 | 新增依赖检查器(dependency_checker.py)、编码辅助(encoding_helper.py)、错误处理(error_handler.py)、Unicode回退数据 |
+| **🧪 测试与示例** | 完整测试套件 | 新增工作流集成测试、工具测试、示例配置文件(optimization_demo.yaml) |
+| **📝 开发脚本** | 多平台测试脚本 | 新增run_tests.py/.sh/.bat，支持Windows/Linux/macOS测试运行 |
+| **🤖 AI学习助手** | Ollama + RAG | 本地AI模型、向量知识库、多轮对话、教学式回答 |
+| **🛠️ DevOps自动化** | GitHub Actions PR审查 | 新增自动化代码审查工作流、智能代码审查工具、JSON报告输出 |
+
+### 🔄 核心架构演进
+
+| 版本阶段 | 核心特性 | 状态 |
+|---------|--------|------|
+| v0.1.x | 基础CAE功能 | ✅ 已稳定 |
+| v0.2.0 | 插件化架构重构 | ✅ 已发布 |
+| v0.10.0 | 完整文档与工具链 + AI学习助手 + GUI界面 | ✅ 本次更新 |
+
+### 🎯 关键里程碑达成
+
+1. **✅ 插件化架构完成** - 标准化CAD/CAE接口，支持FreeCAD+CalculiX集成
+2. **✅ 力学计算模块完善** - 完整的应力、应变、安全系数计算体系
+3. **✅ 多语言支持** - 中英文界面切换，国际化设计
+4. **✅ 完整文档体系** - 从安装到开发的全方位文档支持
+5. **✅ AI学习助手** - 本地Ollama + RAG知识库集成
+6. **✅ DevOps自动化** - GitHub Actions PR审查、智能代码审查工具、JSON报告输出
+7. **✅ GUI 桌面版** - PySide6 Web 美化界面
+
+> 💡 **项目状态**：CAE-CLI已从基础工具发展为**完整的机械学习辅助平台**，具备插件化扩展能力、完整文档体系、专业测试套件、AI智能助手和DevOps自动化审查功能。
+
+---
+
+## 🚀 核心功能
+
+### 🎯 模型分析与优化
+- 📐 **几何文件解析**：支持 STL/STEP/IGES 格式，提取体积、表面积、顶点数等几何信息
+- 🔍 **网格质量评估**：分析纵横比、偏斜度、正交质量等指标，提供质量评分（优秀/良好/一般/较差）
+- ⚙️ **参数自动优化**：自动迭代修改参数（圆角半径、壁厚等），寻找最佳质量/强度方案
+- 📊 **力学性能计算**：计算许用应力、安全系数、屈曲载荷等
+
+### 🤖 AI 辅助设计
+- 🎨 **AI模型生成**：自然语言描述 → FreeCAD 建模（"带圆角的立方体，长100宽50高30圆角10"）
+- 💡 **智能建议**：基于分析结果提供专业中文建议
+- 🤖 **自动建模**：规划中的自动建模功能
+
+### 🎮 交互式学习体验
+- 🖥️ **交互模式**：菜单式操作，新手友好
+- 🌐 **多语言界面**：🔴 **新功能** 支持中英文界面切换（`--lang zh/en`）
+- ⚡ **实时反馈**：操作过程中提供即时质量分析建议
+- 📝 **命令学习**：支持直接命令行输入和菜单操作两种模式
+
+### 🤖 AI学习助手 (🔥 最新功能)
+- 🤖 **本地AI模型**：支持两种模式
+  - Ollama服务（支持qwen2.5:3b/phi3:mini等）
+  - 本地GGUF模型（离线可用，无需Ollama）
+- 🔍 **RAG知识检索**：使用sentence-transformers + ChromaDB向量化知识库，智能检索相关知识
+- 👨‍🏫 **教学式回答**：专业机械学习助手，用中文教学式、一步步回答，适合大一学生
+- 💬 **多轮对话**：自动保存对话历史，支持上下文连贯的深度问答
+- ⚡ **自动服务启动**：进入学习模式自动检测并启动Ollama服务
+- 📚 **知识库增强**：每次提问前先检索knowledge/目录的Markdown知识库，结合知识库内容回答
+- 🔧 **智能模型检测**：自动检测可用模型
+
+### 📚 机械知识库管理
+- 🧱 **材料数据库**：内置 GB/T 标准材料库（Q235、Q345、铝合金等）
+- 📖 **手册查询**：本地 Markdown 知识库，查询材料参数、螺栓规格、公差、疲劳强度
+- 📏 **单位转换**：支持 SI/MPa 单位系统自动转换
+
+### 📊 报告与输出
+- 📄 **多格式报告**：支持 HTML/PDF/JSON/Markdown 格式
+- 📈 **可视化图表**：质量分曲线、应力分布图等
+- 🔬 **分析类型**：静力、模态、热、屈曲分析报告
+
+### 🧩 插件化架构 (🔥 全新功能)
+- 🔌 **标准化接口**：统一的CAD/CAE抽象基类，支持自由扩展软件集成
+- ⚙️ **工作流引擎**：标准化的CAD→CAE分析流程管理，支持预定义和自定义工作流
+- ⚡ **配置驱动**：YAML配置文件定义完整仿真流程，支持复杂参数设置
+- 🛠️ **多软件支持**：已实现FreeCAD、CalculiX集成，可扩展支持更多软件
+
+---
+
+## 📦 安装
+
+### 方式一：从 PyPI 安装（推荐）
+
 ```bash
-npm install -g caw-cli
+pip install cae-cli
 ```
 
-## Getting Started
-After installation, you can start using Caw CLI by simply typing:
+### 方式二：从源码安装
+
 ```bash
-caw --help
+git clone https://github.com/yd5768365-hue/caw-cli.git
+cd caw-cli
+pip install -e .
+
+# 或运行安装脚本
+python install.py
 ```
-This will provide you with a list of all commands and functionalities.
 
-## Call to Action
-Discover the power of Caw CLI today! Install it, explore its features, and take your productivity to the next level. Don't forget to check out the [documentation](link-to-documentation) for detailed guides and tips on how to make the most out of Caw CLI.
+### 方式三：安装完整功能版
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+# 包含几何处理和网格分析的所有功能
+pip install "cae-cli[full]"
+```
 
-## Contributing
-We welcome contributions! To contribute, please fork the repository and submit a pull request with your changes. Your feedback and contributions are important to us! 
+### 方式四：安装AI学习助手完整版
 
-## Contact
-If you have any questions or suggestions, feel free to reach out to us via email at support@example.com.
+```bash
+# 包含所有功能 + AI学习助手依赖
+pip install "cae-cli[ai]"
 
-Happy coding!
+# 或同时安装所有扩展
+pip install "cae-cli[full,ai]"
+```
+
+### 方式五：GUI 桌面版本（Web 美化界面）
+
+**推荐：直接下载预编译版本**
+- 从 [Releases 页面](https://github.com/yd5768365-hue/caw-cli/releases) 下载 `cae-cli-gui-v0.10.0-win-x64.zip`
+- 解压后运行 `cae-cli-gui.exe` 即可
+
+**或自行打包**：
+```bash
+# 安装 GUI 依赖
+pip install PySide6 PySide6-WebEngine
+
+# 打包 GUI 版本
+pyinstaller cae-gui.spec
+
+# 可执行文件位置：dist/cae-cli-gui/cae-cli-gui.exe
+# 注意：GUI打包需要较长时间（5-10分钟）
+```
+
+#### CLI 版本快速打包（更快）
+```bash
+# 如果不需要 GUI，只打包命令行版本
+pyinstaller --name=cae-cli --console --add-data "src;src" --add-data "data;data" --add-data "knowledge;knowledge" --hidden-import=click --hidden-import=rich --hidden-import=yaml --hidden-import=numpy --hidden-import=jinja2 --hidden-import=pint --collect-all=rich --exclude-module=PyQt5 --exclude-module=PySide6 src/sw_helper/cli.py
+# 输出：dist/cae-cli/cae-cli.exe
+```
+
+### 系统要求
+
+- **Python**：>= 3.8
+- **操作系统**：Windows / Linux / macOS
+- **可选**：SolidWorks、FreeCAD、ANSYS、Abaqus
+- **AI功能**（可选）：
+  - Ollama (https://ollama.com/) - 本地LLM运行环境
+  - RAM: 最少4GB (推荐8GB+，用于运行AI模型)
+
+### Ollama 安装与配置
+
+```bash
+# 1. 下载安装Ollama
+# 访问 https://ollama.com/ 下载对应系统版本
+
+# 2. 启动Ollama服务
+# Windows/macOS: 安装后自动启动
+# Linux:
+ollama serve
+
+# 3. 下载推荐模型（选择其一）
+# 推荐：qwen2.5:1.5b (适合机械知识讲解，低资源占用)
+ollama pull qwen2.5:1.5b
+
+# 或备选：phi3:mini (通用性好)
+ollama pull phi3:mini
+
+# 4. 验证安装
+curl http://localhost:11434/api/tags
+```
+
+#### 方式2: 本地GGUF模型（离线可用，无需Ollama）
+
+```bash
+# 1. 安装 llama-cpp-python
+pip install llama-cpp-python
+
+# 2. 下载 GGUF 模型文件（如 qwen2.5-1.5b-instruct-q4_k_m.gguf）
+# 放入项目目录或其他目录
+
+# 3. 启动时选择"本地GGUF模型"模式即可
+```
+
+---
+
+## 🚀 快速开始
+
+### 查看帮助
+
+```bash
+cae-cli --help
+```
+
+### 1. 📐 几何文件解析
+
+```bash
+# 解析STEP文件
+cae-cli parse model.step
+
+# 指定格式并保存结果
+cae-cli parse part.stl --format stl --output result.json
+
+# 表格形式显示
+cae-cli parse assembly.step --format-output table
+```
+
+### 2. 🧱 材料数据库查询
+
+```bash
+# 列出所有材料
+cae-cli material --list
+
+# 查询特定材料
+cae-cli material Q235
+
+# 查询特定属性
+cae-cli material Q235 --property elastic_modulus
+
+# 搜索材料
+cae-cli material --search "钢"
+```
+
+### 3. 🔍 网格质量分析
+
+```bash
+# 分析网格文件
+cae-cli analyze mesh.msh
+
+# 指定质量指标
+cae-cli analyze mesh.inp --metric aspect_ratio --metric skewness
+
+# 设置阈值并保存报告
+cae-cli analyze mesh.msh --threshold 0.05 --output quality_report.json
+```
+
+### 4. 📊 生成分析报告
+
+```bash
+# 生成静力分析报告（HTML格式）
+cae-cli report static --input result.inp --output report.html
+
+# 生成模态分析报告（JSON格式）
+cae-cli report modal --input eigenvalues.txt --format json
+
+# 指定报告标题
+cae-cli report thermal --input thermal.rth --title "热分析报告"
+```
+
+### 5. ⚙️ 配置管理
+
+```bash
+# 查看配置
+cae-cli config --list
+
+# 设置配置项
+cae-cli config --set default_material Q345
+cae-cli config --set safety_factor 2.0
+
+# 获取配置项
+cae-cli config --get default_material
+
+# 重置配置
+cae-cli config --reset
+```
+
+### 6. 💻 系统信息
+
+```bash
+# 查看系统信息和状态
+cae-cli info
+
+# 查看版本
+cae-cli version
+cae-cli version --check
+```
+
+### 7. 🎮 交互模式（多语言支持）
+
+```bash
+# 启动中文界面交互模式（默认）
+cae-cli interactive --lang zh
+
+# 启动英文界面交互模式
+cae-cli interactive --lang en
+```
+
+### 8. 🤖 AI学习助手模式（最新功能）
+
+进入交互模式后，选择"学习模式"即可使用AI学习助手：
+
+```bash
+# 启动交互模式（中文界面）
+cae-cli interactive --lang zh
+
+# 在交互菜单中选择"学习模式"或"AI助手"
+
+# 或直接启动学习模式
+cae-cli learn --lang zh
+
+# 使用示例（学习模式中输入以下问题）：
+# 基础问题：
+#   "Q235材料的屈服强度是多少？"
+#   "什么是Von Mises应力？"
+#   "如何理解安全系数？"
+```
+
+---
+
+## 📖 命令参考
+
+### 全局选项
+
+| 选项 | 说明 |
+|------|------|
+| `--version, -v` | 显示版本信息 |
+| `--verbose` | 启用详细输出模式 |
+| `--config` | 指定配置文件路径 |
+| `--help` | 显示帮助信息 |
+| `--lang zh/en` | 指定语言（中文/英文） |
+
+### 可用命令
+
+| 命令 | 说明 | 示例 |
+|------|------|------|
+| `parse` | 解析几何文件 | `cae-cli parse model.step` |
+| `analyze` | 分析网格质量 | `cae-cli analyze mesh.msh` |
+| `material` | 查询材料数据库 | `cae-cli material Q235` |
+| `report` | 生成分析报告 | `cae-cli report static -i result.inp` |
+| `config` | 管理配置 | `cae-cli config --list` |
+| `version` | 显示版本 | `cae-cli version` |
+| `info` | 系统信息 | `cae-cli info` |
+| `interactive` | 交互模式 | `cae-cli interactive --lang zh` |
+| `learn` | AI学习助手模式 | `cae-cli learn --lang zh` |
+
+---
+
+## 🔧 Python API
+
+除了CLI，你也可以在Python代码中使用：
+
+```python
+from sw_helper.geometry import GeometryParser
+from sw_helper.material import MaterialDatabase, MechanicsCalculator
+from sw_helper.chat import AILearningAssistant
+from sw_helper.ai.ollama_integration import OllamaClient
+from sw_helper.ai.rag import RAGManager
+
+# 解析几何
+parser = GeometryParser()
+geo_data = parser.parse("model.step")
+print(f"体积: {geo_data['volume']} m³")
+
+# 查询材料
+db = MaterialDatabase()
+q235 = db.get_material("Q235")
+print(f"弹性模量: {q235['elastic_modulus']} Pa")
+
+# 力学计算
+calc = MechanicsCalculator()
+result = calc.calculate_stress(
+    force=10000,  # 10kN
+    area=0.001,   # 0.001 m²
+    material_name="Q235"
+)
+print(f"安全系数: {result['safety_factor']}")
+
+# 使用AI学习助手
+rag = RAGManager(knowledge_dir="knowledge/")
+rag.build_vectorstore()
+
+ollama = OllamaClient(auto_start=True)
+
+assistant = AILearningAssistant(
+    rag_manager=rag,
+    ollama_client=ollama,
+    save_history=True
+)
+
+response = assistant.chat("什么是Von Mises应力？")
+print(response)
+```
+
+---
+
+## 📁 项目结构
+
+```
+cae-cli/
+├── src/
+│   ├── sw_helper/           # 主包
+│   │   ├── cli.py          # CLI入口
+│   │   ├── geometry/       # 几何解析模块
+│   │   ├── mesh/           # 网格分析模块
+│   │   ├── material/       # 材料力学模块
+│   │   ├── mechanics/      # 力学计算模块
+│   │   ├── report/         # 报告生成模块
+│   │   ├── optimization/   # 参数优化模块
+│   │   ├── ai/            # AI辅助设计模块
+│   │   ├── chat/          # 交互式聊天模块
+│   │   ├── integrations/   # CAD软件集成模块
+│   │   ├── mcp/           # MCP协议接口模块
+│   │   └── utils/         # 工具模块
+│   ├── integrations/       # 插件化架构
+│   │   ├── _base/         # 抽象基类
+│   │   ├── cad/           # CAD连接器
+│   │   ├── cae/           # CAE连接器
+│   │   └── mesher/        # 网格生成器
+│   └── core/              # 核心数据类型
+├── knowledge/              # 机械知识库
+├── data/                  # 数据文件
+├── tests/                 # 测试
+├── docs/                  # 文档
+├── pyproject.toml         # 项目配置
+├── cae-cli.spec           # CLI打包配置
+├── cae-gui.spec          # GUI打包配置
+└── README.md             # 说明文档
+```
+
+---
+
+## 🛠️ 开发
+
+### 安装开发依赖
+
+```bash
+git clone https://github.com/yd5768365-hue/caw-cli.git
+cd caw-cli
+pip install -e ".[dev]"
+```
+
+### 运行测试
+
+```bash
+# 运行所有测试
+pytest
+
+# 运行新架构连接器测试
+python test_freecad_connector.py
+python test_calculix_connector.py
+python test_gmsh.py
+```
+
+### 代码格式化
+
+```bash
+black src/
+```
+
+### 类型检查
+
+```bash
+mypy src/sw_helper src/integrations src/core
+```
+
+---
+
+## 📝 配置文件
+
+配置文件位于 `~/.cae-cli/config.json`：
+
+```json
+{
+  "default_material": "Q235",
+  "safety_factor": 1.5,
+  "default_output_format": "html",
+  "verbose": false
+}
+```
+
+---
+
+## 🐛 故障排除
+
+### 安装失败
+
+```bash
+# 升级pip
+pip install --upgrade pip
+
+# 安装基础版本
+pip install cae-cli
+
+# 安装完整版本
+pip install "cae-cli[full]"
+```
+
+### Ollama相关问题
+
+```bash
+# 检查Ollama服务状态
+curl http://localhost:11434/api/tags
+
+# 手动启动Ollama
+ollama serve
+
+# 查看已安装模型
+ollama list
+```
+
+---
+
+## 🤝 贡献
+
+欢迎提交Issue和Pull Request！
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m 'Add amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建 Pull Request
+
+---
+
+## 📄 许可证
+
+本项目采用 MIT 许可证。
+
+---
+
+## 📮 联系方式与支持
+
+### 📍 项目信息
+
+- **项目主页**：https://github.com/yd5768365-hue/caw-cli
+- **问题报告**：https://github.com/yd5768365-hue/caw-cli/issues
+
+### 🎯 项目状态
+
+**当前版本**：v0.10.0 (插件化架构 + 完整文档体系 + AI学习助手 + GUI桌面版)
+
+**主要用户**：机械专业学生、FreeCAD用户、CAE学习者、插件开发者、开源贡献者
+
+### v0.10.0 发布版本
+- `cae-cli-v0.10.0-win-x64.zip` - 终端版本 (~54MB)
+- `cae-cli-gui-v0.10.0-win-x64.zip` - GUI 桌面版本 (~251MB)
+
+**快速下载**：从 [GitHub Releases](https://github.com/yd5768365-hue/caw-cli/releases) 下载预编译版本
+
+**开发进度**：
+
+- ✅ 基础功能：几何解析、材料计算、网格分析
+- ✅ AI与交互：AI辅助设计、多语言支持、交互模式
+- ✅ AI学习助手：Ollama本地模型 + RAG知识检索 + 多轮对话
+- ✅ 插件化架构：标准化CAD/CAE接口，FreeCAD+CalculiX集成
+- ✅ 网格生成器：Gmsh标准化集成
+- ✅ 完整文档体系：核心文档 + API自动生成脚本
+- ✅ GUI 桌面版：PySide6 Web 美化界面
+- ✅ 打包发布：CLI/GUI 双版本发布
+- 🔄 PyPI包发布：规划中
+
+---
+
+## 🙏 致谢
+
+- **Click** - Python CLI框架
+- **Rich** - 终端美化库
+- **PythonOCC** - OpenCASCADE Python绑定
+- **Ollama** - 本地LLM运行环境
+- **ChromaDB** - 向量数据库
+- **Sentence Transformers** - 文本嵌入模型
