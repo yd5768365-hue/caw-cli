@@ -1,0 +1,63 @@
+# beam_analysis.yaml - 简单梁静力分析示例
+# 这是一个最简化的分析配置，适合入门学习
+
+project:
+  name: "简支梁弯曲分析"
+  description: "学习CAE的入门案例 - 简支梁在集中载荷下的弯曲"
+
+# CAD配置（可选，如无可跳过）
+cad:
+  software: "none"  # 无需CAD，直接使用网格
+
+# 网格配置
+mesh:
+  generator: "gmsh"
+  geometry:
+    type: "beam"
+    length: 1000      # 梁长10m
+    width: 50        # 截面宽50mm
+    height: 100     # 截面高100mm
+  element_size: 25  # 网格大小
+  element_type: "hexahedron"  # 六面体网格
+
+# 材料配置（可以直接使用材料库中的名称）
+material:
+  name: "Q235"  # 从材料库中读取
+  # 或者手动指定：
+  # elastic_modulus: 210000  # MPa
+  # poisson_ratio: 0.3
+  # density: 7850  # kg/m3
+
+# 分析配置
+analysis:
+  type: "static"  # 静力分析
+  solver: "calculix"
+
+  # 载荷定义
+  loads:
+    - type: "force"
+      location: "mid_span"  # 跨中位置
+      value: 10000           # 10000 N
+      direction: [0, -1, 0] # Y方向向下
+
+  # 边界条件
+  constraints:
+    - type: "pinned"   # 铰支座
+      location: "left"  # 左端
+      dofs: [1, 1, 1]   # XYZ位移约束
+
+    - type: "roller"   # 滚动支座
+      location: "right" # 右端
+      dofs: [0, 1, 1]  # YZ位移约束（可水平移动）
+
+# 求解器设置
+solver:
+  max_iterations: 1000
+  tolerance: 1e-6
+
+# 输出设置
+output:
+  directory: "./results"
+  formats:
+    - "json"  # 结果输出为JSON
+  show_results: true  # 完成后显示结果摘要

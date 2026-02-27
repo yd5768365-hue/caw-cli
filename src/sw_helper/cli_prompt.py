@@ -1,21 +1,17 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 提示词管理CLI命令
 """
 
 import click
 from rich.console import Console
-from rich.table import Table
-from rich import print as rprint
 
 from sw_helper.ai.prompt_manager import PromptManager, list_prompts
-
 
 console = Console()
 
 
-@click.group()
+@click.group(hidden=True)
 def prompt():
     """提示词管理命令"""
     pass

@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "solver": "simple",
+  "max_displacement": 0.11904761904761903,
+  "max_stress": 14.999999999999996,
+  "safety_factor": 15.666666666666671,
+  "material": "Q235",
+  "load": 5000.0,
+  "beam_length": 1000,
+  "section": "50x100"
+}

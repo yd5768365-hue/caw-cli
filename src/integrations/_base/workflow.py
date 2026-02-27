@@ -6,12 +6,12 @@
 """
 
 import time
-from pathlib import Path
-from typing import Optional, Dict, Any, List, Callable, Tuple
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from .connectors import CADConnector, CAEConnector, FileFormat
+from .connectors import CADConnector, CAEConnector
 
 
 class WorkflowStatus(Enum):
@@ -263,9 +263,7 @@ class WorkflowEngine:
 
             for step_idx, (module, action) in enumerate(workflow_steps):
                 step_name = f"{module}.{action}"
-                step_desc = (
-                    f"步骤 {step_idx + 1}/{len(workflow_steps)}: {module} -> {action}"
-                )
+                step_desc = f"步骤 {step_idx + 1}/{len(workflow_steps)}: {module} -> {action}"
 
                 step = self._create_step(step_name, step_desc)
                 self._start_step(step)
@@ -273,21 +271,13 @@ class WorkflowEngine:
                 try:
                     # 根据模块和操作执行相应的方法
                     if module == "cad":
-                        result = self._execute_cad_step(
-                            action, config, intermediate_files
-                        )
+                        result = self._execute_cad_step(action, config, intermediate_files)
                     elif module == "mesher":
-                        result = self._execute_mesher_step(
-                            action, config, intermediate_files
-                        )
+                        result = self._execute_mesher_step(action, config, intermediate_files)
                     elif module == "cae":
-                        result = self._execute_cae_step(
-                            action, config, intermediate_files
-                        )
+                        result = self._execute_cae_step(action, config, intermediate_files)
                     elif module == "postprocess":
-                        result = self._execute_postprocess_step(
-                            action, config, intermediate_files
-                        )
+                        result = self._execute_postprocess_step(action, config, intermediate_files)
                     else:
                         raise ValueError(f"未知的模块: {module}")
 

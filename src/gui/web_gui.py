@@ -2,30 +2,36 @@
 CAE-CLI Web界面 - PySide6 + QWebEngineView
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QLineEdit, QTextEdit, QLabel, QMessageBox
-)
-from PySide6.QtCore import QUrl, QObject, Slot, Signal, QProcess, QTimer, QProcessEnvironment
+from PySide6.QtCore import QObject, QProcess, QUrl, Signal, Slot
 from PySide6.QtGui import QAction, QKeySequence
-from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWebChannel import QWebChannel
+from PySide6.QtWebEngineCore import QWebEngineSettings
+from PySide6.QtWebEngineWidgets import QWebEngineView
+from PySide6.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QMessageBox,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 def get_cli_path():
     """获取CLI可执行文件路径 - 兼容打包和开发模式"""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         # 打包后：exe 同目录
         base_dir = os.path.dirname(sys.executable)
     else:
         # 开发时：项目根目录 (caw-cli/)
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
+
     # 搜索路径列表（按优先级）
     search_paths = [
         os.path.join(base_dir, "cae-cli.exe"),
@@ -36,11 +42,11 @@ def get_cli_path():
         os.path.join(base_dir, "..", "build", "cae-cli", "cae-cli.exe"),
         os.path.join(base_dir, "..", "cae-cli.exe"),
     ]
-    
+
     for cli_path in search_paths:
         if os.path.exists(cli_path):
             return cli_path
-    
+
     return search_paths[0]
 
 
@@ -49,37 +55,37 @@ CLI_EXE_PATH = get_cli_path()
 
 class CLIBridge(QObject):
     """CLI桥接器 - 允许JavaScript调用Python执行命令"""
-    
+
     # 信号：命令执行完成
     commandFinished = Signal(str)
-    
+
     # 信号：命令执行中状态
     commandStarted = Signal()
-    
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self._process = None
         self._current_output = ""
-    
+
     @Slot(str)
     def runCommand(self, cmd: str):
         """从JavaScript接收命令并执行"""
         print(f"[Bridge] runCommand called: {cmd}")
         self.commandStarted.emit()
         self._current_output = ""
-        
+
         # 创建QProcess执行命令
         self._process = QProcess(self)
         # 直接使用系统环境，不设置特殊环境变量
-        
+
         # 连接信号
         self._process.readyReadStandardOutput.connect(self._on_stdout)
         self._process.readyReadStandardError.connect(self._on_stderr)
         self._process.finished.connect(self._on_finished)
-        
+
         # 分割命令
         cmd_list = cmd.split()
-        
+
         # 替换cae-cli为实际路径
         if cmd_list and (cmd_list[0] == "cae-cli" or cmd_list[0] == "cae"):
             if os.path.exists(CLI_EXE_PATH):
@@ -87,20 +93,20 @@ class CLIBridge(QObject):
             else:
                 self.commandFinished.emit(f"[错误] 找不到CLI: {CLI_EXE_PATH}")
                 return
-        
+
         # 启动进程
         self._process.start(cmd_list[0], cmd_list[1:])
-    
+
     def _on_stdout(self):
         """标准输出"""
         data = self._process.readAllStandardOutput()
-        self._current_output += bytes(data).decode('utf-8', errors='replace')
-    
+        self._current_output += bytes(data).decode("utf-8", errors="replace")
+
     def _on_stderr(self):
         """标准错误"""
         data = self._process.readAllStandardError()
-        self._current_output += bytes(data).decode('utf-8', errors='replace')
-    
+        self._current_output += bytes(data).decode("utf-8", errors="replace")
+
     def _on_finished(self, exitCode, exitStatus):
         """进程结束"""
         if exitCode == 0:
@@ -117,12 +123,12 @@ class WebGUIWindow(QMainWindow):
         self._bridge = CLIBridge(self)
         self._init_ui()
         self._load_homepage()
-    
+
     def _init_ui(self):
-        self.setWindowTitle("CAE-CLI 现代化界面")
-        self.setMinimumSize(1400, 900)
-        self.resize(1800, 1100)
-        
+        self.setWindowTitle("MechDesign 简洁界面")
+        self.setMinimumSize(1200, 800)
+        self.resize(1400, 900)
+
         self.setStyleSheet("""
             QMainWindow { background-color: #0d1117; }
             QMenuBar { background-color: #161b22; color: #c9d1d9; border-bottom: 1px solid #30363d; }
@@ -130,124 +136,99 @@ class WebGUIWindow(QMainWindow):
             QMenu { background-color: #161b22; color: #c9d1d9; border: 1px solid #30363d; }
             QMenu::item:selected { background-color: #21262d; }
         """)
-        
+
         central = QWidget()
         self.setCentralWidget(central)
-        
+
         main_layout = QHBoxLayout(central)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        
-        # 左侧：Web视图
-        left_widget = QWidget()
-        left_layout = QVBoxLayout(left_widget)
+
+        # 左侧：Web视图（主页和聊天）
+        self.left_widget = QWidget()
+        left_layout = QVBoxLayout(self.left_widget)
         left_layout.setContentsMargins(0, 0, 0, 0)
-        
+
         self.web_view = QWebEngineView()
-        
+
         # 配置Web设置
         settings = self.web_view.settings()
         settings.setAttribute(QWebEngineSettings.WebAttribute.LocalStorageEnabled, True)
         settings.setAttribute(QWebEngineSettings.WebAttribute.JavascriptEnabled, True)
         settings.setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanOpenWindows, False)
         settings.setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanAccessClipboard, True)
-        
+
         # 设置WebChannel
         self._channel = QWebChannel(self)
         self._channel.registerObject("bridge", self._bridge)
         self.web_view.page().setWebChannel(self._channel)
-        
+
         left_layout.addWidget(self.web_view)
-        
-        # 右侧：命令面板
+
+        # 右侧：命令面板（简化版，窄一些）
         right_widget = QWidget()
-        right_widget.setMinimumWidth(600)
-        right_widget.setMaximumWidth(800)
+        right_widget.setMinimumWidth(400)
+        right_widget.setMaximumWidth(500)
         right_widget.setStyleSheet("background-color: #0d1117;")
         right_layout = QVBoxLayout(right_widget)
         right_layout.setContentsMargins(15, 15, 15, 15)
-        right_layout.setSpacing(12)
-        
+        right_layout.setSpacing(10)
+
         # 标题
-        title_label = QLabel("📋 命令控制台")
-        title_label.setStyleSheet("font-size: 20px; font-weight: bold; padding: 10px; color: #58a6ff;")
+        title_label = QLabel("终端输出")
+        title_label.setStyleSheet("font-size: 16px; font-weight: bold; padding: 8px; color: #165DFF;")
         right_layout.addWidget(title_label)
-        
-        # CLI路径显示
+
+        # CLI状态
         cli_exists = "✅" if os.path.exists(CLI_EXE_PATH) else "❌"
-        cli_path_label = QLabel(f"{cli_exists} CLI路径: {os.path.basename(CLI_EXE_PATH)}")
-        cli_path_label.setStyleSheet("color: #8b949e; font-size: 12px; padding: 5px;")
+        cli_path_label = QLabel(f"{cli_exists} CLI: {os.path.basename(CLI_EXE_PATH)}")
+        cli_path_label.setStyleSheet("color: #8b949e; font-size: 11px; padding: 5px;")
         cli_path_label.setWordWrap(True)
         right_layout.addWidget(cli_path_label)
-        
-        # 命令输入框
-        self.command_input = QLineEdit()
-        self.command_input.setPlaceholderText("输入命令，如: cae-cli --help")
-        self.command_input.setStyleSheet("padding: 12px; font-size: 14px; background-color: #161b22; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px;")
-        self.command_input.returnPressed.connect(self._execute_command)
-        right_layout.addWidget(self.command_input)
-        
-        # 执行按钮
-        button_layout = QHBoxLayout()
-        
-        self.execute_btn = QPushButton("▶ 执行命令")
-        self.execute_btn.setStyleSheet("QPushButton { background-color: #238636; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 14px; } QPushButton:hover { background-color: #2ea043; } QPushButton:disabled { background-color: #21262d; color: #484f58; }")
-        self.execute_btn.clicked.connect(self._execute_command)
-        button_layout.addWidget(self.execute_btn)
-        
-        self.clear_btn = QPushButton("🗑 清空")
-        self.clear_btn.setStyleSheet("QPushButton { background-color: #21262d; color: #c9d1d9; border: 1px solid #30363d; padding: 12px 20px; border-radius: 6px; font-size: 14px; } QPushButton:hover { background-color: #30363d; }")
-        self.clear_btn.clicked.connect(lambda: self.output_text.clear())
-        button_layout.addWidget(self.clear_btn)
-        
-        right_layout.addLayout(button_layout)
-        
-        # 输出文本框
-        output_label = QLabel("📄 执行输出:")
-        output_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #c9d1d9;")
-        right_layout.addWidget(output_label)
-        
+
+        # 输出文本框 - 占据更大空间
         self.output_text = QTextEdit()
         self.output_text.setReadOnly(True)
-        self.output_text.setStyleSheet("QTextEdit { background-color: #0d1117; color: #c9d1d9; font-family: 'Consolas', monospace; font-size: 13px; border: 1px solid #30363d; padding: 10px; }")
-        right_layout.addWidget(self.output_text, 1)
-        
+        self.output_text.setStyleSheet(
+            "QTextEdit { background-color: #0d1117; color: #c9d1d9; font-family: 'Consolas', monospace; font-size: 12px; border: 1px solid #30363d; padding: 10px; }"
+        )
+        right_layout.addWidget(self.output_text, 3)  # 占据更多空间
+
         # 状态栏
-        self.status_label = QLabel("✅ 就绪 - 点击界面卡片或按回车执行命令")
-        self.status_label.setStyleSheet("padding: 8px; font-size: 13px; color: #8b949e;")
+        self.status_label = QLabel("✅ 就绪")
+        self.status_label.setStyleSheet("padding: 6px; font-size: 12px; color: #8b949e;")
         right_layout.addWidget(self.status_label)
-        
-        main_layout.addWidget(left_widget, 3)
-        main_layout.addWidget(right_widget, 2)
-        
+
+        main_layout.addWidget(self.left_widget, 3)  # 左侧占 3 份
+        main_layout.addWidget(right_widget, 1)  # 右侧占 1 份
+
         self._create_menu_bar()
-        
+
         # 连接bridge信号
         self._bridge.commandStarted.connect(self._on_command_started)
         self._bridge.commandFinished.connect(self._on_command_finished)
-    
+
     def _on_command_started(self):
         """命令开始执行"""
-        self.status_label.setText("⏳ 正在执行命令...")
+        self.status_label.setText('<span style="color: #f0a500;">◐</span> 正在执行命令...')
         self.execute_btn.setEnabled(False)
-    
+
     def _on_command_finished(self, output: str):
         """命令执行完成"""
-        self.output_text.append(output)
-        self.output_text.append("-" * 60)
+        # 使用 HTML 格式化输出 - 灰色文字
+        self.output_text.append(f'<span style="color: #8899aa;">{output}</span>')
+        self.output_text.append(f"<span style=\"color: #30363d;\">{'─' * 60}</span>")
         self.output_text.append("")
-        
-        self.output_text.verticalScrollBar().setValue(
-            self.output_text.verticalScrollBar().maximum()
-        )
-        
+
+        self.output_text.verticalScrollBar().setValue(self.output_text.verticalScrollBar().maximum())
+
         self.execute_btn.setEnabled(True)
-        self.status_label.setText("✅ 命令执行完成")
-    
+        self.status_label.setText('<span style="color: #22c55e;">✓</span> 命令执行完成')
+
     def _create_menu_bar(self):
         menubar = self.menuBar()
         menubar.setStyleSheet("QMenuBar { background-color: #161b22; color: #c9d1d9; }")
-        
+
         file_menu = menubar.addMenu("文件(&F)")
         refresh_action = QAction("刷新(&R)", self)
         refresh_action.setShortcut(QKeySequence.StandardKey.Refresh)
@@ -258,7 +239,7 @@ class WebGUIWindow(QMainWindow):
         exit_action.setShortcut(QKeySequence.StandardKey.Quit)
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
-        
+
         nav_menu = menubar.addMenu("导航(&N)")
         home_action = QAction("🏠 主页", self)
         home_action.triggered.connect(self._load_homepage)
@@ -270,7 +251,7 @@ class WebGUIWindow(QMainWindow):
         forward_action = QAction("➡ 前进", self)
         forward_action.triggered.connect(self.web_view.forward)
         nav_menu.addAction(forward_action)
-        
+
         tools_menu = menubar.addMenu("工具(&T)")
         geometry_action = QAction("📐 几何解析", self)
         geometry_action.triggered.connect(lambda: self._fill_command("cae-cli parse --help"))
@@ -294,17 +275,17 @@ class WebGUIWindow(QMainWindow):
         kb_action = QAction("📚 知识库", self)
         kb_action.triggered.connect(lambda: self._fill_command("cae-cli handbook --help"))
         tools_menu.addAction(kb_action)
-        
+
         help_menu = menubar.addMenu("帮助(&H)")
         about_action = QAction("ℹ️  关于", self)
         about_action.triggered.connect(self._show_about)
         help_menu.addAction(about_action)
-    
+
     def _fill_command(self, cmd: str):
         """填入命令到输入框"""
         self.command_input.setText(cmd)
         self.status_label.setText(f"📝 已填入命令: {cmd}，按回车执行")
-    
+
     def _load_homepage(self):
         # 加载HTML文件
         html_file = Path(__file__).parent / "cae_ui.html"
@@ -316,33 +297,242 @@ class WebGUIWindow(QMainWindow):
             html = self._get_default_html()
             self.web_view.setHtml(html)
             print("[GUI] Fallback to inline HTML")
-    
+
     def _execute_command(self):
         """执行命令（从输入框）"""
         command_str = self.command_input.text().strip()
         if not command_str:
             return
-        
+
         if not os.path.exists(CLI_EXE_PATH):
-            self.output_text.append(f"[错误] 找不到CLI: {CLI_EXE_PATH}")
+            self.output_text.append(
+                f'<span style="color: #f44747;">[错误]</span> <span style="color: #8899aa;">找不到CLI: {CLI_EXE_PATH}</span>'
+            )
             return
-        
+
         self._bridge.runCommand(command_str)
-    
+
     def _show_about(self):
-        QMessageBox.about(
-            self, "关于 CAE-CLI",
-            "CAE-CLI 现代化界面 v0.2.0\n\n基于 PySide6 + QWebEngineView"
-        )
-    
+        QMessageBox.about(self, "关于 MechDesign", "MechDesign 现代化界面 v0.2.0\n\n基于 PySide6 + QWebEngineView")
+
     def _get_default_html(self) -> str:
-        """获取默认HTML内容 - 暗色科技风"""
+        """简化版HTML - 简洁界面"""
         return """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAE-CLI</title>
+    <title>MechDesign</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-blue: #165DFF;
+            --accent-purple: #FF7D00;
+            --accent-green: #238636;
+            --gradient-primary: linear-gradient(135deg, #165DFF 0%, #FF7D00 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+        .header {
+            background: var(--bg-secondary);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 18px; font-weight: bold; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav { display: flex; gap: 8px; }
+        .nav-item {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .nav-item:hover { background: rgba(88, 166, 255, 0.1); color: var(--accent-blue); }
+        .nav-item.active { background: var(--gradient-primary); color: white; }
+        .main { padding: 20px; height: calc(100vh - 50px); overflow-y: auto; }
+        .modules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1200px; margin: 0 auto; }
+        .module-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .module-card:hover { border-color: var(--accent-blue); transform: translateY(-3px); }
+        .module-icon { font-size: 32px; margin-bottom: 10px; }
+        .module-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        .module-desc { font-size: 12px; color: var(--text-secondary); }
+        /* 聊天页面 */
+        #chat-page { display: none; height: calc(100vh - 50px); }
+        .chat-full {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 70%;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .chat-message.user {
+            background: var(--gradient-primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-message.ai {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-input-area {
+            padding: 16px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        .chat-input:focus { outline: none; border-color: var(--accent-blue); }
+        .chat-send-btn {
+            padding: 12px 24px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .chat-send-btn:hover { opacity: 0.9; }
+        .loading { color: var(--text-secondary); font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">MechDesign v1.0.0</div>
+        <div class="nav">
+            <div class="nav-item active" onclick="showPage('home')">首页</div>
+            <div class="nav-item" onclick="showPage('chat')">AI 聊天</div>
+        </div>
+    </div>
+    <div class="main">
+        <div id="home-page">
+            <div class="modules">
+                <div class="module-card" onclick="bridge.runCommand('cae-cli parse --help')">
+                    <div class="module-icon">📐</div>
+                    <div class="module-title">几何解析</div>
+                    <div class="module-desc">解析 STEP/STL/IGES</div>
+                </div>
+                <div class="module-card" onclick="bridge.runCommand('cae-cli analyze --help')">
+                    <div class="module-icon">🔲</div>
+                    <div class="module-title">网格分析</div>
+                    <div class="module-desc">分析网格质量</div>
+                </div>
+                <div class="module-card" onclick="bridge.runCommand('cae-cli material --help')">
+                    <div class="module-icon">🔧</div>
+                    <div class="module-title">材料查询</div>
+                    <div class="module-desc">GB/T 材料库</div>
+                </div>
+                <div class="module-card" onclick="showPage('chat')">
+                    <div class="module-icon">🤖</div>
+                    <div class="module-title">AI 助手</div>
+                    <div class="module-desc">智能问答</div>
+                </div>
+            </div>
+        </div>
+        <div id="chat-page">
+            <div class="chat-full">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-message ai">
+                        你好！我是 CAE-CLI AI 助手。<br><br>
+                        可以帮助你解答：<br>
+                        • CAD/CAE 问题<br>
+                        • 材料选型建议<br>
+                        • 网格划分知识<br>
+                        • 机械设计问题<br><br>
+                        请在下方输入你的问题...
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chat-input"
+                           placeholder="输入问题，按回车发送..."
+                           onkeypress="if(event.key==='Enter')sendChat()">
+                    <button class="chat-send-btn" onclick="sendChat()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var bridge = null;
+        new QWebChannel(qtwebchannelCallbacks, function(channel) { bridge = channel.objects.bridge; });
+        function qtwebchannelCallbacks(registry) {}
+        function showPage(pageId) {
+            document.getElementById('home-page').style.display = pageId === 'home' ? 'block' : 'none';
+            document.getElementById('chat-page').style.display = pageId === 'chat' ? 'block' : 'none';
+            document.querySelectorAll('.nav-item').forEach(function(item) {
+                item.classList.remove('active');
+                if(item.textContent.includes(pageId === 'home' ? '首页' : '聊天')) item.classList.add('active');
+            });
+        }
+        function sendChat() {
+            var input = document.getElementById('chat-input');
+            var msg = input.value.trim();
+            if (!msg) return;
+            var messages = document.getElementById('chat-messages');
+            messages.innerHTML += '<div class="chat-message user">' + msg + '</div>';
+            messages.innerHTML += '<div class="chat-message ai loading">正在思考...</div>';
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+            if (bridge) bridge.runCommand('cae-cli chat "' + msg + '"');
+        }
+    </script>
+</body>
+</html>"""
+        return """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechDesign</title>
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -353,14 +543,14 @@ class WebGUIWindow(QMainWindow):
             --bg-card: rgba(22, 27, 34, 0.8);
             --bg-glass: rgba(22, 27, 34, 0.7);
             --border-color: #30363d;
-            --border-hover: #58a6ff;
+            --border-hover: #165DFF;
             --text-primary: #c9d1d9;
             --text-secondary: #8b949e;
-            --accent-blue: #58a6ff;
-            --accent-purple: #a371f7;
+            --accent-blue: #165DFF;
+            --accent-purple: #FF7D00;
             --accent-green: #238636;
             --accent-green-hover: #2ea043;
-            --gradient-primary: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
+            --gradient-primary: linear-gradient(135deg, #165DFF 0%, #FF7D00 100%);
             --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
             --shadow-hover: 0 8px 40px rgba(88, 166, 255, 0.15);
             --radius-sm: 6px;
@@ -1196,8 +1386,8 @@ class WebGUIWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app.setApplicationName("CAE-CLI")
-    app.setApplicationVersion("0.2.0")
+    app.setApplicationName("MechDesign")
+    app.setApplicationVersion("1.0.0")
     app.setStyle("Fusion")
 
     # 设置应用图标和主题

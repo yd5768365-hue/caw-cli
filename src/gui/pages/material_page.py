@@ -4,23 +4,20 @@
 此模块提供材料数据库查询功能的GUI界面。
 """
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QGroupBox,
     QHBoxLayout,
-    QPushButton,
+    QHeaderView,
     QLabel,
     QLineEdit,
-    QTextEdit,
-    QGroupBox,
-    QFormLayout,
+    QPushButton,
     QTableWidget,
     QTableWidgetItem,
-    QHeaderView,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Signal
-
-from ..theme import CAETheme
 
 
 class MaterialPage(QWidget):
@@ -133,15 +130,9 @@ class MaterialPage(QWidget):
             for i, name in enumerate(materials):
                 mat = db.get_material(name)
                 if mat:
-                    self.materials_table.setItem(
-                        i, 0, QTableWidgetItem(mat.get("name", name))
-                    )
-                    self.materials_table.setItem(
-                        i, 1, QTableWidgetItem(mat.get("type", ""))
-                    )
-                    self.materials_table.setItem(
-                        i, 2, QTableWidgetItem(mat.get("standard", ""))
-                    )
+                    self.materials_table.setItem(i, 0, QTableWidgetItem(mat.get("name", name)))
+                    self.materials_table.setItem(i, 1, QTableWidgetItem(mat.get("type", "")))
+                    self.materials_table.setItem(i, 2, QTableWidgetItem(mat.get("standard", "")))
 
             self.detail_text.setText(f"已加载全部材料（共 {len(materials)} 种）")
         except Exception as e:
@@ -201,15 +192,9 @@ class MaterialPage(QWidget):
         """显示搜索结果"""
         self.materials_table.setRowCount(len(results))
         for i, mat in enumerate(results):
-            self.materials_table.setItem(
-                i, 0, QTableWidgetItem(mat.get("name", ""))
-            )
-            self.materials_table.setItem(
-                i, 1, QTableWidgetItem(mat.get("type", ""))
-            )
-            self.materials_table.setItem(
-                i, 2, QTableWidgetItem(mat.get("standard", ""))
-            )
+            self.materials_table.setItem(i, 0, QTableWidgetItem(mat.get("name", "")))
+            self.materials_table.setItem(i, 1, QTableWidgetItem(mat.get("type", "")))
+            self.materials_table.setItem(i, 2, QTableWidgetItem(mat.get("standard", "")))
 
         self.detail_text.setText(f"找到 {len(results)} 个结果")
 

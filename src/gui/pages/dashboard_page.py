@@ -3,20 +3,19 @@ CAE-CLI 首页/仪表盘
 快速访问常用功能和查看状态
 """
 
+import requests  # 性能优化：模块级别导入
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QGridLayout,
-    QPushButton,
-    QLabel,
-    QGroupBox,
     QFrame,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QFont, QPixmap, QPainter, QColor, QPen
-
-from ..theme import CAETheme
 
 
 class DashboardPage(QWidget):
@@ -36,7 +35,7 @@ class DashboardPage(QWidget):
         layout.setSpacing(20)
 
         # ===== 欢迎标题 =====
-        welcome = QLabel("欢迎使用 CAE-CLI")
+        welcome = QLabel("欢迎使用 MechDesign")
         welcome.setFont(QFont("Microsoft YaHei", 24, QFont.Weight.Bold))
         layout.addWidget(welcome)
 
@@ -92,12 +91,7 @@ class DashboardPage(QWidget):
 
         # 创建卡片
         for i, feat in enumerate(features):
-            card = self._create_feature_card(
-                feat["title"],
-                feat["desc"],
-                feat["cmd"],
-                feat["color"]
-            )
+            card = self._create_feature_card(feat["title"], feat["desc"], feat["cmd"], feat["color"])
             cards_layout.addWidget(card, i // 3, i % 3)
 
         layout.addLayout(cards_layout)
@@ -214,12 +208,14 @@ Examples:
     def _check_python(self) -> str:
         """检查Python版本"""
         import sys
+
         return f"Python {sys.version_info.major}.{sys.version_info.minor}"
 
     def _check_freecad(self) -> str:
         """检查FreeCAD"""
         try:
             import FreeCAD
+
             return f"可用 (FreeCAD {FreeCAD.BuildVersion()})"
         except ImportError:
             return "未安装"
@@ -227,12 +223,11 @@ Examples:
     def _check_ollama(self) -> str:
         """检查Ollama"""
         try:
-            import requests
             r = requests.get("http://localhost:11434/api/tags", timeout=2)
             if r.status_code == 200:
                 models = r.json().get("models", [])
                 count = len(models)
                 return f"运行中 ({count}个模型)"
-        except:
+        except Exception:
             pass
         return "未运行"

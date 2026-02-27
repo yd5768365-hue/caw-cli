@@ -151,7 +151,7 @@ def handle_error(func: Callable) -> Callable:
         except Exception as e:
             error_handler.handle_exception(e)
             return False
-        except:
+        except Exception:
             error_handler.handle_unknown_error(sys.exc_info()[1])
             return False
 

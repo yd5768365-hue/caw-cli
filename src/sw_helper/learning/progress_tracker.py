@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 学习进度追踪器 - 用JSON文件记录用户完成知识点进度
 
@@ -38,11 +37,10 @@
 """
 
 import json
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
-import uuid
+from typing import Any, Dict, List, Optional
+
 
 class LearningProgressTracker:
     """学习进度追踪器 - 管理用户学习进度"""
@@ -69,12 +67,12 @@ class LearningProgressTracker:
         """加载或初始化进度数据"""
         if self.progress_file.exists():
             try:
-                with open(self.progress_file, 'r', encoding='utf-8') as f:
+                with open(self.progress_file, encoding="utf-8") as f:
                     data = json.load(f)
                     # 如果数据格式正确，返回
                     if isinstance(data, dict):
                         return data
-            except (json.JSONDecodeError, IOError) as e:
+            except (OSError, json.JSONDecodeError) as e:
                 print(f"警告: 无法加载进度文件，将创建新文件: {e}")
 
         # 初始化新数据结构
@@ -86,23 +84,29 @@ class LearningProgressTracker:
                 "total_study_time_seconds": 0,
                 "completed_topics": 0,
                 "average_quiz_score": 0,
-                "last_study_date": None
-            }
+                "last_study_date": None,
+            },
         }
 
     def save(self):
         """保存进度数据到文件"""
         try:
-            with open(self.progress_file, 'w', encoding='utf-8') as f:
+            with open(self.progress_file, "w", encoding="utf-8") as f:
                 json.dump(self.data, f, ensure_ascii=False, indent=2)
             return True
-        except IOError as e:
+        except OSError as e:
             print(f"错误: 无法保存进度文件: {e}")
             return False
 
-    def mark_topic_completed(self, knowledge_id: str, topic: str,
-                           source_file: str, study_time_seconds: int = 0,
-                           quiz_score: Optional[int] = None, tags: Optional[List[str]] = None):
+    def mark_topic_completed(
+        self,
+        knowledge_id: str,
+        topic: str,
+        source_file: str,
+        study_time_seconds: int = 0,
+        quiz_score: Optional[int] = None,
+        tags: Optional[List[str]] = None,
+    ):
         """
         标记知识点完成
 
@@ -146,7 +150,7 @@ class LearningProgressTracker:
                 "completion_time": current_time,
                 "study_time_seconds": study_time_seconds,
                 "quiz_score": quiz_score,
-                "tags": tags or []
+                "tags": tags or [],
             }
             self.data["progress"].append(record)
 
@@ -205,7 +209,7 @@ class LearningProgressTracker:
             "completion_rate": (len(completed) / total * 100) if total > 0 else 0,
             "by_source": by_source,
             "by_tag": by_tag,
-            "statistics": self.data["statistics"]
+            "statistics": self.data["statistics"],
         }
 
     def _update_statistics(self):
@@ -227,7 +231,7 @@ class LearningProgressTracker:
             "total_study_time_seconds": total_study_time,
             "completed_topics": len(completed),
             "average_quiz_score": avg_quiz_score,
-            "last_study_date": last_study_date
+            "last_study_date": last_study_date,
         }
 
     def _check_achievements(self):
@@ -260,7 +264,7 @@ class LearningProgressTracker:
                 "name": "学习新兵",
                 "description": "完成第一个知识点",
                 "points": 10,
-                "prerequisite_count": 1
+                "prerequisite_count": 1,
             },
             {
                 "achievement_id": "material_expert",
@@ -268,7 +272,7 @@ class LearningProgressTracker:
                 "description": "完成5个材料相关知识点",
                 "points": 20,
                 "prerequisite_tags": ["材料"],
-                "prerequisite_tag_count": 5  # 需要5个含"材料"标签的知识点
+                "prerequisite_tag_count": 5,  # 需要5个含"材料"标签的知识点
             },
             {
                 "achievement_id": "fastener_master",
@@ -276,43 +280,43 @@ class LearningProgressTracker:
                 "description": "完成3个紧固件相关知识点",
                 "points": 20,
                 "prerequisite_tags": ["紧固件", "螺栓"],
-                "prerequisite_tag_count": 3  # 需要3个含相关标签的知识点
+                "prerequisite_tag_count": 3,  # 需要3个含相关标签的知识点
             },
             {
                 "achievement_id": "tolerance_guru",
                 "name": "公差专家",
                 "description": "完成公差配合相关知识点",
                 "points": 20,
-                "prerequisite_tags": ["公差", "配合"]
+                "prerequisite_tags": ["公差", "配合"],
             },
             {
                 "achievement_id": "learning_champion",
                 "name": "学习达人",
                 "description": "完成10个知识点",
                 "points": 30,
-                "prerequisite_count": 10
+                "prerequisite_count": 10,
             },
             {
                 "achievement_id": "time_manager",
                 "name": "时间管理者",
                 "description": "总学习时间超过30分钟",
                 "points": 25,
-                "prerequisite_study_time": 1800  # 30分钟 = 1800秒
+                "prerequisite_study_time": 1800,  # 30分钟 = 1800秒
             },
             {
                 "achievement_id": "quiz_master",
                 "name": "测验高手",
                 "description": "平均测验分数超过80分",
                 "points": 30,
-                "prerequisite_quiz_score": 80
+                "prerequisite_quiz_score": 80,
             },
             {
                 "achievement_id": "comprehensive_learner",
                 "name": "全面学习者",
                 "description": "完成至少1个材料、1个紧固件、1个公差、1个标准件知识点",
                 "points": 40,
-                "prerequisite_categories": ["材料", "紧固件", "公差", "标准件"]
-            }
+                "prerequisite_categories": ["材料", "紧固件", "公差", "标准件"],
+            },
         ]
 
         for achievement_def in achievements_to_check:
@@ -376,7 +380,7 @@ class LearningProgressTracker:
                     "points": achievement_def.get("points", 10),
                     "unlocked": True,
                     "unlock_time": datetime.now().isoformat(),
-                    "prerequisites": achievement_def.get("prerequisites", [])
+                    "prerequisites": achievement_def.get("prerequisites", []),
                 }
 
                 # 添加或更新成就
@@ -424,7 +428,7 @@ class LearningProgressTracker:
             "locked_count": len(locked),
             "unlock_rate": (len(unlocked) / len(all_achievements) * 100) if all_achievements else 0,
             "total_points": self.get_total_achievement_points(),
-            "points_distribution": points_distribution
+            "points_distribution": points_distribution,
         }
 
     def reset_progress(self, keep_achievements: bool = False):
@@ -443,6 +447,7 @@ class LearningProgressTracker:
 
 # 单例模式
 _tracker_instance = None
+
 
 def get_progress_tracker(user_id: str = "default_user") -> LearningProgressTracker:
     """获取进度追踪器实例（单例模式）"""
@@ -463,7 +468,7 @@ if __name__ == "__main__":
         source_file="materials.md",
         study_time_seconds=300,
         quiz_score=85,
-        tags=["材料", "钢", "力学性能"]
+        tags=["材料", "钢", "力学性能"],
     )
 
     tracker.mark_topic_completed(
@@ -472,7 +477,7 @@ if __name__ == "__main__":
         source_file="materials.md",
         study_time_seconds=420,
         quiz_score=90,
-        tags=["材料", "钢", "中碳钢"]
+        tags=["材料", "钢", "中碳钢"],
     )
 
     tracker.mark_topic_completed(
@@ -481,7 +486,7 @@ if __name__ == "__main__":
         source_file="fasteners.md",
         study_time_seconds=180,
         quiz_score=78,
-        tags=["紧固件", "螺栓", "规格"]
+        tags=["紧固件", "螺栓", "规格"],
     )
 
     # 保存

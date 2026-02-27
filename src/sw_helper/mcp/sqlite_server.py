@@ -3,10 +3,11 @@ SQLite 数据库 MCP Server - 提供材料数据库查询、知识库搜索和�
 基于CAE-CLI项目需求定制
 """
 
-import sqlite3
 import json
-from typing import Dict, Any, Optional, List
+import sqlite3
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 from sw_helper.mcp.core import Tool, get_mcp_server
 
 
@@ -35,7 +36,7 @@ class SQLiteMCPServer:
 
         self._register_tools()
 
-        print(f"[SQLite MCP] SQLite数据库MCP服务器已初始化")
+        print("[SQLite MCP] SQLite数据库MCP服务器已初始化")
         print(f"[SQLite MCP] 数据库路径: {self.db_path}")
         print(f"[SQLite MCP] 数据库存在: {self.db_path.exists()}")
 
@@ -53,10 +54,7 @@ class SQLiteMCPServer:
             Tool(
                 name="sqlite_db_info",
                 description="获取SQLite数据库基本信息",
-                input_schema={
-                    "type": "object",
-                    "properties": {}
-                },
+                input_schema={"type": "object", "properties": {}},
                 handler=self._handle_db_info,
             )
         )
@@ -69,18 +67,15 @@ class SQLiteMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "sql": {
-                            "type": "string",
-                            "description": "SQL查询语句"
-                        },
+                        "sql": {"type": "string", "description": "SQL查询语句"},
                         "parameters": {
                             "type": "array",
                             "items": {"type": "string"},
                             "description": "查询参数",
-                            "default": []
-                        }
+                            "default": [],
+                        },
                     },
-                    "required": ["sql"]
+                    "required": ["sql"],
                 },
                 handler=self._handle_execute_query,
             )
@@ -94,28 +89,12 @@ class SQLiteMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "name": {
-                            "type": "string",
-                            "description": "材料名称（支持模糊查询）"
-                        },
-                        "category": {
-                            "type": "string",
-                            "description": "材料类别"
-                        },
-                        "min_yield_strength": {
-                            "type": "number",
-                            "description": "最小屈服强度 (Pa)"
-                        },
-                        "max_yield_strength": {
-                            "type": "number",
-                            "description": "最大屈服强度 (Pa)"
-                        },
-                        "limit": {
-                            "type": "integer",
-                            "description": "返回结果数量限制",
-                            "default": 50
-                        }
-                    }
+                        "name": {"type": "string", "description": "材料名称（支持模糊查询）"},
+                        "category": {"type": "string", "description": "材料类别"},
+                        "min_yield_strength": {"type": "number", "description": "最小屈服强度 (Pa)"},
+                        "max_yield_strength": {"type": "number", "description": "最大屈服强度 (Pa)"},
+                        "limit": {"type": "integer", "description": "返回结果数量限制", "default": 50},
+                    },
                 },
                 handler=self._handle_query_materials,
             )
@@ -129,17 +108,10 @@ class SQLiteMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "搜索关键词"
-                        },
-                        "limit": {
-                            "type": "integer",
-                            "description": "返回结果数量限制",
-                            "default": 20
-                        }
+                        "query": {"type": "string", "description": "搜索关键词"},
+                        "limit": {"type": "integer", "description": "返回结果数量限制", "default": 20},
                     },
-                    "required": ["query"]
+                    "required": ["query"],
                 },
                 handler=self._handle_search_knowledge,
             )
@@ -153,24 +125,12 @@ class SQLiteMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "input": {
-                            "type": "object",
-                            "description": "计算输入参数"
-                        },
-                        "result": {
-                            "type": "object",
-                            "description": "计算结果"
-                        },
-                        "analysis_type": {
-                            "type": "string",
-                            "description": "分析类型（如static, modal, thermal等）"
-                        },
-                        "metadata": {
-                            "type": "object",
-                            "description": "额外元数据"
-                        }
+                        "input": {"type": "object", "description": "计算输入参数"},
+                        "result": {"type": "object", "description": "计算结果"},
+                        "analysis_type": {"type": "string", "description": "分析类型（如static, modal, thermal等）"},
+                        "metadata": {"type": "object", "description": "额外元数据"},
                     },
-                    "required": ["input", "result"]
+                    "required": ["input", "result"],
                 },
                 handler=self._handle_add_calc_history,
             )
@@ -184,24 +144,11 @@ class SQLiteMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "analysis_type": {
-                            "type": "string",
-                            "description": "分析类型"
-                        },
-                        "start_date": {
-                            "type": "string",
-                            "description": "开始日期（YYYY-MM-DD格式）"
-                        },
-                        "end_date": {
-                            "type": "string",
-                            "description": "结束日期（YYYY-MM-DD格式）"
-                        },
-                        "limit": {
-                            "type": "integer",
-                            "description": "返回结果数量限制",
-                            "default": 50
-                        }
-                    }
+                        "analysis_type": {"type": "string", "description": "分析类型"},
+                        "start_date": {"type": "string", "description": "开始日期（YYYY-MM-DD格式）"},
+                        "end_date": {"type": "string", "description": "结束日期（YYYY-MM-DD格式）"},
+                        "limit": {"type": "integer", "description": "返回结果数量限制", "default": 50},
+                    },
                 },
                 handler=self._handle_query_calc_history,
             )
@@ -215,20 +162,11 @@ class SQLiteMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "title": {
-                            "type": "string",
-                            "description": "条目标题"
-                        },
-                        "content": {
-                            "type": "string",
-                            "description": "条目内容"
-                        },
-                        "keywords": {
-                            "type": "string",
-                            "description": "关键词（空格分隔）"
-                        }
+                        "title": {"type": "string", "description": "条目标题"},
+                        "content": {"type": "string", "description": "条目内容"},
+                        "keywords": {"type": "string", "description": "关键词（空格分隔）"},
                     },
-                    "required": ["title", "content"]
+                    "required": ["title", "content"],
                 },
                 handler=self._handle_add_knowledge,
             )
@@ -241,12 +179,7 @@ class SQLiteMCPServer:
                 description="备份数据库",
                 input_schema={
                     "type": "object",
-                    "properties": {
-                        "backup_path": {
-                            "type": "string",
-                            "description": "备份文件路径（可选）"
-                        }
-                    }
+                    "properties": {"backup_path": {"type": "string", "description": "备份文件路径（可选）"}},
                 },
                 handler=self._handle_backup_db,
             )
@@ -275,7 +208,7 @@ class SQLiteMCPServer:
                 try:
                     cursor.execute(f"SELECT COUNT(*) FROM {table}")
                     table_counts[table] = cursor.fetchone()[0]
-                except:
+                except Exception:
                     table_counts[table] = 0
 
             conn.close()
@@ -286,7 +219,7 @@ class SQLiteMCPServer:
                 "db_size": db_size,
                 "tables": tables,
                 "table_counts": table_counts,
-                "exists": self.db_path.exists()
+                "exists": self.db_path.exists(),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -308,32 +241,25 @@ class SQLiteMCPServer:
                 columns = [description[0] for description in cursor.description] if cursor.description else []
                 result = [dict(zip(columns, row)) for row in rows]
 
-                return {
-                    "success": True,
-                    "type": "query",
-                    "row_count": len(result),
-                    "columns": columns,
-                    "data": result
-                }
+                return {"success": True, "type": "query", "row_count": len(result), "columns": columns, "data": result}
             else:
                 # DML语句（INSERT, UPDATE, DELETE等）
                 conn.commit()
                 affected_rows = cursor.rowcount
 
-                return {
-                    "success": True,
-                    "type": "dml",
-                    "affected_rows": affected_rows,
-                    "lastrowid": cursor.lastrowid
-                }
+                return {"success": True, "type": "dml", "affected_rows": affected_rows, "lastrowid": cursor.lastrowid}
 
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def _handle_query_materials(self, name: Optional[str] = None, category: Optional[str] = None,
-                               min_yield_strength: Optional[float] = None,
-                               max_yield_strength: Optional[float] = None,
-                               limit: int = 50) -> Dict[str, Any]:
+    def _handle_query_materials(
+        self,
+        name: Optional[str] = None,
+        category: Optional[str] = None,
+        min_yield_strength: Optional[float] = None,
+        max_yield_strength: Optional[float] = None,
+        limit: int = 50,
+    ) -> Dict[str, Any]:
         """处理材料查询请求"""
         try:
             conn = self._get_connection()
@@ -379,10 +305,10 @@ class SQLiteMCPServer:
             for row in rows:
                 material = dict(row)
                 # 解析JSON数据
-                if material.get('data'):
+                if material.get("data"):
                     try:
-                        material['data'] = json.loads(material['data'])
-                    except:
+                        material["data"] = json.loads(material["data"])
+                    except json.JSONDecodeError:
                         pass
                 materials.append(material)
 
@@ -396,8 +322,8 @@ class SQLiteMCPServer:
                     "name": name,
                     "category": category,
                     "min_yield_strength": min_yield_strength,
-                    "max_yield_strength": max_yield_strength
-                }
+                    "max_yield_strength": max_yield_strength,
+                },
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -427,18 +353,17 @@ class SQLiteMCPServer:
 
             conn.close()
 
-            return {
-                "success": True,
-                "query": query,
-                "count": len(results),
-                "results": results
-            }
+            return {"success": True, "query": query, "count": len(results), "results": results}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def _handle_add_calc_history(self, input: Dict[str, Any], result: Dict[str, Any],
-                                analysis_type: Optional[str] = None,
-                                metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def _handle_add_calc_history(
+        self,
+        input: Dict[str, Any],
+        result: Dict[str, Any],
+        analysis_type: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """处理添加计算历史请求"""
         try:
             conn = self._get_connection()
@@ -449,31 +374,32 @@ class SQLiteMCPServer:
             VALUES (?, ?, ?, ?)
             """
 
-            cursor.execute(sql, (
-                json.dumps(input, ensure_ascii=False),
-                json.dumps(result, ensure_ascii=False),
-                analysis_type,
-                json.dumps(metadata or {}, ensure_ascii=False)
-            ))
+            cursor.execute(
+                sql,
+                (
+                    json.dumps(input, ensure_ascii=False),
+                    json.dumps(result, ensure_ascii=False),
+                    analysis_type,
+                    json.dumps(metadata or {}, ensure_ascii=False),
+                ),
+            )
 
             conn.commit()
             history_id = cursor.lastrowid
 
             conn.close()
 
-            return {
-                "success": True,
-                "history_id": history_id,
-                "timestamp": "now",
-                "analysis_type": analysis_type
-            }
+            return {"success": True, "history_id": history_id, "timestamp": "now", "analysis_type": analysis_type}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def _handle_query_calc_history(self, analysis_type: Optional[str] = None,
-                                  start_date: Optional[str] = None,
-                                  end_date: Optional[str] = None,
-                                  limit: int = 50) -> Dict[str, Any]:
+    def _handle_query_calc_history(
+        self,
+        analysis_type: Optional[str] = None,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        limit: int = 50,
+    ) -> Dict[str, Any]:
         """处理查询计算历史请求"""
         try:
             conn = self._get_connection()
@@ -512,11 +438,11 @@ class SQLiteMCPServer:
             for row in rows:
                 item = dict(row)
                 # 解析JSON字段
-                for field in ['input', 'result', 'metadata']:
+                for field in ["input", "result", "metadata"]:
                     if item.get(field):
                         try:
                             item[field] = json.loads(item[field])
-                        except:
+                        except json.JSONDecodeError:
                             pass
                 history_items.append(item)
 
@@ -526,11 +452,7 @@ class SQLiteMCPServer:
                 "success": True,
                 "count": len(history_items),
                 "history": history_items,
-                "query": {
-                    "analysis_type": analysis_type,
-                    "start_date": start_date,
-                    "end_date": end_date
-                }
+                "query": {"analysis_type": analysis_type, "start_date": start_date, "end_date": end_date},
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -552,12 +474,7 @@ class SQLiteMCPServer:
 
             conn.close()
 
-            return {
-                "success": True,
-                "knowledge_id": knowledge_id,
-                "title": title,
-                "keywords": keywords
-            }
+            return {"success": True, "knowledge_id": knowledge_id, "title": title, "keywords": keywords}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -567,8 +484,8 @@ class SQLiteMCPServer:
             if not self.db_path.exists():
                 return {"success": False, "error": "源数据库文件不存在"}
 
-            import shutil
             import datetime
+            import shutil
 
             if backup_path is None:
                 # 生成默认备份路径
@@ -586,7 +503,7 @@ class SQLiteMCPServer:
                 "backup_path": str(backup_path_obj),
                 "original_path": str(self.db_path),
                 "backup_size": backup_path_obj.stat().st_size,
-                "timestamp": datetime.datetime.now().isoformat()
+                "timestamp": datetime.datetime.now().isoformat(),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}

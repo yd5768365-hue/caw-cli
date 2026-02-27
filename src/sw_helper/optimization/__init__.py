@@ -2,13 +2,14 @@
 参数优化模块
 """
 
+from .optimizer import FreeCADOptimizer
+from .optimizer import OptimizationResult as FCOptimizationResult
 from .parametric import (
-    ParametricOptimizer,
     AIAssistedOptimizer,
-    OptimizationResult,
     OptimizationConfig,
+    OptimizationResult,
+    ParametricOptimizer,
 )
-from .optimizer import FreeCADOptimizer, OptimizationResult as FCOptimizationResult
 
 __all__ = [
     "ParametricOptimizer",

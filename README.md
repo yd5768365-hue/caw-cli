@@ -88,16 +88,34 @@ CAE-CLI 是为机械专业学生（特别是从互联网专业转向机械领域
 - ⚡ **实时反馈**：操作过程中提供即时质量分析建议
 - 📝 **命令学习**：支持直接命令行输入和菜单操作两种模式
 
-### 🤖 AI学习助手 (🔥 最新功能)
-- 🤖 **本地AI模型**：支持两种模式
-  - Ollama服务（支持qwen2.5:3b/phi3:mini等）
-  - 本地GGUF模型（离线可用，无需Ollama）
-- 🔍 **RAG知识检索**：使用sentence-transformers + ChromaDB向量化知识库，智能检索相关知识
-- 👨‍🏫 **教学式回答**：专业机械学习助手，用中文教学式、一步步回答，适合大一学生
-- 💬 **多轮对话**：自动保存对话历史，支持上下文连贯的深度问答
-- ⚡ **自动服务启动**：进入学习模式自动检测并启动Ollama服务
-- 📚 **知识库增强**：每次提问前先检索knowledge/目录的Markdown知识库，结合知识库内容回答
-- 🔧 **智能模型检测**：自动检测可用模型
+### 🤖 AI学习助手 (🔥 核心亮点 - 离线可用)
+
+CAE-CLI 内置**本地 AI 引擎**，无需联网、无需 Ollama，下载模型文件即可使用：
+
+#### 🎯 两种 AI 模式
+
+| 模式 | 特点 | 适用场景 |
+|------|------|---------|
+| **GGUF 离线模式** ⭐ | 无需 Ollama，下载模型即可用，离线也能跑 | 打包分发、离线环境、便携使用 |
+| Ollama 在线模式 | 需要 Ollama 服务，支持更多模型 | 开发调试、需要最新模型 |
+
+#### 📦 GGUF 模型准备
+
+下载以下两个模型文件放到 **exe 同目录** 即可：
+
+| 模型 | 用途 | 大小 |
+|------|------|------|
+| `qwen2.5-1.5b-instruct-q4_k_m.gguf` | LLM 对话模型 | ~1GB |
+| `bge-m3-Q8_0.gguf` | 嵌入向量模型 | ~500MB |
+
+> 💡 **打包分发**：用户只需获取 `dist/cae-gui/` 文件夹 + 两个 GGUF 文件，无需安装 Python 环境！
+
+#### ✨ AI 功能特性
+
+- 🔍 **RAG知识检索**：使用 sentence-transformers + ChromaDB 向量化知识库
+- 👨‍🏫 **教学式回答**：用中文一步步讲解，适合大一学生
+- 💬 **多轮对话**：自动保存对话历史，支持上下文连贯问答
+- ⚡ **自动启动**：检测到模型后自动加载，无需手动配置
 
 ### 📚 机械知识库管理
 - 🧱 **材料数据库**：内置 GB/T 标准材料库（Q235、Q345、铝合金等）
@@ -153,13 +171,22 @@ pip install "cae-cli[ai]"
 pip install "cae-cli[full,ai]"
 ```
 
-### 方式五：GUI 桌面版本（Web 美化界面）
+### 方式五：GUI 桌面版本（Web 美化界面 + 离线 AI）
 
-**推荐：直接下载预编译版本**
-- 从 [Releases 页面](https://github.com/yd5768365-hue/caw-cli/releases) 下载 `cae-cli-gui-v0.10.0-win-x64.zip`
-- 解压后运行 `cae-cli-gui.exe` 即可
+**⭐ 推荐：直接下载预编译版本（含 AI 离线支持）**
 
-**或自行打包**：
+从 [Releases 页面](https://github.com/yd5768365-hue/caw-cli/releases) 下载：
+- `cae-cli-gui-v0.10.0-win-x64.zip` - GUI 桌面版
+
+**AI 离线使用**：下载后放入两个 GGUF 模型文件到 exe 同目录即可：
+```
+cae-gui/
+├── cae-gui.exe
+├── qwen2.5-1.5b-instruct-q4_k_m.gguf  # 需自行下载
+└── bge-m3-Q8_0.gguf                   # 需自行下载
+```
+
+**自行打包**：
 ```bash
 # 安装 GUI 依赖
 pip install PySide6 PySide6-WebEngine
@@ -167,8 +194,8 @@ pip install PySide6 PySide6-WebEngine
 # 打包 GUI 版本
 pyinstaller cae-gui.spec
 
-# 可执行文件位置：dist/cae-cli-gui/cae-cli-gui.exe
-# 注意：GUI打包需要较长时间（5-10分钟）
+# 输出位置：dist/cae-gui/cae-gui.exe
+# 提示：打包需要 5-10 分钟
 ```
 
 #### CLI 版本快速打包（更快）
@@ -187,38 +214,38 @@ pyinstaller --name=cae-cli --console --add-data "src;src" --add-data "data;data"
   - Ollama (https://ollama.com/) - 本地LLM运行环境
   - RAM: 最少4GB (推荐8GB+，用于运行AI模型)
 
-### Ollama 安装与配置
+### AI 模式选择
+
+#### 方式一：GGUF 离线模式 ⭐（推荐，用于打包分发）
+
+无需安装 Ollama，下载 GGUF 模型文件即可：
+
+```bash
+# 1. 安装 llama-cpp-python
+pip install llama-cpp-python
+
+# 2. 下载模型文件
+# qwen2.5-1.5b-instruct-q4_k_m.gguf (LLM) + bge-m3-Q8_0.gguf (嵌入)
+# 放入项目根目录或 exe 同目录
+
+# 3. 启动交互模式，选择"学习模式"即可自动加载
+cae-cli interactive --lang zh
+```
+
+#### 方式二：Ollama 在线模式
 
 ```bash
 # 1. 下载安装Ollama
 # 访问 https://ollama.com/ 下载对应系统版本
 
 # 2. 启动Ollama服务
-# Windows/macOS: 安装后自动启动
-# Linux:
 ollama serve
 
-# 3. 下载推荐模型（选择其一）
-# 推荐：qwen2.5:1.5b (适合机械知识讲解，低资源占用)
+# 3. 下载推荐模型
 ollama pull qwen2.5:1.5b
 
-# 或备选：phi3:mini (通用性好)
-ollama pull phi3:mini
-
-# 4. 验证安装
+# 4. 验证
 curl http://localhost:11434/api/tags
-```
-
-#### 方式2: 本地GGUF模型（离线可用，无需Ollama）
-
-```bash
-# 1. 安装 llama-cpp-python
-pip install llama-cpp-python
-
-# 2. 下载 GGUF 模型文件（如 qwen2.5-1.5b-instruct-q4_k_m.gguf）
-# 放入项目目录或其他目录
-
-# 3. 启动时选择"本地GGUF模型"模式即可
 ```
 
 ---
@@ -572,7 +599,9 @@ ollama list
 
 ### v0.10.0 发布版本
 - `cae-cli-v0.10.0-win-x64.zip` - 终端版本 (~54MB)
-- `cae-cli-gui-v0.10.0-win-x64.zip` - GUI 桌面版本 (~251MB)
+- `cae-cli-gui-v0.10.0-win-x64.zip` - GUI 桌面版本 (~72MB + 模型文件)
+
+**⭐ AI 离线使用**：GUI 版本下载后，只需额外下载两个 GGUF 模型文件即可使用 AI 对话功能，无需安装 Python 或 Ollama！
 
 **快速下载**：从 [GitHub Releases](https://github.com/yd5768365-hue/caw-cli/releases) 下载预编译版本
 
@@ -580,12 +609,13 @@ ollama list
 
 - ✅ 基础功能：几何解析、材料计算、网格分析
 - ✅ AI与交互：AI辅助设计、多语言支持、交互模式
-- ✅ AI学习助手：Ollama本地模型 + RAG知识检索 + 多轮对话
+- ✅ AI学习助手：Ollama + RAG知识检索 + 多轮对话
+- ✅ **AI离线引擎**：GGUF本地模型，无需Ollama，打包分发
 - ✅ 插件化架构：标准化CAD/CAE接口，FreeCAD+CalculiX集成
 - ✅ 网格生成器：Gmsh标准化集成
 - ✅ 完整文档体系：核心文档 + API自动生成脚本
-- ✅ GUI 桌面版：PySide6 Web 美化界面
-- ✅ 打包发布：CLI/GUI 双版本发布
+- ✅ GUI 桌面版：PySide6 Web 美化界面 + 离线AI
+- ✅ 打包发布：CLI/GUI 双版本 + GGUF模型外部加载
 - 🔄 PyPI包发布：规划中
 
 ---

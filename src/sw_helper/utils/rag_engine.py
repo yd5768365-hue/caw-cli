@@ -1,31 +1,30 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 RAG (Retrieval-Augmented Generation) Engine for CAE-CLI学习模式
 使用 ChromaDB + sentence-transformers 实现向量检索
 """
 
+import hashlib
+import json
+import sqlite3
+import sys
+import time
+import traceback
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import chromadb
 from chromadb.config import Settings
-from pathlib import Path
-import os
-import sys
-import traceback
-import sqlite3
-import json
-import hashlib
-import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
 
 
 def get_resource_path(relative_path: str) -> Path:
     """获取资源文件路径，支持打包后的exe和开发模式"""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         base_path = Path(sys._MEIPASS)
     else:
         base_path = Path(__file__).parent.parent.parent
     return base_path / relative_path
+
 
 class RAGCacheManager:
     """RAG查询缓存管理器 - 基于SQLite的本地缓存"""
@@ -104,7 +103,7 @@ class RAGCacheManager:
                 "sw_helper/material/**/*.py",
                 "sw_helper/mechanics/**/*.py",
                 "sw_helper/report/**/*.py",
-                "sw_helper/utils/**/*.py"
+                "sw_helper/utils/**/*.py",
             ]
 
             for pattern in core_patterns:
@@ -114,7 +113,7 @@ class RAGCacheManager:
                             stat = py_file.stat()
                             file_info = f"{py_file}:{stat.st_mtime}:{stat.st_size}"
                             hash_data.append(file_info)
-                        except:
+                        except OSError:
                             pass
 
         # 如果没有文件，返回默认哈希
@@ -151,20 +150,26 @@ class RAGCacheManager:
 
         try:
             # 查询缓存（检查是否过期）
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT result_json, created_at
                 FROM rag_cache
                 WHERE query_hash = ? AND expire_at > datetime('now')
-            """, (query_hash,))
+            """,
+                (query_hash,),
+            )
 
             row = cursor.fetchone()
             if row:
                 # 更新访问时间（可选）
-                cursor.execute("""
+                cursor.execute(
+                    """
                     UPDATE rag_cache
                     SET created_at = CURRENT_TIMESTAMP
                     WHERE query_hash = ?
-                """, (query_hash,))
+                """,
+                    (query_hash,),
+                )
                 conn.commit()
 
                 # 返回缓存的JSON结果
@@ -176,7 +181,9 @@ class RAGCacheManager:
         finally:
             conn.close()
 
-    def set_cache(self, query: str, results: List[Dict[str, Any]], top_k: int = 3, max_length: int = 0, ttl_hours: int = 24):
+    def set_cache(
+        self, query: str, results: List[Dict[str, Any]], top_k: int = 3, max_length: int = 0, ttl_hours: int = 24
+    ):
         """
         设置缓存
 
@@ -196,15 +203,19 @@ class RAGCacheManager:
         try:
             # 计算过期时间
             from datetime import datetime, timedelta
+
             expire_at = datetime.now() + timedelta(hours=ttl_hours)
             expire_str = expire_at.isoformat()
 
             # 插入或替换缓存
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT OR REPLACE INTO rag_cache
                 (query_hash, query_text, result_json, created_at, expire_at)
                 VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?)
-            """, (query_hash, query, result_json, expire_str))
+            """,
+                (query_hash, query, result_json, expire_str),
+            )
 
             conn.commit()
 
@@ -265,7 +276,7 @@ class RAGCacheManager:
                 "active_entries": active,
                 "expired_entries": expired,
                 "hit_rate": hit_rate,
-                "db_path": str(self.db_path)
+                "db_path": str(self.db_path),
             }
 
         finally:
@@ -293,6 +304,7 @@ class RAGEngine:
         # 尝试导入sentence-transformers，提供友好的错误提示
         try:
             from sentence_transformers import SentenceTransformer
+
             self.SentenceTransformer = SentenceTransformer
             self.sentence_transformers_available = True
         except ImportError as e:
@@ -304,11 +316,12 @@ class RAGEngine:
         # 初始化模型 - 使用小模型减少内存占用
         try:
             import os
+
             # 检查是否离线模式
-            offline_mode = os.environ.get('HF_HUB_OFFLINE', '0') == '1'
+            offline_mode = os.environ.get("HF_HUB_OFFLINE", "0") == "1"
 
             # 检查环境变量中的模型路径
-            env_model_path = os.environ.get('CAE_CLI_MODEL_PATH')
+            env_model_path = os.environ.get("CAE_CLI_MODEL_PATH")
             if env_model_path and not model_path:
                 model_path = env_model_path
 
@@ -330,9 +343,10 @@ class RAGEngine:
                 try:
                     # 设置较短的超时时间，避免长时间等待
                     import socket
+
                     socket.setdefaulttimeout(30)  # 30秒超时
 
-                    self.model = self.SentenceTransformer('all-MiniLM-L6-v2')
+                    self.model = self.SentenceTransformer("all-MiniLM-L6-v2")
                     print("[OK] 加载 sentence-transformers 模型")
                 except Exception as download_error:
                     print(f"模型下载失败: {download_error}")
@@ -340,8 +354,8 @@ class RAGEngine:
                     # 检查是否有本地缓存的模型
 
                     # HuggingFace默认缓存路径
-                    cache_home = os.environ.get('HF_HOME', os.path.expanduser('~/.cache/huggingface'))
-                    model_cache_path = Path(cache_home) / 'hub' / 'models--sentence-transformers--all-MiniLM-L6-v2'
+                    cache_home = os.environ.get("HF_HOME", os.path.expanduser("~/.cache/huggingface"))
+                    model_cache_path = Path(cache_home) / "hub" / "models--sentence-transformers--all-MiniLM-L6-v2"
 
                     if model_cache_path.exists():
                         print(f"找到本地缓存模型: {model_cache_path}")
@@ -369,20 +383,19 @@ class RAGEngine:
 
         # 初始化ChromaDB
         try:
-            self.client = chromadb.Client(Settings(
-                allow_reset=True,
-                anonymized_telemetry=False,
-                persist_directory=str(self.knowledge_dir / "chroma_db")
-            ))
+            self.client = chromadb.Client(
+                Settings(
+                    allow_reset=True,
+                    anonymized_telemetry=False,
+                    persist_directory=str(self.knowledge_dir / "chroma_db"),
+                )
+            )
             print("[OK] 初始化 ChromaDB 客户端")
         except Exception as e:
             print(f"警告: 初始化ChromaDB失败: {e}")
             # 尝试回退到内存模式
             try:
-                self.client = chromadb.Client(Settings(
-                    allow_reset=True,
-                    anonymized_telemetry=False
-                ))
+                self.client = chromadb.Client(Settings(allow_reset=True, anonymized_telemetry=False))
                 print("[OK] 使用内存模式 ChromaDB")
             except Exception as e2:
                 print(f"错误: 无法初始化ChromaDB: {e2}")
@@ -392,8 +405,7 @@ class RAGEngine:
         # 获取或创建集合
         try:
             self.collection = self.client.get_or_create_collection(
-                name="cae_knowledge",
-                metadata={"description": "CAE-CLI机械专业知识库"}
+                name="cae_knowledge", metadata={"description": "CAE-CLI机械专业知识库"}
             )
             print("[OK] 加载 ChromaDB 集合")
         except Exception as e:
@@ -410,8 +422,7 @@ class RAGEngine:
         src_dir = project_root / "src" if project_root.name else Path("src")
 
         self.knowledge_hash = self.cache_manager._compute_knowledge_hash(
-            self.knowledge_dir,
-            src_dir if src_dir.exists() else None
+            self.knowledge_dir, src_dir if src_dir.exists() else None
         )
 
         print(f"[缓存] 知识库哈希: {self.knowledge_hash[:12]}...")
@@ -434,7 +445,7 @@ class RAGEngine:
             if count > 0:
                 print(f"知识库已有 {count} 个文档，跳过加载")
                 return
-        except:
+        except Exception:
             pass
 
         documents = []
@@ -453,7 +464,7 @@ class RAGEngine:
 
         for file in md_files:
             try:
-                with open(file, 'r', encoding='utf-8') as f:
+                with open(file, encoding="utf-8") as f:
                     content = f.read()
 
                 # 跳过空文件
@@ -476,12 +487,7 @@ class RAGEngine:
             embeddings = self.model.encode(documents, show_progress_bar=True, normalize_embeddings=True).tolist()
 
             # 添加到集合
-            self.collection.add(
-                documents=documents,
-                embeddings=embeddings,
-                metadatas=metadatas,
-                ids=ids
-            )
+            self.collection.add(documents=documents, embeddings=embeddings, metadatas=metadatas, ids=ids)
 
             print(f"[OK] 已加载 {len(documents)} 个知识文档到向量数据库")
 
@@ -558,7 +564,7 @@ class RAGEngine:
 
         sample_file = self.knowledge_dir / "sample_knowledge.md"
         try:
-            with open(sample_file, 'w', encoding='utf-8') as f:
+            with open(sample_file, "w", encoding="utf-8") as f:
                 f.write(sample_content)
             print(f"[OK] 已创建示例知识文件: {sample_file}")
         except Exception as e:
@@ -576,7 +582,6 @@ class RAGEngine:
         Returns:
             检索结果列表，每个结果包含 content、source、distance 字段
         """
-        import time
         start_time = time.time()
 
         if not self.sentence_transformers_available:
@@ -604,43 +609,35 @@ class RAGEngine:
             results = self.collection.query(
                 query_embeddings=[query_embedding],
                 n_results=min(top_k, 5),  # 限制最多5个结果
-                include=["documents", "metadatas", "distances"]
+                include=["documents", "metadatas", "distances"],
             )
 
             # 格式化结果
             formatted_results = []
             if results["documents"] and results["documents"][0]:
-                for i, (doc, meta, dist) in enumerate(zip(
-                    results["documents"][0],
-                    results["metadatas"][0],
-                    results["distances"][0]
-                )):
+                for i, (doc, meta, dist) in enumerate(
+                    zip(results["documents"][0], results["metadatas"][0], results["distances"][0])
+                ):
                     # 内容截断处理
                     content = doc
                     if max_length > 0 and len(content) > max_length:
                         # 尝试截断到最近的句号、感叹号、问号或换行处
                         truncate_pos = max_length
-                        for punct in ['.', '!', '?', '\n']:
+                        for punct in [".", "!", "?", "\n"]:
                             pos = content.rfind(punct, 0, max_length)
                             if pos > 0:
                                 truncate_pos = max(truncate_pos, pos + 1)
                                 break
                         content = content[:truncate_pos].rstrip() + "..."
 
-                    formatted_results.append({
-                        "content": content,
-                        "source": meta.get("source", "未知来源"),
-                        "distance": float(dist)
-                    })
+                    formatted_results.append(
+                        {"content": content, "source": meta.get("source", "未知来源"), "distance": float(dist)}
+                    )
 
             # 3. 将结果存入缓存（24小时TTL）
             if formatted_results:
                 self.cache_manager.set_cache(
-                    query=query,
-                    results=formatted_results,
-                    top_k=top_k,
-                    max_length=max_length,
-                    ttl_hours=24
+                    query=query, results=formatted_results, top_k=top_k, max_length=max_length, ttl_hours=24
                 )
 
             # 4. 打印统计信息
@@ -661,6 +658,7 @@ class RAGEngine:
 
 # 单例模式
 _rag_instance = None
+
 
 def get_rag_engine() -> RAGEngine:
     """获取RAG引擎实例（单例模式）"""

@@ -4,21 +4,20 @@ AI助手页面
 此模块提供AI辅助设计功能的GUI界面。
 """
 
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QGroupBox,
-    QFormLayout,
-    QComboBox,
-)
-from PySide6.QtCore import Signal
+import os  # 性能优化：模块级别导入
 
-from ..theme import CAETheme
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class AIPage(QWidget):
@@ -122,7 +121,6 @@ class AIPage(QWidget):
             generator = AIModelGenerator(use_mock=use_mock)
 
             # 获取输出目录
-            import os
             output_dir = os.path.expanduser("~/CAE-CLI/models")
 
             # 生成模型
@@ -164,7 +162,7 @@ class AIPage(QWidget):
                 self.result_text.setText(f"生成失败: {result.get('error', '未知错误')}")
 
         except ImportError as e:
-            self.result_text.setText(f"缺少依赖: {e}\n\n请安装: pip install -e \".[full]\"")
+            self.result_text.setText(f'缺少依赖: {e}\n\n请安装: pip install -e ".[full]"')
         except Exception as e:
             self.result_text.setText(f"生成失败: {e}")
         finally:
@@ -184,7 +182,6 @@ class AIPage(QWidget):
             # 强制使用模拟模式
             generator = AIModelGenerator(use_mock=True)
 
-            import os
             output_dir = os.path.expanduser("~/CAE-CLI/models")
 
             result = generator.generate(description, output_dir=output_dir)

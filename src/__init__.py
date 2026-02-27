@@ -5,19 +5,19 @@ CAE-CLI 源代码包
 """
 
 # 版本信息
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 # 导入核心模块
 from .core import (
     CAEError,
-    SimulationConfig,
     FileFormat,
+    SimulationConfig,
 )
 
 # 导入GUI模块
 from .gui import (
-    MainWindow,
     CAETheme,
+    MainWindow,
 )
 
 __all__ = [

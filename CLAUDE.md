@@ -77,11 +77,17 @@ pip install -e .
 # 安装完整功能版（包含几何处理）
 pip install -e ".[full]"
 
+# 安装AI学习助手依赖
+pip install -e ".[ai]"
+
 # 安装开发依赖
 pip install -e ".[dev]"
 
 # 安装SSH增强功能
 pip install -e ".[ssh]"
+
+# 同时安装多个扩展
+pip install -e ".[full,ai]"
 ```
 
 ### 运行测试
@@ -135,6 +141,12 @@ cae-cli --help
 
 # 或使用Python模块方式
 python -m sw_helper --help
+
+# 启动GUI桌面版（需要 PySide6）
+python src/main_gui.py
+
+# 或使用模块方式
+python -m src.main_gui
 ```
 
 ### 脚本工具
@@ -272,7 +284,19 @@ analysis:
 - 功能：解决 Windows 终端编码问题
 - 支持：Unicode 回退数据、编码自动检测
 
-#### 3. 错误处理器（`error_handler.py`）
+#### 3. 本地 GGUF 模型加载器（`local_gguf.py`）
+- 位置：`src/sw_helper/ai/local_gguf.py`
+- 功能：使用 llama-cpp-python 加载 GGUF 模型，无需 Ollama
+- 模型文件：
+  - `qwen2.5-1.5b-instruct-q4_k_m.gguf` - LLM 对话模型 (~1GB)
+  - `bge-m3-Q8_0.gguf` - 嵌入向量模型 (~500MB)
+- 使用场景：打包分发、离线环境
+
+#### 4. 本地嵌入模型（`local_embedding.py`）
+- 位置：`src/sw_helper/ai/local_embedding.py`
+- 功能：本地向量嵌入，支持离线 RAG
+
+#### 5. 错误处理器（`error_handler.py`）
 - 功能：统一的错误处理和用户友好的错误消息
 - 特点：结构化错误信息、建议解决方案
 
@@ -322,6 +346,7 @@ analysis:
 
 ### 9. AI 学习助手 (🔥 最新功能)
 - **本地 AI 模型集成**：支持 Ollama 本地模型 (qwen2.5:1.5b / phi3:mini)
+- **GGUF 离线模式**：无需 Ollama，下载 GGUF 模型文件即可使用，适合打包分发
 - **RAG 知识检索**：使用 ChromaDB + sentence-transformers 向量化知识库，智能检索相关知识
 - **教学式回答**：专业机械学习助手，用中文教学式、一步步回答，适合大一学生
 - **多轮对话**：自动保存对话历史，支持上下文连贯的深度问答
@@ -329,7 +354,12 @@ analysis:
 - **知识库增强**：每次提问前先检索 knowledge/ 目录的 Markdown 知识库，结合知识库内容回答
 - **智能模型检测**：自动检测可用模型，优先使用 qwen2.5:1.5b，回退到 phi3:mini
 
-### 10. 工作流管理 (workflow)
+### 10. GUI 桌面版
+- **PySide6 Web 美化界面**：现代化图形界面
+- **离线 AI 支持**：内置 GGUF 模型加载器，无需 Ollama
+- **双模式运行**：命令行模式 + 图形界面模式
+
+### 11. 工作流管理 (workflow)
 - 标准化 CAD→CAE 分析流程管理
 - 支持预定义和自定义工作流
 - 完整的步骤级错误处理和进度跟踪
@@ -585,6 +615,16 @@ path = Path.home() / ".cae-cli"
 path.mkdir(exist_ok=True)
 ```
 
+## 打包发布
+
+```bash
+# 打包 GUI 桌面版
+pyinstaller cae-gui.spec
+
+# 打包 CLI 版本（更快）
+pyinstaller --name=cae-cli --console --add-data "src;src" --add-data "data;data" --add-data "knowledge;knowledge" --hidden-import=click --hidden-import=rich --hidden-import=yaml --hidden-import=numpy --hidden-import=jinja2 --hidden-import=pint --collect-all=rich --exclude-module=PyQt5 --exclude-module=PySide6 src/sw_helper/cli.py
+```
+
 ## 提交前检查
 
 ```bash
@@ -598,3 +638,31 @@ pytest && black src/ && ruff check src/ && mypy src/sw_helper
 - 类型错误：确保所有函数有类型提示
 - Black 格式化：运行 `black src/` 自动修复
 - 创建虚拟环境：`python -m venv venv && venv\Scripts\activate`
+
+## 代码审查
+
+```bash
+cae-cli review --local           # 本地代码审查
+cae-cli review --pr 123         # PR审查
+cae-cli review --local --json   # JSON格式输出
+```
+
+## GUI 开发
+
+```bash
+pip install -e ".[gui]"        # 安装GUI依赖
+python src/main_gui.py          # 启动GUI
+```
+
+GUI相关文件：
+- `src/gui/web_gui.py` - Web GUI实现 (PySide6 + QtWebEngine)
+- `src/gui/cae_ui.html` - HTML/CSS/JS界面
+- `src/main_gui.py` - GUI入口 + 依赖检查
+
+## 重要开发提示
+
+1. **函数长度限制**：最大50行，超过需添加 `# noqa: PLR0912`
+2. **cli.py 是核心文件**：3300+行，包含所有CLI命令
+3. **新功能开发**：必须添加对应的单元测试
+4. **MCP服务器**：使用 `InMemoryMCPTransport` 进行测试
+5. **知识库**：支持两种方式 - Markdown搜索 和 RAG向量检索

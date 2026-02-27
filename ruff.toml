@@ -1,0 +1,31 @@
+# Ruff 配置文件
+# https://docs.astral.sh/ruff/configuration/
+
+line-length = 120
+
+[lint]
+# 忽略的规则
+ignore = [
+    "E501",  # 行太长 (black 会处理)
+    "N802",  # 函数名大小写 (Qt override 方法)
+    "N803",  # 参数名大小写
+    "N806",  # 变量名大小写
+    "PLR0912",  # 太多分支
+    "PLR0913",  # 太多参数
+    "PLR2004",  # 魔法数字
+    "C901",  # 函数太复杂
+    "F401",  # 未使用的导入 (条件导入模式)
+    "F811",  # 重复定义
+    "F821",  # 未定义的名称 (条件导入)
+    "E402",  # 导入不在顶部 (条件导入)
+    "E741",  # 模糊变量名 (如 I 代表惯性矩)
+]
+
+[lint.per-file-ignores]
+# 特定文件的忽略规则
+"__init__.py" = ["F401"]  # 导入但未使用
+
+[format]
+# 格式化选项
+quote-style = "double"
+indent-style = "space"

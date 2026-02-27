@@ -6,9 +6,9 @@ FreeCAD连接器 - 新架构实现
 """
 
 import sys
-from pathlib import Path
-from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Optional
 
 from .._base.connectors import CADConnector, FileFormat
 
@@ -185,10 +185,11 @@ class FreeCADConnector(CADConnector):
                             if hasattr(constraint, "Value"):
                                 params.append(
                                     FCParameter(
-                                        name=constraint.Name
-                                        if hasattr(constraint, "Name")
-                                        and constraint.Name
-                                        else f"Constraint_{i}",
+                                        name=(
+                                            constraint.Name
+                                            if hasattr(constraint, "Name") and constraint.Name
+                                            else f"Constraint_{i}"
+                                        ),
                                         value=constraint.Value,
                                         unit="mm",
                                         obj_name=obj.Name,
@@ -247,7 +248,7 @@ class FreeCADConnector(CADConnector):
                                         obj_name=obj.Name,
                                     )
                                 )
-                        except:
+                        except Exception:
                             pass
 
         except Exception as e:
@@ -345,10 +346,7 @@ class FreeCADConnector(CADConnector):
                         attr_lower = attr.lower()
 
                         # 精确匹配或包含匹配
-                        if (
-                            attr_lower == target_param_lower
-                            or target_param_lower in attr_lower
-                        ):
+                        if attr_lower == target_param_lower or target_param_lower in attr_lower:
                             setattr(obj, attr, value)
                             print(f"✓ 设置 {obj.Name}.{attr} = {value} mm")
                             return True
@@ -359,9 +357,7 @@ class FreeCADConnector(CADConnector):
                                 for possible_attr in values:
                                     if hasattr(obj, possible_attr):
                                         setattr(obj, possible_attr, value)
-                                        print(
-                                            f"✓ 设置 {obj.Name}.{possible_attr} = {value} mm"
-                                        )
+                                        print(f"✓ 设置 {obj.Name}.{possible_attr} = {value} mm")
                                         return True
 
             # 尝试在电子表格中查找
@@ -369,15 +365,12 @@ class FreeCADConnector(CADConnector):
                 if obj.isDerivedFrom("Spreadsheet::Sheet"):
                     for cell in obj.getContents().keys():
                         cell_content = obj.getContents()[cell]
-                        if (
-                            param_name.lower() in cell.lower()
-                            or param_name.lower() in str(cell_content).lower()
-                        ):
+                        if param_name.lower() in cell.lower() or param_name.lower() in str(cell_content).lower():
                             try:
                                 obj.set(cell, str(value))
                                 print(f"✓ 设置电子表格单元格 {cell} = {value} mm")
                                 return True
-                            except:
+                            except Exception:
                                 continue
 
             print(f"✗ 未找到参数 '{param_name}'")
@@ -430,11 +423,7 @@ class FreeCADConnector(CADConnector):
                 import Import
 
                 # 收集所有Part对象
-                objects = [
-                    obj
-                    for obj in self.active_doc.Objects
-                    if obj.isDerivedFrom("Part::Feature")
-                ]
+                objects = [obj for obj in self.active_doc.Objects if obj.isDerivedFrom("Part::Feature")]
                 if objects:
                     Import.export(objects, output_path)
                     print(f"✓ 导出成功: {output_path}")
@@ -463,11 +452,7 @@ class FreeCADConnector(CADConnector):
             elif format_type.upper() == "IGES":
                 import Import
 
-                objects = [
-                    obj
-                    for obj in self.active_doc.Objects
-                    if obj.isDerivedFrom("Part::Feature")
-                ]
+                objects = [obj for obj in self.active_doc.Objects if obj.isDerivedFrom("Part::Feature")]
                 if objects:
                     Import.export(objects, output_path)
                     print(f"✓ 导出成功: {output_path}")

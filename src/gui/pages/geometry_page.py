@@ -4,21 +4,18 @@
 此模块提供几何文件解析功能的GUI界面。
 """
 
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QFileDialog,
-    QTextEdit,
-    QGroupBox,
-    QFormLayout,
-    QComboBox,
-)
 from PySide6.QtCore import Signal
-
-from ..theme import CAETheme
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFileDialog,
+    QFormLayout,
+    QGroupBox,
+    QLabel,
+    QPushButton,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class GeometryPage(QWidget):
@@ -145,7 +142,7 @@ class GeometryPage(QWidget):
             self.result_text.setText("\n".join(lines))
 
         except ImportError as e:
-            self.result_text.setText(f"缺少依赖: {e}\n\n请安装: pip install -e \".[full]\"")
+            self.result_text.setText(f'缺少依赖: {e}\n\n请安装: pip install -e ".[full]"')
         except FileNotFoundError as e:
             self.result_text.setText(f"文件不存在: {e}")
         except Exception as e:

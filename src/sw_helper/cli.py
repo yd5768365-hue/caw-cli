@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 CAE-CLI: SolidWorks CAE集成助手
 专业的命令行工具，集成SolidWorks、FreeCAD及各类建模/仿真软件
@@ -12,26 +11,28 @@ Usage:
     cae-cli report static -i result.inp
 
 Author: Your Name
-Version: 0.1.0
+Version: 1.0.0
 """
 
-import sys
 import json
-import click
+import sys
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
+
+import click
 from rich.console import Console
-from rich.table import Table
-from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.table import Table
 
 # 确保导入路径正确
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
+
 def get_resource_path(relative_path: str) -> Path:
     """获取资源文件路径，支持打包后的exe和开发模式"""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         # 打包后：资源在 _internal 目录下
         base_path = Path(sys._MEIPASS)
     else:
@@ -39,33 +40,36 @@ def get_resource_path(relative_path: str) -> Path:
         base_path = Path(__file__).parent.parent.parent
     return base_path / relative_path
 
+
 # 处理Windows终端编码问题
 import io
+
 
 def _get_console_file():
     """获取适合的终端文件对象"""
     if sys.platform == "win32":
         try:
             # 尝试设置UTF-8输出
-            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
-        except:
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+        except (AttributeError, io.UnsupportedOperation):
             pass
     return None
+
 
 _get_console_file()
 
 console = Console(force_terminal=False)
 
 # 项目核心颜色定义
-MAIN_RED = "#8B0000"       # 深红/酒红 - 主色调
-HIGHLIGHT_RED = "#FF4500"     # 荧光红 - 高亮色
-BACKGROUND_BLACK = "#0F0F0F"   # 深黑背景
-COOL_GRAY = "#333333"         # 冷灰 - 辅助色
-TEXT_WHITE = "#FFFFFF"          # 白色
+MAIN_RED = "#8B0000"  # 深红/酒红 - 主色调
+HIGHLIGHT_RED = "#FF4500"  # 荧光红 - 高亮色
+BACKGROUND_BLACK = "#0F0F0F"  # 深黑背景
+COOL_GRAY = "#333333"  # 冷灰 - 辅助色
+TEXT_WHITE = "#FFFFFF"  # 白色
 
 # 版本信息
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __prog_name__ = "cae-cli"
 
 
@@ -81,7 +85,7 @@ def load_config() -> Dict[str, Any]:
     """加载配置"""
     config_path = get_config_path()
     if config_path.exists():
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             return json.load(f)
     return {}
 
@@ -93,17 +97,78 @@ def save_config(config: Dict[str, Any]):
         json.dump(config, f, indent=2, ensure_ascii=False)
 
 
+# ==================== 启动动画 ====================
+
+import time
+
+
+def _print_animated_banner():
+    """打印动画启动横幅"""
+    # ASCII Art 横幅
+    banner_lines = [
+        "════════════════════════════════════════════════════════════",
+        "███╗   ███╗███████╗ ██████╗██╗  ██╗██████╗ ███████╗███████╗",
+        " ████╗ ████║██╔════╝██╔════╝██║  ██║██╔══██╗██╔════╝██╔════╝",
+        " ██╔████╔██║█████╗  ██║     ███████║██║  ██║█████╗  ███████╗",
+        " ██║╚██╔╝██║██╔══╝  ██║     ██╔══██║██║  ██║██╔══╝  ╚════██║",
+        " ██║ ╚═╝ ██║███████╗╚██████╗██║  ██║██████╔╝███████╗███████║",
+        " ╚═╝     ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝",
+        "════════════════════════════════════════════════════════════",
+    ]
+
+    # 颜色代码
+    CYAN = "\033[96m"
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+
+    # 逐行显示横幅（打字机效果）
+    for i, line in enumerate(banner_lines):
+        if i == 0 or i == len(banner_lines) - 1:
+            print(f"{CYAN}{line}{RESET}")
+        else:
+            print(f"{CYAN}{line[0:18]}{RESET}{BLUE}{line[18:]}{RESET}")
+        time.sleep(0.08)
+
+    # 副标题
+    print()
+    subtitle_lines = [
+        ("◆", BLUE, " 机械设计学习辅助工具"),
+        ("◆", GREEN, f" 版本: {__version__}"),
+    ]
+
+    for prefix, color, text in subtitle_lines:
+        print(f"{color}{prefix}{RESET}{BOLD}{text}{RESET}")
+        time.sleep(0.15)
+
+    print()
+    print(f"{CYAN}{'═' * 60}{RESET}")
+    print()
+
+
+def _run_banner_animation():
+    """在后台线程运行动画"""
+    try:
+        _print_animated_banner()
+    except Exception:
+        # 如果动画失败，静默回退
+        pass
+
+
+# 控制是否显示动画（可在配置中禁用）
+_SHOW_ANIMATION = True
+
+
 # 创建CLI组
 @click.group()
-@click.version_option(
-    version=__version__, prog_name=__prog_name__, help="Show version info and exit"
-)
+@click.version_option(version=__version__, prog_name=__prog_name__, help="Show version info and exit")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output mode")
 @click.option("--config", "-c", type=click.Path(), help="Specify config file path")
 @click.pass_context
 def cli(ctx, verbose, config):
     """
-    CAE-CLI: SolidWorks CAE Integration Assistant
+    MechDesign: SolidWorks CAE Integration Assistant
 
     Professional CAE tools supporting:
     - Geometry file parsing (STEP, STL, IGES)
@@ -118,6 +183,20 @@ def cli(ctx, verbose, config):
         cae-cli material Q235 --property elastic_modulus
         cae-cli report static -i analysis.inp -o report.html
     """
+    # 显示启动动画（verbose 模式或运行子命令时）
+    global _SHOW_ANIMATION
+    if _SHOW_ANIMATION:
+        # 检查是否需要显示动画（verbose 或运行子命令）
+        show_banner = verbose
+        # 检查是否有子命令
+        cmd_args = [a for a in sys.argv[1:] if not a.startswith("-")]
+        if cmd_args:
+            show_banner = True  # 有子命令时也显示
+
+        if show_banner:
+            _SHOW_ANIMATION = False  # 只显示一次
+            _print_animated_banner()
+
     # 确保ctx.obj存在
     ctx.ensure_object(dict)
     ctx.obj["verbose"] = verbose
@@ -176,17 +255,13 @@ def parse(ctx, file_path, format, output, format_output):
             task = progress.add_task("正在解析几何文件...", total=None)
 
             parser = GeometryParser()
-            result = parser.parse(
-                file_path, file_format=None if format == "auto" else format
-            )
+            result = parser.parse(file_path, file_format=None if format == "auto" else format)
 
             progress.update(task, completed=True)
 
         # 显示结果
         if format_output == "table":
-            table = Table(
-                title="几何信息", show_header=True, header_style="bold magenta"
-            )
+            table = Table(title="几何信息", show_header=True, header_style="bold magenta")
             table.add_column("属性", style="cyan")
             table.add_column("值", style="green")
 
@@ -226,137 +301,10 @@ def parse(ctx, file_path, format, output, format_output):
     default=["all"],
     help="Mesh quality metrics to calculate",
 )
-@click.option(
-    "--threshold", "-t", type=float, default=0.1, help="Quality threshold (0-1)"
-)
+@click.option("--threshold", "-t", type=float, default=0.1, help="Quality threshold (0-1)")
 @click.option("--output", "-o", type=click.Path(), help="Output file path")
 @click.option("--material", "-M", help="Material name for AI suggestions (e.g., Q235)")
 @click.pass_context
-def _get_quality_color(overall_quality: str) -> str:
-    """Get color for quality rating"""
-    quality_colors = {
-        "excellent": "bright_green",
-        "good": "green",
-        "fair": "yellow",
-        "poor": "red",
-        "unknown": "dim",
-    }
-    return quality_colors.get(overall_quality, "white")
-
-
-def _display_analysis_results(results: dict) -> None:
-    """Display analysis results in a table"""
-    table = Table(
-        title="网格质量分析结果", show_header=True, header_style="bold blue"
-    )
-    table.add_column("指标", style="cyan")
-    table.add_column("最小值", style="green")
-    table.add_column("最大值", style="green")
-    table.add_column("平均值", style="yellow")
-    table.add_column("标准差", style="dim")
-
-    for metric_name, values in results.items():
-        if metric_name == "overall_quality":
-            continue
-        if isinstance(values, dict):
-            table.add_row(
-                metric_name,
-                f"{values.get('min', 'N/A'):.4f}"
-                if isinstance(values.get("min"), (int, float))
-                else str(values.get("min", "N/A")),
-                f"{values.get('max', 'N/A'):.4f}"
-                if isinstance(values.get("max"), (int, float))
-                else str(values.get("max", "N/A")),
-                f"{values.get('mean', 'N/A'):.4f}"
-                if isinstance(values.get("mean"), (int, float))
-                else str(values.get("mean", "N/A")),
-                f"{values.get('std', 'N/A'):.4f}"
-                if isinstance(values.get("std"), (int, float))
-                else str(values.get("std", "N/A")),
-            )
-
-    console.print(table)
-
-
-def _save_analysis_results(results: dict, output_path: str) -> None:
-    """Save analysis results to file"""
-    import json
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
-    console.print(f"[green]成功[/green] 报告已保存: [bold]{output_path}[/bold]")
-
-
-def _list_materials_table(db) -> None:
-    """Display table of all materials"""
-    materials = db.list_materials()
-    table = Table(title="材料数据库", show_header=True)
-    table.add_column("名称", style="cyan")
-    table.add_column("类型", style="green")
-    table.add_column("标准", style="dim")
-
-    for mat_name in materials:
-        info = db.get_material(mat_name)
-        table.add_row(
-            mat_name, info.get("type", "N/A"), info.get("standard", "N/A")
-        )
-
-    console.print(table)
-    console.print(f"\n共 [bold]{len(materials)}[/bold] 种材料")
-
-
-def _search_materials_table(db, search_term: str) -> None:
-    """Search and display materials"""
-    results = db.search_materials(search_term)
-    if results:
-        console.print(
-            f"\n搜索 '[bold]{search_term}[/bold]' 找到 {len(results)} 个结果:"
-        )
-        for mat in results:
-            console.print(
-                f"  - {mat['name']} - {mat.get('description', '无描述')}"
-            )
-    else:
-        console.print(
-            f"[yellow]未找到匹配 '[bold]{search_term}[/bold]' 的材料[/yellow]"
-        )
-
-
-def _convert_material_value(key: str, value: float, unit: str) -> tuple:
-    """Convert material value based on unit system"""
-    unit_label = ""
-    converted_value = value
-
-    if unit == "mpa" and isinstance(value, (int, float)):
-        if "modulus" in key or "strength" in key:
-            converted_value = value / 1e6
-            unit_label = "MPa"
-        elif "density" in key:
-            unit_label = "kg/m³"
-
-    return converted_value, unit_label
-
-
-def _display_material_info(info: dict, material_name: str, unit: str) -> None:
-    """Display material information in table"""
-    table = Table(title=f"材料信息: {material_name}", show_header=True)
-    table.add_column("属性", style="cyan")
-    table.add_column("值", style="green")
-    table.add_column("单位", style="dim")
-
-    for key, value in info.items():
-        if key == "name":
-            continue
-
-        # 单位处理
-        if isinstance(value, (int, float)):
-            converted_value, unit_label = _convert_material_value(key, value, unit)
-            table.add_row(str(key), str(converted_value), unit_label)
-        else:
-            table.add_row(str(key), str(value), "")
-
-    console.print(table)
-
-
 def analyze(ctx, file_path, metric, threshold, output, material):
     """
     Analyze mesh quality
@@ -413,12 +361,8 @@ def analyze(ctx, file_path, metric, threshold, output, material):
     "-p",
     help="Query specific property (e.g.: density, elastic_modulus, yield_strength)",
 )
-@click.option(
-    "--list", "-l", "list_materials", is_flag=True, help="List all available materials"
-)
-@click.option(
-    "--search", "-s", help="Search materials (supports name or description keywords)"
-)
+@click.option("--list", "-l", "list_materials", is_flag=True, help="List all available materials")
+@click.option("--search", "-s", help="Search materials (supports name or description keywords)")
 @click.option(
     "--unit",
     "-u",
@@ -426,8 +370,15 @@ def analyze(ctx, file_path, metric, threshold, output, material):
     default="si",
     help="Unit system",
 )
+@click.option(
+    "--full",
+    "-f",
+    "full_info",
+    is_flag=True,
+    help="Show full material information (all properties)",
+)
 @click.pass_context
-def material(ctx, material_name, property, list_materials, search, unit):
+def material(ctx, material_name, property, list_materials, search, unit, full_info):
     """
     Material database query
 
@@ -436,6 +387,7 @@ def material(ctx, material_name, property, list_materials, search, unit):
     Examples:
         cae-cli material Q235
         cae-cli material Q235 -p elastic_modulus
+        cae-cli material Q235 --full
         cae-cli material --list
         cae-cli material --search "steel"
     """
@@ -472,14 +424,12 @@ def material(ctx, material_name, property, list_materials, search, unit):
             if value is not None:
                 console.print(f"{material_name}.{property} = {value}")
             else:
-                console.print(
-                    f"[yellow]材料 '{material_name}' 没有属性 '{property}'[/yellow]"
-                )
+                console.print(f"[yellow]材料 '{material_name}' 没有属性 '{property}'[/yellow]")
                 console.print(f"可用属性: {', '.join(info.keys())}")
             return
 
         # 显示完整信息表格
-        _display_material_info(info, material_name, unit)
+        _display_material_info(info, material_name, unit, full_info)
 
     except Exception as e:
         console.print(f"[red]失败 错误: {e}[/red]")
@@ -572,7 +522,7 @@ def report(ctx, analysis_type, input_file, output, output_format, template, titl
         sys.exit(1)
 
 
-@cli.command()
+@cli.command(hidden=True)
 @click.option(
     "--set",
     "set_config",
@@ -581,9 +531,7 @@ def report(ctx, analysis_type, input_file, output, output_format, template, titl
     help="Set configuration item",
 )
 @click.option("--get", metavar="<KEY>", help="Get configuration item")
-@click.option(
-    "--list", "-l", "list_config", is_flag=True, help="List all configurations"
-)
+@click.option("--list", "-l", "list_config", is_flag=True, help="List all configurations")
 @click.option("--reset", is_flag=True, help="Reset to default configuration")
 @click.pass_context
 def config(ctx, set_config, get, list_config, reset):
@@ -642,7 +590,7 @@ def config(ctx, set_config, get, list_config, reset):
         sys.exit(1)
 
 
-@cli.command()
+@cli.command(hidden=True)
 @click.option("--check", "-c", is_flag=True, help="Check for latest version")
 @click.pass_context
 def version(ctx, check):
@@ -671,7 +619,7 @@ def version(ctx, check):
 
 
 # Add a convenient info command
-@cli.command()
+@cli.command(hidden=True)
 @click.pass_context
 def info(ctx):
     """
@@ -681,7 +629,7 @@ def info(ctx):
     """
     from sw_helper.material.database import MaterialDatabase
 
-    console.print(Panel.fit("[bold]CAE-CLI 系统信息[/bold]", border_style="blue"))
+    console.print(Panel.fit("[bold]MechDesign 系统信息[/bold]", border_style="blue"))
 
     # Python信息
     console.print("\n[cyan]Python 环境:[/cyan]")
@@ -709,6 +657,97 @@ def info(ctx):
         console.print("  [dim]使用默认配置[/dim]")
 
     console.print(f"\n[dim]配置文件: {get_config_path()}[/dim]")
+
+
+# ==================== 格式转换命令 ====================
+
+
+@cli.command()
+@click.argument("input_file", type=click.Path(exists=True))
+@click.argument("output_file", type=click.Path(), required=False)
+@click.option(
+    "--format",
+    "-f",
+    "target_format",
+    type=click.Choice(["step", "stl", "iges", "brep", "obj"], case_sensitive=False),
+    help="Target format (auto-inferred if not specified)",
+)
+@click.option(
+    "--check/--no-check",
+    default=False,
+    help="Check geometry quality after conversion",
+)
+def convert(input_file, output_file, target_format, check):
+    """
+    Convert CAD geometry between formats
+
+    INPUT_FILE: Input geometry file (STEP/STL/IGES/BREP)
+
+    OUTPUT_FILE: Output file path (optional, auto-generated)
+
+    Examples:
+        # STEP to STL
+        cae-cli convert model.step
+
+        # Specify output
+        cae-cli convert model.step -o output.stl
+
+        # Specify format
+        cae-cli convert model.step -f stl
+
+        # IGES to STEP
+       CAE-CLI convert part.iges -o part.step
+    """
+    from pathlib import Path
+
+    from rich.console import Console
+    from rich.table import Table
+
+    console = Console()
+
+    try:
+        from sw_helper.geometry.converter import GeometryConverter
+
+        converter = GeometryConverter()
+
+        # 执行转换
+        if converter.convert(input_file, output_file, target_format):
+            # 显示结果
+            input_path = Path(input_file)
+            if output_file:
+                output_path = Path(output_file)
+            else:
+                output_path = input_path.with_suffix(f".{target_format or '.stl'}")
+
+            table = Table(title="转换结果", show_header=False)
+            table.add_column("属性", style="cyan")
+            table.add_column("值", style="green")
+
+            table.add_row("输入", str(input_path))
+            table.add_row("输出", str(output_path))
+            table.add_row("源格式", converter._get_format(input_path))
+            if target_format:
+                table.add_row("目标格式", target_format.upper())
+
+            console.print(table)
+
+            # 可选：检查几何质量
+            if check:
+                console.print("\n[dim]检查几何质量...[/dim]")
+                # 这里可以调用几何分析模块
+                console.print("[yellow]几何质量检查功能开发中...[/yellow]")
+
+        else:
+            console.print("[red]转换失败[/red]")
+            sys.exit(1)
+
+    except ImportError as e:
+        console.print(f"[red]缺少依赖: {e}[/red]")
+        console.print("[dim]运行 'pip install -e \".[full]\"' 安装完整依赖[/dim]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"[red]错误: {e}[/red]")
+        sys.exit(1)
 
 
 # ==================== CAD集成命令 ====================
@@ -807,7 +846,7 @@ def _export_cad_file(connector, export_path, export_format):
         return False
 
 
-@cli.command()
+@cli.command(hidden=True)
 @click.option(
     "--connect",
     "-c",
@@ -817,9 +856,7 @@ def _export_cad_file(connector, export_path, export_format):
 )
 @click.option("--open", type=click.Path(exists=True), help="Open CAD file")
 @click.option("--list-params", "-l", is_flag=True, help="List all parameters")
-@click.option(
-    "--set-param", "-s", nargs=2, metavar="<NAME> <VALUE>", help="Set parameter value"
-)
+@click.option("--set-param", "-s", nargs=2, metavar="<NAME> <VALUE>", help="Set parameter value")
 @click.option("--rebuild", "-r", is_flag=True, help="Rebuild model")
 @click.option("--export", "-e", type=click.Path(), help="Export file path")
 @click.option(
@@ -876,6 +913,235 @@ def cad(ctx, connect, open, list_params, set_param, rebuild, export, format):
 
     except Exception as e:
         console.print(f"[red]失败 错误: {e}[/red]")
+        if ctx.obj.get("verbose"):
+            console.print_exception()
+        sys.exit(1)
+
+
+# ==================== 分析运行命令 ====================
+
+
+@cli.command()
+@click.argument("config_file", type=click.Path(exists=True), required=False)
+@click.option(
+    "--type",
+    "-t",
+    "analysis_type",
+    type=click.Choice(["static", "modal", "thermal", "buckling"], case_sensitive=False),
+    default="static",
+    help="Analysis type",
+)
+@click.option("--material", "-m", help="Material name (from materials database)")
+@click.option("--load", "-l", "load_value", type=float, help="Load value (N)")
+@click.option("--mesh-size", "-s", "mesh_size", type=float, default=10.0, help="Mesh element size (mm)")
+@click.option("--output", "-o", "output_dir", type=click.Path(), default="./results", help="Output directory")
+@click.option(
+    "--solver",
+    default="simple",
+    type=click.Choice(["simple", "scipy", "calculix"], case_sensitive=False),
+    help="CAE solver to use (simple: 内置求解器, scipy: 需要scipy, calculix: 需要安装ccx)",
+)
+@click.option("--mock/--no-mock", default=False, help="Run in mock mode (no actual solver)")
+@click.pass_context
+def run(
+    ctx,
+    config_file,
+    analysis_type,
+    material,
+    load_value,
+    mesh_size,
+    output_dir,
+    solver,
+    mock,
+):
+    """
+    Run CAE analysis workflow
+
+    Run a complete CAE analysis from configuration file or command line arguments.
+
+    CONFIG_FILE: YAML configuration file (optional)
+
+    Examples:
+        # From config file
+        cae-cli run config.yaml
+        cae-cli run examples/beam_analysis.yaml
+
+        # From command line
+        cae-cli run -m Q235 -l 1000 --mesh-size 5
+
+        # Quick static analysis
+        cae-cli run --type static -m Q235 -l 5000
+    """
+    from pathlib import Path
+
+    import yaml
+    from rich.console import Console
+    from rich.panel import Panel
+
+    console = Console()
+
+    try:
+        # 加载配置
+        config = {}
+        if config_file:
+            config_file = Path(config_file)
+            console.print(f"[dim]加载配置: {config_file}[/dim]")
+            with open(config_file, encoding="utf-8") as f:
+                config = yaml.safe_load(f) or {}
+
+        # 解析参数
+        mat_name = material or config.get("material", {}).get("name", "Q235")
+        load = load_value or config.get("analysis", {}).get("loads", [{}])[0].get("value", 1000)
+        mesh_s = mesh_size or config.get("mesh", {}).get("element_size", 10.0)
+        out_dir = Path(output_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        # 获取材料信息
+        from sw_helper.material.database import MaterialDatabase
+
+        db = MaterialDatabase()
+        mat_info = db.get_material(mat_name)
+
+        if not mat_info:
+            console.print(f"[red]错误: 未找到材料 '{mat_name}'[/red]")
+            console.print("[dim]使用 'cae-cli material --list' 查看可用材料[/dim]")
+            sys.exit(1)
+
+        console.print(
+            Panel.fit(
+                f"[bold cyan]MechDesign 分析运行器[/bold cyan]\n\n"
+                f"材料: [green]{mat_name}[/green]\n"
+                f"载荷: [yellow]{load} N[/yellow]\n"
+                f"网格大小: [yellow]{mesh_s} mm[/yellow]\n"
+                f"分析类型: [cyan]{analysis_type}[/cyan]\n"
+                f"输出目录: [dim]{out_dir}[/dim]",
+                border_style="cyan",
+            )
+        )
+
+        # 显示材料信息
+        E = mat_info.get("elastic_modulus", 210e9) / 1e9  # GPa
+        sigma_yield = mat_info.get("yield_strength", 235e6) / 1e6  # MPa
+        console.print("\n[dim]材料参数:[/dim]")
+        console.print(f"  弹性模量 E = {E:.1f} GPa")
+        console.print(f"  屈服强度 σy = {sigma_yield:.1f} MPa")
+
+        # 检查求解器 - 使用标准化求解器接口
+        try:
+            from integrations.cae.solvers import SolverConfig, SolverResult, get_solver
+        except ImportError:
+            # 降级：如果没有新接口，使用旧逻辑
+            from integrations.cae.solvers import SimpleFEMSolver
+
+            solver = SimpleFEMSolver()
+            solver_available = True
+        else:
+            # 使用新求解器接口
+            solver = get_solver(solver)
+            solver_available = solver.is_available()
+
+            # 显示求解器信息
+            solver_info = solver.get_info()
+            console.print(f"\n[dim]求解器: {solver_info['name']}[/dim]")
+            console.print(f"[dim]描述: {solver_info['description']}[/dim]")
+            if solver_info["requires_install"]:
+                console.print(f"[dim]依赖: {solver_info['requires_install']}[/dim]")
+
+        # 构建求解器配置
+        # 默认几何参数（简支梁）
+        L = 1000  # mm
+        b = 50  # mm
+        h = 100  # mm
+
+        solver_config = SolverConfig(
+            analysis_type=analysis_type,
+            material={
+                "elastic_modulus": mat_info.get("elastic_modulus", 210e9),
+                "yield_strength": mat_info.get("yield_strength", 235e6),
+                "poisson_ratio": mat_info.get("poisson_ratio", 0.3),
+            },
+            load=load,
+            mesh_size=mesh_size,
+            geometry={
+                "length": L,
+                "width": b,
+                "height": h,
+            },
+        )
+
+        # 执行求解
+        if mock or not solver_available:
+            # 模拟模式或求解器不可用时使用 simple solver
+            from integrations.cae.solvers import SimpleFEMSolver
+
+            solver = SimpleFEMSolver()
+
+            if mock:
+                console.print("\n[yellow]⚠ 模拟模式 - 使用简易求解器[/yellow]")
+            else:
+                console.print("\n[yellow]⚠ 请求的求解器不可用，使用内置简易求解器[/yellow]")
+
+            result = solver.solve(solver_config)
+        else:
+            # 使用实际求解器
+            result = solver.solve(solver_config)
+
+        # 提取结果
+        delta = result.max_displacement * 1000  # m -> mm
+        sigma = result.max_stress / 1e6  # Pa -> MPa
+
+        results = {
+            "status": "success",
+            "solver": solver.name,
+            "max_displacement": delta,
+            "max_stress": sigma,
+            "safety_factor": result.safety_factor,
+            "material": mat_name,
+            "load": load,
+            "beam_length": L,
+            "section": f"{b}x{h}",
+        }
+
+        # 保存结果
+        result_file = out_dir / "analysis_results.json"
+        import json
+
+        with open(result_file, "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=2, ensure_ascii=False)
+
+        console.print(f"\n[green]✓ 结果已保存: {result_file}[/green]")
+
+        # 显示结果（总是显示）
+        if True:
+            # 显示结果
+            console.print("\n[bold]分析结果:[/bold]")
+            console.print(f"  最大位移: {results['max_displacement']:.6f} mm")
+            console.print(f"  最大应力: {results['max_stress']:.2f} MPa")
+
+            # 安全系数
+            n = results.get("safety_factor", sigma_yield / (results["max_stress"] * 1e6))
+            if n >= 1.5:
+                color = "green"
+                status = "安全"
+            elif n >= 1.0:
+                color = "yellow"
+                status = "警告"
+            else:
+                color = "red"
+                status = "危险"
+
+            console.print(f"  安全系数: [{color}]{n:.2f}[/{color}] ({status})")
+
+            # 显示求解器消息（如果有）
+            if result.messages:
+                console.print(f"\n[dim]{result.messages}[/dim]")
+
+    except ImportError as e:
+        console.print(f"[red]缺少依赖: {e}[/red]")
+        console.print("[dim]运行 'pip install -e \".[full]\"' 安装完整依赖[/dim]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"[red]错误: {e}[/red]")
         if ctx.obj.get("verbose"):
             console.print_exception()
         sys.exit(1)
@@ -962,8 +1228,9 @@ def optimize(
         # Specify output directory
         cae-cli optimize part.FCStd -p Radius -r 1 10 -o results.json -d ./output
     """
-    from sw_helper.optimization.optimizer import FreeCADOptimizer
     from pathlib import Path
+
+    from sw_helper.optimization.optimizer import FreeCADOptimizer
 
     try:
         # 显示优化信息
@@ -1108,14 +1375,10 @@ def optimize(
             if report:
                 report_path = Path(output_dir) / "optimization_report.md"
                 optimizer.generate_report(str(report_path))
-                console.print(
-                    f"[green]Report generated:[/green] [dim]{report_path}[/dim]"
-                )
+                console.print(f"[green]Report generated:[/green] [dim]{report_path}[/dim]")
 
             # 提示输出目录
-            console.print(
-                f"\n[dim]所有输出文件保存在: {Path(output_dir).absolute()}[/dim]"
-            )
+            console.print(f"\n[dim]所有输出文件保存在: {Path(output_dir).absolute()}[/dim]")
 
         else:
             console.print("[yellow]⚠️  没有获得优化结果[/yellow]")
@@ -1127,9 +1390,7 @@ def optimize(
     except RuntimeError as e:
         console.print(f"[red]失败 运行时错误: {e}[/red]")
         if "FreeCAD" in str(e):
-            console.print(
-                "\n[yellow]提示: 如果您没有安装FreeCAD，可以使用模拟模式:[/yellow]"
-            )
+            console.print("\n[yellow]提示: 如果您没有安装FreeCAD，可以使用模拟模式:[/yellow]")
             console.print(
                 f"[dim]  cae-cli optimize {file_path} -p {parameter} -r {param_range[0]} {param_range[1]} --cad mock[/dim]"
             )
@@ -1144,7 +1405,7 @@ def optimize(
 # ==================== AI辅助命令 ====================
 
 
-@cli.group()
+@cli.group(hidden=True)
 def ai():
     """
     AI-assisted design functions
@@ -1189,21 +1450,15 @@ def _display_parsed_results(parsed):
         console.print(f"    - {param}: [yellow]{value}[/yellow] mm")
 
     if parsed.get("features"):
-        console.print(
-            f"  特征: [magenta]{', '.join(f['type'] for f in parsed['features'])}[/magenta]"
-        )
+        console.print(f"  特征: [magenta]{', '.join(f['type'] for f in parsed['features'])}[/magenta]")
 
 
 def _display_output_files(files):
     """Display output files information"""
     console.print("\n[cyan]输出文件 输出文件:[/cyan]")
     for file_type, file_path in files.items():
-        file_size = (
-            Path(file_path).stat().st_size / 1024 if Path(file_path).exists() else 0
-        )
-        console.print(
-            f"  - {file_type.upper()}: [green]{file_path}[/green] ([dim]{file_size:.1f} KB[/dim])"
-        )
+        file_size = Path(file_path).stat().st_size / 1024 if Path(file_path).exists() else 0
+        console.print(f"  - {file_type.upper()}: [green]{file_path}[/green] ([dim]{file_size:.1f} KB[/dim])")
 
 
 def _display_analysis_results(analysis):
@@ -1243,9 +1498,7 @@ def _display_next_steps(files, report_path):
     """Display suggested next steps"""
     console.print("\n[cyan]建议操作:[/cyan]")
     console.print(f"  1. 查看模型: [dim]cae-cli parse {files.get('step', '')}[/dim]")
-    console.print(
-        f"  2. 运行优化: [dim]cae-cli optimize {files.get('fcstd', '')} -p Radius -r 1 10[/dim]"
-    )
+    console.print(f"  2. 运行优化: [dim]cae-cli optimize {files.get('fcstd', '')} -p Radius -r 1 10[/dim]")
     console.print(f"  3. 分析报告: [dim]cat {report_path or ''}[/dim]")
 
 
@@ -1265,10 +1518,8 @@ def _open_freecad_if_requested(open_flag, mock, files):
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
-        except:
-            console.print(
-                "[yellow]⚠️  无法自动打开FreeCAD，请手动打开文件[/yellow]"
-            )
+        except (FileNotFoundError, PermissionError, OSError):
+            console.print("[yellow]⚠️  无法自动打开FreeCAD，请手动打开文件[/yellow]")
 
 
 @ai.command("generate")
@@ -1312,7 +1563,6 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
         cae-cli ai generate "bracket, length 150 width 80 thickness 5" --analyze -d ./bracket
     """
     from sw_helper.ai.model_generator import AIModelGenerator
-    from pathlib import Path
 
     try:
         # 显示生成配置
@@ -1325,9 +1575,7 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
         result = _execute_ai_generation(generator, description, output_dir, name, analyze)
 
         if not result.get("success"):
-            console.print(
-                f"[red]失败 生成失败: {result.get('error', '未知错误')}[/red]"
-            )
+            console.print(f"[red]失败 生成失败: {result.get('error', '未知错误')}[/red]")
             sys.exit(1)
 
         # 获取结果数据
@@ -1346,9 +1594,7 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
 
         # 显示报告路径
         if "report_path" in result:
-            console.print(
-                f"\n[cyan]报告 报告:[/cyan] [green]{result['report_path']}[/green]"
-            )
+            console.print(f"\n[cyan]报告 报告:[/cyan] [green]{result['report_path']}[/green]")
 
         # 成功提示
         _display_success_panel(files)
@@ -1364,17 +1610,13 @@ def ai_generate(description, output_dir, name, mock, analyze, open):
         if mock:
             console.print("\n[yellow]提示: 模拟模式下可以正常使用所有功能[/yellow]")
         else:
-            console.print(
-                "\n[yellow]提示: 如果未安装FreeCAD，请使用 --mock 参数[/yellow]"
-            )
+            console.print("\n[yellow]提示: 如果未安装FreeCAD，请使用 --mock 参数[/yellow]")
             console.print(f'[dim]  cae-cli ai generate "{description}" --mock[/dim]')
         raise
 
 
 @ai.command("suggest")
-@click.option(
-    "--file", "-f", type=click.Path(exists=True), help="Analyze existing design file"
-)
+@click.option("--file", "-f", type=click.Path(exists=True), help="Analyze existing design file")
 @click.option(
     "--target",
     type=click.Choice(["strength", "weight", "cost", "manufacturability"]),
@@ -1420,9 +1662,7 @@ def ai_suggest(file, target, material):
             kb = get_knowledge_base()
             knowledge_text = kb.get_knowledge_text(material)
 
-        suggestions = ai_gen.generate_optimization_suggestions(
-            current_params, mock_metrics, target, knowledge_text
-        )
+        suggestions = ai_gen.generate_optimization_suggestions(current_params, mock_metrics, target, knowledge_text)
 
         if suggestions:
             console.print(f"\n[cyan]发现 {len(suggestions)} 条优化建议:[/cyan]\n")
@@ -1447,7 +1687,7 @@ def ai_suggest(file, target, material):
 # ==================== 宏生成命令 ====================
 
 
-@cli.command()
+@cli.command(hidden=True)
 @click.argument("output_dir", type=click.Path())
 @click.option(
     "--type",
@@ -1480,8 +1720,9 @@ def macro(output_dir, type, format, cli_path):  # noqa: PLR0912
         cae-cli macro ./macros --type export --format step
         cae-cli macro ./macros --type full --cli-path "C:\\Tools\\cae-cli"
     """
-    from sw_helper.integrations.sw_macro import SolidWorksMacroGenerator
     from pathlib import Path
+
+    from sw_helper.integrations.sw_macro import SolidWorksMacroGenerator
 
     def _generate_export_macro(generator, output_path, export_format, call_cli, cli_path):
         """Generate export macro"""
@@ -1566,21 +1807,15 @@ def _configure_llm_for_chat(model, api_key, mock, chat_instance):
     """Configure LLM client for chat"""
     if not mock and model != "auto":
         if model == "openai":
-            api_key = api_key or click.prompt(
-                "OpenAI API Key", hide_input=True, confirmation_prompt=False
-            )
+            api_key = api_key or click.prompt("OpenAI API Key", hide_input=True, confirmation_prompt=False)
             chat_instance.llm_client = create_openai_client(api_key=api_key)
         elif model == "anthropic":
-            api_key = api_key or click.prompt(
-                "Anthropic API Key", hide_input=True, confirmation_prompt=False
-            )
+            api_key = api_key or click.prompt("Anthropic API Key", hide_input=True, confirmation_prompt=False)
             from sw_helper.ai.llm_client import create_anthropic_client
 
             chat_instance.llm_client = create_anthropic_client(api_key=api_key)
         elif model == "deepseek":
-            api_key = api_key or click.prompt(
-                "DeepSeek API Key", hide_input=True, confirmation_prompt=False
-            )
+            api_key = api_key or click.prompt("DeepSeek API Key", hide_input=True, confirmation_prompt=False)
             config = LLMConfig(
                 provider=LLMProvider.DEEPSEEK,
                 model="deepseek-chat",
@@ -1599,14 +1834,13 @@ def _display_chat_start_panel():
     """Display chat start panel"""
     console.print(
         Panel.fit(
-            "[bold cyan]🚀 启动CAE-CLI智能助手[/bold cyan]\n"
-            "集成MCP + LLM + FreeCAD的交互式设计环境",
+            "[bold cyan]🚀 启动MechDesign智能助手[/bold cyan]\n" "集成MCP + LLM + FreeCAD的交互式设计环境",
             border_style="cyan",
         )
     )
 
 
-@cli.command()
+@cli.command(hidden=True)
 @click.option(
     "--model",
     "-m",
@@ -1648,23 +1882,22 @@ def chat(model, api_key, mock):  # noqa: PLR0912
         > Analyze quality of current model
     """
     import asyncio
-    from sw_helper.chat.interactive import OpencodeStyleChat
+
     from sw_helper.ai.llm_client import (
         LLMClient,
         LLMConfig,
         LLMProvider,
-        create_openai_client,
         create_anthropic_client,
         create_ollama_client,
+        create_openai_client,
     )
+    from sw_helper.chat.interactive import OpencodeStyleChat
 
     def _configure_llm(chat_instance):
         """Configure LLM client for chat"""
         if not mock and model != "auto":
             if model == "openai":
-                actual_api_key = api_key or click.prompt(
-                    "OpenAI API Key", hide_input=True, confirmation_prompt=False
-                )
+                actual_api_key = api_key or click.prompt("OpenAI API Key", hide_input=True, confirmation_prompt=False)
                 chat_instance.llm_client = create_openai_client(api_key=actual_api_key)
             elif model == "anthropic":
                 actual_api_key = api_key or click.prompt(
@@ -1672,9 +1905,7 @@ def chat(model, api_key, mock):  # noqa: PLR0912
                 )
                 chat_instance.llm_client = create_anthropic_client(api_key=actual_api_key)
             elif model == "deepseek":
-                actual_api_key = api_key or click.prompt(
-                    "DeepSeek API Key", hide_input=True, confirmation_prompt=False
-                )
+                actual_api_key = api_key or click.prompt("DeepSeek API Key", hide_input=True, confirmation_prompt=False)
                 config = LLMConfig(
                     provider=LLMProvider.DEEPSEEK,
                     model="deepseek-chat",
@@ -1691,8 +1922,7 @@ def chat(model, api_key, mock):  # noqa: PLR0912
     try:
         console.print(
             Panel.fit(
-                "[bold cyan]🚀 启动CAE-CLI智能助手[/bold cyan]\n"
-                "集成MCP + LLM + FreeCAD的交互式设计环境",
+                "[bold cyan]🚀 启动MechDesign智能助手[/bold cyan]\n" "集成MCP + LLM + FreeCAD的交互式设计环境",
                 border_style="cyan",
             )
         )
@@ -1711,7 +1941,7 @@ def chat(model, api_key, mock):  # noqa: PLR0912
 # ==================== MCP工具命令 ====================
 
 
-@cli.group()
+@cli.group(hidden=True)
 def handbook():
     """
     机械手册知识库功能
@@ -1737,7 +1967,7 @@ def search(keyword, case_sensitive):
     # 创建Console时处理编码问题
     try:
         console = Console(force_terminal=False)
-    except:
+    except Exception:
         console = Console()
 
     kb = get_knowledge_base()
@@ -1784,8 +2014,9 @@ def material(material_name):
 
     MATERIAL_NAME: 材料名称或牌号（如 Q235、45钢、304不锈钢）
     """
-    from sw_helper.knowledge import get_knowledge_base
     from rich.console import Console
+
+    from sw_helper.knowledge import get_knowledge_base
 
     console = Console()
     kb = get_knowledge_base()
@@ -1829,8 +2060,9 @@ def bolt(bolt_spec):
 
     BOLT_SPEC: 螺栓规格（如 M6、M8、M10 等）
     """
-    from sw_helper.knowledge import get_knowledge_base
     from rich.console import Console
+
+    from sw_helper.knowledge import get_knowledge_base
 
     console = Console()
     kb = get_knowledge_base()
@@ -1866,9 +2098,10 @@ def bolt(bolt_spec):
 
 # ===================== Learn 命令组 =====================
 
-@cli.group()
+
+@cli.group(hidden=True)
 def learn():
-    """CAE-CLI 学习中心 - 系统化学习CAE知识"""
+    """MechDesign 学习中心 - 系统化学习CAE知识"""
     pass
 
 
@@ -1881,7 +2114,7 @@ def learn_list():
 
     # 标题
     console.print("\n")
-    console.print("[bold cyan]📚 CAE-CLI 学习中心[/bold cyan]")
+    console.print("[bold cyan]📚 MechDesign 学习中心[/bold cyan]")
     console.print("=" * 50)
 
     # 课程列表
@@ -1905,49 +2138,42 @@ def learn_list():
 @learn.command("mechanics", help="材料力学")
 def learn_mechanics():
     """材料力学"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("mechanics")
 
 
 @learn.command("theory", help="理论力学")
 def learn_theory():
     """理论力学"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("theory")
 
 
 @learn.command("fem", help="有限元基础")
 def learn_fem():
     """有限元基础"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("fem")
 
 
 @learn.command("materials", help="材料知识")
 def learn_materials():
     """材料知识"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("materials")
 
 
 @learn.command("fasteners", help="紧固件")
 def learn_fasteners():
     """紧固件"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("fasteners")
 
 
 @learn.command("standards", help="公差配合")
 def learn_standards():
     """公差配合"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("standards")
 
 
 @learn.command("standard-parts", help="标准零件")
 def learn_standard_parts():
     """标准零件"""
-    from sw_helper.learn import CourseManager, load_course_content
     _show_course("standard_parts")
 
 
@@ -1963,7 +2189,7 @@ def learn_view(course_id):
       cae-cli learn view mechanics
       cae-cli learn view standard
     """
-    from sw_helper.learn import CourseManager, load_course_content
+    from sw_helper.learn import CourseManager
 
     console = Console()
 
@@ -2000,27 +2226,6 @@ def learn_view(course_id):
 
     # 显示课程
     _show_course(course.id)
-
-
-@learn.command("materials")
-def learn_materials():
-    """材料知识"""
-    from sw_helper.learn import CourseManager, load_course_content
-    _show_course("materials")
-
-
-@learn.command("fasteners")
-def learn_fasteners():
-    """紧固件"""
-    from sw_helper.learn import CourseManager, load_course_content
-    _show_course("fasteners")
-
-
-@learn.command("standards")
-def learn_standards():
-    """公差配合"""
-    from sw_helper.learn import CourseManager, load_course_content
-    _show_course("standards")
 
 
 def _show_course(course_id: str):
@@ -2060,9 +2265,10 @@ def learn_read(course_id):
 
     COURSE_ID: 课程ID (mechanics, theory, fem, materials, fasteners, standards)
     """
-    from sw_helper.learn import CourseManager, load_course_content
-    import subprocess
     import platform
+    import subprocess
+
+    from sw_helper.learn import CourseManager, load_course_content
 
     console = Console()
 
@@ -2087,18 +2293,24 @@ def learn_read(course_id):
         subprocess.run(["cmd", "/c", "type", "temp_learn.md"])
         try:
             import os
+
             os.remove("temp_learn.md")
-        except:
+        except OSError:
             pass
     else:
         # Linux/Mac: 使用 less 或 more
         with open("temp_learn.md", "w", encoding="utf-8") as f:
             f.write(content)
-        subprocess.run(["less", "temp_learn.md"] if subprocess.run(["which", "less"]).returncode == 0 else ["more", "temp_learn.md"])
+        subprocess.run(
+            ["less", "temp_learn.md"]
+            if subprocess.run(["which", "less"]).returncode == 0
+            else ["more", "temp_learn.md"]
+        )
         try:
             import os
+
             os.remove("temp_learn.md")
-        except:
+        except OSError:
             pass
 
 
@@ -2115,15 +2327,16 @@ def learn_create(course_name, description, keywords):
       cae-cli learn create "机械设计基础"
       cae-cli learn create "振动分析" -d "机械振动理论" -k "振动,固有频率,模态"
     """
-    from sw_helper.learn import create_course_template, CourseManager
+    from sw_helper.learn import CourseManager, create_course_template
 
     console = Console()
 
     # 构建关键词列表
-    kw_list = [k.strip() for k in keywords.split(",") if k.strip()] if keywords else []
+    [k.strip() for k in keywords.split(",") if k.strip()] if keywords else []
 
     # 生成模板
     from sw_helper.learn import KNOWLEDGE_DIR
+
     template = create_course_template(course_name, description)
 
     # 保存到文件
@@ -2141,21 +2354,25 @@ def learn_create(course_name, description, keywords):
         # 刷新缓存
         CourseManager.refresh()
 
-        console.print(f"\n[green]✓ 课程创建成功![/green]")
+        console.print("\n[green]✓ 课程创建成功![/green]")
         console.print(f"  文件: {course_path}")
-        console.print(f"\n[bold]下一步：[/bold]")
+        console.print("\n[bold]下一步：[/bold]")
         console.print(f"  编辑内容: code {course_path}")
         console.print(f"  查看课程: cae-cli learn {course_filename}")
-        console.print(f"  刷新列表: cae-cli learn list\n")
+        console.print("  刷新列表: cae-cli learn list\n")
 
     except Exception as e:
         console.print(f"[red]创建失败: {e}[/red]")
 
 
 @learn.command("chat")
-@click.option("--mode", "-m", default="learning",
-              type=click.Choice(["default", "learning", "lifestyle", "mechanical"]),
-              help="AI模式选择")
+@click.option(
+    "--mode",
+    "-m",
+    default="learning",
+    type=click.Choice(["default", "learning", "lifestyle", "mechanical"]),
+    help="AI模式选择",
+)
 def learn_chat(mode):  # noqa: PLR0912
     """AI学习助手 - 问答模式
 
@@ -2172,7 +2389,7 @@ def learn_chat(mode):  # noqa: PLR0912
     # 获取系统提示词
     system_prompt = PromptManager.build_system_prompt(mode)
 
-    console.print("\n[bold cyan]🤖 CAE-CLI AI 学习助手[/bold cyan]")
+    console.print("\n[bold cyan]🤖 MechDesign AI 学习助手[/bold cyan]")
     console.print(f"[dim]模式: {mode}[/dim]")
     console.print("=" * 40)
 
@@ -2191,6 +2408,7 @@ def learn_chat(mode):  # noqa: PLR0912
 
     try:
         import requests
+
         r = requests.get("http://localhost:11434/api/tags", timeout=3)
         if r.status_code == 200:
             models = r.json().get("models", [])
@@ -2219,7 +2437,7 @@ def learn_chat(mode):  # noqa: PLR0912
 
         if not q or not q.strip():
             continue
-        if q.strip().lower() == 'q':
+        if q.strip().lower() == "q":
             console.print("再见!")
             break
 
@@ -2229,6 +2447,7 @@ def learn_chat(mode):  # noqa: PLR0912
         if ollama_ok and ollama_model:
             try:
                 import requests
+
                 messages.append({"role": "user", "content": q.strip()})
 
                 resp = requests.post(
@@ -2236,9 +2455,9 @@ def learn_chat(mode):  # noqa: PLR0912
                     json={
                         "model": ollama_model,
                         "messages": messages[-10:],  # 保留最近10条
-                        "stream": False
+                        "stream": False,
                     },
-                    timeout=60
+                    timeout=60,
                 )
                 if resp.status_code == 200:
                     answer = resp.json().get("message", {}).get("content", "")
@@ -2253,7 +2472,7 @@ def learn_chat(mode):  # noqa: PLR0912
             console.print("[yellow]无可用AI模型，请确保Ollama已启动[/yellow]\n")
 
 
-@cli.command()
+@cli.command(hidden=True)
 @click.option("--lang", default="zh", type=click.Choice(["zh", "en"]))
 def interactive(lang):  # noqa: PLR0912
     """
@@ -2268,42 +2487,94 @@ def interactive(lang):  # noqa: PLR0912
 
     Support direct command input like: "analyze test.step --material 40Cr"
     """
-    from rich.console import Console
-    from rich.prompt import Prompt
-    from rich.panel import Panel
-    from rich.table import Table
     import json
-    from pathlib import Path
     import sys
-    import os
+    from pathlib import Path
+
+    from rich.panel import Panel
+    from rich.prompt import Prompt
+    from rich.table import Table
 
     # 加载语言包
     lang_file = get_resource_path("data/languages.json")
     try:
-        with open(lang_file, "r", encoding="utf-8") as f:
+        with open(lang_file, encoding="utf-8") as f:
             lang_data = json.load(f)
         strings = lang_data.get(lang, lang_data["zh"])
     except Exception as e:
         print(f"Warning: Failed to load language pack: {e}")
         strings = {}
 
-    # 初始化Console（延迟初始化避免启动卡住）
-    console = None
+    # 初始化Console
+    from rich.console import Console
 
-    # 一级菜单选择函数（简单数字选择）
+    console = Console()
+
+    # 启动动画函数 - 使用与主CLI相同的横幅
+    def show_startup_animation():
+        """显示启动动画 - 使用与主CLI相同的横幅"""
+        import time
+
+        # 清除屏幕
+        console.clear()
+
+        # 使用与主CLI相同的ASCII艺术横幅
+        # ASCII Art 横幅
+        banner_lines = [
+            "════════════════════════════════════════════════════════════",
+            "███╗   ███╗███████╗ ██████╗██╗  ██╗██████╗ ███████╗███████╗",
+            " ████╗ ████║██╔════╝██╔════╝██║  ██║██╔══██╗██╔════╝██╔════╝",
+            " ██╔████╔██║█████╗  ██║     ███████║██║  ██║█████╗  ███████╗",
+            " ██║╚██╔╝██║██╔══╝  ██║     ██╔══██║██║  ██║██╔══╝  ╚════██║",
+            " ██║ ╚═╝ ██║███████╗╚██████╗██║  ██║██████╔╝███████╗███████║",
+            " ╚═╝     ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝",
+            "════════════════════════════════════════════════════════════",
+        ]
+
+        # 颜色代码
+        CYAN = "\033[96m"
+        BLUE = "\033[94m"
+        GREEN = "\033[92m"
+        BOLD = "\033[1m"
+        RESET = "\033[0m"
+
+        # 逐行显示横幅（打字机效果）
+        for i, line in enumerate(banner_lines):
+            if i == 0 or i == len(banner_lines) - 1:
+                print(f"{CYAN}{line}{RESET}")
+            else:
+                print(f"{CYAN}{line[0:18]}{RESET}{BLUE}{line[18:]}{RESET}")
+            time.sleep(0.08)
+
+        # 副标题
+        print()
+        subtitle_lines = [
+            ("◆", BLUE, " 交互模式启动"),
+            ("◆", GREEN, f" 版本: {__version__}"),
+        ]
+
+        for prefix, color, text in subtitle_lines:
+            print(f"{color}{prefix}{RESET}{BOLD}{text}{RESET}")
+            time.sleep(0.15)
+
+        print()
+        print(f"{CYAN}{'═' * 60}{RESET}")
+        print()
+
+    # 显示启动动画
+    show_startup_animation()
+
+    # 一级菜单选择函数
     def select_mode():
-        print("\n" + "="*40)
-        print("  CAE-CLI 交互模式")
-        print("="*40)
-        print("\n请选择模式:")
-        print("  1. 工作模式 - 原有功能菜单")
-        print("  2. 学习模式 - 聊天式学习助手")
-        print("  3. 退出")
+        console.print("\n[bold]请选择模式:[/bold]")
+        console.print("  [cyan]1[/cyan]. [green]工作模式[/green] - 网格分析、参数优化、AI建模")
+        console.print("  [cyan]2[/cyan]. [yellow]学习模式[/yellow] - AI助教，解答机械工程问题")
+        console.print("  [cyan]3[/cyan]. 退出")
 
         while True:
             try:
                 choice = input("\n请输入选择 (1-3): ").strip()
-            except:
+            except (EOFError, KeyboardInterrupt):
                 choice = ""
             if choice == "1":
                 return "work"
@@ -2322,9 +2593,10 @@ def interactive(lang):  # noqa: PLR0912
         """简洁的AI学习助手"""
         import sys
 
-        # 强制禁用Rich
-        nonlocal console
-        console = None
+        # 创建本地console用于学习模式（不干扰主console）
+        from rich.console import Console as RichConsole
+
+        RichConsole()
 
         # 使用原始标准流
         out = sys.stdout.write
@@ -2338,6 +2610,7 @@ def interactive(lang):  # noqa: PLR0912
 
         try:
             import requests
+
             r = requests.get("http://localhost:11434/api/tags", timeout=3)
             if r.status_code == 200:
                 models = r.json().get("models", [])
@@ -2356,12 +2629,12 @@ def interactive(lang):  # noqa: PLR0912
             out("> ")
             try:
                 q = inp()
-            except:
+            except (EOFError, KeyboardInterrupt):
                 break
 
             if not q.strip():
                 continue
-            if q.strip().lower() == 'q':
+            if q.strip().lower() == "q":
                 out("再见!\n")
                 break
 
@@ -2371,14 +2644,15 @@ def interactive(lang):  # noqa: PLR0912
             if ollama_ok and ollama_model:
                 try:
                     import requests
+
                     resp = requests.post(
                         "http://localhost:11434/api/chat",
                         json={
                             "model": ollama_model,
                             "messages": [{"role": "user", "content": q.strip()}],
-                            "stream": False
+                            "stream": False,
                         },
-                        timeout=60
+                        timeout=60,
                     )
                     if resp.status_code == 200:
                         answer = resp.json().get("message", {}).get("content", "")
@@ -2403,7 +2677,7 @@ def interactive(lang):  # noqa: PLR0912
 
                     # 创建菜单表格
                     menu_table = Table(
-                        title=strings.get("menu_title", "CAE-CLI Interactive Mode"),
+                        title=strings.get("menu_title", "MechDesign Interactive Mode"),
                         show_header=True,
                         header_style="bold cyan",
                     )
@@ -2412,9 +2686,7 @@ def interactive(lang):  # noqa: PLR0912
                         style="cyan",
                         width=5,
                     )
-                    menu_table.add_column(
-                        strings.get("columns", {}).get("operation", "Operation"), style="green"
-                    )
+                    menu_table.add_column(strings.get("columns", {}).get("operation", "Operation"), style="green")
                     menu_table.add_column(
                         strings.get("columns", {}).get("description", "Description"),
                         style="dim",
@@ -2423,30 +2695,22 @@ def interactive(lang):  # noqa: PLR0912
                     menu_table.add_row(
                         "1",
                         strings.get("menu", {}).get("analyze", "Analyze Model"),
-                        strings.get("descriptions", {}).get(
-                            "analyze", "Analyze geometry or mesh quality"
-                        ),
+                        strings.get("descriptions", {}).get("analyze", "Analyze geometry or mesh quality"),
                     )
                     menu_table.add_row(
                         "2",
                         strings.get("menu", {}).get("optimize", "Optimize Parameter"),
-                        strings.get("descriptions", {}).get(
-                            "optimize", "Parameter optimization"
-                        ),
+                        strings.get("descriptions", {}).get("optimize", "Parameter optimization"),
                     )
                     menu_table.add_row(
                         "3",
                         strings.get("menu", {}).get("ai_generate", "AI Generate Model"),
-                        strings.get("descriptions", {}).get(
-                            "ai_generate", "AI model generation"
-                        ),
+                        strings.get("descriptions", {}).get("ai_generate", "AI model generation"),
                     )
                     menu_table.add_row(
                         "4",
                         strings.get("menu", {}).get("handbook", "知识库查询 (Handbook)"),
-                        strings.get("descriptions", {}).get(
-                            "handbook", "Query mechanical handbook knowledge base"
-                        ),
+                        strings.get("descriptions", {}).get("handbook", "Query mechanical handbook knowledge base"),
                     )
                     menu_table.add_row(
                         "5",
@@ -2462,131 +2726,19 @@ def interactive(lang):  # noqa: PLR0912
                         )
                     )
 
-                    # 检测平台，尝试使用msvcrt（Windows）或termios（Linux/Mac）
-                    try:
-                        import msvcrt
-                        def get_key():
-                            if msvcrt.kbhit():
-                                key = msvcrt.getch()
-                                if key == b'\xe0':  # 扩展键
-                                    key = msvcrt.getch()
-                                    return key
-                                elif key == b'\r':
-                                    return 'enter'
-                                elif key == b'q':
-                                    return 'q'
-                                elif key == b'\x03':  # Ctrl+C
-                                    raise KeyboardInterrupt
-                                else:
-                                    # 普通字符，返回解码后的字符串
-                                    try:
-                                        return key.decode('utf-8')
-                                    except:
-                                        return None
-                            return None
-                        has_keyboard = True
-                    except ImportError:
-                        try:
-                            import tty, termios, sys
-                            def get_key():
-                                fd = sys.stdin.fileno()
-                                old_settings = termios.tcgetattr(fd)
-                                try:
-                                    tty.setraw(fd)
-                                    ch = sys.stdin.read(1)
-                                    if ch == '\x1b':  # 转义序列
-                                        ch = sys.stdin.read(2)  # 读取后续字符
-                                        if ch == '[A':
-                                            return 'up'
-                                        elif ch == '[B':
-                                            return 'down'
-                                    elif ch == '\r':
-                                        return 'enter'
-                                    elif ch == 'q':
-                                        return 'q'
-                                    elif ch == '\x03':  # Ctrl+C
-                                        raise KeyboardInterrupt
-                                    else:
-                                        return ch  # 普通字符
-                                finally:
-                                    termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-                                return None
-                            has_keyboard = True
-                        except ImportError:
-                            has_keyboard = False
-
-                    choice = None
-                    if has_keyboard:
-                        # 使用箭头键选择
-                        selected = 0  # 0-4对应1-5
-                        options_text = [
-                            strings.get("menu", {}).get("analyze", "Analyze Model"),
-                            strings.get("menu", {}).get("optimize", "Optimize Parameter"),
-                            strings.get("menu", {}).get("ai_generate", "AI Generate Model"),
-                            strings.get("menu", {}).get("handbook", "知识库查询 (Handbook)"),
-                            strings.get("menu", {}).get("exit", "Exit"),
-                        ]
-
-                        # 显示提示
-                        console.print("\n[dim]使用 ↑ ↓ 箭头键选择，Enter 确认，或直接输入命令[/dim]")
-
-                        while choice is None:
-                            # 高亮显示当前选项（重新绘制菜单行）
-                            console.print(f"\n当前选择: [bold green]{selected+1}. {options_text[selected]}[/bold green]")
-                            console.print("[dim]按 Enter 确认选择，或直接输入命令...[/dim]")
-
-                            key = get_key()
-                            if key == b'H' or key == 'up':  # 上箭头
-                                selected = (selected - 1) % 5
-                            elif key == b'P' or key == 'down':  # 下箭头
-                                selected = (selected + 1) % 5
-                            elif key == 'enter':
-                                choice = str(selected + 1)  # 返回数字字符串
-                            elif isinstance(key, str) and key.isdigit():
-                                # 数字键直接选择
-                                choice = key
-                                break
-                            elif isinstance(key, str) and key:
-                                # 普通字符输入，切换到直接命令模式
-                                console.print(f"\n[dim]输入命令: {key}[/dim]", end='')
-                                # 读取剩余输入
-                                import sys
-                                if sys.stdin.isatty():
-                                    remaining = sys.stdin.readline()
-                                    if remaining:
-                                        command = key + remaining.rstrip('\n')
-                                    else:
-                                        command = key
-                                else:
-                                    command = key
-                                choice = command.strip()
-                                break
-                    else:
-                        # 回退到原有输入方式
-                        choice = Prompt.ask(
-                            strings.get("prompts", {}).get(
-                                "enter_choice", "\nEnter your choice (1-5) or command"
-                            )
-                        )
+                    # 直接使用简单输入方式（更稳定）
+                    choice = Prompt.ask(
+                        strings.get("prompts", {}).get("enter_choice", "\n输入选项 (1-5) 或直接输入命令")
+                    )
 
                     if choice == "1":
                         # 分析模型
-                        file_path = Prompt.ask(
-                            strings.get("analyze", {}).get(
-                                "enter_file", "Enter model file path"
-                            )
-                        )
+                        file_path = Prompt.ask(strings.get("analyze", {}).get("enter_file", "Enter model file path"))
                         if file_path:
                             # 支持多种分析选项
+                            console.print(strings.get("analyze", {}).get("options", "\n[cyan]Analysis options:[/cyan]"))
                             console.print(
-                                strings.get("analyze", {}).get(
-                                    "options", "\n[cyan]Analysis options:[/cyan]"
-                                )
-                            )
-                            console.print(
-                                strings.get("analyze", {}).get(
-                                    "parse", "  - [bold]parse[/bold]: Parse geometry file"
-                                )
+                                strings.get("analyze", {}).get("parse", "  - [bold]parse[/bold]: Parse geometry file")
                             )
                             console.print(
                                 strings.get("analyze", {}).get(
@@ -2601,9 +2753,7 @@ def interactive(lang):  # noqa: PLR0912
                             )
 
                             analysis_type = Prompt.ask(
-                                strings.get("analyze", {}).get(
-                                    "enter_analysis_type", "Enter analysis type"
-                                ),
+                                strings.get("analyze", {}).get("enter_analysis_type", "Enter analysis type"),
                                 default="parse",
                             )
 
@@ -2637,9 +2787,7 @@ def interactive(lang):  # noqa: PLR0912
 
                             elif analysis_type == "material":
                                 material_name = Prompt.ask(
-                                    strings.get("analyze", {}).get(
-                                        "enter_material_name", "Enter material name"
-                                    )
+                                    strings.get("analyze", {}).get("enter_material_name", "Enter material name")
                                 )
                                 if material_name:
                                     from sw_helper.material.database import MaterialDatabase
@@ -2668,15 +2816,11 @@ def interactive(lang):  # noqa: PLR0912
                     elif choice == "2":
                         # 参数优化
                         file_path = Prompt.ask(
-                            strings.get("optimize", {}).get(
-                                "enter_cad_file", "Enter CAD file path (.FCStd)"
-                            )
+                            strings.get("optimize", {}).get("enter_cad_file", "Enter CAD file path (.FCStd)")
                         )
                         if file_path:
                             parameter = Prompt.ask(
-                                strings.get("optimize", {}).get(
-                                    "enter_parameter", "Enter parameter to optimize"
-                                )
+                                strings.get("optimize", {}).get("enter_parameter", "Enter parameter to optimize")
                             )
                             if parameter:
                                 param_range = Prompt.ask(
@@ -2686,9 +2830,7 @@ def interactive(lang):  # noqa: PLR0912
                                     default="2 15",
                                 )
                                 steps = Prompt.ask(
-                                    strings.get("optimize", {}).get(
-                                        "enter_steps", "Enter number of steps"
-                                    ),
+                                    strings.get("optimize", {}).get("enter_steps", "Enter number of steps"),
                                     default="5",
                                 )
 
@@ -2780,9 +2922,7 @@ def interactive(lang):  # noqa: PLR0912
                     elif choice == "3":
                         # AI生成模型
                         description = Prompt.ask(
-                            strings.get("ai_generate", {}).get(
-                                "enter_description", "Enter model description"
-                            )
+                            strings.get("ai_generate", {}).get("enter_description", "Enter model description")
                         )
                         if description:
                             from sw_helper.ai.model_generator import AIModelGenerator
@@ -2794,9 +2934,7 @@ def interactive(lang):  # noqa: PLR0912
                                 console.print_json(data=result)
                             except Exception as e:
                                 console.print(
-                                    strings.get("prompts", {})
-                                    .get("error", "[red]Error: {error}[/red]")
-                                    .format(error=e)
+                                    strings.get("prompts", {}).get("error", "[red]Error: {error}[/red]").format(error=e)
                                 )
 
                     elif choice == "4":
@@ -2814,18 +2952,12 @@ def interactive(lang):  # noqa: PLR0912
                                             "welcome",
                                             "[green]📚 机械手册知识库查询[/green]\n\n输入关键词查询机械设计相关知识\n示例: 40Cr, M10螺栓, 圆角, 公差, Q235\n\n[dim]输入 'back' 或按 Enter 返回主菜单[/dim]",
                                         ),
-                                        title=strings.get("handbook", {}).get(
-                                            "title", "知识库查询"
-                                        ),
+                                        title=strings.get("handbook", {}).get("title", "知识库查询"),
                                         border_style="cyan",
                                     )
                                 )
 
-                                keyword = Prompt.ask(
-                                    strings.get("handbook", {}).get(
-                                        "enter_keyword", "\n输入关键词"
-                                    )
-                                )
+                                keyword = Prompt.ask(strings.get("handbook", {}).get("enter_keyword", "\n输入关键词"))
 
                                 if not keyword or keyword.lower() == "back":
                                     break
@@ -2840,9 +2972,7 @@ def interactive(lang):  # noqa: PLR0912
 
                                 # 询问是否继续搜索
                                 continue_search = Prompt.ask(
-                                    strings.get("handbook", {}).get(
-                                        "continue_search", "\n继续搜索? (y/n)"
-                                    ),
+                                    strings.get("handbook", {}).get("continue_search", "\n继续搜索? (y/n)"),
                                     default="y",
                                 ).lower()
                                 if continue_search not in ["y", "yes"]:
@@ -2850,9 +2980,7 @@ def interactive(lang):  # noqa: PLR0912
 
                             except KeyboardInterrupt:
                                 console.print(
-                                    strings.get("handbook", {}).get(
-                                        "back_to_menu", "\n[yellow]返回主菜单[/yellow]"
-                                    )
+                                    strings.get("handbook", {}).get("back_to_menu", "\n[yellow]返回主菜单[/yellow]")
                                 )
                                 break
                             except Exception as e:
@@ -2863,9 +2991,7 @@ def interactive(lang):  # noqa: PLR0912
                                 )
                                 try:
                                     Prompt.ask(
-                                        strings.get("handbook", {}).get(
-                                            "press_enter", "\n按 Enter 继续..."
-                                        ),
+                                        strings.get("handbook", {}).get("press_enter", "\n按 Enter 继续..."),
                                         default="",
                                     )
                                 except EOFError:
@@ -2873,11 +2999,7 @@ def interactive(lang):  # noqa: PLR0912
 
                     elif choice == "5":
                         # 退出工作模式，返回一级菜单
-                        console.print(
-                            strings.get("prompts", {}).get(
-                                "back_to_main", "\n[green]返回主菜单...[/green]"
-                            )
-                        )
+                        console.print(strings.get("prompts", {}).get("back_to_main", "\n[green]返回主菜单...[/green]"))
                         break
 
                     elif choice.strip():
@@ -2904,9 +3026,7 @@ def interactive(lang):  # noqa: PLR0912
 
                         except Exception as e:
                             console.print(
-                                strings.get("prompts", {})
-                                .get("error", "[red]Error: {error}[/red]")
-                                .format(error=e)
+                                strings.get("prompts", {}).get("error", "[red]Error: {error}[/red]").format(error=e)
                             )
 
                     else:
@@ -2921,9 +3041,7 @@ def interactive(lang):  # noqa: PLR0912
                     if choice not in ["5"]:
                         try:
                             Prompt.ask(
-                                strings.get("prompts", {}).get(
-                                    "press_continue", "\nPress Enter to continue..."
-                                ),
+                                strings.get("prompts", {}).get("press_continue", "\nPress Enter to continue..."),
                                 default="",
                             )
                         except EOFError:
@@ -2931,25 +3049,17 @@ def interactive(lang):  # noqa: PLR0912
 
                 except KeyboardInterrupt:
                     console.print(
-                        strings.get("prompts", {}).get(
-                            "interrupted", "\n[yellow]Interrupted by user[/yellow]"
-                        )
+                        strings.get("prompts", {}).get("interrupted", "\n[yellow]Interrupted by user[/yellow]")
                     )
                     break
                 except Exception as e:
-                    console.print(
-                        strings.get("prompts", {})
-                        .get("error", "[red]Error: {error}[/red]")
-                        .format(error=e)
-                    )
+                    console.print(strings.get("prompts", {}).get("error", "[red]Error: {error}[/red]").format(error=e))
                     import traceback
 
                     console.print(f"[dim]{traceback.format_exc()}[/dim]")
                     try:
                         Prompt.ask(
-                            strings.get("prompts", {}).get(
-                                "press_continue", "\nPress Enter to continue..."
-                            ),
+                            strings.get("prompts", {}).get("press_continue", "\nPress Enter to continue..."),
                             default="",
                         )
                     except EOFError:
@@ -2962,10 +3072,11 @@ def interactive(lang):  # noqa: PLR0912
             # 强制禁用console并重置stdout
             console = None
             import sys
+
             try:
                 sys.stdout = sys.__stdout__
                 sys.stdin = sys.__stdin__
-            except:
+            except (AttributeError, OSError):
                 pass
             learning_mode()
             # 学习模式结束后返回一级菜单
@@ -2973,12 +3084,12 @@ def interactive(lang):  # noqa: PLR0912
 
         elif mode == "exit":
             console.print(
-                strings.get("prompts", {}).get(
-                    "thank_you", "\n[green]Thank you for using CAE-CLI![/green]"
-                )
+                strings.get("prompts", {}).get("thank_you", "\n[green]Thank you for using MechDesign![/green]")
             )
             break
-@cli.group()
+
+
+@cli.group(hidden=True)
 def mcp():
     """
     MCP (Model Context Protocol) tool management
@@ -3028,9 +3139,10 @@ def mcp_call(tool_name, arguments):
         cae-cli mcp call freecad_connect '{"use_mock": true}'
         cae-cli mcp call freecad_create_box '{"length": 100, "width": 50}'
     """
-    from sw_helper.mcp.core import MCPMessage, InMemoryMCPTransport
-    from sw_helper.mcp.freecad_server import get_freecad_mcp_server
     import asyncio
+
+    from sw_helper.mcp.core import InMemoryMCPTransport, MCPMessage
+    from sw_helper.mcp.freecad_server import get_freecad_mcp_server
 
     async def run_tool():
         try:
@@ -3047,9 +3159,7 @@ def mcp_call(tool_name, arguments):
                     return
 
             # 构建消息
-            message = MCPMessage(
-                method="tools/call", params={"name": tool_name, "arguments": args}
-            )
+            message = MCPMessage(method="tools/call", params={"name": tool_name, "arguments": args})
 
             # 执行
             with console.status(f"[bold green]执行 {tool_name}..."):
@@ -3064,12 +3174,10 @@ def mcp_call(tool_name, arguments):
                     try:
                         result_json = json.loads(result_text)
                         console.print_json(data=result_json)
-                    except:
+                    except json.JSONDecodeError:
                         console.print(result_text)
             elif response.error:
-                console.print(
-                    f"\n[red]失败 错误: {response.error.get('message')}[/red]"
-                )
+                console.print(f"\n[red]失败 错误: {response.error.get('message')}[/red]")
 
         except Exception as e:
             console.print(f"[red]失败 执行失败: {e}[/red]")
@@ -3079,7 +3187,8 @@ def mcp_call(tool_name, arguments):
 
 # ==================== 主菜单命令 ====================
 
-@cli.command()
+
+@cli.command(hidden=True)
 def menu():
     """
     启动CAE-CLI主菜单 - 三个并列顶层模块入口
@@ -3103,11 +3212,16 @@ def menu():
             console.print_exception()
 
 
-@cli.command()
-@click.option('--local', is_flag=True, help="审查本地未提交的变更")
-@click.option('--pr', type=int, help="审查指定PR编号的变更")
-@click.option('--format', 'output_format', type=click.Choice(['text', 'json'], case_sensitive=False),
-              default='text', help="输出格式: text 或 json")
+@cli.command(hidden=True)
+@click.option("--local", is_flag=True, help="审查本地未提交的变更")
+@click.option("--pr", type=int, help="审查指定PR编号的变更")
+@click.option(
+    "--format",
+    "output_format",
+    type=click.Choice(["text", "json"], case_sensitive=False),
+    default="text",
+    help="输出格式: text 或 json",
+)
 def review(local, pr, output_format):  # noqa: PLR0912
     """
     智能代码审查
@@ -3123,46 +3237,47 @@ def review(local, pr, output_format):  # noqa: PLR0912
       cae-cli review --local --format json
     """
     # 如果请求JSON格式，使用utils下的PR审查工具
-    if output_format == 'json':
+    if output_format == "json":
         import subprocess
         import sys
 
         # 构建命令参数
-        cmd = [sys.executable, '-m', 'sw_helper.utils.pr_review', '--output', 'json', '--no-rag']
+        cmd = [sys.executable, "-m", "sw_helper.utils.pr_review", "--output", "json", "--no-rag"]
 
         if local:
             # 对于本地变更，比较HEAD和HEAD~1
-            cmd.extend(['--base', 'HEAD~1', '--head', 'HEAD'])
+            cmd.extend(["--base", "HEAD~1", "--head", "HEAD"])
         elif pr:
             # PR模式 - 简化处理，使用默认分支比较
             console.print(f"[yellow]注意: PR {pr} 审查使用默认分支比较[/yellow]")
-            cmd.extend(['--branch', 'main'])
+            cmd.extend(["--branch", "main"])
         else:
             # 默认：比较当前分支与main
-            cmd.extend(['--branch', 'main'])
+            cmd.extend(["--branch", "main"])
 
         # 执行命令
-        result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
+        result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
 
         # 提取JSON输出（工具可能输出日志信息，JSON在最后）
         stdout_text = result.stdout if result.stdout is not None else ""
         stderr_text = result.stderr if result.stderr is not None else ""
 
-        output_lines = stdout_text.strip().split('\n')
+        output_lines = stdout_text.strip().split("\n")
         json_start = None
 
         # 查找JSON开始位置
         for i, line in enumerate(output_lines):
             line = line.strip()
-            if line.startswith('{'):
+            if line.startswith("{"):
                 json_start = i
                 break
 
         if json_start is not None:
-            json_str = '\n'.join(output_lines[json_start:])
+            json_str = "\n".join(output_lines[json_start:])
             try:
                 # 验证JSON有效性并重新格式化输出
                 import json
+
                 json_data = json.loads(json_str)
                 # 输出纯JSON
                 print(json.dumps(json_data, indent=2, ensure_ascii=True))

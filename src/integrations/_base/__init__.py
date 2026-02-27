@@ -5,11 +5,11 @@ integrations._base - 基础连接器模块
 """
 
 from .connectors import CADConnector, CAEConnector, FileFormat
-from .workflow import WorkflowEngine, WorkflowStep, WorkflowStatus
+from .workflow import WorkflowEngine, WorkflowStatus, WorkflowStep
 
 __all__ = [
     "CADConnector",
-    "CAEConnector", 
+    "CAEConnector",
     "FileFormat",
     "WorkflowEngine",
     "WorkflowStep",

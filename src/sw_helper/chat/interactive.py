@@ -5,21 +5,21 @@
 
 import asyncio
 import json
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
+
 from rich.console import Console
-from rich.panel import Panel
 from rich.markdown import Markdown
+from rich.panel import Panel
 from rich.prompt import Prompt
 
-from sw_helper.mcp.core import MCPMessage, InMemoryMCPTransport
-from sw_helper.mcp.freecad_server import get_freecad_mcp_server
 from sw_helper.ai.llm_client import (
     LLMClient,
     LLMConfig,
     LLMProvider,
     create_openai_client,
 )
-
+from sw_helper.mcp.core import InMemoryMCPTransport, MCPMessage
+from sw_helper.mcp.freecad_server import get_freecad_mcp_server
 
 console = Console()
 
@@ -84,9 +84,7 @@ class OpencodeStyleChat:
 
         # 添加系统提示
         if self.llm_client:
-            self.llm_client.conversation_history.append(
-                {"role": "system", "content": SYSTEM_PROMPT}
-            )
+            self.llm_client.conversation_history.append({"role": "system", "content": SYSTEM_PROMPT})
 
         # 主循环
         while self.running:
@@ -163,9 +161,7 @@ class OpencodeStyleChat:
             console.print("[green]✓ Anthropic客户端已配置[/green]")
         elif choice == "3":
             api_key = Prompt.ask("DeepSeek API Key", password=True)
-            config = LLMConfig(
-                provider=LLMProvider.DEEPSEEK, model="deepseek-chat", api_key=api_key
-            )
+            config = LLMConfig(provider=LLMProvider.DEEPSEEK, model="deepseek-chat", api_key=api_key)
             self.llm_client = LLMClient(config)
             console.print("[green]✓ DeepSeek客户端已配置[/green]")
         elif choice == "4":
@@ -287,7 +283,7 @@ class OpencodeStyleChat:
                 tools_list = await self._get_tools_for_llm()
 
                 # 调用LLM
-                with console.status("[bold green]AI思考中...") as status:
+                with console.status("[bold green]AI思考中..."):
                     response = await self.llm_client.chat(text, tools=tools_list)
 
                 # 显示AI回复
@@ -389,18 +385,14 @@ class OpencodeStyleChat:
 
     async def _handle_analyze(self, text: str):
         """处理分析命令"""
-        message = MCPMessage(
-            method="tools/call", params={"name": "freecad_analyze", "arguments": {}}
-        )
+        message = MCPMessage(method="tools/call", params={"name": "freecad_analyze", "arguments": {}})
 
         with console.status("[bold green]分析模型..."):
             response = await self.mcp_transport.handle_client_message(message)
             if response.result:
                 content = response.result.get("content", [{}])[0].get("text", "")
                 result = json.loads(content)
-                console.print(
-                    f"[green]✓ 质量评分: {result.get('quality_score', 0)}/100[/green]"
-                )
+                console.print(f"[green]✓ 质量评分: {result.get('quality_score', 0)}/100[/green]")
 
     async def _get_tools_for_llm(self) -> List[Dict]:
         """获取工具列表（用于LLM function calling）"""

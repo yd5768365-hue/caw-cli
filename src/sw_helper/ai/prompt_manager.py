@@ -4,7 +4,7 @@
 """
 
 from pathlib import Path
-from typing import Dict, Optional, List
+from typing import Dict, List
 
 # 提示词目录 - 在项目根目录的prompts文件夹
 PROMPTS_DIR = Path(__file__).parent.parent.parent.parent / "prompts"
@@ -39,7 +39,7 @@ class PromptManager:
             return f"提示词文件不存在: {prompt_file}"
 
         try:
-            with open(prompt_file, "r", encoding="utf-8") as f:
+            with open(prompt_file, encoding="utf-8") as f:
                 content = f.read()
 
             # 缓存

@@ -3,19 +3,18 @@ SSH增强的GitHub仓库管理 MCP Server
 提供SSH密钥管理、SSH远程配置和更稳定的SSH-based Git操作
 """
 
-import subprocess
-import os
-from pathlib import Path
-import json
-from typing import Dict, Any, List, Optional
-from datetime import datetime
-import shutil
 import socket
+import subprocess
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 from sw_helper.mcp.core import Tool, get_mcp_server
 
 # 可选依赖：paramiko用于高级SSH测试
 try:
     import paramiko
+
     PARAMIKO_AVAILABLE = True
 except ImportError:
     PARAMIKO_AVAILABLE = False
@@ -43,7 +42,7 @@ class SSHEnhancedMCPServer:
         self.ssh_config_dir = Path.home() / ".ssh"
         self._register_tools()
 
-        print(f"[SSH MCP] 初始化SSH增强仓库管理服务器")
+        print("[SSH MCP] 初始化SSH增强仓库管理服务器")
         print(f"[SSH MCP] 仓库路径: {self.repo_path}")
         print(f"[SSH MCP] HTTPS URL: {self.repo_url}")
         print(f"[SSH MCP] SSH URL: {self.ssh_repo_url}")
@@ -56,10 +55,7 @@ class SSHEnhancedMCPServer:
             Tool(
                 name="ssh_check_config",
                 description="检查SSH配置状态",
-                input_schema={
-                    "type": "object",
-                    "properties": {}
-                },
+                input_schema={"type": "object", "properties": {}},
                 handler=self._handle_ssh_check_config,
             )
         )
@@ -76,19 +72,15 @@ class SSHEnhancedMCPServer:
                             "type": "string",
                             "description": "密钥类型 (rsa, ed25519)",
                             "default": "ed25519",
-                            "enum": ["rsa", "ed25519"]
+                            "enum": ["rsa", "ed25519"],
                         },
-                        "key_size": {
-                            "type": "integer",
-                            "description": "密钥大小（仅适用于RSA）",
-                            "default": 4096
-                        },
+                        "key_size": {"type": "integer", "description": "密钥大小（仅适用于RSA）", "default": 4096},
                         "email": {
                             "type": "string",
                             "description": "邮箱地址（用于密钥注释）",
-                            "default": "user@example.com"
-                        }
-                    }
+                            "default": "user@example.com",
+                        },
+                    },
                 },
                 handler=self._handle_ssh_generate_key,
             )
@@ -101,13 +93,7 @@ class SSHEnhancedMCPServer:
                 description="测试到GitHub的SSH连接",
                 input_schema={
                     "type": "object",
-                    "properties": {
-                        "host": {
-                            "type": "string",
-                            "description": "主机名",
-                            "default": "github.com"
-                        }
-                    }
+                    "properties": {"host": {"type": "string", "description": "主机名", "default": "github.com"}},
                 },
                 handler=self._handle_ssh_test_connection,
             )
@@ -120,13 +106,7 @@ class SSHEnhancedMCPServer:
                 description="配置Git仓库使用SSH远程",
                 input_schema={
                     "type": "object",
-                    "properties": {
-                        "remote_name": {
-                            "type": "string",
-                            "description": "远程名称",
-                            "default": "origin"
-                        }
-                    }
+                    "properties": {"remote_name": {"type": "string", "description": "远程名称", "default": "origin"}},
                 },
                 handler=self._handle_ssh_configure_remote,
             )
@@ -144,9 +124,9 @@ class SSHEnhancedMCPServer:
                             "type": "array",
                             "items": {"type": "string"},
                             "description": "测试目标列表",
-                            "default": ["github.com", "google.com", "8.8.8.8"]
+                            "default": ["github.com", "google.com", "8.8.8.8"],
                         }
-                    }
+                    },
                 },
                 handler=self._handle_network_diagnostic,
             )
@@ -160,27 +140,11 @@ class SSHEnhancedMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "remote": {
-                            "type": "string",
-                            "description": "远程仓库名称",
-                            "default": "origin"
-                        },
-                        "branch": {
-                            "type": "string",
-                            "description": "分支名称",
-                            "default": "main"
-                        },
-                        "force": {
-                            "type": "boolean",
-                            "description": "是否强制推送",
-                            "default": False
-                        },
-                        "timeout": {
-                            "type": "integer",
-                            "description": "超时时间（秒）",
-                            "default": 30
-                        }
-                    }
+                        "remote": {"type": "string", "description": "远程仓库名称", "default": "origin"},
+                        "branch": {"type": "string", "description": "分支名称", "default": "main"},
+                        "force": {"type": "boolean", "description": "是否强制推送", "default": False},
+                        "timeout": {"type": "integer", "description": "超时时间（秒）", "default": 30},
+                    },
                 },
                 handler=self._handle_ssh_git_push,
             )
@@ -197,9 +161,9 @@ class SSHEnhancedMCPServer:
                         "key_file": {
                             "type": "string",
                             "description": "密钥文件名（不含扩展名）",
-                            "default": "id_ed25519"
+                            "default": "id_ed25519",
                         }
-                    }
+                    },
                 },
                 handler=self._handle_ssh_get_public_key,
             )
@@ -213,18 +177,14 @@ class SSHEnhancedMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "host": {
-                            "type": "string",
-                            "description": "主机名",
-                            "default": "github.com"
-                        },
+                        "host": {"type": "string", "description": "主机名", "default": "github.com"},
                         "key_types": {
                             "type": "array",
                             "items": {"type": "string"},
                             "description": "密钥类型",
-                            "default": ["rsa", "ecdsa", "ed25519"]
-                        }
-                    }
+                            "default": ["rsa", "ecdsa", "ed25519"],
+                        },
+                    },
                 },
                 handler=self._handle_ssh_fix_host_key,
             )
@@ -237,13 +197,7 @@ class SSHEnhancedMCPServer:
                 description="检查Git远程配置",
                 input_schema={
                     "type": "object",
-                    "properties": {
-                        "remote_name": {
-                            "type": "string",
-                            "description": "远程名称",
-                            "default": "origin"
-                        }
-                    }
+                    "properties": {"remote_name": {"type": "string", "description": "远程名称", "default": "origin"}},
                 },
                 handler=self._handle_git_check_remote,
             )
@@ -253,7 +207,9 @@ class SSHEnhancedMCPServer:
 
     # ===== 工具处理器 =====
 
-    def _run_command(self, args: List[str], capture_output: bool = True, timeout: int = 30, cwd: Optional[Path] = None) -> Dict[str, Any]:
+    def _run_command(
+        self, args: List[str], capture_output: bool = True, timeout: int = 30, cwd: Optional[Path] = None
+    ) -> Dict[str, Any]:
         """运行命令"""
         try:
             result = subprocess.run(
@@ -262,27 +218,19 @@ class SSHEnhancedMCPServer:
                 capture_output=capture_output,
                 text=True,
                 encoding="utf-8",
-                timeout=timeout
+                timeout=timeout,
             )
             return {
                 "success": result.returncode == 0,
                 "returncode": result.returncode,
                 "stdout": result.stdout if capture_output else "",
                 "stderr": result.stderr if capture_output else "",
-                "command": " ".join(args)
+                "command": " ".join(args),
             }
         except subprocess.TimeoutExpired:
-            return {
-                "success": False,
-                "error": f"命令超时 ({timeout}秒)",
-                "command": " ".join(args)
-            }
+            return {"success": False, "error": f"命令超时 ({timeout}秒)", "command": " ".join(args)}
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "command": " ".join(args)
-            }
+            return {"success": False, "error": str(e), "command": " ".join(args)}
 
     def _run_git_command(self, args: List[str], capture_output: bool = True, timeout: int = 30) -> Dict[str, Any]:
         """运行Git命令"""
@@ -301,12 +249,14 @@ class SSHEnhancedMCPServer:
                 private_key = self.ssh_config_dir / key_type
                 public_key = self.ssh_config_dir / f"{key_type}.pub"
                 if private_key.exists():
-                    key_files.append({
-                        "name": key_type,
-                        "private_exists": True,
-                        "public_exists": public_key.exists(),
-                        "private_size": private_key.stat().st_size if private_key.exists() else 0
-                    })
+                    key_files.append(
+                        {
+                            "name": key_type,
+                            "private_exists": True,
+                            "public_exists": public_key.exists(),
+                            "private_size": private_key.stat().st_size if private_key.exists() else 0,
+                        }
+                    )
 
             # 检查known_hosts
             known_hosts = self.ssh_config_dir / "known_hosts"
@@ -314,7 +264,9 @@ class SSHEnhancedMCPServer:
 
             # 测试SSH代理
             ssh_agent_result = self._run_command(["ssh-add", "-l"], capture_output=True, timeout=5)
-            ssh_agent_has_keys = ssh_agent_result["success"] and "no identities" not in ssh_agent_result.get("stderr", "")
+            ssh_agent_has_keys = ssh_agent_result["success"] and "no identities" not in ssh_agent_result.get(
+                "stderr", ""
+            )
 
             return {
                 "success": True,
@@ -324,12 +276,14 @@ class SSHEnhancedMCPServer:
                 "known_hosts_exists": known_hosts_exists,
                 "key_files": key_files,
                 "ssh_agent_has_keys": ssh_agent_has_keys,
-                "agent_result": ssh_agent_result if not ssh_agent_has_keys else None
+                "agent_result": ssh_agent_result if not ssh_agent_has_keys else None,
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def _handle_ssh_generate_key(self, key_type: str = "ed25519", key_size: int = 4096, email: str = "user@example.com") -> Dict[str, Any]:
+    def _handle_ssh_generate_key(
+        self, key_type: str = "ed25519", key_size: int = 4096, email: str = "user@example.com"
+    ) -> Dict[str, Any]:
         """生成SSH密钥对"""
         try:
             # 确保SSH目录存在
@@ -345,13 +299,25 @@ class SSHEnhancedMCPServer:
                 return {
                     "success": False,
                     "error": f"密钥文件已存在: {private_key_path}",
-                    "existing_key": str(private_key_path)
+                    "existing_key": str(private_key_path),
                 }
 
             # 构建ssh-keygen命令
             comment = f"{email}"
             if key_type == "rsa":
-                cmd = ["ssh-keygen", "-t", "rsa", "-b", str(key_size), "-C", comment, "-f", str(private_key_path), "-N", ""]
+                cmd = [
+                    "ssh-keygen",
+                    "-t",
+                    "rsa",
+                    "-b",
+                    str(key_size),
+                    "-C",
+                    comment,
+                    "-f",
+                    str(private_key_path),
+                    "-N",
+                    "",
+                ]
             else:  # ed25519
                 cmd = ["ssh-keygen", "-t", "ed25519", "-C", comment, "-f", str(private_key_path), "-N", ""]
 
@@ -361,7 +327,7 @@ class SSHEnhancedMCPServer:
                 # 读取公钥内容
                 public_key_content = ""
                 if public_key_path.exists():
-                    with open(public_key_path, "r", encoding="utf-8") as f:
+                    with open(public_key_path, encoding="utf-8") as f:
                         public_key_content = f.read().strip()
 
                 return {
@@ -372,7 +338,7 @@ class SSHEnhancedMCPServer:
                     "key_type": key_type,
                     "key_size": key_size if key_type == "rsa" else 256,  # ed25519固定256位
                     "comment": comment,
-                    "instructions": "请将上面的公钥内容添加到GitHub: Settings → SSH and GPG keys → New SSH key"
+                    "instructions": "请将上面的公钥内容添加到GitHub: Settings → SSH and GPG keys → New SSH key",
                 }
             else:
                 return result
@@ -403,12 +369,15 @@ class SSHEnhancedMCPServer:
                 paramiko_result = {"success": False, "error": "paramiko未安装", "unavailable": True}
 
             return {
-                "success": ssh_result["success"] or (paramiko_result["success"] if paramiko_result and not paramiko_result.get("unavailable") else False),
+                "success": ssh_result["success"]
+                or (
+                    paramiko_result["success"] if paramiko_result and not paramiko_result.get("unavailable") else False
+                ),
                 "host": host,
                 "ssh_command_result": ssh_result,
                 "port_test": port_test_result,
                 "paramiko_test": paramiko_result,
-                "interpretation": self._interpret_ssh_test(ssh_result, paramiko_result)
+                "interpretation": self._interpret_ssh_test(ssh_result, paramiko_result),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -420,12 +389,7 @@ class SSHEnhancedMCPServer:
             sock.settimeout(5)
             result = sock.connect_ex((host, port))
             sock.close()
-            return {
-                "success": result == 0,
-                "host": host,
-                "port": port,
-                "connection_result": result
-            }
+            return {"success": result == 0, "host": host, "port": port, "connection_result": result}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -471,7 +435,7 @@ class SSHEnhancedMCPServer:
                 "new_url": new_url,
                 "ssh_url": self.ssh_repo_url,
                 "action": "updated" if current_url else "set",
-                "verification": verify_result
+                "verification": verify_result,
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -491,6 +455,7 @@ class SSHEnhancedMCPServer:
             if "github.com" in target:
                 try:
                     import requests
+
                     http_result = {"success": False, "error": "requests可用但未测试"}
                 except ImportError:
                     http_result = {"success": False, "error": "requests库未安装"}
@@ -500,12 +465,7 @@ class SSHEnhancedMCPServer:
             for port in [22, 80, 443]:
                 port_results[str(port)] = self._test_port(target, port)
 
-            results.append({
-                "target": target,
-                "ping": ping_result,
-                "http": http_result,
-                "ports": port_results
-            })
+            results.append({"target": target, "ping": ping_result, "http": http_result, "ports": port_results})
 
         # 总体评估
         overall_success = any(r["ping"]["success"] for r in results)
@@ -514,7 +474,7 @@ class SSHEnhancedMCPServer:
             "success": overall_success,
             "targets": results,
             "timestamp": datetime.now().isoformat(),
-            "recommendations": self._generate_network_recommendations(results)
+            "recommendations": self._generate_network_recommendations(results),
         }
 
     def _generate_network_recommendations(self, results: List[Dict[str, Any]]) -> List[str]:
@@ -543,7 +503,9 @@ class SSHEnhancedMCPServer:
 
         return recommendations
 
-    def _handle_ssh_git_push(self, remote: str = "origin", branch: str = "main", force: bool = False, timeout: int = 30) -> Dict[str, Any]:
+    def _handle_ssh_git_push(
+        self, remote: str = "origin", branch: str = "main", force: bool = False, timeout: int = 30
+    ) -> Dict[str, Any]:
         """使用SSH推送Git提交（更稳定）"""
         try:
             # 构建推送命令
@@ -566,7 +528,7 @@ class SSHEnhancedMCPServer:
                 result["diagnostics"] = {
                     "remote_config": remote_result,
                     "network_status": network_result,
-                    "suggestions": self._generate_push_failure_suggestions(result)
+                    "suggestions": self._generate_push_failure_suggestions(result),
                 }
 
             return result
@@ -629,30 +591,19 @@ class SSHEnhancedMCPServer:
                             with open(known_hosts_file, "a", encoding="utf-8") as f:
                                 f.write(f"{key_line}\n")
 
-                            results.append({
-                                "key_type": key_type,
-                                "success": True,
-                                "key_line": key_line,
-                                "action": "added"
-                            })
+                            results.append(
+                                {"key_type": key_type, "success": True, "key_line": key_line, "action": "added"}
+                            )
                         else:
-                            results.append({
-                                "key_type": key_type,
-                                "success": False,
-                                "error": f"未获取到有效的{key_type}密钥"
-                            })
+                            results.append(
+                                {"key_type": key_type, "success": False, "error": f"未获取到有效的{key_type}密钥"}
+                            )
                     else:
-                        results.append({
-                            "key_type": key_type,
-                            "success": False,
-                            "error": result.get("error", "获取密钥失败")
-                        })
+                        results.append(
+                            {"key_type": key_type, "success": False, "error": result.get("error", "获取密钥失败")}
+                        )
                 except Exception as e:
-                    results.append({
-                        "key_type": key_type,
-                        "success": False,
-                        "error": str(e)
-                    })
+                    results.append({"key_type": key_type, "success": False, "error": str(e)})
 
             # 统计成功情况
             success_count = sum(1 for r in results if r["success"])
@@ -671,19 +622,19 @@ class SSHEnhancedMCPServer:
                     "test_after_fix": {
                         "success": test_result["success"],
                         "output": test_result.get("stdout", ""),
-                        "error": test_result.get("stderr", "")
+                        "error": test_result.get("stderr", ""),
                     },
                     "known_hosts_file": str(known_hosts_file),
                     "file_exists": known_hosts_file.exists(),
                     "file_size": known_hosts_file.stat().st_size if known_hosts_file.exists() else 0,
-                    "instructions": "主机密钥已添加到known_hosts文件，现在可以尝试SSH连接"
+                    "instructions": "主机密钥已添加到known_hosts文件，现在可以尝试SSH连接",
                 }
             else:
                 return {
                     "success": False,
                     "host": host,
                     "results": results,
-                    "error": f"未能成功获取任何主机密钥，请检查网络连接"
+                    "error": "未能成功获取任何主机密钥，请检查网络连接",
                 }
 
         except Exception as e:
@@ -700,7 +651,7 @@ class SSHEnhancedMCPServer:
             if not public_key_path.exists():
                 return {"success": False, "error": f"公钥文件不存在: {public_key_path}"}
 
-            with open(public_key_path, "r", encoding="utf-8") as f:
+            with open(public_key_path, encoding="utf-8") as f:
                 public_key_content = f.read().strip()
 
             # 解析公钥信息
@@ -716,7 +667,7 @@ class SSHEnhancedMCPServer:
                 "key_type": key_type,
                 "key_data_preview": key_data[:20] + "..." if len(key_data) > 20 else key_data,
                 "comment": comment,
-                "size": len(public_key_content)
+                "size": len(public_key_content),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -743,7 +694,7 @@ class SSHEnhancedMCPServer:
                 "is_https": is_https,
                 "protocol": "ssh" if is_ssh else "https" if is_https else "unknown",
                 "verbose_output": verbose_result["stdout"] if verbose_result["success"] else "",
-                "recommendation": "已使用SSH协议（推荐）" if is_ssh else "建议切换到SSH协议以获得更稳定的连接"
+                "recommendation": "已使用SSH协议（推荐）" if is_ssh else "建议切换到SSH协议以获得更稳定的连接",
             }
         except Exception as e:
             return {"success": False, "error": str(e)}

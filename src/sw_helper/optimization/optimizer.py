@@ -4,10 +4,10 @@
 
 import json
 import time
-from pathlib import Path
-from typing import Dict, List, Optional, Callable
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Callable, Dict, List, Optional
 
 
 @dataclass
@@ -119,9 +119,7 @@ class FreeCADOptimizer:
                     f"Parameter '{param_name}' not found. Please select from the available parameters above."
                 )
             else:
-                raise ValueError(
-                    f"Parameter '{param_name}' not found, and no parameters were found in the model."
-                )
+                raise ValueError(f"Parameter '{param_name}' not found, and no parameters were found in the model.")
 
         # 创建输出目录
         output_path = Path(output_dir)
@@ -140,7 +138,7 @@ class FreeCADOptimizer:
             import math
 
             ratio = math.exp(math.log(max_val / min_val) / (steps - 1))
-            values = [min_val * (ratio ** i) for i in range(steps)]
+            values = [min_val * (ratio**i) for i in range(steps)]
 
         self.log(f"\nStarting optimization for parameter: {param_name}")
         self.log(f"   Range: {min_val} ~ {max_val} mm")
@@ -168,9 +166,7 @@ class FreeCADOptimizer:
                     self.log("   Warning: Rebuild may have issues")
 
                 # 3. 导出文件
-                export_file = (
-                    output_path / f"iter_{i:02d}_{param_name}_{value:.1f}.step"
-                )
+                export_file = output_path / f"iter_{i:02d}_{param_name}_{value:.1f}.step"
                 self.log(f"   Exporting: {export_file.name}")
 
                 if not self.connector.export_file(str(export_file), "STEP"):
@@ -195,9 +191,7 @@ class FreeCADOptimizer:
                         quality_score = self._calculate_quality_score(geo_data, value)
 
                         # 计算力学性能
-                        allowable_stress, safety_factor = self._calculate_mechanical_properties(
-                            geo_data, value
-                        )
+                        allowable_stress, safety_factor = self._calculate_mechanical_properties(geo_data, value)
 
                         notes = f"Volume: {geo_data.get('volume', 0):.2e} m³"
                     except Exception as e:
@@ -210,14 +204,10 @@ class FreeCADOptimizer:
                     if param_name.lower() in ["fillet", "radius", "r"]:
                         # 圆角半径在适中范围得分高
                         optimal = (min_val + max_val) / 2
-                        quality_score = (
-                            100 - abs(value - optimal) / (max_val - min_val) * 50
-                        )
+                        quality_score = 100 - abs(value - optimal) / (max_val - min_val) * 50
 
                     # 模拟力学性能
-                    allowable_stress, safety_factor = self._calculate_mechanical_properties(
-                        {}, value
-                    )
+                    allowable_stress, safety_factor = self._calculate_mechanical_properties({}, value)
 
                 analysis_time = time.time() - iteration_start
 
@@ -412,8 +402,8 @@ class FreeCADOptimizer:
     def plot_results(self, output_file: str = "optimization_plot.png"):
         """绘制优化结果图表"""
         try:
-            import matplotlib.pyplot as plt
             import matplotlib
+            import matplotlib.pyplot as plt
 
             matplotlib.use("Agg")  # 非交互式后端
 

@@ -2,7 +2,7 @@
 网格质量评估模块
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 class MeshQualityAnalyzer:
@@ -12,9 +12,7 @@ class MeshQualityAnalyzer:
         self.mesh_data = None
         self.quality_metrics = {}
 
-    def analyze(
-        self, file_path: str, metrics: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
+    def analyze(self, file_path: str, metrics: Optional[List[str]] = None) -> Dict[str, Any]:
         """分析网格质量
 
         Args:

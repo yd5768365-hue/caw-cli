@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 首次运行检查模块 - 验证依赖并提示用户安装必要组件
 """
 
-import os
-import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
+
 from rich.console import Console
-from rich.panel import Panel
 from rich.markdown import Markdown
+from rich.panel import Panel
 
 console = Console()
 
 # 项目颜色定义
 MAIN_RED = "#8B0000"
 HIGHLIGHT_RED = "#FF4500"
+
 
 def check_dependency(module_name: str, display_name: str = None) -> Tuple[bool, str]:
     """
@@ -40,10 +39,12 @@ def check_dependency(module_name: str, display_name: str = None) -> Tuple[bool, 
     except Exception as e:
         return False, f"{display_name}: 未知错误 - {e}"
 
+
 def check_sentence_transformers() -> Tuple[bool, str]:
     """检查sentence-transformers"""
     try:
         from sentence_transformers import SentenceTransformer
+
         # 只检查导入，不实际加载模型
         return True, "sentence-transformers可用"
     except ImportError as e:
@@ -51,18 +52,22 @@ def check_sentence_transformers() -> Tuple[bool, str]:
     except Exception as e:
         return False, f"sentence-transformers错误: {e}"
 
+
 def check_ollama_service() -> Tuple[bool, str]:
     """检查Ollama服务是否运行"""
     try:
-        import aiohttp
         import asyncio
+
+        import aiohttp
 
         async def check():
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get("http://localhost:11434/api/tags", timeout=5) as resp:
                         return resp.status == 200
-            except:
+            except (aiohttp.ClientError, asyncio.TimeoutError):
+                return False
+            except Exception:
                 return False
 
         # 同步环境中运行异步检查
@@ -76,20 +81,23 @@ def check_ollama_service() -> Tuple[bool, str]:
                 return True, "Ollama服务正在运行"
             else:
                 return False, "Ollama服务未运行（请启动Ollama或安装）"
-        except:
+        except Exception:
             return False, "无法检查Ollama服务"
 
     except ImportError:
         return False, "aiohttp未安装，无法检查Ollama"
 
+
 def check_chromadb() -> Tuple[bool, str]:
     """检查ChromaDB"""
     return check_dependency("chromadb", "ChromaDB")
+
 
 def is_first_run() -> bool:
     """检查是否是首次运行"""
     marker_file = Path.home() / ".cae-cli" / "first_run_checked"
     return not marker_file.exists()
+
 
 def mark_first_run_done():
     """标记首次运行检查已完成"""
@@ -98,6 +106,7 @@ def mark_first_run_done():
 
     marker_file = marker_dir / "first_run_checked"
     marker_file.touch()
+
 
 def show_installation_guide(missing_deps: List[str]):
     """显示安装指南"""
@@ -145,12 +154,15 @@ pip install chromadb==0.4.0
 """
 
     console.print("\n")
-    console.print(Panel(
-        Markdown(guide_text),
-        title=f"[bright_red]安装指南[/bright_red]",
-        border_style=MAIN_RED,
-        padding=(1, 2),
-    ))
+    console.print(
+        Panel(
+            Markdown(guide_text),
+            title="[bright_red]安装指南[/bright_red]",
+            border_style=MAIN_RED,
+            padding=(1, 2),
+        )
+    )
+
 
 def perform_first_run_check(show_guide: bool = True) -> Dict[str, bool]:
     """
@@ -168,7 +180,7 @@ def perform_first_run_check(show_guide: bool = True) -> Dict[str, bool]:
     missing_deps = []
 
     # 基础依赖（必须）
-    console.print(f"[dim]检查基础依赖...[/dim]")
+    console.print("[dim]检查基础依赖...[/dim]")
     base_deps = [
         ("click", "Click"),
         ("rich", "Rich"),
@@ -187,35 +199,35 @@ def perform_first_run_check(show_guide: bool = True) -> Dict[str, bool]:
             missing_deps.append(f"{display_name} ({msg})")
 
     # AI依赖（可选但重要）
-    console.print(f"\n[dim]检查AI依赖...[/dim]")
+    console.print("\n[dim]检查AI依赖...[/dim]")
 
     # sentence-transformers
     st_ok, st_msg = check_sentence_transformers()
     results["ai_sentence_transformers"] = st_ok
     if st_ok:
-        console.print(f"  [green][OK] sentence-transformers[/green]")
+        console.print("  [green][OK] sentence-transformers[/green]")
     else:
         console.print(f"  [yellow][WARN] sentence-transformers[/yellow]: [dim]{st_msg}[/dim]")
-        missing_deps.append(f"sentence-transformers")
+        missing_deps.append("sentence-transformers")
 
     # ChromaDB
     chroma_ok, chroma_msg = check_chromadb()
     results["ai_chromadb"] = chroma_ok
     if chroma_ok:
-        console.print(f"  [green][OK] ChromaDB[/green]")
+        console.print("  [green][OK] ChromaDB[/green]")
     else:
         console.print(f"  [yellow][WARN] ChromaDB[/yellow]: [dim]{chroma_msg}[/dim]")
-        missing_deps.append(f"ChromaDB")
+        missing_deps.append("ChromaDB")
 
     # Ollama
     ollama_ok, ollama_msg = check_ollama_service()
     results["ai_ollama"] = ollama_ok
     if ollama_ok:
-        console.print(f"  [green][OK] Ollama服务[/green]")
+        console.print("  [green][OK] Ollama服务[/green]")
     else:
         console.print(f"  [yellow][WARN] Ollama服务[/yellow]: [dim]{ollama_msg}[/dim]")
         if "未安装" in ollama_msg or "未运行" in ollama_msg:
-            missing_deps.append(f"Ollama（可选）")
+            missing_deps.append("Ollama（可选）")
 
     # 总结
     console.print(f"\n[{HIGHLIGHT_RED}]检查完成！[/{HIGHLIGHT_RED}]")
@@ -225,16 +237,16 @@ def perform_first_run_check(show_guide: bool = True) -> Dict[str, bool]:
 
     if base_ok:
         if ai_ok and results.get("ai_ollama", False):
-            console.print(f"[green][OK] 所有依赖就绪，完整功能可用！[/green]")
+            console.print("[green][OK] 所有依赖就绪，完整功能可用！[/green]")
         elif ai_ok:
-            console.print(f"[green][OK] 基础AI功能可用，辅助学习功能受限[/green]")
-            console.print(f"[dim]（Ollama服务未运行，辅助学习模式将使用知识库检索）[/dim]")
+            console.print("[green][OK] 基础AI功能可用，辅助学习功能受限[/green]")
+            console.print("[dim]（Ollama服务未运行，辅助学习模式将使用知识库检索）[/dim]")
         else:
-            console.print(f"[yellow][WARN] 基础功能可用，AI功能需要额外安装[/yellow]")
+            console.print("[yellow][WARN] 基础功能可用，AI功能需要额外安装[/yellow]")
             if show_guide and missing_deps:
                 show_installation_guide(missing_deps)
     else:
-        console.print(f"[red][FAIL] 缺少必要基础依赖，部分功能不可用[/red]")
+        console.print("[red][FAIL] 缺少必要基础依赖，部分功能不可用[/red]")
         if show_guide and missing_deps:
             show_installation_guide(missing_deps)
 
@@ -242,6 +254,7 @@ def perform_first_run_check(show_guide: bool = True) -> Dict[str, bool]:
     mark_first_run_done()
 
     return results
+
 
 def quick_check() -> bool:
     """
@@ -258,6 +271,7 @@ def quick_check() -> bool:
             return False
 
     return True
+
 
 if __name__ == "__main__":
     # 命令行测试

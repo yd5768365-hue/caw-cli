@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAE-CLI</title>
+    <title>MechDesign</title>
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -53,7 +53,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">⚡ CAE-CLI</div>
+        <div class="logo">⚡ MechDesign</div>
         <div class="nav">
             <div class="nav-item active" onclick="showPage('home')">🏠 首页</div>
             <div class="nav-item" onclick="showPage('tools')">🛠️ 工具</div>
@@ -64,7 +64,7 @@
     <div class="container" id="home-page">
         <div class="click-hint">💡 点击任意模块卡片直接执行命令</div>
         <div class="hero">
-            <h1>CAE-CLI</h1>
+            <h1>MechDesign</h1>
             <p>专业的机械设计辅助工具</p>
             <div class="action-btns">
                 <button class="action-btn" onclick="runCmd('cae-cli --help')">查看帮助</button>
@@ -148,7 +148,7 @@
             </div>
             <div class="chat-main">
                 <div class="chat-messages" id="chat-messages">
-                    <div class="chat-message ai">👋 你好！我是CAE-CLI AI助手，可以帮助你：<br><br>• 解答CAD/CAE问题<br>• 提供材料选型建议<br>• 辅助网格划分<br>• 优化设计参数<br><br>请在下方输入你的问题...</div>
+                    <div class="chat-message ai">👋 你好！我是MechDesign AI助手，可以帮助你：<br><br>• 解答CAD/CAE问题<br>• 提供材料选型建议<br>• 辅助网格划分<br>• 优化设计参数<br><br>请在下方输入你的问题...</div>
                 </div>
                 <div class="chat-input-area">
                     <input type="text" class="chat-input" id="chat-input" placeholder="输入你的问题..." onkeypress="if(event.key==='Enter')sendChat()">

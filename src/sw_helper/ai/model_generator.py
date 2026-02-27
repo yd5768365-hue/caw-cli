@@ -4,12 +4,11 @@ AI模型生成器 - 自然语言到3D模型
 包含改进的Prompt模板和增强的特征识别
 """
 
-import re
 import json
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+import re
 from dataclasses import dataclass, field
-
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # ============ Prompt 模板 ============
 
@@ -346,9 +345,7 @@ class NaturalLanguageParser:
             rotation=rotation,
         )
 
-    def parse_with_llm(
-        self, description: str, llm_model, language: str = "zh"
-    ) -> Optional[ParsedGeometry]:
+    def parse_with_llm(self, description: str, llm_model, language: str = "zh") -> Optional[ParsedGeometry]:
         """使用LLM模型解析复杂描述
 
         Args:
@@ -415,9 +412,7 @@ class NaturalLanguageParser:
         if cls._PARAM_PATTERNS_COMPILED is None:
             cls._PARAM_PATTERNS_COMPILED = {}
             for param_name, patterns in cls.PARAM_PATTERNS.items():
-                cls._PARAM_PATTERNS_COMPILED[param_name] = [
-                    re.compile(p, re.IGNORECASE) for p in patterns
-                ]
+                cls._PARAM_PATTERNS_COMPILED[param_name] = [re.compile(p, re.IGNORECASE) for p in patterns]
         return cls._PARAM_PATTERNS_COMPILED
 
     def _extract_parameters(self, desc: str) -> Dict[str, float]:
@@ -614,9 +609,7 @@ class FreeCADModelGenerator:
 
                 # 创建矩形
                 sketch.addGeometry(
-                    Part.LineSegment(
-                        self.fc_app.Vector(0, 0, 0), self.fc_app.Vector(length, 0, 0)
-                    ),
+                    Part.LineSegment(self.fc_app.Vector(0, 0, 0), self.fc_app.Vector(length, 0, 0)),
                     False,
                 )
                 sketch.addGeometry(
@@ -634,9 +627,7 @@ class FreeCADModelGenerator:
                     False,
                 )
                 sketch.addGeometry(
-                    Part.LineSegment(
-                        self.fc_app.Vector(0, width, 0), self.fc_app.Vector(0, 0, 0)
-                    ),
+                    Part.LineSegment(self.fc_app.Vector(0, width, 0), self.fc_app.Vector(0, 0, 0)),
                     False,
                 )
 
@@ -718,7 +709,7 @@ class FreeCADModelGenerator:
                 width = params.get("width", 50)
                 height = params.get("height", 30)
                 # 创建楔形的顶点
-                points = [
+                [
                     self.fc_app.Vector(0, 0, 0),
                     self.fc_app.Vector(length, 0, 0),
                     self.fc_app.Vector(length, width, 0),
@@ -847,9 +838,7 @@ class FreeCADModelGenerator:
         try:
             import Import
 
-            objects = [
-                obj for obj in self.doc.Objects if obj.isDerivedFrom("Part::Feature")
-            ]
+            objects = [obj for obj in self.doc.Objects if obj.isDerivedFrom("Part::Feature")]
             if objects:
                 Import.export(objects, filepath)
                 return True
@@ -863,7 +852,7 @@ class FreeCADModelGenerator:
         if self.doc and not self.use_mock:
             try:
                 self.fc_app.closeDocument(self.doc.Name)
-            except:
+            except Exception:
                 pass
 
 
@@ -1012,9 +1001,7 @@ class AIModelGenerator:
                     "quality_score": self._calculate_quality(geo_data),
                 }
 
-                print(
-                    f" 质量评分: {result['detailed_analysis']['quality_score']:.1f}/100"
-                )
+                print(f" 质量评分: {result['detailed_analysis']['quality_score']:.1f}/100")
 
                 # 生成报告
                 report_path = Path(output_dir) / "generation_report.md"

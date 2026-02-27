@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PR审查工具 - 基于RAG知识库的智能代码审查
 
@@ -11,65 +10,68 @@ PR审查工具 - 基于RAG知识库的智能代码审查
 4. 生成综合审查报告
 
 Author: CAE-CLI DevOps Team
-Version: 0.1.0
+Version: 1.0.0
 """
 
-import sys
-import os
-import json
+import argparse
 import asyncio
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
+import json
+import sys
 from dataclasses import dataclass
 from enum import Enum
-import argparse
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # 导入项目模块
 try:
-    from .pr_analyzer import PRAnalyzer, ChangeStatistics, CodeQualityResults
-    from .code_checker import CodeChecker, CodeIssue, Severity
+    from .code_checker import CodeChecker, Severity
+    from .pr_analyzer import PRAnalyzer
     from .rag_engine import get_rag_engine
 except ImportError:
     # 如果相对导入失败，尝试绝对导入
     import sys
+
     sys.path.insert(0, str(Path(__file__).parent.parent))
-    from sw_helper.utils.pr_analyzer import PRAnalyzer, ChangeStatistics, CodeQualityResults
-    from sw_helper.utils.code_checker import CodeChecker, CodeIssue, Severity
+    from sw_helper.utils.code_checker import CodeChecker, Severity
+    from sw_helper.utils.pr_analyzer import PRAnalyzer
     from sw_helper.utils.rag_engine import get_rag_engine
 
 
 class ReviewSeverity(Enum):
     """审查问题严重程度"""
-    CRITICAL = "critical"      # 必须修复
-    HIGH = "high"              # 应该修复
-    MEDIUM = "medium"          # 建议修复
-    LOW = "low"                # 优化建议
-    INFO = "info"              # 信息提示
+
+    CRITICAL = "critical"  # 必须修复
+    HIGH = "high"  # 应该修复
+    MEDIUM = "medium"  # 建议修复
+    LOW = "low"  # 优化建议
+    INFO = "info"  # 信息提示
 
 
 @dataclass
 class ReviewSuggestion:
     """审查建议"""
-    category: str              # 类别：security/performance/maintainability/knowledge
-    severity: ReviewSeverity   # 严重程度
-    file: str                  # 文件路径
-    line: int                  # 行号（可选）
-    message: str               # 问题描述
-    suggestion: str            # 修复建议
+
+    category: str  # 类别：security/performance/maintainability/knowledge
+    severity: ReviewSeverity  # 严重程度
+    file: str  # 文件路径
+    line: int  # 行号（可选）
+    message: str  # 问题描述
+    suggestion: str  # 修复建议
     knowledge_ref: Optional[str] = None  # 相关知识库引用
-    code_snippet: Optional[str] = None   # 代码片段
+    code_snippet: Optional[str] = None  # 代码片段
 
 
 @dataclass
 class ReviewSummary:
     """审查摘要"""
-    total_files: int           # 总变更文件数
-    reviewed_files: int        # 已审查文件数
-    total_issues: int          # 总问题数
-    critical_issues: int       # 严重问题数
-    high_issues: int           # 高优先级问题数
-    knowledge_queries: int     # 知识库查询次数
-    knowledge_hits: int        # 知识库命中次数
+
+    total_files: int  # 总变更文件数
+    reviewed_files: int  # 已审查文件数
+    total_issues: int  # 总问题数
+    critical_issues: int  # 严重问题数
+    high_issues: int  # 高优先级问题数
+    knowledge_queries: int  # 知识库查询次数
+    knowledge_hits: int  # 知识库命中次数
 
 
 class PRReviewer:
@@ -101,8 +103,9 @@ class PRReviewer:
         # 知识库缓存（避免重复查询）
         self.knowledge_cache: Dict[str, List[Dict[str, Any]]] = {}
 
-    async def review_pr(self, base_ref: str = "HEAD~1", head_ref: str = "HEAD",
-                       branch: Optional[str] = None) -> Tuple[List[ReviewSuggestion], ReviewSummary]:
+    async def review_pr(
+        self, base_ref: str = "HEAD~1", head_ref: str = "HEAD", branch: Optional[str] = None
+    ) -> Tuple[List[ReviewSuggestion], ReviewSummary]:
         """
         审查PR/提交
 
@@ -140,10 +143,8 @@ class PRReviewer:
 
         # 4. 生成最终摘要
         self.summary.total_issues = len(self.suggestions)
-        self.summary.critical_issues = sum(1 for s in self.suggestions
-                                          if s.severity == ReviewSeverity.CRITICAL)
-        self.summary.high_issues = sum(1 for s in self.suggestions
-                                      if s.severity == ReviewSeverity.HIGH)
+        self.summary.critical_issues = sum(1 for s in self.suggestions if s.severity == ReviewSeverity.CRITICAL)
+        self.summary.high_issues = sum(1 for s in self.suggestions if s.severity == ReviewSeverity.HIGH)
 
         print(f"[INFO] Review completed: {self.summary.reviewed_files} files, {self.summary.total_issues} issues")
         print(f"[INFO] Knowledge queries: {self.summary.knowledge_queries} (hits: {self.summary.knowledge_hits})")
@@ -179,12 +180,12 @@ class PRReviewer:
                 line=issue.line,
                 message=issue.message,
                 suggestion=issue.suggestion,
-                code_snippet=issue.code_snippet
+                code_snippet=issue.code_snippet,
             )
             self.suggestions.append(suggestion)
 
         # 2. 知识库查询（仅对Python文件和重要变更）
-        if file_path.endswith('.py') and self.rag_available:
+        if file_path.endswith(".py") and self.rag_available:
             await self._query_knowledge_for_file(file_path)
 
     async def _query_knowledge_for_file(self, file_path: str):
@@ -196,7 +197,7 @@ class PRReviewer:
         """
         try:
             # 读取文件内容（仅读取前几行进行分析）
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read(5000)  # 只读取前5000字符
 
             # 提取关键信息用于查询
@@ -226,7 +227,7 @@ class PRReviewer:
                             line=0,  # 无特定行号
                             message=f"相关知识库条目: {result['source']}",
                             suggestion=f"相关机械知识: {result['content'][:150]}...",
-                            knowledge_ref=result['source']
+                            knowledge_ref=result["source"],
                         )
                         self.suggestions.append(suggestion)
 
@@ -248,15 +249,44 @@ class PRReviewer:
         # 提取可能的机械相关关键词（简单实现）
         keywords = [
             # 材料相关
-            "material", "steel", "aluminum", "alloy", "Q235", "Q345", "6061", "7075",
+            "material",
+            "steel",
+            "aluminum",
+            "alloy",
+            "Q235",
+            "Q345",
+            "6061",
+            "7075",
             # 力学相关
-            "stress", "strain", "force", "load", "pressure", "tension", "compression",
+            "stress",
+            "strain",
+            "force",
+            "load",
+            "pressure",
+            "tension",
+            "compression",
             # 几何相关
-            "geometry", "dimension", "tolerance", "clearance", "fit",
+            "geometry",
+            "dimension",
+            "tolerance",
+            "clearance",
+            "fit",
             # 紧固件
-            "bolt", "screw", "nut", "fastener", "M6", "M8", "M10", "M12",
+            "bolt",
+            "screw",
+            "nut",
+            "fastener",
+            "M6",
+            "M8",
+            "M10",
+            "M12",
             # 分析类型
-            "analysis", "simulation", "FEA", "mesh", "grid", "element"
+            "analysis",
+            "simulation",
+            "FEA",
+            "mesh",
+            "grid",
+            "element",
         ]
 
         # 转换为小写以便匹配
@@ -269,8 +299,9 @@ class PRReviewer:
         # 限制查询数量
         return queries[:5]  # 最多5个查询
 
-    def generate_report(self, suggestions: List[ReviewSuggestion],
-                       summary: ReviewSummary, output_format: str = "text") -> str:
+    def generate_report(
+        self, suggestions: List[ReviewSuggestion], summary: ReviewSummary, output_format: str = "text"
+    ) -> str:
         """
         生成审查报告
 
@@ -287,8 +318,7 @@ class PRReviewer:
         else:
             return self._generate_text_report(suggestions, summary)
 
-    def _generate_text_report(self, suggestions: List[ReviewSuggestion],
-                            summary: ReviewSummary) -> str:
+    def _generate_text_report(self, suggestions: List[ReviewSuggestion], summary: ReviewSummary) -> str:
         """生成文本报告"""
         report_lines = []
 
@@ -366,8 +396,7 @@ class PRReviewer:
 
         return "\n".join(report_lines)
 
-    def _generate_json_report(self, suggestions: List[ReviewSuggestion],
-                            summary: ReviewSummary) -> str:
+    def _generate_json_report(self, suggestions: List[ReviewSuggestion], summary: ReviewSummary) -> str:
         """生成JSON报告"""
         report = {
             "summary": {
@@ -377,7 +406,7 @@ class PRReviewer:
                 "critical_issues": summary.critical_issues,
                 "high_issues": summary.high_issues,
                 "knowledge_queries": summary.knowledge_queries,
-                "knowledge_hits": summary.knowledge_hits
+                "knowledge_hits": summary.knowledge_hits,
             },
             "suggestions": [
                 {
@@ -388,10 +417,10 @@ class PRReviewer:
                     "message": s.message,
                     "suggestion": s.suggestion,
                     "knowledge_ref": s.knowledge_ref,
-                    "code_snippet": s.code_snippet
+                    "code_snippet": s.code_snippet,
                 }
                 for s in suggestions
-            ]
+            ],
         }
 
         return json.dumps(report, indent=2, ensure_ascii=False)
@@ -400,18 +429,12 @@ class PRReviewer:
 async def main():
     """命令行入口点"""
     parser = argparse.ArgumentParser(description="PR智能审查工具")
-    parser.add_argument("--base", "-b", default="HEAD~1",
-                       help="基准引用（默认: HEAD~1）")
-    parser.add_argument("--head", "-H", default="HEAD",
-                       help="目标引用（默认: HEAD）")
-    parser.add_argument("--branch", "-B",
-                       help="比较当前分支与指定分支")
-    parser.add_argument("--output", "-o", default="text",
-                       choices=["text", "json"], help="输出格式")
-    parser.add_argument("--rag", action="store_true",
-                       help="启用RAG知识库查询")
-    parser.add_argument("--no-rag", action="store_true",
-                       help="禁用RAG知识库查询")
+    parser.add_argument("--base", "-b", default="HEAD~1", help="基准引用（默认: HEAD~1）")
+    parser.add_argument("--head", "-H", default="HEAD", help="目标引用（默认: HEAD）")
+    parser.add_argument("--branch", "-B", help="比较当前分支与指定分支")
+    parser.add_argument("--output", "-o", default="text", choices=["text", "json"], help="输出格式")
+    parser.add_argument("--rag", action="store_true", help="启用RAG知识库查询")
+    parser.add_argument("--no-rag", action="store_true", help="禁用RAG知识库查询")
 
     args = parser.parse_args()
 
@@ -429,11 +452,7 @@ async def main():
     reviewer = PRReviewer(rag_engine=rag_engine if args.rag or not args.no_rag else None)
 
     # 执行审查
-    suggestions, summary = await reviewer.review_pr(
-        base_ref=args.base,
-        head_ref=args.head,
-        branch=args.branch
-    )
+    suggestions, summary = await reviewer.review_pr(base_ref=args.base, head_ref=args.head, branch=args.branch)
 
     # 生成报告
     report = reviewer.generate_report(suggestions, summary, args.output)

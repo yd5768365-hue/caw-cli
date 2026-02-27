@@ -2,7 +2,7 @@
 几何特征提取模块
 """
 
-from typing import Dict, Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 class GeometryAnalyzer:

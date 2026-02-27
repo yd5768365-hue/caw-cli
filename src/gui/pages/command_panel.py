@@ -2,22 +2,20 @@
 命令面板 - 快速执行CLI命令
 """
 
+import subprocess  # 性能优化：模块级别导入
+
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QGroupBox,
     QHBoxLayout,
-    QPushButton,
     QLabel,
     QLineEdit,
+    QPushButton,
     QTextEdit,
-    QGroupBox,
-    QListWidget,
-    QListWidgetItem,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt, Signal, QProcess
-from PySide6.QtGui import QFont
-
-from ..theme import CAETheme
 
 
 class CommandPanel(QWidget):
@@ -127,8 +125,6 @@ class CommandPanel(QWidget):
         self.output.append("-" * 40)
 
         # 使用 subprocess 执行
-        import subprocess
-        import sys
 
         try:
             # 检测是否以 cae-cli 开头
@@ -136,13 +132,7 @@ class CommandPanel(QWidget):
                 cmd = "cae-cli " + cmd
 
             result = subprocess.run(
-                cmd,
-                shell=True,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=60
+                cmd, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60
             )
 
             if result.stdout:
@@ -159,9 +149,7 @@ class CommandPanel(QWidget):
             self.output.append(f"[Error] {str(e)}")
 
         # 滚动到底部
-        self.output.verticalScrollBar().setValue(
-            self.output.verticalScrollBar().maximum()
-        )
+        self.output.verticalScrollBar().setValue(self.output.verticalScrollBar().maximum())
 
     def _run_preset(self, cmd: str):
         """运行预设命令"""

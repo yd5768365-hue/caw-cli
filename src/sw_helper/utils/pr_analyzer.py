@@ -14,37 +14,37 @@ PR 分析器 - 分析 Git 变更并提供统计报告
 3. 分析当前工作区的变更
 
 Author: CAE-CLI DevOps Team
-Version: 0.1.0
+Version: 1.0.0
 """
 
-import os
-import sys
-import re
 import subprocess
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any, Set
+import sys
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 try:
     import git
+
     GITPYTHON_AVAILABLE = True
 except ImportError:
     GITPYTHON_AVAILABLE = False
 
+from rich.box import SIMPLE
 from rich.console import Console
 from rich.table import Table
-from rich.panel import Panel
 from rich.text import Text
-from rich.box import SIMPLE
+
+from .code_checker import CodeChecker, CodeIssue
 
 # 导入项目错误处理器
 from .error_handler import create_error_handler
-from .code_checker import CodeChecker, CodeIssue, Severity
 
 
 class ChangeType(Enum):
     """变更类型枚举"""
+
     ADDED = "A"
     MODIFIED = "M"
     DELETED = "D"
@@ -56,6 +56,7 @@ class ChangeType(Enum):
 @dataclass
 class FileChange:
     """文件变更信息"""
+
     path: str
     change_type: ChangeType
     old_path: Optional[str] = None  # 仅用于重命名/复制
@@ -66,6 +67,7 @@ class FileChange:
 @dataclass
 class ChangeStatistics:
     """变更统计信息"""
+
     total_files: int = 0
     added_files: int = 0
     modified_files: int = 0
@@ -80,6 +82,7 @@ class ChangeStatistics:
 @dataclass
 class CodeQualityResults:
     """代码质量检查结果"""
+
     total_issues: int = 0
     issues_by_category: Dict[str, int] = field(default_factory=dict)  # 分类 -> 问题数
     issues_by_severity: Dict[str, int] = field(default_factory=dict)  # 严重程度 -> 问题数
@@ -128,12 +131,7 @@ class PRAnalyzer:
         """
         try:
             result = subprocess.run(
-                ["git"] + args,
-                cwd=self.repo_path,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace"
+                ["git"] + args, cwd=self.repo_path, capture_output=True, text=True, encoding="utf-8", errors="replace"
             )
 
             if result.returncode != 0:
@@ -184,10 +182,7 @@ class PRAnalyzer:
             # 确定变更类型
             change_type = self._parse_change_type(status)
 
-            file_change = FileChange(
-                path=path,
-                change_type=change_type
-            )
+            file_change = FileChange(path=path, change_type=change_type)
 
             # 处理重命名/复制
             if change_type in (ChangeType.RENAMED, ChangeType.COPIED) and len(parts) >= 3:
@@ -212,7 +207,9 @@ class PRAnalyzer:
         status_char = status[0] if status else "?"
         return status_map.get(status_char, ChangeType.UNKNOWN)
 
-    def get_line_changes(self, file_change: FileChange, base_ref: str = "HEAD~1", head_ref: str = "HEAD") -> Tuple[int, int]:
+    def get_line_changes(
+        self, file_change: FileChange, base_ref: str = "HEAD~1", head_ref: str = "HEAD"
+    ) -> Tuple[int, int]:
         """
         获取文件行变更统计（新增/删除行数）
 
@@ -253,25 +250,25 @@ class PRAnalyzer:
         ext = Path(file_path).suffix.lower()
 
         # Python 文件
-        if ext in ['.py', '.pyw']:
+        if ext in [".py", ".pyw"]:
             return "Python"
         # 配置文件
-        elif ext in ['.yaml', '.yml', '.json', '.toml', '.ini', '.cfg', '.conf']:
+        elif ext in [".yaml", ".yml", ".json", ".toml", ".ini", ".cfg", ".conf"]:
             return "Config"
         # 文档文件
-        elif ext in ['.md', '.rst', '.txt', '.adoc', '.tex']:
+        elif ext in [".md", ".rst", ".txt", ".adoc", ".tex"]:
             return "Documentation"
         # 脚本文件
-        elif ext in ['.sh', '.bash', '.zsh', '.ps1', '.bat', '.cmd']:
+        elif ext in [".sh", ".bash", ".zsh", ".ps1", ".bat", ".cmd"]:
             return "Script"
         # 测试文件
-        elif '/test_' in file_path or file_path.startswith('test_') or '/tests/' in file_path:
+        elif "/test_" in file_path or file_path.startswith("test_") or "/tests/" in file_path:
             return "Test"
         # 其他代码文件
-        elif ext in ['.js', '.ts', '.jsx', '.tsx', '.java', '.cpp', '.c', '.h', '.hpp', '.go', '.rs', '.rb']:
+        elif ext in [".js", ".ts", ".jsx", ".tsx", ".java", ".cpp", ".c", ".h", ".hpp", ".go", ".rs", ".rb"]:
             return "Code"
         # 数据文件
-        elif ext in ['.csv', '.tsv', '.xlsx', '.xls', '.jsonl', '.parquet']:
+        elif ext in [".csv", ".tsv", ".xlsx", ".xls", ".jsonl", ".parquet"]:
             return "Data"
         else:
             return "Other"
@@ -291,16 +288,9 @@ class PRAnalyzer:
         file_changes = self.get_changed_files(base_ref, head_ref)
 
         if not file_changes:
-            return ChangeStatistics(
-                language_stats={},
-                changed_dirs=set()
-            )
+            return ChangeStatistics(language_stats={}, changed_dirs=set())
 
-        stats = ChangeStatistics(
-            total_files=len(file_changes),
-            language_stats={},
-            changed_dirs=set()
-        )
+        stats = ChangeStatistics(total_files=len(file_changes), language_stats={}, changed_dirs=set())
 
         # 统计变更类型和语言
         for file_change in file_changes:
@@ -349,7 +339,7 @@ class PRAnalyzer:
         # 只检查Python文件（新增和修改的文件）
         python_files = []
         for fc in file_changes:
-            if fc.path.endswith('.py') and fc.change_type in (ChangeType.ADDED, ChangeType.MODIFIED):
+            if fc.path.endswith(".py") and fc.change_type in (ChangeType.ADDED, ChangeType.MODIFIED):
                 python_files.append(fc.path)
 
         if not python_files:
@@ -375,7 +365,7 @@ class PRAnalyzer:
         checker_names = {
             "security": "SecurityChecker",
             "performance": "PerformanceChecker",
-            "maintainability": "MaintainabilityChecker"
+            "maintainability": "MaintainabilityChecker",
         }
         for category, count in results.issues_by_category.items():
             checker_name = checker_names.get(category, category)
@@ -383,8 +373,9 @@ class PRAnalyzer:
 
         return results
 
-    def generate_report(self, stats: ChangeStatistics, file_changes: List[FileChange],
-                        code_quality: Optional[CodeQualityResults] = None) -> str:
+    def generate_report(
+        self, stats: ChangeStatistics, file_changes: List[FileChange], code_quality: Optional[CodeQualityResults] = None
+    ) -> str:
         """
         生成文本报告
 
@@ -450,7 +441,7 @@ class PRAnalyzer:
                     ChangeType.DELETED: "[-]",
                     ChangeType.RENAMED: "[R]",
                     ChangeType.COPIED: "[C]",
-                    ChangeType.UNKNOWN: "[?]"
+                    ChangeType.UNKNOWN: "[?]",
                 }.get(file_change.change_type, "[?]")
 
                 line_info = ""
@@ -474,15 +465,22 @@ class PRAnalyzer:
             # 按严重程度统计
             if code_quality.issues_by_severity:
                 report_lines.append("By severity:")
-                for severity, count in sorted(code_quality.issues_by_severity.items(),
-                                            key=lambda x: ["critical", "high", "medium", "low"].index(x[0])
-                                            if x[0] in ["critical", "high", "medium", "low"] else 999):
+                for severity, count in sorted(
+                    code_quality.issues_by_severity.items(),
+                    key=lambda x: (
+                        ["critical", "high", "medium", "low"].index(x[0])
+                        if x[0] in ["critical", "high", "medium", "low"]
+                        else 999
+                    ),
+                ):
                     report_lines.append(f"  {severity}: {count}")
 
             # 按分类统计
             if code_quality.issues_by_category:
                 report_lines.append("By category:")
-                for category, count in sorted(code_quality.issues_by_category.items(), key=lambda x: x[1], reverse=True):
+                for category, count in sorted(
+                    code_quality.issues_by_category.items(), key=lambda x: x[1], reverse=True
+                ):
                     report_lines.append(f"  {category}: {count}")
 
             # 按文件详细问题
@@ -517,8 +515,9 @@ class PRAnalyzer:
         # TODO: 实现完整的 diff 文件解析
         raise NotImplementedError("从 diff 文件分析功能尚未实现")
 
-    def print_rich_report(self, stats: ChangeStatistics, file_changes: List[FileChange],
-                          code_quality: Optional[CodeQualityResults] = None) -> None:
+    def print_rich_report(
+        self, stats: ChangeStatistics, file_changes: List[FileChange], code_quality: Optional[CodeQualityResults] = None
+    ) -> None:
         """使用 Rich 输出美观的报告"""
         # 创建摘要表格
         summary_table = Table(title="[Summary] PR Change Summary", box=SIMPLE, show_header=True)
@@ -530,7 +529,9 @@ class PRAnalyzer:
         summary_table.add_row("Added files", str(stats.added_files), "Newly added files")
         summary_table.add_row("Modified files", str(stats.modified_files), "Modified files")
         summary_table.add_row("Deleted files", str(stats.deleted_files), "Deleted files")
-        summary_table.add_row("Line changes", f"+{stats.total_additions} / -{stats.total_deletions}", "Added/deleted lines")
+        summary_table.add_row(
+            "Line changes", f"+{stats.total_additions} / -{stats.total_deletions}", "Added/deleted lines"
+        )
 
         if stats.total_additions + stats.total_deletions > 0:
             net_change = stats.total_additions - stats.total_deletions
@@ -569,7 +570,7 @@ class PRAnalyzer:
                     ChangeType.DELETED: ("[-]", "red"),
                     ChangeType.RENAMED: ("[R]", "cyan"),
                     ChangeType.COPIED: ("[C]", "blue"),
-                    ChangeType.UNKNOWN: ("[?]", "white")
+                    ChangeType.UNKNOWN: ("[?]", "white"),
                 }
 
                 status_symbol, status_color = status_map.get(file_change.change_type, ("[?]", "white"))
@@ -623,19 +624,16 @@ class PRAnalyzer:
 
             for file_path, issues in code_quality.issues_by_file.items():
                 for issue in issues[:3]:  # 每个文件最多显示3个问题
-                    severity_color = {
-                        "critical": "bold red",
-                        "high": "red",
-                        "medium": "yellow",
-                        "low": "blue"
-                    }.get(issue.severity.value, "white")
+                    severity_color = {"critical": "bold red", "high": "red", "medium": "yellow", "low": "blue"}.get(
+                        issue.severity.value, "white"
+                    )
 
                     severity_text = Text(issue.severity.value.upper(), style=severity_color)
                     details_table.add_row(
                         file_path,
                         str(issue.line),
                         severity_text,
-                        issue.message[:100] + "..." if len(issue.message) > 100 else issue.message
+                        issue.message[:100] + "..." if len(issue.message) > 100 else issue.message,
                     )
 
             self.console.print(details_table)
@@ -644,18 +642,25 @@ class PRAnalyzer:
 # 自定义异常类
 class PRAnalyzerError(Exception):
     """PR 分析器基础异常"""
+
     pass
+
 
 class NotGitRepositoryError(PRAnalyzerError):
     """非 Git 仓库异常"""
+
     pass
+
 
 class GitCommandError(PRAnalyzerError):
     """Git 命令执行异常"""
+
     pass
+
 
 class NoChangesError(PRAnalyzerError):
     """无变更异常"""
+
     pass
 
 
@@ -674,66 +679,34 @@ def main():
   %(prog)s --diff-file changes.diff  # 分析 diff 文件
 
 默认行为: 分析 HEAD~1 到 HEAD 的变更
-        """
+        """,
     )
 
-    parser.add_argument(
-        "--base", "-b",
-        default="HEAD~1",
-        help="基准引用 (分支名、提交哈希、标签等)"
-    )
+    parser.add_argument("--base", "-b", default="HEAD~1", help="基准引用 (分支名、提交哈希、标签等)")
+
+    parser.add_argument("--head", "-H", default="HEAD", help="目标引用 (分支名、提交哈希、标签等)")
+
+    parser.add_argument("--branch", "-B", help="比较当前分支与指定分支 (便捷参数，等价于 --base <branch> --head HEAD)")
+
+    parser.add_argument("--pr-number", "-p", type=int, help="PR 编号 (需要 GitHub CLI 支持)")
+
+    parser.add_argument("--diff-file", "-d", help="直接分析 diff 文件")
+
+    parser.add_argument("--repo-path", "-r", help="Git 仓库路径 (默认为当前目录)")
 
     parser.add_argument(
-        "--head", "-H",
-        default="HEAD",
-        help="目标引用 (分支名、提交哈希、标签等)"
-    )
-
-    parser.add_argument(
-        "--branch", "-B",
-        help="比较当前分支与指定分支 (便捷参数，等价于 --base <branch> --head HEAD)"
-    )
-
-    parser.add_argument(
-        "--pr-number", "-p",
-        type=int,
-        help="PR 编号 (需要 GitHub CLI 支持)"
-    )
-
-    parser.add_argument(
-        "--diff-file", "-d",
-        help="直接分析 diff 文件"
-    )
-
-    parser.add_argument(
-        "--repo-path", "-r",
-        help="Git 仓库路径 (默认为当前目录)"
-    )
-
-    parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         choices=["text", "rich", "json"],
         default="rich",
-        help="输出格式: text(文本), rich(美化), json(JSON格式)"
+        help="输出格式: text(文本), rich(美化), json(JSON格式)",
     )
 
-    parser.add_argument(
-        "--check-code", "-c",
-        action="store_true",
-        help="启用代码质量检查"
-    )
+    parser.add_argument("--check-code", "-c", action="store_true", help="启用代码质量检查")
 
-    parser.add_argument(
-        "--debug", "-D",
-        action="store_true",
-        help="启用调试模式"
-    )
+    parser.add_argument("--debug", "-D", action="store_true", help="启用调试模式")
 
-    parser.add_argument(
-        "--version", "-V",
-        action="version",
-        version="PR 分析器 v0.1.0"
-    )
+    parser.add_argument("--version", "-V", action="version", version="PR 分析器 v1.0.0")
 
     args = parser.parse_args()
 
@@ -774,25 +747,26 @@ def main():
             # 直接使用MBCS编码输出
             message = "[OK] No changes found\n"
             try:
-                sys.stdout.buffer.write(message.encode('mbcs'))
+                sys.stdout.buffer.write(message.encode("mbcs"))
             except UnicodeEncodeError:
-                sys.stdout.buffer.write(message.encode('mbcs', errors='replace'))
+                sys.stdout.buffer.write(message.encode("mbcs", errors="replace"))
             return 0
 
         if args.output == "text":
             report = analyzer.generate_report(stats, file_changes, code_quality)
             # 直接使用MBCS编码输出（Windows系统编码）
             try:
-                sys.stdout.buffer.write(report.encode('mbcs'))
-                sys.stdout.buffer.write(b'\n')
+                sys.stdout.buffer.write(report.encode("mbcs"))
+                sys.stdout.buffer.write(b"\n")
             except UnicodeEncodeError:
                 # 如果MBCS编码失败，使用replace策略
-                sys.stdout.buffer.write(report.encode('mbcs', errors='replace'))
-                sys.stdout.buffer.write(b'\n')
+                sys.stdout.buffer.write(report.encode("mbcs", errors="replace"))
+                sys.stdout.buffer.write(b"\n")
         elif args.output == "rich":
             analyzer.print_rich_report(stats, file_changes, code_quality)
         elif args.output == "json":
             import json
+
             result = {
                 "summary": {
                     "total_files": stats.total_files,
@@ -811,10 +785,10 @@ def main():
                         "change_type": fc.change_type.value,
                         "old_path": fc.old_path,
                         "additions": fc.additions,
-                        "deletions": fc.deletions
+                        "deletions": fc.deletions,
                     }
                     for fc in file_changes
-                ]
+                ],
             }
 
             # 添加代码质量检查结果（如果存在）
@@ -823,22 +797,24 @@ def main():
                 issues_list = []
                 for file_path, issues in code_quality.issues_by_file.items():
                     for issue in issues:
-                        issues_list.append({
-                            "file": issue.file,
-                            "line": issue.line,
-                            "category": issue.category,
-                            "severity": issue.severity.value,
-                            "message": issue.message,
-                            "suggestion": issue.suggestion,
-                            "code_snippet": issue.code_snippet
-                        })
+                        issues_list.append(
+                            {
+                                "file": issue.file,
+                                "line": issue.line,
+                                "category": issue.category,
+                                "severity": issue.severity.value,
+                                "message": issue.message,
+                                "suggestion": issue.suggestion,
+                                "code_snippet": issue.code_snippet,
+                            }
+                        )
 
                 result["code_quality"] = {
                     "total_issues": code_quality.total_issues,
                     "issues_by_category": code_quality.issues_by_category,
                     "issues_by_severity": code_quality.issues_by_severity,
                     "checker_stats": code_quality.checker_stats,
-                    "issues": issues_list
+                    "issues": issues_list,
                 }
             print(json.dumps(result, indent=2, ensure_ascii=False))
 
@@ -847,18 +823,19 @@ def main():
     except PRAnalyzerError as e:
         error_msg = f"[ERROR] 错误: {e}\n"
         try:
-            sys.stderr.buffer.write(error_msg.encode('mbcs'))
+            sys.stderr.buffer.write(error_msg.encode("mbcs"))
         except UnicodeEncodeError:
-            sys.stderr.buffer.write(error_msg.encode('mbcs', errors='replace'))
+            sys.stderr.buffer.write(error_msg.encode("mbcs", errors="replace"))
         return 1
     except Exception as e:
         error_msg = f"[ERROR] 未预期的错误: {e}\n"
         try:
-            sys.stderr.buffer.write(error_msg.encode('mbcs'))
+            sys.stderr.buffer.write(error_msg.encode("mbcs"))
         except UnicodeEncodeError:
-            sys.stderr.buffer.write(error_msg.encode('mbcs', errors='replace'))
+            sys.stderr.buffer.write(error_msg.encode("mbcs", errors="replace"))
         if args.debug:
             import traceback
+
             traceback.print_exc()
         return 1
 

@@ -5,41 +5,40 @@ CAE-CLI 核心模块
 """
 
 # 导入数据类型
-from .types import (
-    FileFormat,
-    MaterialProperty,
-    LoadCondition,
-    BoundaryCondition,
-    SimulationConfig,
-    SimulationResult,
-    create_default_config,
-)
-
 # 导入异常
 from .exceptions import (
-    CAEError,
-    FileNotFoundError,
-    FileFormatError,
-    FileParseError,
+    AIError,
     CADConnectionError,
     CADOperationError,
     CAEAnalysisError,
-    MeshGenerationError,
-    MaterialNotFoundError,
-    MaterialPropertyError,
+    CAEError,
     ConfigError,
     ConfigValidationError,
+    FileFormatError,
+    FileNotFoundError,
+    FileParseError,
+    GUIError,
+    MaterialNotFoundError,
+    MaterialPropertyError,
+    MeshGenerationError,
+    ModelNotFoundError,
+    OllamaConnectionError,
+    RAGError,
+    SimulationConvergenceError,
     SimulationError,
     SimulationTimeoutError,
-    SimulationConvergenceError,
-    AIError,
-    OllamaConnectionError,
-    ModelNotFoundError,
-    RAGError,
-    GUIError,
     WorkerError,
     format_error,
     get_error_details,
+)
+from .types import (
+    BoundaryCondition,
+    FileFormat,
+    LoadCondition,
+    MaterialProperty,
+    SimulationConfig,
+    SimulationResult,
+    create_default_config,
 )
 
 __all__ = [

@@ -5,12 +5,12 @@
 确保不同软件组件之间的数据交换一致性。
 """
 
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Dict, Any, Union
-from dataclasses import dataclass, field
-import yaml
+from typing import Any, Dict, List, Optional, Union
 
+import yaml
 
 # 使用pydantic需要额外安装，这里用dataclass替代
 # from pydantic import BaseModel, Field, validator
@@ -122,9 +122,7 @@ class SimulationConfig:
 
     # 输出配置
     output_dir: Path = Path("./simulation_output")
-    output_formats: List[FileFormat] = field(
-        default_factory=lambda: [FileFormat.VTK, FileFormat.JSON]
-    )
+    output_formats: List[FileFormat] = field(default_factory=lambda: [FileFormat.VTK, FileFormat.JSON])
     report_format: FileFormat = FileFormat.HTML
 
     @classmethod
@@ -144,7 +142,7 @@ class SimulationConfig:
         if not yaml_path.exists():
             raise FileNotFoundError(f"配置文件不存在: {yaml_path}")
 
-        with open(yaml_path, "r", encoding="utf-8") as f:
+        with open(yaml_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
 
         return cls.from_dict(data)

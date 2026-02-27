@@ -1,32 +1,54 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 本地GGUF模型加载器
 支持 llama-cpp-python 和 llama.cpp 直接调用两种方式
 """
 
-import os
-import sys
-import subprocess
 import multiprocessing
-import json
-import threading
+import subprocess
+import sys
 from pathlib import Path
-from typing import Optional, List, Dict, Any, Callable, Generator
+from typing import Any, Dict, Generator, List, Optional
 
 # 设置UTF-8输出以避免Windows编码问题
-if sys.platform == 'win32':
+if sys.platform == "win32":
     import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
 console = Console()
 
-DEFAULT_MODEL_DIR = Path(__file__).parent.parent.parent
+
+def _get_app_dir() -> Path:
+    """获取可执行文件或脚本所在目录（支持打包后的 exe）"""
+    if getattr(sys, "frozen", False):
+        # 打包后的 exe
+        return Path(sys._MEIPASS)
+    else:
+        # 开发环境
+        return Path(__file__).parent.parent.parent
+
+
+DEFAULT_MODEL_DIR = _get_app_dir()
 DEFAULT_GGUF_MODEL = "qwen2.5-1.5b-instruct-q4_k_m.gguf"
+
+
+def _get_default_gguf_model_path() -> Optional[Path]:
+    """获取默认 GGUF 模型路径 - 优先从 exe 同目录查找"""
+    if getattr(sys, "frozen", False):
+        # 打包环境：从 exe 同目录查找
+        exe_dir = Path(sys.executable).parent
+        model_path = exe_dir / DEFAULT_GGUF_MODEL
+        if model_path.exists():
+            return model_path
+    # 开发环境：从项目根目录查找
+    model_path = DEFAULT_MODEL_DIR / DEFAULT_GGUF_MODEL
+    if model_path.exists():
+        return model_path
+    return None
 
 
 def parse_quantization_type(filename: str) -> str:
@@ -161,11 +183,13 @@ class LocalGGUFModel:
 
         model_file = Path(self.model_path)
         if not model_file.exists():
-            default_path = DEFAULT_MODEL_DIR / self.model_path
-            if default_path.exists():
+            # 尝试多个默认位置
+            default_path = _get_default_gguf_model_path()
+            if default_path:
                 self.model_path = str(default_path)
             else:
                 console.print(f"[red]模型文件不存在: {self.model_path}[/red]")
+                console.print("[yellow]请将 qwen2.5-1.5b-instruct-q4_k_m.gguf 放到 exe 同目录[/yellow]")
                 return False
 
         # 获取模型信息
@@ -209,7 +233,7 @@ class LocalGGUFModel:
                 use_mlock=True,
                 verbose=False,
             )
-            console.print(f"[green]✓ 模型加载成功 (llama-cpp-python)[/green]")
+            console.print("[green]✓ 模型加载成功 (llama-cpp-python)[/green]")
             return True
         except ImportError:
             console.print("[yellow]llama-cpp-python 未安装[/yellow]")
@@ -250,9 +274,7 @@ class LocalGGUFModel:
             messages = []
             if history:
                 for h in history:
-                    messages.append(
-                        {"role": h.get("role", "user"), "content": h.get("content", "")}
-                    )
+                    messages.append({"role": h.get("role", "user"), "content": h.get("content", "")})
             messages.append({"role": "user", "content": message})
 
             response = self.llm.create_chat_completion(
@@ -293,10 +315,14 @@ class LocalGGUFModel:
         try:
             cmd = [
                 str(self._llama_cpp_path),
-                "-m", str(self.model_path),
-                "-p", prompt,
-                "--temp", str(temperature),
-                "-n", str(max_tokens),
+                "-m",
+                str(self.model_path),
+                "-p",
+                prompt,
+                "--temp",
+                str(temperature),
+                "-n",
+                str(max_tokens),
                 "--no-mmap",
             ]
 
@@ -318,11 +344,8 @@ class LocalGGUFModel:
         except Exception as e:
             return f"生成失败: {str(e)}"
 
-    def _build_prompt(
-        self, message: str, history: Optional[List[Dict[str, str]]] = None
-    ) -> str:
+    def _build_prompt(self, message: str, history: Optional[List[Dict[str, str]]] = None) -> str:
         """构建 llama.cpp 格式的 prompt"""
-        from llama_cpp import Llama
 
         # 使用 llama.cpp 内置的 prompt template
         if self.llm:

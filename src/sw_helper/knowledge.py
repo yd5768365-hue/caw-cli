@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 机械手册知识库管理模块
 用于读取 Markdown 格式的知识库文件并提供搜索功能
 """
 
-import os
 import re
-import glob
-import markdown
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, List, Optional
+
 from rich.console import Console
-from rich.text import Text
 from rich.panel import Panel
-from rich.markdown import Markdown
+from rich.text import Text
 
 
 class KnowledgeBase:
@@ -50,14 +46,16 @@ class KnowledgeBase:
         self._documents = []
         for md_file in md_files:
             try:
-                with open(md_file, "r", encoding="utf-8") as f:
+                with open(md_file, encoding="utf-8") as f:
                     content = f.read()
 
-                self._documents.append({
-                    "filename": md_file.name,
-                    "title": self._extract_title(content) or md_file.name.replace(".md", ""),
-                    "content": content
-                })
+                self._documents.append(
+                    {
+                        "filename": md_file.name,
+                        "title": self._extract_title(content) or md_file.name.replace(".md", ""),
+                        "content": content,
+                    }
+                )
 
             except Exception as e:
                 self.console.print(f"[red]错误: 无法读取文件 '{md_file}': {e}[/red]")
@@ -65,7 +63,7 @@ class KnowledgeBase:
     def _extract_title(self, content: str) -> Optional[str]:
         """从 Markdown 内容中提取标题"""
         # 查找 # 标题
-        match = re.search(r'^#\s+([^\n]+)', content, re.MULTILINE)
+        match = re.search(r"^#\s+([^\n]+)", content, re.MULTILINE)
         if match:
             return match.group(1).strip()
 
@@ -101,7 +99,7 @@ class KnowledgeBase:
 |------|----------------|----------------|------------|------|
 | H62 | 110 | 330 | 40 | 普通黄铜，用于制造小五金、仪表等 |
 | QSn4-3 | 200 | 400 | 40 | 锡青铜，用于制造轴承、轴套等 |
-"""
+""",
             },
             {
                 "filename": "fasteners.md",
@@ -126,7 +124,7 @@ class KnowledgeBase:
 | 8.8 | 800 | 640 | 高强度螺栓，用于重要的连接 |
 | 10.9 | 1000 | 900 | 高强度螺栓，用于重载连接 |
 | 12.9 | 1200 | 1080 | 超高强度螺栓，用于极重要的连接 |
-"""
+""",
             },
             {
                 "filename": "tolerances.md",
@@ -149,8 +147,8 @@ class KnowledgeBase:
 | 间隙配合 | 孔的尺寸大于轴的尺寸，有间隙 | 滑动轴承、齿轮啮合等 |
 | 过盈配合 | 孔的尺寸小于轴的尺寸，有过盈 | 轴与轮毂的连接等 |
 | 过渡配合 | 可能有间隙或过盈，配合较紧 | 定位配合、定心配合等 |
-"""
-            }
+""",
+            },
         ]
 
         for file_info in default_files:
@@ -236,7 +234,7 @@ class KnowledgeBase:
                 break
 
             result.append(text[idx:found_idx])
-            result.append(text[found_idx:found_idx + len(keyword)], style="yellow")
+            result.append(text[found_idx : found_idx + len(keyword)], style="yellow")
             idx = found_idx + len(keyword)
 
         return result
@@ -266,7 +264,7 @@ class KnowledgeBase:
                 title=f"[green]{result['title']}[/green]",
                 subtitle=f"[dim]{result['filename']}[/dim]",
                 border_style="cyan",
-                expand=False
+                expand=False,
             )
 
             panels.append(panel)
@@ -301,9 +299,19 @@ class KnowledgeBase:
     def _suggest_keywords(self) -> None:
         """提供搜索建议"""
         suggestions = [
-            "Q235", "45钢", "Q345", "304不锈钢", "6061铝合金",
-            "M6", "M8", "M10", "螺栓规格", "螺栓强度",
-            "公差等级", "间隙配合", "过盈配合"
+            "Q235",
+            "45钢",
+            "Q345",
+            "304不锈钢",
+            "6061铝合金",
+            "M6",
+            "M8",
+            "M10",
+            "螺栓规格",
+            "螺栓强度",
+            "公差等级",
+            "间隙配合",
+            "过盈配合",
         ]
 
         self.console.print("[dim]建议搜索:[/dim]")
@@ -328,13 +336,14 @@ class KnowledgeBase:
         knowledge_text = ""
         for result in results:
             knowledge_text += f"# {result['title']}\n\n"
-            knowledge_text += result['content'] + "\n\n"
+            knowledge_text += result["content"] + "\n\n"
 
         return knowledge_text
 
 
 # 单例模式
 _kb_instance = None
+
 
 def get_knowledge_base() -> KnowledgeBase:
     """获取知识库实例（单例模式）"""
@@ -356,4 +365,4 @@ if __name__ == "__main__":
     q235_results = kb.search("Q235")
     for result in q235_results:
         print(f"\n{result['title']}:")
-        print(result['content'][:200] + "...")
+        print(result["content"][:200] + "...")

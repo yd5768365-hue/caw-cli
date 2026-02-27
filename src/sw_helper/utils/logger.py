@@ -8,9 +8,7 @@ from pathlib import Path
 from typing import Optional
 
 
-def setup_logger(
-    name: str = "sw_helper", level: int = logging.INFO, log_file: Optional[str] = None
-) -> logging.Logger:
+def setup_logger(name: str = "sw_helper", level: int = logging.INFO, log_file: Optional[str] = None) -> logging.Logger:
     """设置日志记录器
 
     Args:

@@ -5,12 +5,12 @@
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
 
 
 def get_resource_path(relative_path: str) -> Path:
     """获取资源文件路径，支持打包后的exe和开发模式"""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         base_path = Path(sys._MEIPASS)
     else:
         base_path = Path(__file__).parent.parent.parent.parent
@@ -31,7 +31,7 @@ class MaterialDatabase:
     def _load_database(self):
         """加载材料数据库"""
         if self.db_path.exists():
-            with open(self.db_path, "r", encoding="utf-8") as f:
+            with open(self.db_path, encoding="utf-8") as f:
                 self.materials = json.load(f)
         else:
             # 创建默认数据库

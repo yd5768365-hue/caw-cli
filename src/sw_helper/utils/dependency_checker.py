@@ -9,7 +9,7 @@
 - 依赖状态报告
 """
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 from rich.console import Console
 from rich.table import Table
@@ -116,6 +116,7 @@ class DependencyChecker:
             # 尝试获取版本 - 使用 importlib.metadata 避免弃用警告
             try:
                 from importlib.metadata import version
+
                 status["version"] = version(dependency.module_name)
             except (ImportError, Exception):
                 # 回退到属性检查

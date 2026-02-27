@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "caw-cli-main",
+    "createdAt": 1772114007425,
+    "preset": "starter"
+  },
+  "authorizedRoots": [
+    "E:\\workspace\\projects\\caw-cli\\caw-cli-main"
+  ]
+}

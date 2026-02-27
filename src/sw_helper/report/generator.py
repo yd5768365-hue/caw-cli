@@ -3,9 +3,9 @@
 """
 
 import json
-from pathlib import Path
-from typing import Dict, Any, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 
 class ReportGenerator:
@@ -61,9 +61,7 @@ class ReportGenerator:
 
         # 生成报告
         if format.lower() == "html":
-            return self.generate_html_report(
-                str(output_path_obj), title=title or f"{analysis_type} Analysis Report"
-            )
+            return self.generate_html_report(str(output_path_obj), title=title or f"{analysis_type} Analysis Report")
         else:
             self._write_report(output_path_obj)
 

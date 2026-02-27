@@ -6,20 +6,19 @@ CAE-CLI 可视化界面模块
 """
 
 # 版本信息
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 # 导入主题配置
-from .theme import (
-    CAETheme,
-    MAIN_RED,
-    HIGHLIGHT_RED,
-    BACKGROUND_BLACK,
-    COOL_GRAY,
-    TEXT_WHITE,
-)
-
 # 导入主窗口
 from .main_window import MainWindow
+from .theme import (
+    BACKGROUND_BLACK,
+    COOL_GRAY,
+    HIGHLIGHT_RED,
+    MAIN_RED,
+    TEXT_WHITE,
+    CAETheme,
+)
 
 __all__ = [
     "__version__",

@@ -2,8 +2,10 @@
 材料力学计算模块
 """
 
-import numpy as np
 from typing import Dict, Optional
+
+import numpy as np
+
 from .database import MaterialDatabase
 
 
@@ -13,9 +15,7 @@ class MechanicsCalculator:
     def __init__(self):
         self.db = MaterialDatabase()
 
-    def calculate_stress(
-        self, force: float, area: float, material_name: Optional[str] = None
-    ) -> Dict[str, float]:
+    def calculate_stress(self, force: float, area: float, material_name: Optional[str] = None) -> Dict[str, float]:
         """计算应力
 
         Args:

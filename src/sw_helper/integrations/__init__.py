@@ -2,7 +2,7 @@
 软件集成模块
 """
 
-from .cad_connector import SolidWorksConnector, FreeCADConnector, CADManager, Parameter
+from .cad_connector import CADManager, FreeCADConnector, Parameter, SolidWorksConnector
 from .sw_macro import SolidWorksMacroGenerator
 
 __all__ = [

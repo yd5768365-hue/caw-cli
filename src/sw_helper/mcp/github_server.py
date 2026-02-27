@@ -3,12 +3,12 @@ GitHub仓库管理 MCP Server - 将GitHub仓库操作暴露为MCP工具
 专门针对 https://github.com/yd5768365-hue/caw-cli.git 仓库
 """
 
-from typing import Dict, Any, Optional, List
-from pathlib import Path
-import subprocess
-import json
 import shutil
+import subprocess
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 from sw_helper.mcp.core import Tool, get_mcp_server
 
 
@@ -30,7 +30,7 @@ class GitHubRepoMCPServer:
         self.repo_url = "https://github.com/yd5768365-hue/caw-cli.git"
         self._register_tools()
 
-        print(f"[GitHub MCP] 初始化仓库管理服务器")
+        print("[GitHub MCP] 初始化仓库管理服务器")
         print(f"[GitHub MCP] 仓库路径: {self.repo_path}")
         print(f"[GitHub MCP] 仓库URL: {self.repo_url}")
 
@@ -42,10 +42,7 @@ class GitHubRepoMCPServer:
             Tool(
                 name="github_repo_info",
                 description="获取GitHub仓库基本信息",
-                input_schema={
-                    "type": "object",
-                    "properties": {}
-                },
+                input_schema={"type": "object", "properties": {}},
                 handler=self._handle_repo_info,
             )
         )
@@ -58,22 +55,10 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "directory": {
-                            "type": "string",
-                            "description": "目录路径（相对仓库根目录）",
-                            "default": "."
-                        },
-                        "recursive": {
-                            "type": "boolean",
-                            "description": "是否递归列出",
-                            "default": False
-                        },
-                        "pattern": {
-                            "type": "string",
-                            "description": "文件匹配模式（如*.py）",
-                            "default": "*"
-                        }
-                    }
+                        "directory": {"type": "string", "description": "目录路径（相对仓库根目录）", "default": "."},
+                        "recursive": {"type": "boolean", "description": "是否递归列出", "default": False},
+                        "pattern": {"type": "string", "description": "文件匹配模式（如*.py）", "default": "*"},
+                    },
                 },
                 handler=self._handle_list_files,
             )
@@ -87,17 +72,10 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "file_path": {
-                            "type": "string",
-                            "description": "文件路径（相对仓库根目录）"
-                        },
-                        "encoding": {
-                            "type": "string",
-                            "description": "文件编码",
-                            "default": "utf-8"
-                        }
+                        "file_path": {"type": "string", "description": "文件路径（相对仓库根目录）"},
+                        "encoding": {"type": "string", "description": "文件编码", "default": "utf-8"},
                     },
-                    "required": ["file_path"]
+                    "required": ["file_path"],
                 },
                 handler=self._handle_read_file,
             )
@@ -111,26 +89,12 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "file_path": {
-                            "type": "string",
-                            "description": "文件路径（相对仓库根目录）"
-                        },
-                        "content": {
-                            "type": "string",
-                            "description": "文件内容"
-                        },
-                        "encoding": {
-                            "type": "string",
-                            "description": "文件编码",
-                            "default": "utf-8"
-                        },
-                        "create_dirs": {
-                            "type": "boolean",
-                            "description": "是否自动创建目录",
-                            "default": True
-                        }
+                        "file_path": {"type": "string", "description": "文件路径（相对仓库根目录）"},
+                        "content": {"type": "string", "description": "文件内容"},
+                        "encoding": {"type": "string", "description": "文件编码", "default": "utf-8"},
+                        "create_dirs": {"type": "boolean", "description": "是否自动创建目录", "default": True},
                     },
-                    "required": ["file_path", "content"]
+                    "required": ["file_path", "content"],
                 },
                 handler=self._handle_write_file,
             )
@@ -144,22 +108,11 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "file_path": {
-                            "type": "string",
-                            "description": "文件路径（相对仓库根目录）"
-                        },
-                        "content": {
-                            "type": "string",
-                            "description": "文件内容",
-                            "default": ""
-                        },
-                        "encoding": {
-                            "type": "string",
-                            "description": "文件编码",
-                            "default": "utf-8"
-                        }
+                        "file_path": {"type": "string", "description": "文件路径（相对仓库根目录）"},
+                        "content": {"type": "string", "description": "文件内容", "default": ""},
+                        "encoding": {"type": "string", "description": "文件编码", "default": "utf-8"},
                     },
-                    "required": ["file_path"]
+                    "required": ["file_path"],
                 },
                 handler=self._handle_create_file,
             )
@@ -173,17 +126,10 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "file_path": {
-                            "type": "string",
-                            "description": "文件路径（相对仓库根目录）"
-                        },
-                        "force": {
-                            "type": "boolean",
-                            "description": "是否强制删除",
-                            "default": False
-                        }
+                        "file_path": {"type": "string", "description": "文件路径（相对仓库根目录）"},
+                        "force": {"type": "boolean", "description": "是否强制删除", "default": False},
                     },
-                    "required": ["file_path"]
+                    "required": ["file_path"],
                 },
                 handler=self._handle_delete_file,
             )
@@ -197,21 +143,11 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "old_path": {
-                            "type": "string",
-                            "description": "原文件路径"
-                        },
-                        "new_path": {
-                            "type": "string",
-                            "description": "新文件路径"
-                        },
-                        "overwrite": {
-                            "type": "boolean",
-                            "description": "是否覆盖已存在的文件",
-                            "default": False
-                        }
+                        "old_path": {"type": "string", "description": "原文件路径"},
+                        "new_path": {"type": "string", "description": "新文件路径"},
+                        "overwrite": {"type": "boolean", "description": "是否覆盖已存在的文件", "default": False},
                     },
-                    "required": ["old_path", "new_path"]
+                    "required": ["old_path", "new_path"],
                 },
                 handler=self._handle_rename_file,
             )
@@ -222,10 +158,7 @@ class GitHubRepoMCPServer:
             Tool(
                 name="github_git_status",
                 description="查看Git仓库状态",
-                input_schema={
-                    "type": "object",
-                    "properties": {}
-                },
+                input_schema={"type": "object", "properties": {}},
                 handler=self._handle_git_status,
             )
         )
@@ -241,14 +174,10 @@ class GitHubRepoMCPServer:
                         "files": {
                             "type": "array",
                             "items": {"type": "string"},
-                            "description": "文件路径列表（相对仓库根目录）"
+                            "description": "文件路径列表（相对仓库根目录）",
                         },
-                        "all": {
-                            "type": "boolean",
-                            "description": "是否添加所有更改",
-                            "default": False
-                        }
-                    }
+                        "all": {"type": "boolean", "description": "是否添加所有更改", "default": False},
+                    },
                 },
                 handler=self._handle_git_add,
             )
@@ -262,17 +191,14 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "message": {
-                            "type": "string",
-                            "description": "提交信息"
-                        },
+                        "message": {"type": "string", "description": "提交信息"},
                         "author": {
                             "type": "string",
                             "description": "提交者信息",
-                            "default": "Claude Code <noreply@anthropic.com>"
-                        }
+                            "default": "Claude Code <noreply@anthropic.com>",
+                        },
                     },
-                    "required": ["message"]
+                    "required": ["message"],
                 },
                 handler=self._handle_git_commit,
             )
@@ -286,22 +212,10 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "remote": {
-                            "type": "string",
-                            "description": "远程仓库名称",
-                            "default": "origin"
-                        },
-                        "branch": {
-                            "type": "string",
-                            "description": "分支名称",
-                            "default": "main"
-                        },
-                        "force": {
-                            "type": "boolean",
-                            "description": "是否强制推送",
-                            "default": False
-                        }
-                    }
+                        "remote": {"type": "string", "description": "远程仓库名称", "default": "origin"},
+                        "branch": {"type": "string", "description": "分支名称", "default": "main"},
+                        "force": {"type": "boolean", "description": "是否强制推送", "default": False},
+                    },
                 },
                 handler=self._handle_git_push,
             )
@@ -315,17 +229,9 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "remote": {
-                            "type": "string",
-                            "description": "远程仓库名称",
-                            "default": "origin"
-                        },
-                        "branch": {
-                            "type": "string",
-                            "description": "分支名称",
-                            "default": "main"
-                        }
-                    }
+                        "remote": {"type": "string", "description": "远程仓库名称", "default": "origin"},
+                        "branch": {"type": "string", "description": "分支名称", "default": "main"},
+                    },
                 },
                 handler=self._handle_git_pull,
             )
@@ -339,18 +245,14 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "limit": {
-                            "type": "integer",
-                            "description": "显示最近的提交数量",
-                            "default": 10
-                        },
+                        "limit": {"type": "integer", "description": "显示最近的提交数量", "default": 10},
                         "format": {
                             "type": "string",
                             "description": "输出格式",
                             "enum": ["oneline", "short", "full", "graph"],
-                            "default": "oneline"
-                        }
-                    }
+                            "default": "oneline",
+                        },
+                    },
                 },
                 handler=self._handle_git_log,
             )
@@ -364,17 +266,10 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "branch_name": {
-                            "type": "string",
-                            "description": "分支名称"
-                        },
-                        "start_point": {
-                            "type": "string",
-                            "description": "起始点（分支/提交）",
-                            "default": "HEAD"
-                        }
+                        "branch_name": {"type": "string", "description": "分支名称"},
+                        "start_point": {"type": "string", "description": "起始点（分支/提交）", "default": "HEAD"},
                     },
-                    "required": ["branch_name"]
+                    "required": ["branch_name"],
                 },
                 handler=self._handle_git_create_branch,
             )
@@ -388,17 +283,10 @@ class GitHubRepoMCPServer:
                 input_schema={
                     "type": "object",
                     "properties": {
-                        "branch_name": {
-                            "type": "string",
-                            "description": "分支名称"
-                        },
-                        "create": {
-                            "type": "boolean",
-                            "description": "是否创建分支（如果不存在）",
-                            "default": False
-                        }
+                        "branch_name": {"type": "string", "description": "分支名称"},
+                        "create": {"type": "boolean", "description": "是否创建分支（如果不存在）", "default": False},
                     },
-                    "required": ["branch_name"]
+                    "required": ["branch_name"],
                 },
                 handler=self._handle_git_checkout,
             )
@@ -422,25 +310,17 @@ class GitHubRepoMCPServer:
         """运行Git命令"""
         try:
             result = subprocess.run(
-                ["git"] + args,
-                cwd=self.repo_path,
-                capture_output=capture_output,
-                text=True,
-                encoding="utf-8"
+                ["git"] + args, cwd=self.repo_path, capture_output=capture_output, text=True, encoding="utf-8"
             )
             return {
                 "success": result.returncode == 0,
                 "returncode": result.returncode,
                 "stdout": result.stdout if capture_output else "",
                 "stderr": result.stderr if capture_output else "",
-                "command": f"git {' '.join(args)}"
+                "command": f"git {' '.join(args)}",
             }
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "command": f"git {' '.join(args)}"
-            }
+            return {"success": False, "error": str(e), "command": f"git {' '.join(args)}"}
 
     def _handle_repo_info(self) -> Dict[str, Any]:
         """处理仓库信息请求"""
@@ -461,14 +341,16 @@ class GitHubRepoMCPServer:
                 "repo_url": self.repo_url,
                 "current_branch": branch_result.get("stdout", "").strip(),
                 "has_remote": "origin" in remote_result.get("stdout", ""),
-                "uncommitted_changes": len(status_result.get("stdout", "").strip().splitlines()) if status_result.get("stdout") else 0,
+                "uncommitted_changes": (
+                    len(status_result.get("stdout", "").strip().splitlines()) if status_result.get("stdout") else 0
+                ),
                 "file_stats": {
                     "total_files": total_files,
                     "python_files": len(python_files),
                     "markdown_files": len(md_files),
-                    "directories": sum(1 for _ in self.repo_path.rglob("*/") if _.is_dir())
+                    "directories": sum(1 for _ in self.repo_path.rglob("*/") if _.is_dir()),
                 },
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -492,30 +374,24 @@ class GitHubRepoMCPServer:
                     rel_path = file_path.relative_to(self.repo_path)
                     try:
                         stat = file_path.stat()
-                        file_list.append({
-                            "path": str(rel_path),
-                            "name": file_path.name,
-                            "size": stat.st_size,
-                            "modified": stat.st_mtime,
-                            "is_dir": False
-                        })
-                    except:
-                        file_list.append({
-                            "path": str(rel_path),
-                            "name": file_path.name,
-                            "is_dir": False
-                        })
+                        file_list.append(
+                            {
+                                "path": str(rel_path),
+                                "name": file_path.name,
+                                "size": stat.st_size,
+                                "modified": stat.st_mtime,
+                                "is_dir": False,
+                            }
+                        )
+                    except OSError:
+                        file_list.append({"path": str(rel_path), "name": file_path.name, "is_dir": False})
 
             # 如果非递归，也列出目录
             if not recursive:
                 for dir_path in target_dir.iterdir():
                     if dir_path.is_dir():
                         rel_path = dir_path.relative_to(self.repo_path)
-                        file_list.append({
-                            "path": str(rel_path),
-                            "name": dir_path.name,
-                            "is_dir": True
-                        })
+                        file_list.append({"path": str(rel_path), "name": dir_path.name, "is_dir": True})
 
             return {
                 "success": True,
@@ -523,7 +399,7 @@ class GitHubRepoMCPServer:
                 "recursive": recursive,
                 "pattern": pattern,
                 "count": len(file_list),
-                "files": sorted(file_list, key=lambda x: x["path"])
+                "files": sorted(file_list, key=lambda x: x["path"]),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -535,7 +411,7 @@ class GitHubRepoMCPServer:
             if not full_path.exists():
                 return {"success": False, "error": f"文件不存在: {file_path}"}
 
-            with open(full_path, "r", encoding=encoding) as f:
+            with open(full_path, encoding=encoding) as f:
                 content = f.read()
 
             stat = full_path.stat()
@@ -545,14 +421,16 @@ class GitHubRepoMCPServer:
                 "content": content,
                 "size": stat.st_size,
                 "modified": stat.st_mtime,
-                "encoding": encoding
+                "encoding": encoding,
             }
         except UnicodeDecodeError:
             return {"success": False, "error": f"无法使用 {encoding} 编码读取文件"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def _handle_write_file(self, file_path: str, content: str, encoding: str = "utf-8", create_dirs: bool = True) -> Dict[str, Any]:
+    def _handle_write_file(
+        self, file_path: str, content: str, encoding: str = "utf-8", create_dirs: bool = True
+    ) -> Dict[str, Any]:
         """处理写入文件请求"""
         try:
             full_path = self._get_full_path(file_path)
@@ -580,7 +458,7 @@ class GitHubRepoMCPServer:
                 "action": "modified" if backup_path else "created",
                 "size": stat.st_size,
                 "backup": str(backup_path) if backup_path else None,
-                "encoding": encoding
+                "encoding": encoding,
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -600,12 +478,7 @@ class GitHubRepoMCPServer:
                 f.write(content)
 
             stat = full_path.stat()
-            return {
-                "success": True,
-                "file_path": file_path,
-                "size": stat.st_size,
-                "encoding": encoding
-            }
+            return {"success": True, "file_path": file_path, "size": stat.st_size, "encoding": encoding}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -637,7 +510,7 @@ class GitHubRepoMCPServer:
                 "success": True,
                 "file_path": file_path,
                 "action": action,
-                "backup": str(backup_path) if not force and full_path.is_file() else None
+                "backup": str(backup_path) if not force and full_path.is_file() else None,
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -669,7 +542,7 @@ class GitHubRepoMCPServer:
                 "old_path": old_path,
                 "new_path": new_path,
                 "action": "renamed",
-                "backup": str(backup_path) if backup_path else None
+                "backup": str(backup_path) if backup_path else None,
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -704,7 +577,7 @@ class GitHubRepoMCPServer:
                 "changed_files": len(files),
                 "files": files,
                 "has_remote": "origin" in remote_result.get("stdout", ""),
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -766,12 +639,7 @@ class GitHubRepoMCPServer:
     def _handle_git_log(self, limit: int = 10, format: str = "oneline") -> Dict[str, Any]:
         """处理Git日志请求"""
         try:
-            format_map = {
-                "oneline": "--oneline",
-                "short": "--short",
-                "full": "--full",
-                "graph": "--graph --oneline"
-            }
+            format_map = {"oneline": "--oneline", "short": "--short", "full": "--full", "graph": "--graph --oneline"}
 
             format_arg = format_map.get(format, "--oneline")
             command = ["log", format_arg, f"-{limit}"]
@@ -786,15 +654,9 @@ class GitHubRepoMCPServer:
                         # 简单解析oneline格式
                         if " " in line:
                             hash_part, message = line.split(" ", 1)
-                            commits.append({
-                                "hash": hash_part,
-                                "message": message.strip()
-                            })
+                            commits.append({"hash": hash_part, "message": message.strip()})
                         else:
-                            commits.append({
-                                "hash": line,
-                                "message": ""
-                            })
+                            commits.append({"hash": line, "message": ""})
 
                 result["commits"] = commits
                 result["count"] = len(commits)

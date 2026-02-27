@@ -4,22 +4,19 @@
 此模块提供网格质量分析功能的GUI界面。
 """
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QFileDialog,
-    QTextEdit,
-    QGroupBox,
-    QFormLayout,
     QComboBox,
     QDoubleSpinBox,
+    QFileDialog,
+    QFormLayout,
+    QGroupBox,
+    QLabel,
+    QPushButton,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Signal
-
-from ..theme import CAETheme
 
 
 class MeshPage(QWidget):
@@ -179,7 +176,7 @@ class MeshPage(QWidget):
             self.result_text.setText("\n".join(lines))
 
         except ImportError as e:
-            self.result_text.setText(f"缺少依赖: {e}\n\n请安装: pip install -e \".[full]\"")
+            self.result_text.setText(f'缺少依赖: {e}\n\n请安装: pip install -e ".[full]"')
         except FileNotFoundError as e:
             self.result_text.setText(f"文件不存在: {e}")
         except Exception as e:

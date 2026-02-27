@@ -4,24 +4,22 @@
 此模块提供参数优化功能的GUI界面。
 """
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QComboBox,
+    QDoubleSpinBox,
+    QFileDialog,
+    QFormLayout,
+    QGroupBox,
     QHBoxLayout,
-    QPushButton,
     QLabel,
     QLineEdit,
-    QTextEdit,
-    QGroupBox,
-    QFormLayout,
-    QDoubleSpinBox,
+    QPushButton,
     QSpinBox,
-    QComboBox,
-    QFileDialog,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Signal
-
-from ..theme import CAETheme
 
 
 class OptimizationPage(QWidget):

@@ -15,13 +15,13 @@
 - Linux/Mac：正常显示 Unicode
 """
 
+import json
 import os
 import sys
-import json
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
 from rich.console import Console
-from rich.style import Style
 
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -77,7 +77,7 @@ def load_unicode_fallback() -> Dict[str, str]:
 
     try:
         if UNICODE_FALLBACK_CONFIG.exists():
-            with open(UNICODE_FALLBACK_CONFIG, "r", encoding="utf-8") as f:
+            with open(UNICODE_FALLBACK_CONFIG, encoding="utf-8") as f:
                 custom_mapping = json.load(f)
             default_mapping.update(custom_mapping)
     except Exception as e:
@@ -188,6 +188,7 @@ def set_encoding_env() -> None:
         try:
             # 尝试设置控制台代码页
             import subprocess
+
             subprocess.run(["chcp", "65001"], shell=True, check=False, capture_output=True)
         except Exception as e:
             print(f"设置控制台代码页失败: {e}")
@@ -207,12 +208,12 @@ def safe_print(text: str, console: Optional[Console] = None) -> None:
             console.print(fallback_text)
         else:
             print(fallback_text)
-    except Exception as e:
+    except Exception:
         # 终极回退方案：仅打印 ASCII 字符
         try:
             stripped_text = "".join(c for c in fallback_text if ord(c) < 128)
             print(stripped_text)
-        except:
+        except Exception:
             print("输出失败")
 
 

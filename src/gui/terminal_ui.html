@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CAE-CLI 终端</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Consolas', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .header {
+            background: #252526;
+            padding: 12px 20px;
+            border-bottom: 1px solid #3c3c3c;
+        }
+        .logo { font-size: 16px; color: #569cd6; font-weight: bold; }
+        .nav { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .nav-item {
+            padding: 6px 12px;
+            background: #3c3c3c;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .nav-item:hover { background: #094771; }
+        .main { padding: 15px; overflow-y: auto; height: calc(100vh - 80px); }
+        .section { margin-bottom: 20px; }
+        .section-title {
+            color: #569cd6;
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #3c3c3c;
+        }
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+        }
+        .cmd-card {
+            padding: 10px 12px;
+            background: #2d2d2d;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cmd-card:hover { background: #094771; border-color: #569cd6; }
+        .cmd-name { color: #9cdcfe; font-weight: bold; }
+        .cmd-desc { color: #6a9955; font-size: 11px; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">CAE-CLI 终端</div>
+        <div class="nav">
+            <div class="nav-item" data-cmd="cae-cli --help">帮助</div>
+            <div class="nav-item" data-cmd="cae-cli info">系统信息</div>
+            <div class="nav-item" data-cmd="cae-cli version">版本</div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="section">
+            <div class="section-title">核心功能</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-cmd="cae-cli parse --help">
+                    <div class="cmd-name">parse</div>
+                    <div class="cmd-desc">几何解析</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli analyze --help">
+                    <div class="cmd-name">analyze</div>
+                    <div class="cmd-desc">网格分析</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli material --help">
+                    <div class="cmd-name">material</div>
+                    <div class="cmd-desc">材料查询</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli optimize --help">
+                    <div class="cmd-name">optimize</div>
+                    <div class="cmd-desc">参数优化</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli report --help">
+                    <div class="cmd-name">report</div>
+                    <div class="cmd-desc">报告生成</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli handbook --help">
+                    <div class="cmd-name">handbook</div>
+                    <div class="cmd-desc">知识库</div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">AI 功能</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-cmd="cae-cli ai --help">
+                    <div class="cmd-name">ai</div>
+                    <div class="cmd-desc">AI 辅助设计</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli learn --help">
+                    <div class="cmd-name">learn</div>
+                    <div class="cmd-desc">学习模式</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli chat --help">
+                    <div class="cmd-name">chat</div>
+                    <div class="cmd-desc">交互聊天</div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">系统</div>
+            <div class="cmd-grid">
+                <div class="cmd-card" data-cmd="cae-cli config --list">
+                    <div class="cmd-name">config</div>
+                    <div class="cmd-desc">配置管理</div>
+                </div>
+                <div class="cmd-card" data-cmd="cae-cli interactive --help">
+                    <div class="cmd-name">interactive</div>
+                    <div class="cmd-desc">交互模式</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var bridge = null;
+
+        // 使用 QWebChannel 初始化 bridge
+        function initWebChannel() {
+            if (typeof QWebChannel === 'undefined') {
+                console.log('Waiting for QWebChannel...');
+                setTimeout(initWebChannel, 200);
+                return;
+            }
+
+            // 尝试多种方式初始化
+            if (window.qt && window.qt.webChannelTransport) {
+                new QWebChannel(window.qt.webChannelTransport, function(channel) {
+                    bridge = channel.objects.bridge;
+                    console.log('Bridge connected (qt.webChannelTransport)');
+                    attachClickHandlers();
+                });
+            } else {
+                // 尝试通过 qtwebchannelCallbacks
+                if (typeof qtwebchannelCallbacks === 'function') {
+                    qtwebchannelCallbacks({});
+                }
+                setTimeout(function() {
+                    if (window.bridge) {
+                        bridge = window.bridge;
+                        console.log('Bridge connected (window.bridge)');
+                        attachClickHandlers();
+                    } else {
+                        console.log('Trying alternative method...');
+                        // 最后尝试
+                        new QWebChannel(qt.webChannelTransport, function(channel) {
+                            bridge = channel.objects.bridge;
+                            console.log('Bridge connected (qt.webChannelTransport alt)');
+                            attachClickHandlers();
+                        });
+                    }
+                }, 500);
+            }
+        }
+
+        function attachClickHandlers() {
+            // 为所有命令卡片添加点击事件
+            document.querySelectorAll('.cmd-card, .nav-item[data-cmd]').forEach(function(el) {
+                el.addEventListener('click', function() {
+                    var cmd = el.getAttribute('data-cmd');
+                    if (cmd && bridge) {
+                        console.log('Executing:', cmd);
+                        bridge.runCommand(cmd);
+                    }
+                });
+            });
+        }
+
+        // 启动初始化
+        initWebChannel();
+    </script>
+</body>
+</html>

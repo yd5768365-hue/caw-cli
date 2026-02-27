@@ -4,10 +4,10 @@
 
 import json
 import time
-from pathlib import Path
-from typing import Dict, List, Optional, Callable
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Callable, Dict, List, Optional
 
 
 @dataclass
@@ -73,8 +73,8 @@ class ParametricOptimizer:
         Returns:
             优化结果列表
         """
-        from sw_helper.integrations.cad_connector import CADManager
         from sw_helper.geometry.parser import GeometryParser
+        from sw_helper.integrations.cad_connector import CADManager
 
         self.results = []
 
@@ -256,9 +256,7 @@ class ParametricOptimizer:
         for i, value in enumerate(values):
             iteration_start = time.time()
 
-            print(
-                f"\n[迭代 {i + 1}/{config.iterations}] {config.target_parameter} = {value:.4f}"
-            )
+            print(f"\n[迭代 {i + 1}/{config.iterations}] {config.target_parameter} = {value:.4f}")
 
             try:
                 # 修改参数
@@ -318,9 +316,7 @@ class ParametricOptimizer:
         best_result = max(self.results, key=lambda x: x.quality_score)
 
         for result in self.results:
-            params_str = ", ".join(
-                [f"{k}={v:.2f}" for k, v in result.parameters.items()]
-            )
+            params_str = ", ".join([f"{k}={v:.2f}" for k, v in result.parameters.items()])
             marker = " ★ 最佳" if result == best_result else ""
             report_lines.append(
                 f"迭代 {result.iteration}: {params_str} | "
@@ -448,23 +444,17 @@ class AIAssistedOptimizer(ParametricOptimizer):
             print(f"  • {param_name}: {param_info['value']} {param_info['unit']}")
 
         # 2. 获取AI优化建议
-        current_params = {
-            k: v["value"] for k, v in design_data.get("parameters", {}).items()
-        }
+        current_params = {k: v["value"] for k, v in design_data.get("parameters", {}).items()}
 
         # 模拟质量指标
         mock_metrics = {"max_stress": 180e6, "safety_factor": 1.8, "weight": 2.5}
 
-        suggestions = self.ai.generate_optimization_suggestions(
-            current_params, mock_metrics, target
-        )
+        suggestions = self.ai.generate_optimization_suggestions(current_params, mock_metrics, target)
 
         print("\nAI优化建议:")
         for i, suggestion in enumerate(suggestions, 1):
             print(f"  {i}. {suggestion['reason']}")
-            print(
-                f"     建议: {suggestion['type']} = {suggestion.get('suggested', 'N/A')}"
-            )
+            print(f"     建议: {suggestion['type']} = {suggestion.get('suggested', 'N/A')}")
             print(f"     预期改进: {suggestion.get('expected_improvement', 'N/A')}")
 
         # 3. 执行第一个建议的优化

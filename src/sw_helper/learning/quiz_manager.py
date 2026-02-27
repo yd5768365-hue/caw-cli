@@ -1,32 +1,37 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 题库管理器 - 加载YAML题库、随机出题、检查答案、记录分数
 """
 
-import yaml
 import random
-import os
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import yaml
+
 
 class QuestionDifficulty(Enum):
     """题目难度等级"""
+
     EASY = "easy"
     MEDIUM = "medium"
     HARD = "hard"
 
+
 @dataclass
 class QuestionOption:
     """选择题选项"""
+
     text: str
     correct: bool
+
 
 @dataclass
 class Question:
     """题目"""
+
     id: str
     knowledge_id: str
     question: str
@@ -36,9 +41,11 @@ class Question:
     tags: List[str]
     options: List[QuestionOption]
 
+
 @dataclass
 class QuizResult:
     """测验结果"""
+
     question_id: str
     knowledge_id: str
     selected_option_index: int
@@ -77,7 +84,7 @@ class QuizManager:
         all_questions = []
         for quiz_file in quiz_files:
             try:
-                with open(quiz_file, 'r', encoding='utf-8') as f:
+                with open(quiz_file, encoding="utf-8") as f:
                     quiz_data = yaml.safe_load(f)
 
                 # 验证数据格式
@@ -99,7 +106,7 @@ class QuizManager:
             except yaml.YAMLError as e:
                 print(f"警告: 解析YAML文件失败 {quiz_file}: {e}")
                 continue
-            except IOError as e:
+            except OSError as e:
                 print(f"警告: 读取文件失败 {quiz_file}: {e}")
                 continue
 
@@ -120,10 +127,7 @@ class QuizManager:
         # 解析选项
         options = []
         for opt_data in q_data.get("options", []):
-            option = QuestionOption(
-                text=opt_data.get("text", ""),
-                correct=opt_data.get("correct", False)
-            )
+            option = QuestionOption(text=opt_data.get("text", ""), correct=opt_data.get("correct", False))
             options.append(option)
 
         # 确保至少有一个正确选项
@@ -138,12 +142,12 @@ class QuizManager:
             category=q_data.get("category", ""),
             difficulty=difficulty,
             tags=q_data.get("tags", []),
-            options=options
+            options=options,
         )
 
-    def get_random_questions(self, count: int = 5,
-                           categories: Optional[List[str]] = None,
-                           difficulty: Optional[QuestionDifficulty] = None) -> List[Question]:
+    def get_random_questions(
+        self, count: int = 5, categories: Optional[List[str]] = None, difficulty: Optional[QuestionDifficulty] = None
+    ) -> List[Question]:
         """
         获取随机题目
 
@@ -217,7 +221,7 @@ class QuizManager:
         # 单选题：假设只有一个正确选项
         if len(correct_option_indices) == 1:
             correct_index = correct_option_indices[0]
-            is_correct = (selected_option_index == correct_index)
+            is_correct = selected_option_index == correct_index
             return is_correct, correct_index, question.explanation
         else:
             # 多选题：暂时不支持
@@ -240,7 +244,7 @@ class QuizManager:
                 "score_percentage": 0,
                 "average_time": 0,
                 "by_category": {},
-                "by_difficulty": {}
+                "by_difficulty": {},
             }
 
         total = len(results)
@@ -262,7 +266,7 @@ class QuizManager:
             "score_percentage": score_percentage,
             "average_time": average_time,
             "by_category": by_category,
-            "by_difficulty": by_difficulty
+            "by_difficulty": by_difficulty,
         }
 
     def get_quiz_summary(self) -> Dict[str, Any]:
@@ -298,12 +302,13 @@ class QuizManager:
             "total_questions": len(self.questions),
             "by_category": by_category,
             "by_difficulty": by_difficulty,
-            "by_tag": by_tag
+            "by_tag": by_tag,
         }
 
 
 # 单例模式
 _quiz_manager_instance = None
+
 
 def get_quiz_manager() -> QuizManager:
     """获取题库管理器实例（单例模式）"""
@@ -321,19 +326,19 @@ if __name__ == "__main__":
     manager = get_quiz_manager()
     summary = manager.get_quiz_summary()
 
-    print(f"\n题库摘要:")
+    print("\n题库摘要:")
     print(f"  总题数: {summary['total_questions']}")
 
-    print(f"\n按类别分布:")
-    for category, count in summary['by_category'].items():
+    print("\n按类别分布:")
+    for category, count in summary["by_category"].items():
         print(f"  {category}: {count}题")
 
-    print(f"\n按难度分布:")
-    for difficulty, count in summary['by_difficulty'].items():
+    print("\n按难度分布:")
+    for difficulty, count in summary["by_difficulty"].items():
         print(f"  {difficulty}: {count}题")
 
     # 测试随机出题
-    print(f"\n随机抽取3题测试:")
+    print("\n随机抽取3题测试:")
     random_questions = manager.get_random_questions(count=3)
 
     for i, question in enumerate(random_questions, 1):

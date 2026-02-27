@@ -1,31 +1,31 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 CAE-CLI 主菜单模块
 三个并列顶层模块：工作模式 / 知识顾问 / 辅助学习
 """
 
 import asyncio
-import json
 import sys
-from typing import Optional, List, Dict, Any
 from pathlib import Path
+from typing import Any, Dict, List
+
 from rich.console import Console
-from rich.table import Table
+from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Prompt
+from rich.table import Table
 from rich.text import Text
-from rich.markdown import Markdown
-from sw_helper.utils.rag_engine import get_rag_engine
-from sw_helper.ai.llm_client import LLMClient, LLMConfig, LLMProvider, Message, create_ollama_client
+
+from sw_helper.ai.llm_client import LLMClient, Message, create_ollama_client
 from sw_helper.learning.progress_tracker import get_progress_tracker
 from sw_helper.learning.quiz_manager import get_quiz_manager
 from sw_helper.utils.first_run import is_first_run, perform_first_run_check
+from sw_helper.utils.rag_engine import get_rag_engine
 
 
 def get_resource_path(relative_path: str) -> Path:
     """获取资源文件路径，支持打包后的exe和开发模式"""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         base_path = Path(sys._MEIPASS)
     else:
         base_path = Path(__file__).parent.parent
@@ -33,11 +33,11 @@ def get_resource_path(relative_path: str) -> Path:
 
 
 # 项目核心颜色定义
-MAIN_RED = "#8B0000"       # 深红/酒红 - 主色调
-HIGHLIGHT_RED = "#FF4500"     # 荧光红 - 高亮色
-BACKGROUND_BLACK = "#0F0F0F"   # 深黑背景
-COOL_GRAY = "#333333"         # 冷灰 - 辅助色
-TEXT_WHITE = "#FFFFFF"          # 白色
+MAIN_RED = "#8B0000"  # 深红/酒红 - 主色调
+HIGHLIGHT_RED = "#FF4500"  # 荧光红 - 高亮色
+BACKGROUND_BLACK = "#0F0F0F"  # 深黑背景
+COOL_GRAY = "#333333"  # 冷灰 - 辅助色
+TEXT_WHITE = "#FFFFFF"  # 白色
 
 console = Console()
 
@@ -59,6 +59,7 @@ class MainMenu:
             perform_first_run_check(show_guide=True)
             console.print(f"\n[{HIGHLIGHT_RED}]按 Enter 继续...[/{HIGHLIGHT_RED}]")
             from rich.prompt import Prompt
+
             Prompt.ask("", default="", show_default=False)
 
         while self.running:
@@ -75,7 +76,7 @@ class MainMenu:
     def _show_welcome(self):
         """显示欢迎界面"""
         welcome_text = Text()
-        welcome_text.append("CAE-CLI", style=f"bold {HIGHLIGHT_RED}")
+        welcome_text.append("MechDesign", style=f"bold {HIGHLIGHT_RED}")
         welcome_text.append(" - 机械工程专业学习工具\n", style="white")
 
         panel = Panel(
@@ -105,31 +106,21 @@ class MainMenu:
 
         # 工作模式
         table.add_row(
-            "[bright_red]1[/bright_red]",
-            "[bold white]工作模式[/bold white]",
-            "纯粹工具箱 - 分析、优化、报告生成"
+            "[bright_red]1[/bright_red]", "[bold white]工作模式[/bold white]", "纯粹工具箱 - 分析、优化、报告生成"
         )
 
         # 知识顾问
         table.add_row(
-            "[bright_red]2[/bright_red]",
-            "[bold white]知识顾问[/bold white]",
-            "快速检索手册、材料参数、公差标准"
+            "[bright_red]2[/bright_red]", "[bold white]知识顾问[/bold white]", "快速检索手册、材料参数、公差标准"
         )
 
         # 辅助学习
         table.add_row(
-            "[bright_red]3[/bright_red]",
-            "[bold white]辅助学习[/bold white]",
-            "系统性学习、教学式解释、进度追踪"
+            "[bright_red]3[/bright_red]", "[bold white]辅助学习[/bold white]", "系统性学习、教学式解释、进度追踪"
         )
 
         # 退出
-        table.add_row(
-            "[bright_red]0[/bright_red]",
-            "[bold white]退出[/bold white]",
-            "退出程序"
-        )
+        table.add_row("[bright_red]0[/bright_red]", "[bold white]退出[/bold white]", "退出程序")
 
         console.print(table)
         console.print("\n")
@@ -159,13 +150,13 @@ class MainMenu:
         """进入工作模式 - 纯粹工具箱"""
         console.print("\n")
         panel = Panel(
-            f"[bold white]工作模式[/bold white]\n\n"
-            f"机械分析工具箱\n"
-            f"- 几何文件解析\n"
-            f"- 网格质量分析\n"
-            f"- 材料数据库查询\n"
-            f"- 参数优化\n"
-            f"- 报告生成",
+            "[bold white]工作模式[/bold white]\n\n"
+            "机械分析工具箱\n"
+            "- 几何文件解析\n"
+            "- 网格质量分析\n"
+            "- 材料数据库查询\n"
+            "- 参数优化\n"
+            "- 报告生成",
             title="[bright_red]工具模式[/bright_red]",
             border_style=MAIN_RED,
             padding=(1, 2),
@@ -233,12 +224,12 @@ class MainMenu:
         """进入知识顾问模式 - 极简检索"""
         console.print("\n")
         panel = Panel(
-            f"[bold white]知识顾问模式[/bold white]\n\n"
-            f"快速精准检索 knowledge/ 目录\n\n"
-            f"[dim]- 手册内容查询[/dim]\n"
-            f"[dim]- 材料参数查询[/dim]\n"
-            f"[dim]- 公差标准查询[/dim]\n"
-            f"[dim]- 公式查询[/dim]",
+            "[bold white]知识顾问模式[/bold white]\n\n"
+            "快速精准检索 knowledge/ 目录\n\n"
+            "[dim]- 手册内容查询[/dim]\n"
+            "[dim]- 材料参数查询[/dim]\n"
+            "[dim]- 公差标准查询[/dim]\n"
+            "[dim]- 公式查询[/dim]",
             title="[bright_red]知识顾问[/bright_red]",
             border_style=MAIN_RED,
             padding=(1, 2),
@@ -254,9 +245,9 @@ class MainMenu:
         try:
             rag_engine = get_rag_engine()
             if not rag_engine.is_available():
-                console.print(f"\n[red]RAG引擎不可用[/red]")
-                console.print(f"[dim]请检查sentence-transformers依赖，或使用离线模式。[/dim]")
-                console.print(f"[dim]知识顾问功能受限，将使用简单关键词匹配。[/dim]")
+                console.print("\n[red]RAG引擎不可用[/red]")
+                console.print("[dim]请检查sentence-transformers依赖，或使用离线模式。[/dim]")
+                console.print("[dim]知识顾问功能受限，将使用简单关键词匹配。[/dim]")
                 rag_available = False
             else:
                 rag_available = True
@@ -272,11 +263,11 @@ class MainMenu:
                 return
 
             if not keyword.strip():
-                console.print(f"[red]请输入有效关键词[/red]")
+                console.print("[red]请输入有效关键词[/red]")
                 continue
 
-            console.print(f"\n[green]正在检索...[/green]")
-            console.print(f"[dim]当前模式: phi3:mini (优先速度和结构化输出)[/dim]")
+            console.print("\n[green]正在检索...[/green]")
+            console.print("[dim]当前模式: phi3:mini (优先速度和结构化输出)[/dim]")
 
             results = []
             if rag_available:
@@ -309,24 +300,26 @@ class MainMenu:
         # 遍历knowledge目录的.md文件
         for md_file in knowledge_dir.glob("*.md"):
             try:
-                with open(md_file, 'r', encoding='utf-8') as f:
+                with open(md_file, encoding="utf-8") as f:
                     content = f.read()
 
                 # 简单关键词匹配（不区分大小写）
                 if keyword.lower() in content.lower():
                     # 提取包含关键词的段落（简单实现）
-                    lines = content.split('\n')
+                    lines = content.split("\n")
                     for line in lines:
                         if keyword.lower() in line.lower() and line.strip():
                             # 截断过长的行
                             preview = line.strip()[:150] + ("..." if len(line.strip()) > 150 else "")
-                            results.append({
-                                "content": preview,
-                                "source": md_file.name,
-                                "distance": 1.0  # 简单搜索没有距离，设为1.0
-                            })
+                            results.append(
+                                {
+                                    "content": preview,
+                                    "source": md_file.name,
+                                    "distance": 1.0,  # 简单搜索没有距离，设为1.0
+                                }
+                            )
                             break  # 每个文件只取第一个匹配行
-            except Exception as e:
+            except Exception:
                 continue  # 忽略读取错误
 
         return results[:3]  # 最多返回3个结果
@@ -365,11 +358,7 @@ class MainMenu:
             else:  # 简单搜索结果
                 content_display = f"[white]{content}[/white]"
 
-            table.add_row(
-                f"[bright_red]{i}[/bright_red]",
-                content_display,
-                f"[dim]{source}[/dim]"
-            )
+            table.add_row(f"[bright_red]{i}[/bright_red]", content_display, f"[dim]{source}[/dim]")
 
         console.print(table)
         console.print("\n")
@@ -378,12 +367,12 @@ class MainMenu:
         """进入辅助学习模式 - 教学式对话"""
         console.print("\n")
         panel = Panel(
-            f"[bold white]辅助学习模式[/bold white]\n\n"
-            f"系统性学习 + 教学式解释\n\n"
-            f"[dim]- 概念深度讲解[/dim]\n"
-            f"[dim]- 一步步引导[/dim]\n"
-            f"[dim]- 学习进度追踪[/dim]\n"
-            f"[dim]- 练习题生成[/dim]",
+            "[bold white]辅助学习模式[/bold white]\n\n"
+            "系统性学习 + 教学式解释\n\n"
+            "[dim]- 概念深度讲解[/dim]\n"
+            "[dim]- 一步步引导[/dim]\n"
+            "[dim]- 学习进度追踪[/dim]\n"
+            "[dim]- 练习题生成[/dim]",
             title="[bright_red]辅助学习[/bright_red]",
             border_style=MAIN_RED,
             padding=(1, 2),
@@ -400,17 +389,17 @@ class MainMenu:
 
     async def _learning_assistant_loop(self):
         """辅助学习对话循环 - 教学式多轮对话"""
-        console.print(f"\n[green]初始化辅助学习系统...[/green]")
+        console.print("\n[green]初始化辅助学习系统...[/green]")
 
         # 初始化RAG引擎
         rag_engine = None
         try:
             rag_engine = get_rag_engine()
             if not rag_engine.is_available():
-                console.print(f"[yellow]RAG引擎不可用，知识库检索功能受限[/yellow]")
+                console.print("[yellow]RAG引擎不可用，知识库检索功能受限[/yellow]")
                 rag_engine = None
             else:
-                console.print(f"[green][OK] 知识库检索引擎就绪[/green]")
+                console.print("[green][OK] 知识库检索引擎就绪[/green]")
         except Exception as e:
             console.print(f"[yellow]RAG引擎异常: {e}[/yellow]")
             rag_engine = None
@@ -421,20 +410,20 @@ class MainMenu:
             # 尝试连接Ollama服务
             ollama_available = self._check_ollama_available()
             if not ollama_available:
-                console.print(f"[red]Ollama服务不可用[/red]")
-                console.print(f"[dim]请确保已安装并启动Ollama，模型 qwen2.5:1.5b 或 phi3:mini 可用[/dim]")
-                console.print(f"[dim]辅助学习模式将降级到本地知识库检索[/dim]")
+                console.print("[red]Ollama服务不可用[/red]")
+                console.print("[dim]请确保已安装并启动Ollama，模型 qwen2.5:1.5b 或 phi3:mini 可用[/dim]")
+                console.print("[dim]辅助学习模式将降级到本地知识库检索[/dim]")
             else:
                 # 创建Ollama客户端，默认使用qwen2.5:1.5b
                 try:
                     llm_client = create_ollama_client(model="qwen2.5:1.5b")
-                    console.print(f"[green][OK] Ollama客户端就绪 (模型: qwen2.5:1.5b)[/green]")
+                    console.print("[green][OK] Ollama客户端就绪 (模型: qwen2.5:1.5b)[/green]")
                 except Exception as e:
                     console.print(f"[yellow]无法加载qwen2.5:1.5b: {e}[/yellow]")
-                    console.print(f"[dim]尝试回退到phi3:mini...[/dim]")
+                    console.print("[dim]尝试回退到phi3:mini...[/dim]")
                     try:
                         llm_client = create_ollama_client(model="phi3:mini")
-                        console.print(f"[green][OK] Ollama客户端就绪 (模型: phi3:mini)[/green]")
+                        console.print("[green][OK] Ollama客户端就绪 (模型: phi3:mini)[/green]")
                     except Exception as e2:
                         console.print(f"[red]无法加载任何Ollama模型: {e2}[/red]")
                         llm_client = None
@@ -488,12 +477,12 @@ class MainMenu:
         completed_count = progress_summary["completed_topics"]
         total_study_time = progress_summary["statistics"]["total_study_time_seconds"]
 
-        progress_text = f"[bold white]当前学习进度[/bold white]\n\n"
+        progress_text = "[bold white]当前学习进度[/bold white]\n\n"
         progress_text += f"[dim]已掌握知识点:[/dim] [bright_red]{completed_count}[/bright_red] 个\n"
         progress_text += f"[dim]总学习时间:[/dim] [bright_red]{total_study_time}[/bright_red] 秒\n"
 
         if progress_summary["by_source"]:
-            progress_text += f"\n[dim]按知识库分类:[/dim]\n"
+            progress_text += "\n[dim]按知识库分类:[/dim]\n"
             for source, count in progress_summary["by_source"].items():
                 progress_text += f"  [white]{source}:[/white] [bright_red]{count}[/bright_red] 个知识点\n"
 
@@ -520,10 +509,10 @@ class MainMenu:
                     progress_text += f" 等{len(ach_list)}个"
 
             if len(unlocked_achievements) > 0:
-                progress_text += f"\n  [dim]输入'成就'查看所有成就徽章[/dim]"
+                progress_text += "\n  [dim]输入'成就'查看所有成就徽章[/dim]"
         else:
-            progress_text += f"\n[dim]已解锁成就:[/dim] [bright_red]0[/bright_red] 个 ([dim]暂无徽章[/dim])"
-            progress_text += f"\n  [dim]输入'成就'查看可解锁成就[/dim]"
+            progress_text += "\n[dim]已解锁成就:[/dim] [bright_red]0[/bright_red] 个 ([dim]暂无徽章[/dim])"
+            progress_text += "\n  [dim]输入'成就'查看可解锁成就[/dim]"
 
         progress_panel = Panel(
             progress_text,
@@ -534,7 +523,9 @@ class MainMenu:
         console.print(progress_panel)
 
         console.print(f"\n[{HIGHLIGHT_RED}]教学助手已就绪！输入你的问题，我会一步步教你。[/{HIGHLIGHT_RED}]")
-        console.print(f"[{HIGHLIGHT_RED}]特殊命令: '成就'查看成就徽章 | '测验'开始自测 | '进度'查看详细进度 | '0'返回主菜单[/{HIGHLIGHT_RED}]")
+        console.print(
+            f"[{HIGHLIGHT_RED}]特殊命令: '成就'查看成就徽章 | '测验'开始自测 | '进度'查看详细进度 | '0'返回主菜单[/{HIGHLIGHT_RED}]"
+        )
 
         # 多轮对话循环
         while True:
@@ -556,7 +547,7 @@ class MainMenu:
                 continue
 
             if not question.strip():
-                console.print(f"[red]请输入有效问题[/red]")
+                console.print("[red]请输入有效问题[/red]")
                 continue
 
             # 检索相关知识
@@ -571,7 +562,9 @@ class MainMenu:
                             content = result.get("content", "").strip()
                             source = result.get("source", "未知来源")
                             similarity = 1.0 - result.get("distance", 1.0)
-                            knowledge_context += f"\n**知识点 {i}** (来源: {source}, 相关性: {similarity:.1%}):\n{content}\n"
+                            knowledge_context += (
+                                f"\n**知识点 {i}** (来源: {source}, 相关性: {similarity:.1%}):\n{content}\n"
+                            )
                 except Exception as e:
                     console.print(f"[yellow]知识库检索失败: {e}[/yellow]")
 
@@ -584,7 +577,7 @@ class MainMenu:
             conversation_history.append({"role": "user", "content": user_message})
 
             # 生成回答
-            console.print(f"\n[green]正在生成教学式回答...[/green]")
+            console.print("\n[green]正在生成教学式回答...[/green]")
 
             if llm_client:
                 # 使用Ollama生成回答
@@ -594,12 +587,14 @@ class MainMenu:
 
                     # 显示回答
                     console.print("\n")
-                    console.print(Panel(
-                        Markdown(response),
-                        title="[bright_red]教学助手[/bright_red]",
-                        border_style=MAIN_RED,
-                        padding=(1, 2),
-                    ))
+                    console.print(
+                        Panel(
+                            Markdown(response),
+                            title="[bright_red]教学助手[/bright_red]",
+                            border_style=MAIN_RED,
+                            padding=(1, 2),
+                        )
+                    )
 
                     # 保存助手回复到历史
                     conversation_history.append({"role": "assistant", "content": response})
@@ -616,6 +611,7 @@ class MainMenu:
 
                             # 生成知识点ID：文件#行号或内容哈希
                             import hashlib
+
                             content_hash = hashlib.md5(content_preview.encode()).hexdigest()[:8]
                             knowledge_id = f"{source.replace('.md', '')}#{content_hash}"
 
@@ -639,7 +635,7 @@ class MainMenu:
                                 topic=f"知识点: {content_preview}...",
                                 source_file=source,
                                 study_time_seconds=study_time,
-                                tags=tags
+                                tags=tags,
                             )
 
                         # 保存进度
@@ -654,17 +650,19 @@ class MainMenu:
 
                 except Exception as e:
                     console.print(f"[red]生成回答失败: {e}[/red]")
-                    console.print(f"[dim]将使用知识库内容回复...[/dim]")
+                    console.print("[dim]将使用知识库内容回复...[/dim]")
 
                     # 降级：显示知识库内容
                     if knowledge_context:
                         console.print("\n")
-                        console.print(Panel(
-                            Markdown(knowledge_context + "\n\n**由于AI模型不可用，以上是知识库检索结果。**"),
-                            title="[bright_red]知识库检索结果[/bright_red]",
-                            border_style=MAIN_RED,
-                            padding=(1, 2),
-                        ))
+                        console.print(
+                            Panel(
+                                Markdown(knowledge_context + "\n\n**由于AI模型不可用，以上是知识库检索结果。**"),
+                                title="[bright_red]知识库检索结果[/bright_red]",
+                                border_style=MAIN_RED,
+                                padding=(1, 2),
+                            )
+                        )
 
                         # 更新学习进度 - 标记相关知识点为已学习
                         if results:
@@ -677,6 +675,7 @@ class MainMenu:
                                 content_preview = result.get("content", "")[:100]
 
                                 import hashlib
+
                                 content_hash = hashlib.md5(content_preview.encode()).hexdigest()[:8]
                                 knowledge_id = f"{source.replace('.md', '')}#{content_hash}"
 
@@ -698,7 +697,7 @@ class MainMenu:
                                     topic=f"知识点: {content_preview}...",
                                     source_file=source,
                                     study_time_seconds=study_time,
-                                    tags=tags
+                                    tags=tags,
                                 )
 
                             progress_tracker.save()
@@ -707,17 +706,21 @@ class MainMenu:
                             # 检查并显示新解锁的成就
                             self._check_and_display_new_achievements(progress_tracker, before_ids)
                     else:
-                        console.print(f"\n[{HIGHLIGHT_RED}]抱歉，无法生成回答。请检查Ollama服务或尝试其他问题。[/{HIGHLIGHT_RED}]")
+                        console.print(
+                            f"\n[{HIGHLIGHT_RED}]抱歉，无法生成回答。请检查Ollama服务或尝试其他问题。[/{HIGHLIGHT_RED}]"
+                        )
             else:
                 # 无AI模型，仅显示知识库内容
                 if knowledge_context:
                     console.print("\n")
-                    console.print(Panel(
-                        Markdown(knowledge_context + "\n\n**提示：启动Ollama服务可获得更好的教学式解释**"),
-                        title="[bright_red]知识库检索结果[/bright_red]",
-                        border_style=MAIN_RED,
-                        padding=(1, 2),
-                    ))
+                    console.print(
+                        Panel(
+                            Markdown(knowledge_context + "\n\n**提示：启动Ollama服务可获得更好的教学式解释**"),
+                            title="[bright_red]知识库检索结果[/bright_red]",
+                            border_style=MAIN_RED,
+                            padding=(1, 2),
+                        )
+                    )
 
                     # 更新学习进度 - 标记相关知识点为已学习
                     if results:
@@ -730,6 +733,7 @@ class MainMenu:
                             content_preview = result.get("content", "")[:100]
 
                             import hashlib
+
                             content_hash = hashlib.md5(content_preview.encode()).hexdigest()[:8]
                             knowledge_id = f"{source.replace('.md', '')}#{content_hash}"
 
@@ -751,7 +755,7 @@ class MainMenu:
                                 topic=f"知识点: {content_preview}...",
                                 source_file=source,
                                 study_time_seconds=study_time,
-                                tags=tags
+                                tags=tags,
                             )
 
                         progress_tracker.save()
@@ -760,14 +764,17 @@ class MainMenu:
                         # 检查并显示新解锁的成就
                         self._check_and_display_new_achievements(progress_tracker, before_ids)
                 else:
-                    console.print(f"\n[{HIGHLIGHT_RED}]未找到相关知识。请尝试其他问题或启动Ollama服务。[/{HIGHLIGHT_RED}]")
+                    console.print(
+                        f"\n[{HIGHLIGHT_RED}]未找到相关知识。请尝试其他问题或启动Ollama服务。[/{HIGHLIGHT_RED}]"
+                    )
 
             console.print(f"\n[{HIGHLIGHT_RED}]继续问吧～ 输入'0'返回主菜单[/{HIGHLIGHT_RED}]")
 
     def _check_ollama_available(self) -> bool:
         """检查Ollama服务是否可用"""
-        import aiohttp
         import asyncio
+
+        import aiohttp
 
         async def check():
             try:
@@ -775,7 +782,7 @@ class MainMenu:
                     # 尝试连接Ollama API
                     async with session.get("http://localhost:11434/api/tags", timeout=5) as resp:
                         return resp.status == 200
-            except:
+            except Exception:
                 return False
 
         try:
@@ -785,7 +792,7 @@ class MainMenu:
             result = loop.run_until_complete(check())
             loop.close()
             return result
-        except:
+        except Exception:
             return False
 
     async def _async_chat(self, llm_client: LLMClient, question: str) -> str:
@@ -804,7 +811,7 @@ class MainMenu:
                     # 如果异步上下文失败，尝试直接调用
                     try:
                         return await llm_client.chat(question)
-                    except:
+                    except Exception:
                         raise e
         except asyncio.TimeoutError:
             raise TimeoutError("LLM响应超时（30秒），请检查Ollama服务状态或尝试简化问题")
@@ -813,9 +820,9 @@ class MainMenu:
         """显示成就徽章页面"""
         console.print("\n")
         panel = Panel(
-            f"[bold white]成就徽章系统[/bold white]\n\n"
-            f"完成学习任务，解锁专属徽章！\n\n"
-            f"[dim]每个成就都有对应的点数，点数越高代表成就越难获得。[/dim]",
+            "[bold white]成就徽章系统[/bold white]\n\n"
+            "完成学习任务，解锁专属徽章！\n\n"
+            "[dim]每个成就都有对应的点数，点数越高代表成就越难获得。[/dim]",
             title="[bright_red]🏆 成就大厅 🏆[/bright_red]",
             border_style=MAIN_RED,
             padding=(1, 2),
@@ -829,7 +836,7 @@ class MainMenu:
         total_points = progress_tracker.get_total_achievement_points()
 
         # 显示总览
-        overview_text = f"[bold white]成就总览[/bold white]\n\n"
+        overview_text = "[bold white]成就总览[/bold white]\n\n"
         overview_text += f"[dim]总成就数:[/dim] [bright_red]{len(all_achievements)}[/bright_red] 个\n"
         overview_text += f"[dim]已解锁:[/dim] [bright_red]{len(unlocked_achievements)}[/bright_red] 个\n"
         overview_text += f"[dim]未解锁:[/dim] [bright_red]{len(locked_achievements)}[/bright_red] 个\n"
@@ -870,7 +877,7 @@ class MainMenu:
             table.add_column("徽章", style=HIGHLIGHT_RED, width=5, justify="center")
             table.add_column("名称", style="white", width=20)
             table.add_column("描述", style="white", width=40)
-            table.add_column("点数", style=f"bright_red", width=8, justify="center")
+            table.add_column("点数", style="bright_red", width=8, justify="center")
             table.add_column("解锁时间", style=f"dim {COOL_GRAY}", width=15)
 
             for ach in unlocked_sorted:
@@ -888,7 +895,11 @@ class MainMenu:
                     f"[bold white]{ach['name']}[/bold white]",
                     f"[white]{ach['description']}[/white]",
                     f"[bright_red]{points}[/bright_red]",
-                    f"[dim]{ach.get('unlock_time', '未知')[:10]}[/dim]" if ach.get('unlock_time') else "[dim]未知[/dim]"
+                    (
+                        f"[dim]{ach.get('unlock_time', '未知')[:10]}[/dim]"
+                        if ach.get("unlock_time")
+                        else "[dim]未知[/dim]"
+                    ),
                 )
 
             console.print(table)
@@ -898,12 +909,14 @@ class MainMenu:
         # 显示未解锁成就（可预览）
         if locked_achievements:
             console.print(f"\n[{HIGHLIGHT_RED}]🔒 可解锁成就（预览）[{HIGHLIGHT_RED}]")
-            console.print(f"[dim]完成以下任务来解锁成就：[/dim]\n")
+            console.print("[dim]完成以下任务来解锁成就：[/dim]\n")
 
             # 只显示前5个未解锁成就
             for i, ach in enumerate(locked_achievements[:5], 1):
                 points = ach.get("points", 10)
-                console.print(f"  [bright_red]{i}.[/bright_red] [white]{ach['name']}[/white] ([bright_red]{points}[/bright_red]点)")
+                console.print(
+                    f"  [bright_red]{i}.[/bright_red] [white]{ach['name']}[/white] ([bright_red]{points}[/bright_red]点)"
+                )
                 console.print(f"     [dim]{ach['description']}[/dim]")
 
             if len(locked_achievements) > 5:
@@ -919,7 +932,7 @@ class MainMenu:
         achievement_summary = progress_tracker.get_achievement_summary()
 
         # 创建进度详情面板
-        progress_text = f"[bold white]📈 详细学习进度[/bold white]\n\n"
+        progress_text = "[bold white]📈 详细学习进度[/bold white]\n\n"
 
         # 基础统计
         completed_count = progress_summary["completed_topics"]
@@ -927,21 +940,25 @@ class MainMenu:
         completion_rate = progress_summary["completion_rate"]
         total_study_time = progress_summary["statistics"]["total_study_time_seconds"]
 
-        progress_text += f"[dim]已掌握知识点:[/dim] [bright_red]{completed_count}[/bright_red] / [white]{total_topics}[/white] 个\n"
+        progress_text += (
+            f"[dim]已掌握知识点:[/dim] [bright_red]{completed_count}[/bright_red] / [white]{total_topics}[/white] 个\n"
+        )
         progress_text += f"[dim]掌握率:[/dim] [bright_red]{completion_rate:.1f}%[/bright_red]\n"
         progress_text += f"[dim]总学习时间:[/dim] [bright_red]{total_study_time}[/bright_red] 秒 ([bright_red]{total_study_time/60:.1f}[/bright_red] 分钟)\n"
         if progress_summary["statistics"]["last_study_date"]:
-            progress_text += f"[dim]最近学习:[/dim] [white]{progress_summary['statistics']['last_study_date']}[/white]\n"
+            progress_text += (
+                f"[dim]最近学习:[/dim] [white]{progress_summary['statistics']['last_study_date']}[/white]\n"
+            )
 
         # 按来源分类
         if progress_summary["by_source"]:
-            progress_text += f"\n[dim]📚 按知识库分类:[/dim]\n"
+            progress_text += "\n[dim]📚 按知识库分类:[/dim]\n"
             for source, count in progress_summary["by_source"].items():
                 progress_text += f"  [white]{source}:[/white] [bright_red]{count}[/bright_red] 个知识点\n"
 
         # 按标签分类
         if progress_summary["by_tag"]:
-            progress_text += f"\n[dim]🏷️ 按标签分类:[/dim]\n"
+            progress_text += "\n[dim]🏷️ 按标签分类:[/dim]\n"
             sorted_tags = sorted(progress_summary["by_tag"].items(), key=lambda x: x[1], reverse=True)[:5]  # 前5个
             for tag, count in sorted_tags:
                 progress_text += f"  [white]{tag}:[/white] [bright_red]{count}[/bright_red] 次\n"
@@ -955,15 +972,19 @@ class MainMenu:
         console.print(progress_panel)
 
         # 成就统计面板
-        achievement_text = f"[bold white]🎯 成就统计[/bold white]\n\n"
-        achievement_text += f"[dim]总成就数:[/dim] [bright_red]{achievement_summary['total_achievements']}[/bright_red] 个\n"
+        achievement_text = "[bold white]🎯 成就统计[/bold white]\n\n"
+        achievement_text += (
+            f"[dim]总成就数:[/dim] [bright_red]{achievement_summary['total_achievements']}[/bright_red] 个\n"
+        )
         achievement_text += f"[dim]已解锁:[/dim] [bright_red]{achievement_summary['unlocked_count']}[/bright_red] 个\n"
         achievement_text += f"[dim]未解锁:[/dim] [bright_red]{achievement_summary['locked_count']}[/bright_red] 个\n"
         achievement_text += f"[dim]解锁率:[/dim] [bright_red]{achievement_summary['unlock_rate']:.1f}%[/bright_red]\n"
-        achievement_text += f"[dim]总成就点数:[/dim] [bright_red]{achievement_summary['total_points']}[/bright_red] 点\n"
+        achievement_text += (
+            f"[dim]总成就点数:[/dim] [bright_red]{achievement_summary['total_points']}[/bright_red] 点\n"
+        )
 
         if achievement_summary["points_distribution"]:
-            achievement_text += f"\n[dim]点数分布:[/dim]\n"
+            achievement_text += "\n[dim]点数分布:[/dim]\n"
             for points, count in sorted(achievement_summary["points_distribution"].items(), reverse=True):
                 achievement_text += f"  [white]{points}[/white]点成就: [bright_red]{count}[/bright_red] 个\n"
 
@@ -982,11 +1003,11 @@ class MainMenu:
         """开始自测测验"""
         console.print("\n")
         panel = Panel(
-            f"[bold white]自测题库[/bold white]\n\n"
-            f"测试你的机械工程知识掌握程度！\n\n"
-            f"[dim]• 每次测验随机抽取题目[/dim]\n"
-            f"[dim]• 答对题目可获得成就点数[/dim]\n"
-            f"[dim]• 测验结果计入学习进度[/dim]",
+            "[bold white]自测题库[/bold white]\n\n"
+            "测试你的机械工程知识掌握程度！\n\n"
+            "[dim]• 每次测验随机抽取题目[/dim]\n"
+            "[dim]• 答对题目可获得成就点数[/dim]\n"
+            "[dim]• 测验结果计入学习进度[/dim]",
             title="[bright_red]📝 知识测验[/bright_red]",
             border_style=MAIN_RED,
             padding=(1, 2),
@@ -998,7 +1019,7 @@ class MainMenu:
             quiz_manager = get_quiz_manager()
             if not quiz_manager.loaded:
                 if not quiz_manager.load_all_quizzes():
-                    console.print(f"\n[red]题库加载失败，请检查data/quiz目录是否有题库文件[/red]")
+                    console.print("\n[red]题库加载失败，请检查data/quiz目录是否有题库文件[/red]")
                     Prompt.ask(f"[{HIGHLIGHT_RED}]按 Enter 返回...[{HIGHLIGHT_RED}]")
                     return
         except Exception as e:
@@ -1008,10 +1029,10 @@ class MainMenu:
 
         # 选择测验设置
         console.print(f"\n[{HIGHLIGHT_RED}]测验设置:[/{HIGHLIGHT_RED}]")
-        console.print(f"[dim]1. 快速测验 (3题)[/dim]")
-        console.print(f"[dim]2. 标准测验 (5题)[/dim]")
-        console.print(f"[dim]3. 综合测验 (8题)[/dim]")
-        console.print(f"[dim]0. 返回[/dim]")
+        console.print("[dim]1. 快速测验 (3题)[/dim]")
+        console.print("[dim]2. 标准测验 (5题)[/dim]")
+        console.print("[dim]3. 综合测验 (8题)[/dim]")
+        console.print("[dim]0. 返回[/dim]")
 
         choice = Prompt.ask(
             f"[{HIGHLIGHT_RED}]选择测验类型[{HIGHLIGHT_RED}]",
@@ -1036,7 +1057,7 @@ class MainMenu:
         questions = quiz_manager.get_random_questions(count=question_count)
 
         if not questions:
-            console.print(f"\n[red]题库中没有足够的题目，请检查题库文件[/red]")
+            console.print("\n[red]题库中没有足够的题目，请检查题库文件[/red]")
             Prompt.ask(f"[{HIGHLIGHT_RED}]按 Enter 返回...[{HIGHLIGHT_RED}]")
             return
 
@@ -1047,6 +1068,7 @@ class MainMenu:
         total_time = 0
 
         import time
+
         for i, question in enumerate(questions, 1):
             console.print(f"\n[{HIGHLIGHT_RED}]题目 {i}/{len(questions)}:[/{HIGHLIGHT_RED}]")
             console.print(f"[bold white]{question.question}[/bold white]")
@@ -1070,7 +1092,7 @@ class MainMenu:
                         break
                     console.print(f"[red]请输入 1-{len(question.options)} 之间的数字[/red]")
                 except ValueError:
-                    console.print(f"[red]请输入有效数字[/red]")
+                    console.print("[red]请输入有效数字[/red]")
 
             end_time = time.time()
             time_spent = end_time - start_time
@@ -1091,15 +1113,17 @@ class MainMenu:
             console.print(f"\n[dim]💡 解释: {explanation}[/dim]")
 
             # 记录结果
-            results.append({
-                "question_id": question.id,
-                "knowledge_id": question.knowledge_id,
-                "selected_option_index": selected_index,
-                "correct_option_index": correct_idx,
-                "is_correct": is_correct,
-                "time_spent_seconds": time_spent,
-                "score": 100 if is_correct else 0
-            })
+            results.append(
+                {
+                    "question_id": question.id,
+                    "knowledge_id": question.knowledge_id,
+                    "selected_option_index": selected_index,
+                    "correct_option_index": correct_idx,
+                    "is_correct": is_correct,
+                    "time_spent_seconds": time_spent,
+                    "score": 100 if is_correct else 0,
+                }
+            )
 
             if i < len(questions):
                 console.print(f"\n[{HIGHLIGHT_RED}]按 Enter 继续下一题...[{HIGHLIGHT_RED}]")
@@ -1111,7 +1135,7 @@ class MainMenu:
         score_percentage = (correct_count / len(questions)) * 100
         avg_time = total_time / len(questions) if questions else 0
 
-        result_text = f"[bold white]测验结果[/bold white]\n\n"
+        result_text = "[bold white]测验结果[/bold white]\n\n"
         result_text += f"[dim]答题数:[/dim] [bright_red]{len(questions)}[/bright_red] 题\n"
         result_text += f"[dim]答对题数:[/dim] [bright_red]{correct_count}[/bright_red] 题\n"
         result_text += f"[dim]正确率:[/dim] [bright_red]{score_percentage:.1f}%[/bright_red]\n"
@@ -1154,7 +1178,7 @@ class MainMenu:
                         source_file=f"quiz_{question.category}",
                         study_time_seconds=int(result["time_spent_seconds"]),
                         quiz_score=100,
-                        tags=tags
+                        tags=tags,
                     )
 
         # 保存进度

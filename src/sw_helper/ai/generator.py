@@ -2,7 +2,7 @@
 AI集成模块 - 支持几何生成和优化建议
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 class AIGenerator:
@@ -36,9 +36,7 @@ class AIGenerator:
                 self.provider = provider
                 break
 
-    def generate_geometry_prompt(
-        self, description: str, constraints: Optional[Dict] = None
-    ) -> str:
+    def generate_geometry_prompt(self, description: str, constraints: Optional[Dict] = None) -> str:
         """生成几何结构的提示词
 
         Args:
@@ -189,9 +187,7 @@ class AIGenerator:
 
         return suggestions
 
-    def generate_design_variants(
-        self, base_params: Dict[str, Any], num_variants: int = 3
-    ) -> List[Dict[str, Any]]:
+    def generate_design_variants(self, base_params: Dict[str, Any], num_variants: int = 3) -> List[Dict[str, Any]]:
         """生成设计变体
 
         Args:

@@ -4,20 +4,21 @@
 """
 
 import json
-import math
 import sys
 from pathlib import Path
-from typing import Dict, Any, Optional, Tuple, List
+from typing import Any, Dict, Optional
+
 import numpy as np
 
 
 def get_resource_path(relative_path: str) -> Path:
     """获取资源文件路径，支持打包后的exe和开发模式"""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         base_path = Path(sys._MEIPASS)
     else:
         base_path = Path(__file__).parent.parent.parent.parent
     return base_path / relative_path
+
 
 try:
     from rich.console import Console
@@ -35,14 +36,14 @@ except ImportError:
     HAS_PINT = False
 
 from .physics_formulas import (
-    calculate_von_mises_stress,
-    calculate_principal_stresses,
-    calculate_safety_factor,
-    calculate_buckling_load,
-    calculate_deflection,
+    calc_max_shear,
     calc_principal_stresses,
     calc_von_mises,
-    calc_max_shear,
+    calculate_buckling_load,
+    calculate_deflection,
+    calculate_principal_stresses,
+    calculate_safety_factor,
+    calculate_von_mises_stress,
 )
 
 
@@ -74,7 +75,7 @@ class MechanicsEngine:
         """加载材料数据库"""
         try:
             if self.db_path.exists():
-                with open(self.db_path, "r", encoding="utf-8") as f:
+                with open(self.db_path, encoding="utf-8") as f:
                     return json.load(f)
             else:
                 raise FileNotFoundError(f"材料数据库不存在: {self.db_path}")
@@ -118,9 +119,7 @@ class MechanicsEngine:
             print(f"单位转换失败 {from_unit} -> {to_unit}: {e}")
             return value
 
-    def _simple_unit_conversion(
-        self, value: float, from_unit: str, to_unit: str
-    ) -> float:
+    def _simple_unit_conversion(self, value: float, from_unit: str, to_unit: str) -> float:
         """简单单位转换（用于没有pint的情况）"""
         # 常用单位转换映射
         pressure_conversions = {
@@ -194,7 +193,6 @@ class MechanicsEngine:
 
         # 基于材料类型判断
         brittle_keywords = ["铸铁", "陶瓷", "玻璃", "脆性"]
-        ductile_keywords = ["钢", "铝", "铜", "塑性", "韧"]
 
         material_type_lower = material_type.lower()
 
@@ -240,9 +238,9 @@ class MechanicsEngine:
 
         # 计算安全系数
         if material_type == "ductile":
-            reference_strength = yield_strength
+            pass
         else:
-            reference_strength = tensile_strength
+            pass
 
         safety_factor = calculate_safety_factor(
             applied_stress=von_mises,
@@ -376,9 +374,7 @@ class MechanicsEngine:
         allowable_deflection = length_m / 250
 
         # 挠度安全系数
-        deflection_safety = (
-            allowable_deflection / deflection if deflection > 0 else float("inf")
-        )
+        deflection_safety = allowable_deflection / deflection if deflection > 0 else float("inf")
 
         return {
             "material": material_name,
@@ -459,9 +455,7 @@ class MechanicsEngine:
         if elongation is None:
             # 根据材料类型推断：钢类通常为延性，铸铁类为脆性
             material_type = material.get("type", "").lower()
-            if any(
-                keyword in material_type for keyword in ["铸铁", "陶瓷", "玻璃", "脆性"]
-            ):
+            if any(keyword in material_type for keyword in ["铸铁", "陶瓷", "玻璃", "脆性"]):
                 elongation = 3.0  # 脆性材料典型值
             else:
                 elongation = 20.0  # 延性材料典型值
@@ -484,9 +478,7 @@ class MechanicsEngine:
             allowable = ultimate_strength
 
         # 计算安全系数
-        safety_factor = (
-            allowable / equivalent_stress if equivalent_stress > 0 else float("inf")
-        )
+        safety_factor = allowable / equivalent_stress if equivalent_stress > 0 else float("inf")
 
         # 构建结果
         result = {

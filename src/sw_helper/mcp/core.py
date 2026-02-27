@@ -3,12 +3,12 @@ MCP (Model Context Protocol) 核心架构
 用于CAE-CLI与FreeCAD、AI模型之间的通信
 """
 
-import json
 import asyncio
-from typing import Dict, Any, List, Optional, Callable
+import json
+import uuid
 from dataclasses import dataclass
 from enum import Enum
-import uuid
+from typing import Any, Callable, Dict, List, Optional
 
 
 class MessageType(Enum):
@@ -142,9 +142,7 @@ class MCPServer:
         """装饰器：注册工具"""
 
         def decorator(func: Callable):
-            tool = Tool(
-                name=name, description=description, input_schema=schema, handler=func
-            )
+            tool = Tool(name=name, description=description, input_schema=schema, handler=func)
             self.register_tool(tool)
             return func
 
@@ -220,9 +218,7 @@ class MCPServer:
                     "content": [
                         {
                             "type": "text",
-                            "text": json.dumps(result, ensure_ascii=False)
-                            if isinstance(result, dict)
-                            else str(result),
+                            "text": json.dumps(result, ensure_ascii=False) if isinstance(result, dict) else str(result),
                         }
                     ]
                 },
@@ -281,9 +277,7 @@ class MCPClient:
 
     async def call_tool(self, name: str, arguments: Dict[str, Any]) -> Any:
         """调用工具"""
-        message = MCPMessage(
-            method="tools/call", params={"name": name, "arguments": arguments}
-        )
+        message = MCPMessage(method="tools/call", params={"name": name, "arguments": arguments})
         response = await self.send_message(message)
         if response.result:
             content = response.result.get("content", [])
@@ -291,7 +285,7 @@ class MCPClient:
                 text = content[0].get("text", "")
                 try:
                     return json.loads(text)
-                except:
+                except json.JSONDecodeError:
                     return text
         elif response.error:
             raise Exception(response.error.get("message", "未知错误"))

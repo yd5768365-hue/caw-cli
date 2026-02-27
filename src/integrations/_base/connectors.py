@@ -6,9 +6,9 @@ CAD/CAE连接器抽象基类 - 定义软件集成的统一接口
 """
 
 from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import Optional, List, Dict, Any, Tuple
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class FileFormat(Enum):
@@ -176,9 +176,7 @@ class CAEConnector(ABC):
         pass
 
     @abstractmethod
-    def generate_mesh(
-        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
-    ) -> bool:
+    def generate_mesh(self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0) -> bool:
         """从几何文件生成网格
 
         Args:
@@ -205,9 +203,7 @@ class CAEConnector(ABC):
         pass
 
     @abstractmethod
-    def run_simulation(
-        self, input_file: Path, output_dir: Optional[Path] = None
-    ) -> bool:
+    def run_simulation(self, input_file: Path, output_dir: Optional[Path] = None) -> bool:
         """运行仿真分析
 
         Args:

@@ -3,9 +3,9 @@ CAD连接器模块 - 使用pywin32连接SolidWorks和FreeCAD
 实现参数修改、重建模型、导出文件
 """
 
-from pathlib import Path
-from typing import Optional, List
 from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Optional
 
 
 @dataclass
@@ -65,9 +65,7 @@ class SolidWorksConnector:
             # 打开文档
             errors = 0
             warnings = 0
-            self.active_doc = self.sw_app.OpenDoc6(
-                file_path, doc_type, 0, "", errors, warnings
-            )
+            self.active_doc = self.sw_app.OpenDoc6(file_path, doc_type, 0, "", errors, warnings)
 
             return self.active_doc is not None
 
@@ -84,7 +82,7 @@ class SolidWorksConnector:
 
         try:
             # 获取自定义属性
-            cust_prop = self.active_doc.Extension.CustomPropertyManager("")
+            self.active_doc.Extension.CustomPropertyManager("")
 
             # 获取尺寸参数
             model = self.active_doc
@@ -107,7 +105,7 @@ class SolidWorksConnector:
                                         description=f"特征: {feat.Name}",
                                     )
                                 )
-                    except:
+                    except Exception:
                         pass
 
                 feat = feat.GetNextFeature()
@@ -132,7 +130,7 @@ class SolidWorksConnector:
                                         description="全局变量",
                                     )
                                 )
-                            except:
+                            except Exception:
                                 pass
 
         except Exception as e:
@@ -208,8 +206,6 @@ class SolidWorksConnector:
 
             if use_save:
                 # 使用SaveAs
-                errors = 0
-                warnings = 0
                 result = self.active_doc.SaveAs3(output_path, 0, 2)
                 return result == 0
             else:
@@ -233,7 +229,7 @@ class SolidWorksConnector:
             try:
                 self.sw_app.CloseDoc(self.active_doc.GetTitle)
                 self.active_doc = None
-            except:
+            except Exception:
                 pass
 
     def disconnect(self):
@@ -311,11 +307,7 @@ class FreeCADConnector:
 
                 # 检查属性
                 if hasattr(obj, "Length"):
-                    params.append(
-                        Parameter(
-                            name=f"{obj.Name}.Length", value=obj.Length, unit="mm"
-                        )
-                    )
+                    params.append(Parameter(name=f"{obj.Name}.Length", value=obj.Length, unit="mm"))
 
         except Exception as e:
             print(f"获取参数失败: {e}")
@@ -393,11 +385,7 @@ class FreeCADConnector:
                 import Import
 
                 Import.export(
-                    [
-                        obj
-                        for obj in self.active_doc.Objects
-                        if obj.isDerivedFrom("Part::Feature")
-                    ],
+                    [obj for obj in self.active_doc.Objects if obj.isDerivedFrom("Part::Feature")],
                     output_path,
                 )
                 return True
@@ -422,7 +410,7 @@ class FreeCADConnector:
                     self.active_doc.save()
                 self.fc_app.closeDocument(self.active_doc.Name)
                 self.active_doc = None
-            except:
+            except Exception:
                 pass
 
     def disconnect(self):

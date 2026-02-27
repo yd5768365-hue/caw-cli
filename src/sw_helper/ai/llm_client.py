@@ -3,13 +3,13 @@ AI LLM集成 - 支持OpenAI/Claude/本地模型
 实现类似opencode的交互式AI助手
 """
 
-import os
-import json
 import asyncio
-import time
-from typing import Dict, List, Optional, AsyncGenerator, Any
+import json
+import os
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, AsyncGenerator, Dict, List, Optional
+
 import aiohttp
 
 
@@ -47,17 +47,13 @@ class ConnectionPool:
             ClientSession实例
         """
         # 规范化URL（去除末尾斜杠）
-        normalized_url = base_url.rstrip('/')
+        normalized_url = base_url.rstrip("/")
 
         if normalized_url not in self._sessions:
             # 创建新的session
             timeout = aiohttp.ClientTimeout(total=60)
             connector = aiohttp.TCPConnector(limit=10, keepalive_timeout=30)
-            session = aiohttp.ClientSession(
-                timeout=timeout,
-                connector=connector,
-                headers={"User-Agent": "CAE-CLI/1.0"}
-            )
+            session = aiohttp.ClientSession(timeout=timeout, connector=connector, headers={"User-Agent": "CAE-CLI/1.0"})
             self._sessions[normalized_url] = session
             self._session_refcount[normalized_url] = 1
             print(f"[HTTP连接池] 创建新session: {normalized_url}")
@@ -74,7 +70,7 @@ class ConnectionPool:
         Args:
             base_url: API基础URL
         """
-        normalized_url = base_url.rstrip('/')
+        normalized_url = base_url.rstrip("/")
 
         if normalized_url in self._session_refcount:
             self._session_refcount[normalized_url] -= 1
@@ -99,7 +95,7 @@ class ConnectionPool:
         return {
             "total_sessions": len(self._sessions),
             "session_refcounts": self._session_refcount.copy(),
-            "open_sessions": sum(1 for s in self._sessions.values() if not s.closed)
+            "open_sessions": sum(1 for s in self._sessions.values() if not s.closed),
         }
 
 
@@ -141,7 +137,7 @@ class LLMClient:
     def _get_base_url(self) -> str:
         """获取API基础URL"""
         if self.config.api_base:
-            return self.config.api_base.rstrip('/')
+            return self.config.api_base.rstrip("/")
 
         # 默认URL
         if self.config.provider == LLMProvider.OPENAI:
@@ -198,9 +194,7 @@ class LLMClient:
 
         return response
 
-    async def chat_stream(
-        self, message: str, tools: Optional[List[Dict]] = None
-    ) -> AsyncGenerator[str, None]:
+    async def chat_stream(self, message: str, tools: Optional[List[Dict]] = None) -> AsyncGenerator[str, None]:
         """
         流式聊天
 
@@ -233,9 +227,7 @@ class LLMClient:
                     await asyncio.sleep(0.05)  # 模拟打字效果
 
         # 添加完整回复到历史
-        self.conversation_history.append(
-            Message(role="assistant", content=full_response)
-        )
+        self.conversation_history.append(Message(role="assistant", content=full_response))
 
     async def _call_openai(self, tools: Optional[List[Dict]] = None) -> str:
         """调用OpenAI API"""
@@ -249,9 +241,7 @@ class LLMClient:
             "Content-Type": "application/json",
         }
 
-        messages = [
-            {"role": m.role, "content": m.content} for m in self.conversation_history
-        ]
+        messages = [{"role": m.role, "content": m.content} for m in self.conversation_history]
 
         payload = {
             "model": self.config.model,
@@ -279,9 +269,7 @@ class LLMClient:
 
             return choice["message"]["content"]
 
-    async def _call_openai_stream(
-        self, tools: Optional[List[Dict]] = None
-    ) -> AsyncGenerator[str, None]:
+    async def _call_openai_stream(self, tools: Optional[List[Dict]] = None) -> AsyncGenerator[str, None]:
         """流式调用OpenAI API"""
         api_key = self.config.api_key or os.getenv("OPENAI_API_KEY")
         url = "https://api.openai.com/v1/chat/completions"
@@ -290,9 +278,7 @@ class LLMClient:
             "Content-Type": "application/json",
         }
 
-        messages = [
-            {"role": m.role, "content": m.content} for m in self.conversation_history
-        ]
+        messages = [{"role": m.role, "content": m.content} for m in self.conversation_history]
 
         payload = {
             "model": self.config.model,
@@ -358,9 +344,7 @@ class LLMClient:
             data = await resp.json()
             return data["content"][0]["text"]
 
-    async def _call_anthropic_stream(
-        self, tools: Optional[List[Dict]] = None
-    ) -> AsyncGenerator[str, None]:
+    async def _call_anthropic_stream(self, tools: Optional[List[Dict]] = None) -> AsyncGenerator[str, None]:
         """流式调用Anthropic API"""
         # 简化实现，实际应该使用SSE
         response = await self._call_anthropic(tools)
@@ -380,9 +364,7 @@ class LLMClient:
             "Content-Type": "application/json",
         }
 
-        messages = [
-            {"role": m.role, "content": m.content} for m in self.conversation_history
-        ]
+        messages = [{"role": m.role, "content": m.content} for m in self.conversation_history]
 
         payload = {
             "model": self.config.model,
@@ -405,9 +387,7 @@ class LLMClient:
         base_url = self.config.api_base or "http://localhost:11434"
         url = f"{base_url.rstrip('/')}/api/chat"
 
-        messages = [
-            {"role": m.role, "content": m.content} for m in self.conversation_history
-        ]
+        messages = [{"role": m.role, "content": m.content} for m in self.conversation_history]
 
         payload = {"model": self.config.model, "messages": messages, "stream": False}
 
@@ -423,6 +403,7 @@ class LLMClient:
 
             # 执行HTTP请求
             import time
+
             start_time = time.time()
 
             async with session_to_use.post(url, json=payload) as resp:
@@ -454,9 +435,7 @@ class LLMClient:
             headers["Authorization"] = f"Bearer {self.config.api_key}"
         headers["Content-Type"] = "application/json"
 
-        messages = [
-            {"role": m.role, "content": m.content} for m in self.conversation_history
-        ]
+        messages = [{"role": m.role, "content": m.content} for m in self.conversation_history]
 
         payload = {
             "model": self.config.model,
@@ -465,9 +444,7 @@ class LLMClient:
             "max_tokens": self.config.max_tokens,
         }
 
-        async with self.session.post(
-            self.config.api_base, headers=headers, json=payload
-        ) as resp:
+        async with self.session.post(self.config.api_base, headers=headers, json=payload) as resp:
             if resp.status != 200:
                 error = await resp.text()
                 raise Exception(f"Custom API error: {error}")
@@ -491,9 +468,7 @@ class LLMClient:
 
 
 # 便捷函数：创建常用配置的客户端
-def create_openai_client(
-    model: str = "gpt-4", api_key: Optional[str] = None
-) -> LLMClient:
+def create_openai_client(model: str = "gpt-4", api_key: Optional[str] = None) -> LLMClient:
     """创建OpenAI客户端"""
     config = LLMConfig(
         provider=LLMProvider.OPENAI,
@@ -503,9 +478,7 @@ def create_openai_client(
     return LLMClient(config)
 
 
-def create_anthropic_client(
-    model: str = "claude-3-sonnet-20240229", api_key: Optional[str] = None
-) -> LLMClient:
+def create_anthropic_client(model: str = "claude-3-sonnet-20240229", api_key: Optional[str] = None) -> LLMClient:
     """创建Anthropic客户端"""
     config = LLMConfig(
         provider=LLMProvider.ANTHROPIC,
@@ -515,9 +488,7 @@ def create_anthropic_client(
     return LLMClient(config)
 
 
-def create_ollama_client(
-    model: str = "llama2", api_base: str = "http://localhost:11434"
-) -> LLMClient:
+def create_ollama_client(model: str = "llama2", api_base: str = "http://localhost:11434") -> LLMClient:
     """创建Ollama本地模型客户端"""
     config = LLMConfig(provider=LLMProvider.OLLAMA, model=model, api_base=api_base)
     return LLMClient(config)

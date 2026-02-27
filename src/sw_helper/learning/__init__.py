@@ -6,14 +6,13 @@ from .progress_tracker import (
     LearningProgressTracker,
     get_progress_tracker,
 )
-
 from .quiz_manager import (
-    QuizManager,
-    get_quiz_manager,
     Question,
-    QuestionOption,
     QuestionDifficulty,
+    QuestionOption,
+    QuizManager,
     QuizResult,
+    get_quiz_manager,
 )
 
 __all__ = [

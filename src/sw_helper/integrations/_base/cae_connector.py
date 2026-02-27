@@ -4,9 +4,8 @@ CAE连接器抽象基类 - 定义CAE仿真软件集成的统一接口
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class AnalysisType(Enum):
@@ -141,7 +140,5 @@ class CAEConnector(ABC):
             "name": self.__class__.__name__.replace("Connector", ""),
             "type": "CAE",
             "version": "unknown",
-            "supported_analysis": [
-                at.value for at in self.get_supported_analysis_types()
-            ],
+            "supported_analysis": [at.value for at in self.get_supported_analysis_types()],
         }

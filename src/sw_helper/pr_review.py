@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 智能代码审查工具 - CAE-CLI PR审查
 
@@ -10,18 +9,15 @@
 4. 支持--local（本地变更）和--pr NUMBER（PR编号）两种模式
 
 Author: CAE-CLI DevOps Team
-Version: 0.1.0
+Version: 1.0.0
 """
 
-import subprocess
 import os
 import re
-import sys
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
-import click
+import subprocess
+from typing import Any, Dict, List, Optional
+
 from rich.console import Console
-from rich.markdown import Markdown
 
 console = Console()
 
@@ -53,19 +49,16 @@ class CodeReviewer:
             if local:
                 # 本地未提交的变更
                 result = subprocess.run(
-                    ["git", "diff", "--name-only", "HEAD"],
-                    capture_output=True,
-                    text=True,
-                    encoding='utf-8'
+                    ["git", "diff", "--name-only", "HEAD"], capture_output=True, text=True, encoding="utf-8"
                 )
             elif pr_number:
                 # PR变更（简化实现：假设有GitHub CLI）
                 # 实际应该使用GitHub API获取PR变更
                 result = subprocess.run(
-                    ["git", "diff", "--name-only", f"origin/main...HEAD"],
+                    ["git", "diff", "--name-only", "origin/main...HEAD"],
                     capture_output=True,
                     text=True,
-                    encoding='utf-8'
+                    encoding="utf-8",
                 )
             else:
                 # 默认：与上游分支比较
@@ -73,13 +66,12 @@ class CodeReviewer:
                     ["git", "diff", "--name-only", "origin/main...HEAD"],
                     capture_output=True,
                     text=True,
-                    encoding='utf-8'
+                    encoding="utf-8",
                 )
 
             if result.returncode == 0 and result.stdout.strip():
                 changed_files = [
-                    f.strip() for f in result.stdout.strip().split('\n')
-                    if f.strip() and os.path.exists(f.strip())
+                    f.strip() for f in result.stdout.strip().split("\n") if f.strip() and os.path.exists(f.strip())
                 ]
 
         except Exception as e:
@@ -100,13 +92,13 @@ class CodeReviewer:
         issues = []
 
         # 只检查Python文件
-        if not file_path.endswith('.py'):
+        if not file_path.endswith(".py"):
             return issues
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
-                lines = content.split('\n')
+                lines = content.split("\n")
 
             # 安全检查
             issues.extend(self._check_security(file_path, lines))
@@ -126,26 +118,28 @@ class CodeReviewer:
         """安全检查"""
         issues = []
         security_patterns = [
-            (r'password\s*=\s*[\"\'].*[\"\']', 'Hardcoded password'),
-            (r'api_key\s*=\s*[\"\'].*[\"\']', 'Hardcoded API key'),
-            (r'secret\s*=\s*[\"\'].*[\"\']', 'Hardcoded secret'),
-            (r'eval\(', 'Dangerous eval function'),
-            (r'exec\(', 'Dangerous exec function'),
-            (r'os\.system\(', 'Direct system call'),
-            (r'subprocess\.call\(.*shell=True', 'Dangerous shell call'),
+            (r"password\s*=\s*[\"\'].*[\"\']", "Hardcoded password"),
+            (r"api_key\s*=\s*[\"\'].*[\"\']", "Hardcoded API key"),
+            (r"secret\s*=\s*[\"\'].*[\"\']", "Hardcoded secret"),
+            (r"eval\(", "Dangerous eval function"),
+            (r"exec\(", "Dangerous exec function"),
+            (r"os\.system\(", "Direct system call"),
+            (r"subprocess\.call\(.*shell=True", "Dangerous shell call"),
         ]
 
         for i, line in enumerate(lines, 1):
             for pattern, description in security_patterns:
                 if re.search(pattern, line, re.IGNORECASE):
-                    issues.append({
-                        'file': file_path,
-                        'line': i,
-                        'category': 'security',
-                        'severity': 'high',
-                        'description': description,
-                        'code': line.strip()[:100]
-                    })
+                    issues.append(
+                        {
+                            "file": file_path,
+                            "line": i,
+                            "category": "security",
+                            "severity": "high",
+                            "description": description,
+                            "code": line.strip()[:100],
+                        }
+                    )
                     break  # 每行只报告一个问题
 
         return issues
@@ -156,24 +150,25 @@ class CodeReviewer:
 
         # 检查大文件读取 (skip pattern matching logic)
         for i, line in enumerate(lines, 1):
-            if 'open(' in line and 'read()' in line and 'in line' not in line:
-                if 'with' not in line and 'close()' not in line:
-                    issues.append({
-                        'file': file_path,
-                        'line': i,
-                        'category': 'performance',
-                        'severity': 'medium',
-                        'description': 'Possible unbuffered large file read',
-                        'code': line.strip()[:100]
-                    })
+            if "open(" in line and "read()" in line and "in line" not in line:
+                if "with" not in line and "close()" not in line:
+                    issues.append(
+                        {
+                            "file": file_path,
+                            "line": i,
+                            "category": "performance",
+                            "severity": "medium",
+                            "description": "Possible unbuffered large file read",
+                            "code": line.strip()[:100],
+                        }
+                    )
 
         # 检查嵌套循环（简化版）
-        indent_level = 0
         loop_stack = []
 
         for i, line in enumerate(lines, 1):
             stripped = line.strip()
-            if not stripped or stripped.startswith('#'):
+            if not stripped or stripped.startswith("#"):
                 continue
 
             # 计算缩进
@@ -181,21 +176,23 @@ class CodeReviewer:
             current_indent = leading_spaces // 4  # 假设4空格缩进
 
             # 检查循环开始
-            if stripped.startswith(('for ', 'while ', 'async for ')):
+            if stripped.startswith(("for ", "while ", "async for ")):
                 loop_stack.append((stripped, current_indent, i))
 
             # 检查循环嵌套深度
             if loop_stack:
                 last_loop = loop_stack[-1]
                 if current_indent > last_loop[1] + 1 and len(loop_stack) >= 2:
-                    issues.append({
-                        'file': file_path,
-                        'line': i,
-                        'category': 'performance',
-                        'severity': 'medium',
-                        'description': f'Nested loops, depth {len(loop_stack)}',
-                        'code': line.strip()[:100]
-                    })
+                    issues.append(
+                        {
+                            "file": file_path,
+                            "line": i,
+                            "category": "performance",
+                            "severity": "medium",
+                            "description": f"Nested loops, depth {len(loop_stack)}",
+                            "code": line.strip()[:100],
+                        }
+                    )
 
             # 检查循环结束（通过缩进减少）
             while loop_stack and current_indent <= loop_stack[-1][1]:
@@ -210,17 +207,19 @@ class CodeReviewer:
         # 检查TODO/FIXME注释 (skip pattern matching logic)
         for i, line in enumerate(lines, 1):
             # Skip lines that are part of the pattern matching logic itself
-            if 're.search' in line or 'IGNORECASE' in line:
+            if "re.search" in line or "IGNORECASE" in line:
                 continue
-            if re.search(r'\b(TODO|FIXME|XXX|HACK|BUG)\b', line, re.IGNORECASE):
-                issues.append({
-                    'file': file_path,
-                    'line': i,
-                    'category': 'maintainability',
-                    'severity': 'low',
-                    'description': 'Technical debt marker',
-                    'code': line.strip()[:100]
-                })
+            if re.search(r"\b(TODO|FIXME|XXX|HACK|BUG)\b", line, re.IGNORECASE):
+                issues.append(
+                    {
+                        "file": file_path,
+                        "line": i,
+                        "category": "maintainability",
+                        "severity": "low",
+                        "description": "Technical debt marker",
+                        "code": line.strip()[:100],
+                    }
+                )
 
         # 检查函数长度（简化版）
         in_function = False
@@ -232,40 +231,41 @@ class CodeReviewer:
         for i, line in enumerate(lines, 1):
             stripped = line.strip()
 
-            if not stripped or stripped.startswith('#'):
+            if not stripped or stripped.startswith("#"):
                 continue
 
             leading_spaces = len(line) - len(line.lstrip())
             line_indent = leading_spaces // 4
 
             # 函数开始
-            if not in_function and stripped.startswith(('def ', 'async def ')):
+            if not in_function and stripped.startswith(("def ", "async def ")):
                 in_function = True
                 function_start = i
                 function_lines = 0
                 current_indent = line_indent
                 # 检查是否有 noqa 注释禁用 PLR0912 (function-too-complex)
-                self_ignore = 'noqa' in stripped and 'PLR0912' in stripped
+                self_ignore = "noqa" in stripped and "PLR0912" in stripped
             elif in_function:
-                if line_indent <= current_indent and stripped and not stripped.startswith('#'):
+                if line_indent <= current_indent and stripped and not stripped.startswith("#"):
                     # 函数结束 - 跳过有 noqa 注释的函数
                     if function_lines > 50 and not self_ignore:
-                        issues.append({
-                            'file': file_path,
-                            'line': function_start,
-                            'category': 'maintainability',
-                            'severity': 'medium',
-                            'description': f'Function too long ({function_lines} lines)',
-                            'code': lines[function_start-1].strip()[:100]
-                        })
+                        issues.append(
+                            {
+                                "file": file_path,
+                                "line": function_start,
+                                "category": "maintainability",
+                                "severity": "medium",
+                                "description": f"Function too long ({function_lines} lines)",
+                                "code": lines[function_start - 1].strip()[:100],
+                            }
+                        )
                     in_function = False
                 else:
                     function_lines += 1
 
         return issues
 
-    def generate_markdown_report(self, issues: List[Dict[str, Any]],  # noqa: PLR0912
-                               changed_files: List[str]) -> str:
+    def generate_markdown_report(self, issues: List[Dict[str, Any]], changed_files: List[str]) -> str:  # noqa: PLR0912
         """
         Generate code review report in Markdown format
 
@@ -280,15 +280,15 @@ class CodeReviewer:
             return "# [OK] Code Review Report\n\nNo issues found!"
 
         # Statistics by severity
-        critical_count = sum(1 for i in issues if i['severity'] == 'critical')
-        high_count = sum(1 for i in issues if i['severity'] == 'high')
-        medium_count = sum(1 for i in issues if i['severity'] == 'medium')
-        low_count = sum(1 for i in issues if i['severity'] == 'low')
+        critical_count = sum(1 for i in issues if i["severity"] == "critical")
+        high_count = sum(1 for i in issues if i["severity"] == "high")
+        medium_count = sum(1 for i in issues if i["severity"] == "medium")
+        low_count = sum(1 for i in issues if i["severity"] == "low")
 
         # Statistics by category
-        security_count = sum(1 for i in issues if i['category'] == 'security')
-        performance_count = sum(1 for i in issues if i['category'] == 'performance')
-        maintainability_count = sum(1 for i in issues if i['category'] == 'maintainability')
+        security_count = sum(1 for i in issues if i["category"] == "security")
+        performance_count = sum(1 for i in issues if i["category"] == "performance")
+        maintainability_count = sum(1 for i in issues if i["category"] == "maintainability")
 
         report = []
         report.append("# [REVIEW] Code Review Report")
@@ -310,50 +310,50 @@ class CodeReviewer:
         report.append("")
 
         # Security issues
-        security_issues = [i for i in issues if i['category'] == 'security']
+        security_issues = [i for i in issues if i["category"] == "security"]
         if security_issues:
             report.append("## [SECURITY] Security Issues")
             report.append("")
             report.append("| File | Line | Severity | Description | Code Snippet |")
             report.append("|------|------|----------|-------------|--------------|")
             for issue in security_issues:
-                file_name = os.path.basename(issue['file'])
-                line = issue['line']
-                severity = issue['severity'].upper()
-                desc = issue['description']
-                code = issue['code'].replace('|', '\\|')  # Escape Markdown table separator
+                file_name = os.path.basename(issue["file"])
+                line = issue["line"]
+                severity = issue["severity"].upper()
+                desc = issue["description"]
+                code = issue["code"].replace("|", "\\|")  # Escape Markdown table separator
                 report.append(f"| `{file_name}` | {line} | **{severity}** | {desc} | `{code}` |")
             report.append("")
 
         # Performance issues
-        performance_issues = [i for i in issues if i['category'] == 'performance']
+        performance_issues = [i for i in issues if i["category"] == "performance"]
         if performance_issues:
             report.append("## [PERFORMANCE] Performance Issues")
             report.append("")
             report.append("| File | Line | Severity | Description | Code Snippet |")
             report.append("|------|------|----------|-------------|--------------|")
             for issue in performance_issues:
-                file_name = os.path.basename(issue['file'])
-                line = issue['line']
-                severity = issue['severity'].upper()
-                desc = issue['description']
-                code = issue['code'].replace('|', '\\|')
+                file_name = os.path.basename(issue["file"])
+                line = issue["line"]
+                severity = issue["severity"].upper()
+                desc = issue["description"]
+                code = issue["code"].replace("|", "\\|")
                 report.append(f"| `{file_name}` | {line} | **{severity}** | {desc} | `{code}` |")
             report.append("")
 
         # Maintainability issues
-        maintainability_issues = [i for i in issues if i['category'] == 'maintainability']
+        maintainability_issues = [i for i in issues if i["category"] == "maintainability"]
         if maintainability_issues:
             report.append("## [MAINTAINABILITY] Maintainability Issues")
             report.append("")
             report.append("| File | Line | Severity | Description | Code Snippet |")
             report.append("|------|------|----------|-------------|--------------|")
             for issue in maintainability_issues:
-                file_name = os.path.basename(issue['file'])
-                line = issue['line']
-                severity = issue['severity'].upper()
-                desc = issue['description']
-                code = issue['code'].replace('|', '\\|')
+                file_name = os.path.basename(issue["file"])
+                line = issue["line"]
+                severity = issue["severity"].upper()
+                desc = issue["description"]
+                code = issue["code"].replace("|", "\\|")
                 report.append(f"| `{file_name}` | {line} | **{severity}** | {desc} | `{code}` |")
             report.append("")
 
@@ -384,7 +384,7 @@ class CodeReviewer:
         report.append("---")
         report.append("*Generated by CAE-CLI Code Review Tool*")
 
-        return '\n'.join(report)
+        return "\n".join(report)
 
 
 def review_command(local: bool = True, pr: Optional[int] = None):
@@ -400,10 +400,7 @@ def review_command(local: bool = True, pr: Optional[int] = None):
     # Check if in Git repository
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "--is-inside-work-tree"],
-            capture_output=True,
-            text=True,
-            encoding='utf-8'
+            ["git", "rev-parse", "--is-inside-work-tree"], capture_output=True, text=True, encoding="utf-8"
         )
         if result.returncode != 0:
             console.print("[red]Error: Not in a Git repository[/red]")
@@ -448,6 +445,7 @@ def review_command(local: bool = True, pr: Optional[int] = None):
 if __name__ == "__main__":
     # 命令行测试
     import argparse
+
     parser = argparse.ArgumentParser(description="代码审查工具")
     parser.add_argument("--local", action="store_true", help="审查本地变更")
     parser.add_argument("--pr", type=int, help="PR编号")

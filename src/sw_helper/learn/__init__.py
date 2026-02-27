@@ -5,11 +5,11 @@ CAE-CLI 学习模块
 """
 
 import os
-import sys
 import re
-from pathlib import Path
-from typing import Optional, Dict, List, Any
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # 知识库基础路径
 KNOWLEDGE_DIR = Path(__file__).parent.parent.parent.parent / "knowledge"
@@ -18,6 +18,7 @@ KNOWLEDGE_DIR = Path(__file__).parent.parent.parent.parent / "knowledge"
 @dataclass
 class Course:
     """课程信息"""
+
     id: str  # 课程ID，对应文件名
     name: str  # 课程名称
     description: str  # 课程描述
@@ -106,7 +107,7 @@ class CourseManager:
         # 扫描所有 .md 文件
         for md_file in sorted(KNOWLEDGE_DIR.glob("*.md")):
             try:
-                with open(md_file, "r", encoding="utf-8") as f:
+                with open(md_file, encoding="utf-8") as f:
                     content = f.read()
 
                 # 解析元数据
@@ -207,14 +208,14 @@ def load_course_content(course_id: str) -> str:
 
     try:
         # 去掉 frontmatter 后返回正文
-        with open(course.path, "r", encoding="utf-8") as f:
+        with open(course.path, encoding="utf-8") as f:
             content = f.read()
 
         # 如果有 frontmatter，去掉它
         if content.startswith("---"):
             end_idx = content.find("---", 3)
             if end_idx != -1:
-                content = content[end_idx + 3:].strip()
+                content = content[end_idx + 3 :].strip()
 
         return content
 
@@ -259,6 +260,7 @@ keywords: 关键词1, 关键词2, 关键词3
 
 *使用 `cae-cli learn {course_name.lower().replace(' ', '-')}` 开始学习*
 """
+
 
 __all__ = [
     "Course",

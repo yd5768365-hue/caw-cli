@@ -4,9 +4,9 @@ FreeCAD连接器 - 使用FreeCAD Python API
 """
 
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
-from dataclasses import dataclass
 
 
 @dataclass
@@ -129,10 +129,11 @@ class FreeCADConnector:
                             if hasattr(constraint, "Value"):
                                 params.append(
                                     FCParameter(
-                                        name=constraint.Name
-                                        if hasattr(constraint, "Name")
-                                        and constraint.Name
-                                        else f"Constraint_{i}",
+                                        name=(
+                                            constraint.Name
+                                            if hasattr(constraint, "Name") and constraint.Name
+                                            else f"Constraint_{i}"
+                                        ),
                                         value=constraint.Value,
                                         unit="mm",
                                         obj_name=obj.Name,
@@ -191,7 +192,7 @@ class FreeCADConnector:
                                         obj_name=obj.Name,
                                     )
                                 )
-                        except:
+                        except Exception:
                             pass
 
         except Exception as e:
@@ -279,17 +280,13 @@ class FreeCADConnector:
 
             for obj in self.active_doc.Objects:
                 # 支持的属性类型
-                for attr in [
-                    "Radius", "Length", "Width", "Height", "FilletRadius",
-                    "Thickness", "Diameter"
-                ]:
+                for attr in ["Radius", "Length", "Width", "Height", "FilletRadius", "Thickness", "Diameter"]:
                     if hasattr(obj, attr):
                         # 检查属性名称是否匹配
                         attr_lower = attr.lower()
 
                         # 精确匹配或包含匹配
-                        if (attr_lower == target_param_lower or
-                            target_param_lower in attr_lower):
+                        if attr_lower == target_param_lower or target_param_lower in attr_lower:
                             setattr(obj, attr, value)
                             print(f"✓ Set {obj.Name}.{attr} = {value} mm")
                             return True
@@ -313,7 +310,7 @@ class FreeCADConnector:
                                 obj.set(cell, str(value))
                                 print(f"✓ Set spreadsheet cell {cell} = {value} mm")
                                 return True
-                            except:
+                            except Exception:
                                 continue
 
             print(f"✗ Parameter '{param_name}' not found")
@@ -330,6 +327,7 @@ class FreeCADConnector:
         except Exception as e:
             print(f"Failed to set parameter: {e}")
             import traceback
+
             traceback.print_exc()
             return False
 
@@ -382,11 +380,7 @@ class FreeCADConnector:
                 import Import
 
                 # 收集所有Part对象
-                objects = [
-                    obj
-                    for obj in self.active_doc.Objects
-                    if obj.isDerivedFrom("Part::Feature")
-                ]
+                objects = [obj for obj in self.active_doc.Objects if obj.isDerivedFrom("Part::Feature")]
                 if objects:
                     Import.export(objects, output_path)
                     print(f"✓ 导出成功: {output_path}")

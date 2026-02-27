@@ -2,9 +2,9 @@
 几何解析模块 - 支持STEP/STL/IGES等格式
 """
 
-from pathlib import Path
-from typing import Dict, Any, Optional
 import json
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 
 class GeometryParser:
@@ -15,9 +15,7 @@ class GeometryParser:
     def __init__(self):
         self.data = None
 
-    def parse(
-        self, file_path: str, file_format: Optional[str] = None
-    ) -> Dict[str, Any]:
+    def parse(self, file_path: str, file_format: Optional[str] = None) -> Dict[str, Any]:
         """解析几何文件
 
         Args:

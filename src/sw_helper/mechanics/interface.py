@@ -4,16 +4,16 @@
 """
 
 import json
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Any, Dict, Optional
+
 import numpy as np
 
 try:
-    from rich.console import Console
-    from rich.table import Table
-    from rich.panel import Panel
-    from rich.text import Text
     from rich import box
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.table import Table
+    from rich.text import Text
 
     HAS_RICH = True
 except ImportError:
@@ -155,9 +155,7 @@ class MechanicsInterface:
             length_unit=length_unit,
         )
 
-    def generate_report(
-        self, analysis_results: Dict[str, Any], output_format: str = "rich"
-    ) -> str:
+    def generate_report(self, analysis_results: Dict[str, Any], output_format: str = "rich") -> str:
         """
         生成分析报告
 
@@ -180,10 +178,6 @@ class MechanicsInterface:
     def _generate_rich_report(self, results: Dict[str, Any]) -> str:
         """生成Rich格式报告"""
         from rich.console import Console
-        from rich.table import Table
-        from rich.panel import Panel
-        from rich.text import Text
-        from rich import box
 
         console = Console()
 
@@ -200,8 +194,7 @@ class MechanicsInterface:
         # 标题
         console.print(
             Panel.fit(
-                f"[bold cyan]CAE-CLI 力学分析报告[/bold cyan]\n"
-                f"[dim]分析类型: {analysis_type}[/dim]",
+                f"[bold cyan]CAE-CLI 力学分析报告[/bold cyan]\n" f"[dim]分析类型: {analysis_type}[/dim]",
                 border_style="cyan",
             )
         )
@@ -218,13 +211,9 @@ class MechanicsInterface:
         material_table.add_row("材料类型", material_type)
 
         if "yield_strength" in results:
-            material_table.add_row(
-                "屈服强度", f"{results['yield_strength'] / 1e6:.2f} MPa"
-            )
+            material_table.add_row("屈服强度", f"{results['yield_strength'] / 1e6:.2f} MPa")
         if "tensile_strength" in results:
-            material_table.add_row(
-                "抗拉强度", f"{results['tensile_strength'] / 1e6:.2f} MPa"
-            )
+            material_table.add_row("抗拉强度", f"{results['tensile_strength'] / 1e6:.2f} MPa")
 
         console.print(material_table)
         console.print()
@@ -298,15 +287,9 @@ class MechanicsInterface:
             f"{results.get('critical_buckling_load', 0) / 1000:.2f}",
             "kN",
         )
-        buckling_table.add_row(
-            "施加载荷", f"{results.get('applied_force', 0) / 1000:.2f}", "kN"
-        )
-        buckling_table.add_row(
-            "屈曲安全系数", f"{results.get('buckling_safety_factor', 0):.2f}", ""
-        )
-        buckling_table.add_row(
-            "压缩应力", f"{results.get('compressive_stress', 0) / 1e6:.2f}", "MPa"
-        )
+        buckling_table.add_row("施加载荷", f"{results.get('applied_force', 0) / 1000:.2f}", "kN")
+        buckling_table.add_row("屈曲安全系数", f"{results.get('buckling_safety_factor', 0):.2f}", "")
+        buckling_table.add_row("压缩应力", f"{results.get('compressive_stress', 0) / 1e6:.2f}", "MPa")
 
         console.print(buckling_table)
         console.print()
@@ -334,9 +317,7 @@ class MechanicsInterface:
 
         deflection_table.add_row("计算挠度", f"{deflection:.3f}", "mm")
         deflection_table.add_row("允许挠度", f"{allowable:.3f}", "mm")
-        deflection_table.add_row(
-            "挠度安全系数", f"{results.get('deflection_safety_factor', 0):.2f}", ""
-        )
+        deflection_table.add_row("挠度安全系数", f"{results.get('deflection_safety_factor', 0):.2f}", "")
 
         console.print(deflection_table)
         console.print()
@@ -383,9 +364,7 @@ class MechanicsInterface:
             if safety_factor < 1.0:
                 conclusion += " [red bold]不满足[/red bold] 安全要求，需要重新设计。"
             elif safety_factor < 1.5:
-                conclusion += (
-                    " [yellow bold]基本满足[/yellow bold] 安全要求，建议优化。"
-                )
+                conclusion += " [yellow bold]基本满足[/yellow bold] 安全要求，建议优化。"
             else:
                 conclusion += " [green bold]完全满足[/green bold] 安全要求，设计合理。"
 
@@ -412,22 +391,16 @@ class MechanicsInterface:
         # 计算结果
         if "von_mises_stress" in results:
             lines.append("\n[应力分析结果]")
-            lines.append(
-                f"  Von Mises等效应力: {results['von_mises_stress'] / 1e6:.2f} MPa"
-            )
+            lines.append(f"  Von Mises等效应力: {results['von_mises_stress'] / 1e6:.2f} MPa")
             principal = results.get("principal_stresses", (0, 0, 0))
             for i, stress in enumerate(principal, 1):
                 lines.append(f"  主应力 σ{i}: {stress / 1e6:.2f} MPa")
 
         if "buckling_safety_factor" in results:
             lines.append("\n[屈曲分析结果]")
-            lines.append(
-                f"  临界屈曲载荷: {results.get('critical_buckling_load', 0) / 1000:.2f} kN"
-            )
+            lines.append(f"  临界屈曲载荷: {results.get('critical_buckling_load', 0) / 1000:.2f} kN")
             lines.append(f"  施加载荷: {results.get('applied_force', 0) / 1000:.2f} kN")
-            lines.append(
-                f"  屈曲安全系数: {results.get('buckling_safety_factor', 0):.2f}"
-            )
+            lines.append(f"  屈曲安全系数: {results.get('buckling_safety_factor', 0):.2f}")
 
         if "deflection_safety_factor" in results:
             lines.append("\n[挠度分析结果]")
@@ -435,9 +408,7 @@ class MechanicsInterface:
             allowable = results.get("allowable_deflection", 0) * 1000
             lines.append(f"  计算挠度: {deflection:.3f} mm")
             lines.append(f"  允许挠度: {allowable:.3f} mm")
-            lines.append(
-                f"  挠度安全系数: {results.get('deflection_safety_factor', 0):.2f}"
-            )
+            lines.append(f"  挠度安全系数: {results.get('deflection_safety_factor', 0):.2f}")
 
         # 安全系数
         safety_factor = None

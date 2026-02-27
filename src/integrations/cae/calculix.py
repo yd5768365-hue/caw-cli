@@ -7,14 +7,13 @@ CalculiX是一个基于GNU GPL许可证的开源有限元分析软件，
 此连接器提供与CalculiX命令行工具(ccx)的标准化接口。
 """
 
-import subprocess
 import shutil
-from pathlib import Path
-from typing import List, Dict, Any, Optional
+import subprocess
 import tempfile
-import json
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from .._base.connectors import CAEConnector, FileFormat
+from .._base.connectors import CAEConnector
 
 
 class CalculiXConnector(CAEConnector):
@@ -46,9 +45,7 @@ class CalculiXConnector(CAEConnector):
             print(f"连接CalculiX失败: {e}")
             return False
 
-    def generate_mesh(
-        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
-    ) -> bool:
+    def generate_mesh(self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0) -> bool:
         """从几何文件生成网格
 
         注意：CalculiX本身不包含网格生成器，通常使用Gmsh生成网格。
@@ -115,9 +112,7 @@ class CalculiXConnector(CAEConnector):
             print(f"设置仿真失败: {e}")
             raise
 
-    def run_simulation(
-        self, input_file: Path, output_dir: Optional[Path] = None
-    ) -> bool:
+    def run_simulation(self, input_file: Path, output_dir: Optional[Path] = None) -> bool:
         """运行仿真分析"""
         if not self.is_connected:
             if not self.connect():
@@ -262,9 +257,7 @@ S
 
     def _create_static_analysis(self, mesh_file: Path, config: Dict[str, Any]) -> str:
         """创建静态分析输入文件"""
-        material = config.get(
-            "material", {"E": 210000.0, "nu": 0.3, "density": 7.85e-9}
-        )
+        material = config.get("material", {"E": 210000.0, "nu": 0.3, "density": 7.85e-9})
         loads = config.get("loads", [])
         constraints = config.get("constraints", [])
 
@@ -286,12 +279,12 @@ S
 
         # 添加边界条件
         for constraint in constraints:
-            inp += f"*BOUNDARY\n"
+            inp += "*BOUNDARY\n"
             inp += f"{constraint.get('node_set', 'FIXED')}, {constraint.get('dofs', '1,3,0.0')}\n"
 
         # 添加载荷
         for load in loads:
-            inp += f"*CLOAD\n"
+            inp += "*CLOAD\n"
             inp += f"{load.get('node_set', 'LOAD_NODES')}, {load.get('dof', 3)}, {load.get('value', -100.0)}\n"
 
         inp += """*NODE PRINT
@@ -373,7 +366,7 @@ HFL
         }
 
         try:
-            with open(frd_file, "r", encoding="utf-8", errors="ignore") as f:
+            with open(frd_file, encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
 
             node_count = 0
@@ -423,7 +416,7 @@ HFL
         }
 
         try:
-            with open(dat_file, "r", encoding="utf-8", errors="ignore") as f:
+            with open(dat_file, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
             # 简单搜索关键信息
@@ -435,7 +428,7 @@ HFL
             if disp_matches:
                 try:
                     results["max_displacement"] = float(disp_matches[-1])
-                except:
+                except (ValueError, IndexError):
                     pass
 
             # 查找最大应力
@@ -444,7 +437,7 @@ HFL
             if stress_matches:
                 try:
                     results["max_stress"] = float(stress_matches[-1])
-                except:
+                except (ValueError, IndexError):
                     pass
 
         except Exception as e:
@@ -458,7 +451,7 @@ HFL
             try:
                 shutil.rmtree(self.work_dir)
                 self.work_dir = None
-            except:
+            except OSError:
                 pass
 
 
@@ -474,17 +467,13 @@ class CalculiXConnectorMock(CalculiXConnector):
         self.is_connected = True
         return True
 
-    def generate_mesh(
-        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
-    ) -> bool:
+    def generate_mesh(self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0) -> bool:
         print(f"[模拟模式] 生成网格: {geometry_file} -> {mesh_file}")
         mesh_file.parent.mkdir(parents=True, exist_ok=True)
         mesh_file.write_text("** Mock mesh file\n")
         return True
 
-    def run_simulation(
-        self, input_file: Path, output_dir: Optional[Path] = None
-    ) -> bool:
+    def run_simulation(self, input_file: Path, output_dir: Optional[Path] = None) -> bool:
         print(f"[模拟模式] 运行仿真: {input_file}")
         if output_dir:
             output_dir.mkdir(parents=True, exist_ok=True)

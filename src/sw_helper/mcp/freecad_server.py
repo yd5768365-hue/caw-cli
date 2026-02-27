@@ -2,8 +2,9 @@
 FreeCAD MCP Server - 将FreeCAD功能暴露为MCP工具
 """
 
-from typing import Dict, Any, Optional
 from pathlib import Path
+from typing import Any, Dict, Optional
+
 from sw_helper.mcp.core import Tool, get_mcp_server
 
 
@@ -47,9 +48,7 @@ class FreeCADMCPServer:
                 description="打开FreeCAD文档",
                 input_schema={
                     "type": "object",
-                    "properties": {
-                        "file_path": {"type": "string", "description": "文件路径"}
-                    },
+                    "properties": {"file_path": {"type": "string", "description": "文件路径"}},
                     "required": ["file_path"],
                 },
                 handler=self._handle_open,
@@ -154,9 +153,7 @@ class FreeCADMCPServer:
                 description="应用圆角",
                 input_schema={
                     "type": "object",
-                    "properties": {
-                        "radius": {"type": "number", "description": "圆角半径"}
-                    },
+                    "properties": {"radius": {"type": "number", "description": "圆角半径"}},
                     "required": ["radius"],
                 },
                 handler=self._handle_apply_fillet,
@@ -245,9 +242,7 @@ class FreeCADMCPServer:
         params = connector.get_parameters()
         return {
             "count": len(params),
-            "parameters": [
-                {"name": p.name, "value": p.value, "unit": p.unit} for p in params
-            ],
+            "parameters": [{"name": p.name, "value": p.value, "unit": p.unit} for p in params],
         }
 
     def _handle_set_parameter(self, param_name: str, value: float) -> Dict[str, Any]:
@@ -268,9 +263,7 @@ class FreeCADMCPServer:
         success = connector.export_file(output_path, format)
         return {"success": success, "output_path": output_path, "format": format}
 
-    def _handle_create_box(
-        self, length: float = 100, width: float = 50, height: float = 30
-    ) -> Dict[str, Any]:
+    def _handle_create_box(self, length: float = 100, width: float = 50, height: float = 30) -> Dict[str, Any]:
         """处理创建立方体请求"""
         # 这里简化实现，实际应该调用FreeCAD API
         return {
@@ -280,9 +273,7 @@ class FreeCADMCPServer:
             "message": f"创建立方体: {length}x{width}x{height}mm",
         }
 
-    def _handle_create_cylinder(
-        self, radius: float = 25, height: float = 50
-    ) -> Dict[str, Any]:
+    def _handle_create_cylinder(self, radius: float = 25, height: float = 50) -> Dict[str, Any]:
         """处理创建圆柱体请求"""
         return {
             "success": True,
@@ -293,7 +284,7 @@ class FreeCADMCPServer:
 
     def _handle_apply_fillet(self, radius: float) -> Dict[str, Any]:
         """处理应用圆角请求"""
-        connector = self._get_connector()
+        self._get_connector()
         # 这里简化实现
         return {
             "success": True,
@@ -301,14 +292,12 @@ class FreeCADMCPServer:
             "message": f"应用圆角: R{radius}mm",
         }
 
-    def _handle_optimize(
-        self, param_name: str, min_value: float, max_value: float, steps: int = 5
-    ) -> Dict[str, Any]:
+    def _handle_optimize(self, param_name: str, min_value: float, max_value: float, steps: int = 5) -> Dict[str, Any]:
         """处理优化请求"""
         # 这里调用优化器
         from sw_helper.optimization.optimizer import FreeCADOptimizer
 
-        optimizer = FreeCADOptimizer(use_mock=True)
+        FreeCADOptimizer(use_mock=True)
         # 简化实现，实际应该执行完整优化流程
 
         return {

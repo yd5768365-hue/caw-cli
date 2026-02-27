@@ -11,16 +11,14 @@ Gmsh是一个开源的三维有限元网格生成器，支持多种几何格式�
 - 网格质量检查和异常处理
 """
 
-import sys
-import subprocess
 import shutil
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
 import tempfile
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 import pint
 
-from .._base.connectors import CAEConnector, FileFormat
+from .._base.connectors import CAEConnector
 
 
 class MeshQualityError(Exception):
@@ -74,9 +72,7 @@ class GmshConnector(CAEConnector):
             print(f"连接Gmsh失败: {e}")
             return False
 
-    def generate_mesh(
-        self, geometry_file: Path, mesh_file: Path, element_size: float = 1.0
-    ) -> bool:
+    def generate_mesh(self, geometry_file: Path, mesh_file: Path, element_size: float = 1.0) -> bool:
         """从几何文件生成网格
 
         支持格式: STEP (.step, .stp), STL (.stl), BREP (.brep), IGES (.iges)
@@ -113,9 +109,7 @@ class GmshConnector(CAEConnector):
             self._gmsh().option.setNumber("General.Terminal", 1)
 
             # 设置网格选项 (element_size 单位: mm → 转换为 m 供 Gmsh 使用)
-            element_size_m = (
-                self.ureg.Quantity(element_size, self.ureg.mm).to(self.ureg.m).magnitude
-            )
+            element_size_m = self.ureg.Quantity(element_size, self.ureg.mm).to(self.ureg.m).magnitude
             self._set_mesh_options(element_size_m)
 
             # 导入几何
@@ -175,7 +169,7 @@ class GmshConnector(CAEConnector):
             # 确保清理Gmsh
             try:
                 self.gmsh_module.finalize()
-            except:
+            except Exception:
                 pass
             return False
 
@@ -216,17 +210,15 @@ class GmshConnector(CAEConnector):
             print(f"设置仿真失败: {e}")
             raise
 
-    def run_simulation(
-        self, input_file: Path, output_dir: Optional[Path] = None
-    ) -> bool:
+    def run_simulation(self, input_file: Path, output_dir: Optional[Path] = None) -> bool:
         """运行仿真分析（对于网格生成器，此方法无实际意义）
 
         注意：Gmsh不是求解器，此方法仅用于兼容性
         实际仿真应使用CalculiX、Abaqus等求解器
         """
-        print(f"⚠️  Gmsh不是求解器，跳过仿真步骤")
+        print("⚠️  Gmsh不是求解器，跳过仿真步骤")
         print(f"    输入文件: {input_file}")
-        print(f"    请使用CAE求解器运行此文件")
+        print("    请使用CAE求解器运行此文件")
 
         # 为兼容性返回成功
         return True
@@ -293,9 +285,7 @@ class GmshConnector(CAEConnector):
 
         return inp_path
 
-    def convert_mesh_format(
-        self, input_mesh: Path, output_mesh: Path, target_format: str
-    ) -> bool:
+    def convert_mesh_format(self, input_mesh: Path, output_mesh: Path, target_format: str) -> bool:
         """转换网格格式
 
         Args:
@@ -349,9 +339,7 @@ class GmshConnector(CAEConnector):
                 "mesh_file": str(mesh_file),
                 "quality_metrics": quality_metrics,
                 "overall_quality": self._evaluate_overall_quality(quality_metrics),
-                "recommendations": self._generate_quality_recommendations(
-                    quality_metrics
-                ),
+                "recommendations": self._generate_quality_recommendations(quality_metrics),
             }
 
         except Exception as e:
@@ -397,7 +385,7 @@ class GmshConnector(CAEConnector):
             max_quality = quality_stats[1]  # 最大质量
             avg_quality = quality_stats[2]  # 平均质量
 
-            print(f"  网格质量统计:")
+            print("  网格质量统计:")
             print(f"    最小质量: {min_quality:.4f}")
             print(f"    最大质量: {max_quality:.4f}")
             print(f"    平均质量: {avg_quality:.4f}")
@@ -428,7 +416,7 @@ class GmshConnector(CAEConnector):
             node_count = self.gmsh_module.model.mesh.getNodes()[0].shape[0]
             element_count = self.gmsh_module.model.mesh.getElements()[2][0].shape[0]
 
-            print(f"  网格统计:")
+            print("  网格统计:")
             print(f"    节点数: {node_count}")
             print(f"    单元数: {element_count}")
 
@@ -473,13 +461,13 @@ class GmshConnector(CAEConnector):
 
                 # 定义Gmsh到CalculiX的单元类型映射
                 elem_type_map = {
-                    4: "C3D4",    # 四面体
-                    5: "C3D8",    # 六面体
-                    1: "CPS4",    # 四边形（平面应力）
-                    2: "CPE4",    # 四边形（平面应变）
-                    3: "C3D6",    # 三棱柱
-                    6: "C3D10",   # 四面体（二次）
-                    7: "C3D20"    # 六面体（二次）
+                    4: "C3D4",  # 四面体
+                    5: "C3D8",  # 六面体
+                    1: "CPS4",  # 四边形（平面应力）
+                    2: "CPE4",  # 四边形（平面应变）
+                    3: "C3D6",  # 三棱柱
+                    6: "C3D10",  # 四面体（二次）
+                    7: "C3D20",  # 六面体（二次）
                 }
 
                 # 写入每个单元组
@@ -565,7 +553,7 @@ class GmshConnector(CAEConnector):
         }
 
         try:
-            with open(msh_file, "r", encoding="utf-8", errors="ignore") as f:
+            with open(msh_file, encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
 
             for line in lines:
@@ -598,7 +586,7 @@ class GmshConnector(CAEConnector):
         }
 
         try:
-            with open(inp_file, "r", encoding="utf-8", errors="ignore") as f:
+            with open(inp_file, encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
 
             in_nodes = False
@@ -685,7 +673,7 @@ class GmshConnector(CAEConnector):
             try:
                 shutil.rmtree(self.work_dir)
                 self.work_dir = None
-            except:
+            except OSError:
                 pass
 
 
@@ -701,9 +689,7 @@ class GmshConnectorMock(GmshConnector):
         self.is_connected = True
         return True
 
-    def generate_mesh(
-        self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0
-    ) -> bool:
+    def generate_mesh(self, geometry_file: Path, mesh_file: Path, element_size: float = 2.0) -> bool:
         print(f"[模拟模式] 生成网格: {geometry_file} -> {mesh_file}")
         mesh_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -731,9 +717,7 @@ class GmshConnectorMock(GmshConnector):
 
         return True
 
-    def convert_mesh_format(
-        self, input_mesh: Path, output_mesh: Path, target_format: str
-    ) -> bool:
+    def convert_mesh_format(self, input_mesh: Path, output_mesh: Path, target_format: str) -> bool:
         print(f"[模拟模式] 转换格式: {input_mesh} -> {output_mesh} ({target_format})")
         output_mesh.parent.mkdir(parents=True, exist_ok=True)
         output_mesh.write_text(f"** Mock {target_format.upper()} file\n")

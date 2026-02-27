@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cae-cli"
-version = "0.2.0"
+version = "1.0.0"
 authors = [
     {name = "Your Name", email = "your.email@example.com"},
 ]
@@ -99,6 +99,8 @@ Issues = "https://github.com/yourusername/cae-cli/issues"
 cae-cli = "sw_helper.cli:cli"
 # 别名
 sw-helper = "sw_helper.cli:cli"
+# GUI 命令
+cae-gui = "main_gui:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

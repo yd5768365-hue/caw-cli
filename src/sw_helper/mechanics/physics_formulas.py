@@ -4,7 +4,8 @@
 """
 
 import math
-from typing import Tuple, List, Optional, Dict, Any
+from typing import Tuple
+
 import numpy as np
 
 
@@ -31,10 +32,7 @@ def calculate_von_mises_stress(stress_tensor: np.ndarray) -> float:
     τ_yz = stress_tensor[1, 2]
 
     # Von Mises公式
-    σ_vm = math.sqrt(
-        0.5 * ((σ_x - σ_y) ** 2 + (σ_y - σ_z) ** 2 + (σ_z - σ_x) ** 2)
-        + 3 * (τ_xy**2 + τ_xz**2 + τ_yz**2)
-    )
+    σ_vm = math.sqrt(0.5 * ((σ_x - σ_y) ** 2 + (σ_y - σ_z) ** 2 + (σ_z - σ_x) ** 2) + 3 * (τ_xy**2 + τ_xz**2 + τ_yz**2))
 
     return σ_vm
 
@@ -122,9 +120,7 @@ def calculate_buckling_load(
     effective_length = k * length
 
     # 欧拉屈曲公式
-    critical_load = (math.pi**2 * youngs_modulus * moment_of_inertia) / (
-        effective_length**2
-    )
+    critical_load = (math.pi**2 * youngs_modulus * moment_of_inertia) / (effective_length**2)
 
     return critical_load
 

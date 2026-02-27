@@ -4,8 +4,7 @@ CAD连接器抽象基类 - 定义CAD软件集成的统一接口
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from pathlib import Path
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List
 
 
 @dataclass

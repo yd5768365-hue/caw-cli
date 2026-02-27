@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆 -->
+  <circle cx="128" cy="128" r="120" fill="#1A1A1A" stroke="#8B0000" stroke-width="4"/>
+
+  <!-- 外圈齿轮（工程元素） -->
+  <g transform="translate(128,128)">
+    <circle r="100" fill="none" stroke="#333333" stroke-width="8"/>
+    <!-- 齿轮齿 -->
+    <g stroke="#8B0000" stroke-width="12">
+      <line x1="0" y1="-108" x2="0" y2="-88"/>
+      <line x1="0" y1="108" x2="0" y2="88"/>
+      <line x1="-108" y1="0" x2="-88" y2="0"/>
+      <line x1="108" y1="0" x2="88" y2="0"/>
+      <line x1="76" y1="-76" x2="62" y2="-62"/>
+      <line x1="-76" y1="-76" x2="-62" y2="-62"/>
+      <line x1="76" y1="76" x2="62" y2="62"/>
+      <line x1="-76" y1="76" x2="-62" y2="62"/>
+    </g>
+  </g>
+
+  <!-- 内部渐变圆 -->
+  <circle cx="128" cy="128" r="70" fill="url(#gradient1)"/>
+
+  <!-- CAE 字母变形 -->
+  <text x="128" y="145" font-family="Arial Black, sans-serif" font-size="64" font-weight="bold" fill="#FFFFFF" text-anchor="middle">CAE</text>
+
+  <!-- AI 芯片/神经元（科技+AI） -->
+  <g transform="translate(180,60)">
+    <!-- 芯片底座 -->
+    <rect x="-15" y="-15" width="30" height="30" rx="4" fill="#FF4500"/>
+    <!-- 电路纹路 -->
+    <path d="M-8 -15 V-25 M8 -15 V-25 M-15 -8 H-25 M15 -8 H25" stroke="#FF4500" stroke-width="3"/>
+    <!-- 核心 -->
+    <circle cx="0" cy="0" r="8" fill="#FFFFFF"/>
+    <circle cx="0" cy="0" r="4" fill="#FF4500"/>
+  </g>
+
+  <!-- 学习的闪电/连接线 -->
+  <g stroke="#569CD6" stroke-width="2" opacity="0.8">
+    <path d="M60 160 Q80 180 100 165" fill="none"/>
+    <path d="M60 180 Q90 195 110 175" fill="none"/>
+    <circle cx="60" cy="160" r="4" fill="#569CD6"/>
+    <circle cx="100" cy="165" r="4" fill="#569CD6"/>
+    <circle cx="60" cy="180" r="4" fill="#569CD6"/>
+    <circle cx="110" cy="175" r="4" fill="#569CD6"/>
+  </g>
+
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="gradient1" x1="64" y1="64" x2="192" y2="192">
+      <stop offset="0%" stop-color="#2D2D2D"/>
+      <stop offset="100%" stop-color="#1A1A1A"/>
+    </linearGradient>
+  </defs>
+</svg>
